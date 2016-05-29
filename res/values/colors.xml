@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="head_bg">#5191FD</color>
+    <color name="text_white">#ffffff</color>
+    <color name="base_bg_gray">#B4B4B4</color>
+    <color name="base_bg_white">#ffffff</color>
+    <color name="text_black">#000000</color>
+    <color name="text_red">#940000</color>
+    <color name="text_green">#007600</color>
+    <color name="base_menu_left_bg">#393c44</color>
+    <color name="pull_refresh_textview">#000000</color>
+    <color name="base_color_text_black">#3e3e39</color>
+    <color name="base_color_text_gray">#9fa0a0</color>
+    <color name="home_item_color_bg">#f4f6f6</color>
+    <color name="holo_blue">#FF33E5B5</color>
+
+</resources>
