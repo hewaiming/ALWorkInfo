@@ -10,12 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hewaiming.ALWorkInfo.ui.MainActivity" >
 
-    <include layout="@layout/head_main" />
+    <include layout="@layout/head_main_include" />
 
     <com.hewaiming.ALWorkInfo.banner.SlideShowView
         android:id="@+id/bannerwView"
         android:layout_width="fill_parent"
-        android:layout_height="160dp"
+        android:layout_height="136dp"
        />
+    <include layout="@layout/main_action" />
 
 </LinearLayout>
