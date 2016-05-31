@@ -25,6 +25,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.hewaiming.ALWorkInfo.banner.JazzyViewPager.TransitionEffect;
+import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.allwork.R;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -49,7 +50,7 @@ public class SlideShowView extends FrameLayout {
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 
 	// 自动轮播的时间间隔
-	private final static int TIME_INTERVAL = 5;
+	private final static int TIME_INTERVAL = 4;
 	// 自动轮播启用开关
 	private final static boolean isAutoPlay = true;
 	// 滚动框是否滚动着
@@ -305,11 +306,10 @@ public class SlideShowView extends FrameLayout {
 		protected Boolean doInBackground(String... params) {
 			try {
 				// 这里一般调用服务端接口获取一组轮播图片，下面是从百度找的几个图片
-				imageUrls.add("http://image.zcool.com.cn/56/35/1303967876491.jpg");
-				imageUrls.add("http://image.zcool.com.cn/59/54/m_1303967870670.jpg");
-				imageUrls.add("http://image.zcool.com.cn/47/19/1280115949992.jpg");
-				imageUrls.add("http://image.zcool.com.cn/59/11/m_1303967844788.jpg");
-				imageUrls.add("http://p0.so.qhimg.com/t0153ac11436adb683f.jpg");
+				String[] picAddress = MyConst.pic_address;
+				for (int i = 0; i< picAddress.length; i++) {
+					imageUrls.add(picAddress[i]);
+				}
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -343,10 +343,15 @@ public class SlideShowView extends FrameLayout {
 													// height，即保存的每个缓存文件的最大长宽
 				.threadPoolSize(3)// 线程池内加载的数量
 				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
-				.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024)) // You  can pass your own memory cache													
-																																																								
-																		
-																				// implementation/你可以通过自己的内存缓存实现
+				.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024)) // You
+																				// can
+																				// pass
+																				// your
+																				// own
+																				// memory
+																				// cache
+
+				// implementation/你可以通过自己的内存缓存实现
 				.memoryCacheSize(2 * 1024 * 1024).discCacheSize(50 * 1024 * 1024)
 
 				.tasksProcessingOrder(QueueProcessingType.LIFO).discCacheFileCount(100) // 缓存的文件数量
