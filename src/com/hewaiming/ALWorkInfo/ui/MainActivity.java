@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.allwork.R;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,9 +24,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
 	private GridView gridView;
 	private SimpleAdapter adapter;
-	private List<Map<String, Object>> dataList;
-	private String[] iconName = { "常用参数", "日报", "效应报表", "槽龄", "槽压曲线", "故障表", "解析记录", "修改参数记录", 
-			"槽状态","测量数据", "效应次数最多", "效应时间最长","槽故障最多","下料异常", "报警记录" ,"实时曲线"};
+	private List<Map<String, Object>> dataList;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +45,11 @@ public class MainActivity extends Activity implements OnItemClickListener {
 	}
 
 	private List<Map<String, Object>> getData() {
-
-		int[] drawable = { R.drawable.set_params, R.drawable.day_table, R.drawable.ae_table, R.drawable.pot_age,
-				R.drawable.potv, R.drawable.fault_list, R.drawable.jx_record, R.drawable.update_params,
-				R.drawable.pot_status, R.drawable.measure, R.drawable.ae_nums, R.drawable.ae_long,
-				R.drawable.fault_more,R.drawable.nb_abnorm ,R.drawable.alarm_list,R.drawable.real_potv};
-		for (int i = 0; i < drawable.length; i++) {
+		
+		for (int i = 0; i < MyConst.drawable.length; i++) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("pic", drawable[i]);
-			map.put("name", iconName[i]);
+			map.put("pic", MyConst.drawable[i]);
+			map.put("name", MyConst.iconName[i]);
 			dataList.add(map);
 		}
 		Log.i("Main", "size=" + dataList.size());
@@ -82,18 +77,21 @@ public class MainActivity extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		switch (position) {
 		case 0:
-//			Intent phone_intent = new Intent(MainActivity.this, ContactsActivity.class);
-//			startActivity(phone_intent);
+			 Intent Paramsintent = new Intent(MainActivity.this,
+			 ParamsActivity.class);
+			 startActivity(Paramsintent);
 			break;
 		case 1:
 			break;
 		case 11:
-//			Intent youtubeIntent = new Intent(MainActivity.this, YoutubeActivity.class);
-//			startActivity(youtubeIntent);
+			// Intent youtubeIntent = new Intent(MainActivity.this,
+			// YoutubeActivity.class);
+			// startActivity(youtubeIntent);
 			break;
 		case 12:
-//			Intent news_intent = new Intent(MainActivity.this, NewsActivity.class);
-//			startActivity(news_intent);
+			// Intent news_intent = new Intent(MainActivity.this,
+			// NewsActivity.class);
+			// startActivity(news_intent);
 			break;
 		}
 

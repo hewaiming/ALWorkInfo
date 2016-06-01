@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="10dp"
+        android:textSize="12dp"
         android:layout_marginTop="5dp"
         android:text="名字"
         android:textColor="@color/text_black" />
