@@ -28,6 +28,8 @@
             android:name="com.hewaiming.ALWorkInfo.ui.ParamsActivity"
             android:label="@string/title_activity_params" >
         </activity>
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.PotAgeActivity" >
+        </activity>
     </application>
 
 </manifest>

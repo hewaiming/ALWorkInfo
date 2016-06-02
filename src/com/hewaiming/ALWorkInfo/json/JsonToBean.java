@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.hewaiming.ALWorkInfo.bean.PotAge;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
@@ -127,6 +128,30 @@ public class JsonToBean {
 				mSetParams.setALF(jsonobj.getInt("ALF"));
 				mSetParams.setSetV(jsonobj.getInt("SetV")/1000.0);
 				listBean.add(mSetParams);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+	
+	//json ×ª»»Îª ²ÛÁäLIST
+	public static List<PotAge> JsonArrayToPotAgeBean(String data) {
+		ArrayList<PotAge> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<PotAge>();
+			System.out.println("jsonarray PotAge.length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				PotAge potAge = new PotAge();
+				potAge.setPotNo(jsonobj.getInt("PotNo"));
+				potAge.setBeginTime(jsonobj.getString("Potage"));
+				potAge.setEndTime(jsonobj.getString("StopAge"));
+				potAge.setAge(jsonobj.getInt("Age"));
+				
+				listBean.add(potAge);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

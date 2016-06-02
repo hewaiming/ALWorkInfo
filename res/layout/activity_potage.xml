@@ -30,7 +30,7 @@
             android:layout_weight="3" />
 
         <Button
-            android:id="@+id/btn_params"
+            android:id="@+id/btn_potage"
             style="@style/Smile.TextView._White"           
             android:layout_width="0dp"           
             android:layout_height="28dp"
@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lv_params"
+        android:id="@+id/lv_potage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="6dp"

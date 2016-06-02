@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_PotNo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"       
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="20dp"
@@ -14,47 +14,47 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="PotNo"
-        android:textColor="#000000" />
+        android:textColor="@color/text_black" />
 
     <TextView
         android:id="@+id/tv_SetV"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"  
          android:layout_weight="1"    
         android:layout_marginBottom="7dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="7dp"
         android:text="SetV"
-        android:textColor="#0000ff" />
+        android:textColor="@color/text_black" />
     <TextView
         android:id="@+id/tv_NbTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
        android:layout_weight="1"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="7dp"
         android:text="NbTime"
-        android:textColor="#0000ff" />
+        android:textColor="@color/text_black" />
     <TextView
         android:id="@+id/tv_AeTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="7dp"
         android:text="AeTime"
-        android:textColor="#0000ff" />
+        android:textColor="@color/text_black" />
       <TextView
         android:id="@+id/tv_ALF"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"  
          android:layout_weight="1"    
-        android:layout_marginBottom="7dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginBottom="7dp"       
         android:layout_marginTop="7dp"
+         android:layout_marginRight="10dp"
         android:text="ALF"
-        android:textColor="#0000ff" />
+        android:textColor="@color/text_black" />
 
 </LinearLayout>
