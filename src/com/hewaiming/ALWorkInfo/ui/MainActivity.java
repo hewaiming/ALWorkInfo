@@ -82,16 +82,19 @@ public class MainActivity extends Activity implements OnItemClickListener {
 			 startActivity(Paramsintent);
 			break;
 		case 1:
+			Intent DayTable_intent = new Intent(MainActivity.this,
+					 DayTableActivity.class);
+					 startActivity(DayTable_intent);
 			break;
 		case 11:
 			// Intent youtubeIntent = new Intent(MainActivity.this,
 			// YoutubeActivity.class);
 			// startActivity(youtubeIntent);
 			break;
-		case 12:
-			// Intent news_intent = new Intent(MainActivity.this,
-			// NewsActivity.class);
-			// startActivity(news_intent);
+		case 3:
+			 Intent Potage_intent = new Intent(MainActivity.this,
+			 PotAgeActivity.class);
+			 startActivity(Potage_intent);
 			break;
 		}
 

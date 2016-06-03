@@ -17,34 +17,35 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="38dp"
+        android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:background="@color/base_bg_white"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <Spinner
-            android:id="@+id/PotAge_spinner_area"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"           
-            android:layout_marginRight="20dp"
-            android:layout_weight="3" />
+            android:id="@+id/spinner_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spinner_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/btn_potage"
-            style="@style/Smile.TextView._White"           
-            android:layout_width="0dp"           
-            android:layout_height="28dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical"           
-            android:layout_weight="1"
-            android:background="@drawable/btn_login_selector"
+            android:id="@+id/btn_daytable"
+            style="@style/Smile.TextView._White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="6dp"            android:background="@drawable/btn_login_selector"
             android:text="确定"
             android:textSize="12sp" >
         </Button>
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lv_potage"
+        android:id="@+id/lv_daytable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="6dp"

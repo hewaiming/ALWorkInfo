@@ -10,8 +10,8 @@ import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
 import com.hewaiming.ALWorkInfo.json.JsonToBeanMap;
-import com.hewaiming.ALWorkInfo.net.HttpPost_Params;
-import com.hewaiming.ALWorkInfo.view.HeaderListView;
+import com.hewaiming.ALWorkInfo.net.HttpPost_area;
+import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 import com.hewaiming.allwork.R;
 import com.hewaiming.allwork.R.id;
 import com.hewaiming.allwork.R.layout;
@@ -43,8 +43,8 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	private int areaId = 11;
 	private ListView lv_params;
 	private ArrayAdapter<String> Area_adapter;
-	private HttpPost_Params http_post;
-	private HeaderListView headerView;
+	private HttpPost_area http_post;
+	private HeaderListView_Params headerView;
 	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotSetValueTable.php";
 
 	@Override
@@ -118,7 +118,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			if (lv_params.getHeaderViewsCount() > 0) {
 				lv_params.removeHeaderView(headerView);
 			}
-			headerView = new HeaderListView(this);// 添加表头
+			headerView = new HeaderListView_Params(this);// 添加表头
 			headerView.setTvPotNo("槽号");
 			headerView.setTvSetV("设定电压");
 			headerView.setTvNBTime("NB时间");
@@ -149,7 +149,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			finish();
 			break;
 		case R.id.btn_params:
-			http_post = (HttpPost_Params) new HttpPost_Params(url, this, this, Integer.toString(areaId)).execute();
+			http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
 		}
 	}
 

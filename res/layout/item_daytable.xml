@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/tv_PotNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="PotNo"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_PotSt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="potst"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_RunTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="runTime"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_SetV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="setv"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_RealSetV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="realsetv"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_WorkV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="workv"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_AverageV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="averagev"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_AeV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="Aev"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_AeTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="Aetime"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_AeCnt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="Aecnt"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_DybTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="dybtime"
+        android:textColor="@color/text_black" />
+
+    <TextView
+        android:id="@+id/tv_Ddate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="ddate"
+        android:textColor="@color/text_black" />
+
+</LinearLayout>

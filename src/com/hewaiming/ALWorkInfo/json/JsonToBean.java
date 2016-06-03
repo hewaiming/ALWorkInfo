@@ -111,7 +111,7 @@ public class JsonToBean {
 		}
 		return listBean;
 	}
-	
+
 	public static List<SetParams> JsonArrayToSetParamsBean(String data) {
 		ArrayList<SetParams> listBean = null;
 		try {
@@ -124,9 +124,9 @@ public class JsonToBean {
 				SetParams mSetParams = new SetParams();
 				mSetParams.setPotNo(jsonobj.getInt("PotNo"));
 				mSetParams.setNBTime(jsonobj.getInt("NBTime"));
-				mSetParams.setAETime(jsonobj.getInt("AETime")/60);
+				mSetParams.setAETime(jsonobj.getInt("AETime") / 60);
 				mSetParams.setALF(jsonobj.getInt("ALF"));
-				mSetParams.setSetV(jsonobj.getInt("SetV")/1000.0);
+				mSetParams.setSetV(jsonobj.getInt("SetV") / 1000.0);
 				listBean.add(mSetParams);
 			}
 		} catch (JSONException e) {
@@ -134,8 +134,8 @@ public class JsonToBean {
 		}
 		return listBean;
 	}
-	
-	//json 转换为 槽龄LIST
+
+	// json 转换为 槽龄LIST
 	public static List<PotAge> JsonArrayToPotAgeBean(String data) {
 		ArrayList<PotAge> listBean = null;
 		try {
@@ -147,10 +147,25 @@ public class JsonToBean {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				PotAge potAge = new PotAge();
 				potAge.setPotNo(jsonobj.getInt("PotNo"));
-				potAge.setBeginTime(jsonobj.getString("Potage"));
-				potAge.setEndTime(jsonobj.getString("StopAge"));
+
+				String begin_time = jsonobj.getString("PotAge");// 处理日期为YYYY-MM-DD
+				int location = begin_time.indexOf(" ");
+				// 为空处理
+				if (location == -1) {
+					potAge.setBeginTime(" ");
+				} else {
+					potAge.setBeginTime(begin_time.substring(0, location));
+				}
+
+				String end_time = jsonobj.getString("StopAge");// 处理日期为YYYY-MM-DD
+				int location2 = end_time.indexOf(" ");
+				if (location2 == -1) {
+					potAge.setEndTime(" ");
+				} else {
+					potAge.setEndTime(end_time.substring(0, location2));
+				}
+
 				potAge.setAge(jsonobj.getInt("Age"));
-				
 				listBean.add(potAge);
 			}
 		} catch (JSONException e) {

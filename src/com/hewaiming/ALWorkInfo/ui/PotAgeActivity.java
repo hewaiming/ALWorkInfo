@@ -6,13 +6,15 @@ import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
+import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
 import com.hewaiming.ALWorkInfo.json.JsonToBeanMap;
-import com.hewaiming.ALWorkInfo.net.HttpPost_Params;
-import com.hewaiming.ALWorkInfo.view.HeaderListView;
+import com.hewaiming.ALWorkInfo.net.HttpPost_area;
+import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
+import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
 import com.hewaiming.allwork.R;
 import com.hewaiming.allwork.R.id;
 import com.hewaiming.allwork.R.layout;
@@ -44,8 +46,8 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	private int areaId = 11;
 	private ListView lv_potage;
 	private ArrayAdapter<String> Area_adapter;
-	private HttpPost_Params http_post;
-	private HeaderListView headerView;
+	private HttpPost_area http_post;
+	private HeaderListView_PotAge headerView;
 	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotAgeTable.php";
 
 	@Override
@@ -67,14 +69,13 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 
 	private void init() {
 		lv_potage = (ListView) findViewById(R.id.lv_potage);
-		spinner = (Spinner) findViewById(R.id.spinner_area);
+		spinner = (Spinner) findViewById(R.id.PotAge_spinner_area);
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
 		// 设置下拉列表的风格
 		Area_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// 将adapter 添加到spinner中
 		spinner.setAdapter(Area_adapter);
-		// 添加事件Spinner事件监听
-		// 设置默认值
+		// 添加事件Spinner事件监听		
 		spinner.setVisibility(View.VISIBLE);
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -107,7 +108,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 			}
 
 		});
-		findBtn = (Button) findViewById(R.id.btn_params);
+		findBtn = (Button) findViewById(R.id.btn_potage);
 		findBtn.setOnClickListener(this);
 	}
 
@@ -119,12 +120,11 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 			if (lv_potage.getHeaderViewsCount() > 0) {
 				lv_potage.removeHeaderView(headerView);
 			}
-			headerView = new HeaderListView(this);// 添加表头
+			headerView = new HeaderListView_PotAge(this);// 添加表头
 			headerView.setTvPotNo("槽号");
-			headerView.setTvSetV("启槽时间");
-			headerView.setTvNBTime("停槽时间");
-			headerView.setTvAETime("槽年代");
-			headerView.setTvALF("");
+			headerView.setTvBeginTime("启槽时间");
+			headerView.setTvEndTime("停槽时间");
+			headerView.setTvAge("槽年代");			
 			lv_potage.addHeaderView(headerView);
 			
 			List<PotAge> listBean=new ArrayList<PotAge>();
@@ -138,8 +138,8 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 //			ArrayAdapter adapter = new ArrayAdapter<SetParams>(this, android.R.layout.simple_list_item_1, listBean);
 //			lv_params.setAdapter(adapter);
 //			lv_params.setAdapter(sadapter);
-//			Params_Adapter mAdapter=new Params_Adapter(this,listBean);
-//			lv_potage.setAdapter(mAdapter);
+			PotAge_Adapter potage_Adapter=new PotAge_Adapter(this,listBean);
+			lv_potage.setAdapter(potage_Adapter);
 		}
 	}
 
@@ -149,8 +149,8 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_params:
-			http_post = (HttpPost_Params) new HttpPost_Params(url, this, this, Integer.toString(areaId)).execute();
+		case R.id.btn_potage:
+			http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
 		}
 	}
 

@@ -30,9 +30,8 @@ public class JSONArrayParser {
 	// constructor
 	public JSONArrayParser() {
 	}
-
-	// function get json from url
-	// by making HTTP POST or GET method
+	
+	// by making HTTP POST or GET method // function get json from url
 	public JSONArray makeHttpRequest(String url, String method, List<NameValuePair> params) {
 
 		// Making HTTP request
@@ -90,10 +89,8 @@ public class JSONArrayParser {
 		
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());
-		}
-		
-		try {
-			
+		}		
+		try {			
 			jObj = new JSONArray(json);
 			
 		} catch (JSONException e) {

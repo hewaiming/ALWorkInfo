@@ -1,27 +1,36 @@
 package com.hewaiming.ALWorkInfo.bean;
 
-public class dayTable {
+public class dayTable {	
 	private int PotNo;
 	private String PotSt;
+	private int RunTime;
 	private double AverageV;
 	private double RealSetV;
 	private double SetV;
 	private double WorkV;
 	private double AeV;
 	private int AeTime;
+	private int AeCnt;
+	private int DybTime;
 	private String Ddate;
-	public dayTable(int potNo, String potSt, double averageV, double realSetV, double setV, double workV, double aeV,
-			int aeTime, String ddate) {		
+	
+	public dayTable(int potNo, String potSt, int runTime, double averageV, double realSetV, double setV, double workV,
+			double aeV, int aeTime, int aeCnt, int dybTime, String ddate) {
+		super();
 		PotNo = potNo;
 		PotSt = potSt;
+		RunTime = runTime;
 		AverageV = averageV;
 		RealSetV = realSetV;
 		SetV = setV;
 		WorkV = workV;
 		AeV = aeV;
 		AeTime = aeTime;
+		AeCnt = aeCnt;
+		DybTime = dybTime;
 		Ddate = ddate;
 	}
+	
 	public int getPotNo() {
 		return PotNo;
 	}
@@ -79,10 +88,36 @@ public class dayTable {
 	public dayTable() {
 		
 	}
+
+	public int getRunTime() {
+		return RunTime;
+	}
+
+	public void setRunTime(int runTime) {
+		RunTime = runTime;
+	}
+
+	public int getAeCnt() {
+		return AeCnt;
+	}
+
+	public void setAeCnt(int aeCnt) {
+		AeCnt = aeCnt;
+	}
+
+	public int getDybTime() {
+		return DybTime;
+	}
+
+	public void setDybTime(int dybTime) {
+		DybTime = dybTime;
+	}
+
 	@Override
 	public String toString() {
-		return "[PotNo=" + PotNo + ", PotSt=" + PotSt + ", AverageV=" + AverageV + ", RealSetV=" + RealSetV
-				+ ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime=" + AeTime + ", Ddate=" + Ddate
-				+ "]";
+		return "dayTable [PotNo=" + PotNo + ", PotSt=" + PotSt + ", RunTime=" + RunTime + ", AverageV=" + AverageV
+				+ ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime="
+				+ AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", Ddate=" + Ddate + "]";
 	}
+	
 }
