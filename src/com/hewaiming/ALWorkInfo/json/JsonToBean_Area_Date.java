@@ -10,9 +10,9 @@ import org.json.JSONObject;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
-public class JsonToBean_Area_Date {	
+public class JsonToBean_Area_Date {
 
-	public static  List<dayTable> JsonArrayToDayTableBean(String data) {
+	public static List<dayTable> JsonArrayToDayTableBean(String data) {
 
 		ArrayList<dayTable> listBean = null;
 		try {
@@ -24,13 +24,30 @@ public class JsonToBean_Area_Date {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				dayTable mday = new dayTable();
 				mday.setPotNo(jsonobj.getInt("PotNo"));
-				mday.setPotSt(jsonobj.getString("PotST"));
-				if ((jsonobj.getString("PotST").toUpperCase()).equals("STOP")) {
+//				mday.setPotSt(jsonobj.getString("PotST"));
+				
+				String Pot_status = jsonobj.getString("PotST").toUpperCase();
+				switch (Pot_status) {
+				case "NORM":
+					mday.setPotSt("正常");
+					break;
+				case "STOP":
+					mday.setPotSt("停槽");
+					break;
+				case "PREHEAT":
+					mday.setPotSt("预热");
+					break;
+				case "START":
+					mday.setPotSt("启动");
+					break;				
+				}
+				
+				if (Pot_status.equals("STOP")) {
 					mday.setAeTime(0);
-				    mday.setAeV(0);
-				    mday.setAeCnt(0);
-				    mday.setDybTime(0);
-				    mday.setRunTime(0);
+					mday.setAeV(0);
+					mday.setAeCnt(0);
+					mday.setDybTime(0);
+					mday.setRunTime(0);
 					mday.setSetV(0);
 					mday.setRealSetV(0);
 					mday.setWorkV(0);
@@ -43,13 +60,13 @@ public class JsonToBean_Area_Date {
 					mday.setSetV(jsonobj.getDouble("SetV"));
 					mday.setRealSetV(jsonobj.getDouble("RealSetV"));
 					mday.setWorkV(jsonobj.getDouble("WorkV"));
-				}	
+				}
 				mday.setAverageV(jsonobj.getDouble("AverageV"));
-				
+
 				String mdata = jsonobj.getString("Ddate");
 				int location = mdata.indexOf(" ");
 				mday.setDdate(mdata.substring(0, location));
-				
+
 				listBean.add(mday);
 			}
 		} catch (JSONException e) {
@@ -58,7 +75,6 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-	
 
 	public List<PotV> JsonArrayToPotVBean(String data) {
 		ArrayList<PotV> listBean = null;
@@ -82,7 +98,6 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-
 	public static List<String> JsonArrayToDate(String data) {
 
 		ArrayList<String> listBean = null;
@@ -103,5 +118,5 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-	
+
 }

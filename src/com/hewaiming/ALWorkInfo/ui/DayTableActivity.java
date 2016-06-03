@@ -117,7 +117,7 @@ public class DayTableActivity extends Activity implements HttpGetListener,HttpGe
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				areaId = 11;
+				
 			}
 
 		});
