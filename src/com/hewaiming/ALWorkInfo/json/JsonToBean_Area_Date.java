@@ -1,7 +1,9 @@
 package com.hewaiming.ALWorkInfo.json;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +26,8 @@ public class JsonToBean_Area_Date {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				dayTable mday = new dayTable();
 				mday.setPotNo(jsonobj.getInt("PotNo"));
-//				mday.setPotSt(jsonobj.getString("PotST"));
-				
+				// mday.setPotSt(jsonobj.getString("PotST"));
+
 				String Pot_status = jsonobj.getString("PotST").toUpperCase();
 				switch (Pot_status) {
 				case "NORM":
@@ -39,9 +41,9 @@ public class JsonToBean_Area_Date {
 					break;
 				case "START":
 					mday.setPotSt("Æô¶¯");
-					break;				
+					break;
 				}
-				
+
 				if (Pot_status.equals("STOP")) {
 					mday.setAeTime(0);
 					mday.setAeV(0);
@@ -117,6 +119,28 @@ public class JsonToBean_Area_Date {
 			e.printStackTrace();
 		}
 		return listBean;
+	}
+
+	public static List<Map<String, Object>> JsonArrayToJXRecord(String data) {
+
+		List<Map<String, Object>> RXList = new ArrayList<Map<String, Object>>();
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			for (int i = 0; i < jsonarray.length(); i++) {
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", jsonobj.getString("RecordNo"));				
+				map.put("jx_name", jsonobj.getString("Name1"));
+				RXList.add(map);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+
+		return RXList;
 	}
 
 }

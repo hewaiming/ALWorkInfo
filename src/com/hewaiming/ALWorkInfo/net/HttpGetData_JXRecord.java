@@ -19,7 +19,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 
 import android.R.string;
@@ -28,30 +27,31 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpGetData_date extends AsyncTask<String, Void, String> {
+public class HttpGetData_JXRecord extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
+
 	// 声明接口
-	private HttpGetDate_Listener listener;
+	private HttpGetJXRecord_Listener listener;
 
 	private HttpPost_NoParams jsonParser = new HttpPost_NoParams();
 
-	public HttpGetData_date() {
+	public HttpGetData_JXRecord() {
 
 	}
 
-	public HttpGetData_date(String url, HttpGetDate_Listener listener) {
+	public HttpGetData_JXRecord(String url, HttpGetJXRecord_Listener listener) {
 		super();
 		this.url = url;
 		this.listener = listener;
 	}
 
-	public HttpGetData_date(String url) {
+	public HttpGetData_JXRecord(String url) {
 		this.url = url;
 	}	
 
-	public HttpGetData_date(String url, HttpGetDate_Listener listener, Context context) {
+	public HttpGetData_JXRecord(String url, HttpGetJXRecord_Listener listener, Context context) {
 		this.url = url;
 		this.listener = listener;
 		this.mContext = context;		
@@ -63,7 +63,7 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 		super.onPreExecute();
 
 		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("初始化日期数据....");
+		pDialog.setMessage("初始化解析记录号名称....");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();
@@ -85,7 +85,7 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		pDialog.dismiss();
-		listener.GetALLDayUrl(result);
+		listener.GetJXRecordUrl(result);
 		super.onPostExecute(result);
 	}
 

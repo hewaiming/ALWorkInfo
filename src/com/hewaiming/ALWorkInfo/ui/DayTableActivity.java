@@ -44,31 +44,60 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DayTableActivity extends Activity implements HttpGetListener,HttpGetDate_Listener, OnClickListener {
+public class DayTableActivity extends Activity implements HttpGetListener, OnClickListener {
 	private Spinner spinner_area, spinner_date;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ListView lv_daytable;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
+
 	private HttpPost_area_date http_post;
 	private HeaderListView_dayTable headerView;
 	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTableArea_date.php";
-	private String getdate_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/getDate.php";
+	// private String getdate_url =
+	// "http://125.64.59.11:8000/scgy/android/odbcPhP/getDate.php";
 	private String ddate;
+
 	private HttpGetData_date mhttpgetdata_date;
-	private List<String> dateBean;
+	private List<String> dateBean = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
-		mhttpgetdata_date = (HttpGetData_date) new HttpGetData_date(getdate_url, this, this).execute();
-		init();
-		init_title();	
+		dateBean = getIntent().getStringArrayListExtra("date_table");
+		// mhttpgetdata_date = (HttpGetData_global) new
+		// HttpGetData_global(getdate_url, this, this).execute();
+		init_area();
+		init_date();
+		init_title();
 	}
-	
+
+	private void init_date() {
+		Date_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dateBean);
+		// 设置下拉列表的风格
+		Date_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		spinner_date.setAdapter(Date_adapter);
+		spinner_date.setVisibility(View.VISIBLE);
+		ddate = spinner_date.getItemAtPosition(0).toString();
+
+		spinner_date.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				ddate = spinner_date.getItemAtPosition(position).toString();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
+		
+	}
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
@@ -78,11 +107,11 @@ public class DayTableActivity extends Activity implements HttpGetListener,HttpGe
 
 	}
 
-	private void init() {
+	private void init_area() {
 		lv_daytable = (ListView) findViewById(R.id.lv_daytable);
 		spinner_area = (Spinner) findViewById(R.id.spinner_area);
-		spinner_date=(Spinner) findViewById(R.id.spinner_date);
-		
+		spinner_date = (Spinner) findViewById(R.id.spinner_date);
+
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
 		// 设置下拉列表的风格
 		Area_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -117,7 +146,7 @@ public class DayTableActivity extends Activity implements HttpGetListener,HttpGe
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				
+
 			}
 
 		});
@@ -170,36 +199,37 @@ public class DayTableActivity extends Activity implements HttpGetListener,HttpGe
 			finish();
 			break;
 		case R.id.btn_daytable:
-			http_post = (HttpPost_area_date) new HttpPost_area_date(url, this, this, Integer.toString(areaId),ddate)
+			http_post = (HttpPost_area_date) new HttpPost_area_date(url, this, this, Integer.toString(areaId), ddate)
 					.execute();
 		}
 	}
 
-	@Override
+	/*@Override
 	public void GetALLDayUrl(String data) {
-		//初始化日期控件	
-		dateBean=new ArrayList<String>();
+		// 初始化日期控件
+		dateBean = new ArrayList<String>();
 		dateBean = JsonToBean_Area_Date.JsonArrayToDate(data);
 		Date_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dateBean);
 		// 设置下拉列表的风格
 		Date_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		spinner_date.setAdapter(Date_adapter);		
+		spinner_date.setAdapter(Date_adapter);
 		spinner_date.setVisibility(View.VISIBLE);
-		ddate = spinner_date.getItemAtPosition(0).toString();	
-		
+		ddate = spinner_date.getItemAtPosition(0).toString();
+
 		spinner_date.setOnItemSelectedListener(new OnItemSelectedListener() {
-			
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				ddate = spinner_date.getItemAtPosition(position).toString();
 			}
+
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {			
+			public void onNothingSelected(AdapterView<?> parent) {
 
 			}
-		});	
-		
-	}
+		});
 
+	}
+*/
 }
