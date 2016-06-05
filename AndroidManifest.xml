@@ -32,6 +32,8 @@
         </activity>
          <activity android:name="com.hewaiming.ALWorkInfo.ui.DayTableActivity" >
         </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.FaultRecActivity" >
+        </activity>
     </application>
 
 </manifest>

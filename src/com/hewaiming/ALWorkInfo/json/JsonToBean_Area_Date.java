@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
@@ -129,9 +130,9 @@ public class JsonToBean_Area_Date {
 
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
-				
+
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", jsonobj.getString("RecordNo"));				
+				map.put("id", jsonobj.getString("RecordNo"));
 				map.put("jx_name", jsonobj.getString("Name1"));
 				RXList.add(map);
 			}
@@ -141,6 +142,34 @@ public class JsonToBean_Area_Date {
 		}
 
 		return RXList;
+	}
+
+	public static List<FaultRecord> JsonArrayToFaultRecordBean(String data, List<Map<String, Object>> JXList) {
+		ArrayList<FaultRecord> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<FaultRecord>();
+			System.out.println("jsonarray.FaultRecord---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				FaultRecord mFault = new FaultRecord();
+				mFault.setPotNo(jsonobj.getInt("PotNo"));
+				mFault.setRecTime(jsonobj.getString("DDate"));
+				
+				int recNo = jsonobj.getInt("RecordNo");
+				recNo=recNo-1;
+				Map mMap = JXList.get(recNo);
+				System.out.println("jx_name"+mMap.get("jx_name").toString());
+				mFault.setRecordNo(mMap.get("jx_name").toString());
+				listBean.add(mFault);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
 	}
 
 }
