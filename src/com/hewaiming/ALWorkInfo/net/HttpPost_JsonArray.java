@@ -22,13 +22,13 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class HttpPost_NoParams {
+public class HttpPost_JsonArray {
 	static InputStream is = null;
 	static JSONArray jObj = null;
 	static String json = "";
 
 	// constructor
-	public HttpPost_NoParams() {
+	public HttpPost_JsonArray() {
 	}
 
 	// function get json from url
@@ -86,8 +86,9 @@ public class HttpPost_NoParams {
 			
 			jObj = new JSONArray(json);
 			
-		} catch (JSONException e) {
+		} catch (JSONException e) {			
 			Log.e("JSONPArser--NoParams", "Error Parsing data" + e.toString());
+			return null;
 		}
 		return jObj;
 	}

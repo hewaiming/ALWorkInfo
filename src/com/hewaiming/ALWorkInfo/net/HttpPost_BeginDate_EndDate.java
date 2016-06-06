@@ -22,39 +22,41 @@ import org.json.JSONObject;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 
+import android.R.integer;
 import android.R.string;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpPost_BeginDate_EndDate_Area extends AsyncTask<String, Void, String> {
+public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
-	private String Area;
+	private String Area_PotNo;
+	private int type;
 	private String BeginDate, EndDate;
 	// 声明接口
 	private HttpGetListener listener;
 	private JSONArrayParser jsonParser = new JSONArrayParser();
 
-	public HttpPost_BeginDate_EndDate_Area() {
+	public HttpPost_BeginDate_EndDate() {
 
 	}
 
-	public HttpPost_BeginDate_EndDate_Area(String url, String area, String beginDate, String endDate,
+	public HttpPost_BeginDate_EndDate(String url, int type, String area, String beginDate, String endDate,
 			HttpGetListener listener, Context mContext) {
 
 		this.mContext = mContext;
 		this.url = url;
-		this.Area = area;
-
+		this.Area_PotNo = area;
+		this.type = type;
 		this.BeginDate = beginDate;
 		this.EndDate = endDate;
 		this.listener = listener;
 	}
 
-	public HttpPost_BeginDate_EndDate_Area(String url) {
+	public HttpPost_BeginDate_EndDate(String url) {
 		this.url = url;
 	}
 
@@ -74,14 +76,20 @@ public class HttpPost_BeginDate_EndDate_Area extends AsyncTask<String, Void, Str
 		// Building Parameters
 		List<NameValuePair> mparams = new ArrayList<NameValuePair>();
 		mparams.clear();
+		if (type == 1) {
+			mparams.add(new BasicNameValuePair("areaID", Area_PotNo)); // 全部槽号
+			mparams.add(new BasicNameValuePair("BeginDate", BeginDate));
+			mparams.add(new BasicNameValuePair("EndDate", EndDate));
+		} else if (type == 2) {
+			mparams.add(new BasicNameValuePair("PotNo", Area_PotNo)); // 槽号
+			mparams.add(new BasicNameValuePair("BeginDate", BeginDate));
+			mparams.add(new BasicNameValuePair("EndDate", EndDate));
 
-		mparams.add(new BasicNameValuePair("areaID", Area)); // 全部槽号
-		mparams.add(new BasicNameValuePair("areaBeginDate", BeginDate));
-		mparams.add(new BasicNameValuePair("areaEndDate", EndDate));
+		}
 
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
 
-		Log.d("Login attempt", json.toString());// full json response
+		Log.d("json_area_potno", json.toString());// full json response
 		return json.toString();
 	}
 

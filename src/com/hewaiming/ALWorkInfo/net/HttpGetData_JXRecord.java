@@ -35,7 +35,7 @@ public class HttpGetData_JXRecord extends AsyncTask<String, Void, String> {
 	// ÉùÃ÷½Ó¿Ú
 	private HttpGetJXRecord_Listener listener;
 
-	private HttpPost_NoParams jsonParser = new HttpPost_NoParams();
+	private HttpPost_JsonArray jsonParser = new HttpPost_JsonArray();
 
 	public HttpGetData_JXRecord() {
 

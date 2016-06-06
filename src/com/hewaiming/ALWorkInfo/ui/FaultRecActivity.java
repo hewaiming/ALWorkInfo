@@ -17,7 +17,7 @@ import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_Area;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_PotNo;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area_date;
@@ -59,8 +59,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
 
-	private HttpPost_BeginDate_EndDate_Area http_post;
-	private HttpPost_BeginDate_EndDate_PotNo http_post_potno;
+	private HttpPost_BeginDate_EndDate http_post;
 	private HeaderListView_AlarmRecord headerView;
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
 	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
@@ -258,7 +257,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data.equals(null) || data == "") {
+		if (data==null ) {
 			Toast.makeText(getApplicationContext(), "没有找到日报数据！", Toast.LENGTH_LONG).show();
 			listBean.clear();
 			faultRec_Adapter.notifyDataSetChanged();
@@ -293,12 +292,12 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
 				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate_Area) new HttpPost_BeginDate_EndDate_Area(area_url,
+					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
 							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
 				} else {
 
-					http_post_potno = (HttpPost_BeginDate_EndDate_PotNo) new HttpPost_BeginDate_EndDate_PotNo(potno_url,
-							PotNo, BeginDate, EndDate, this, this).execute();
+					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
+							BeginDate, EndDate, this, this).execute();
 				}
 			}
 			break;

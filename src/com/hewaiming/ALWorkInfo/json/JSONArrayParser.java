@@ -30,7 +30,7 @@ public class JSONArrayParser {
 	// constructor
 	public JSONArrayParser() {
 	}
-	
+
 	// by making HTTP POST or GET method // function get json from url
 	public JSONArray makeHttpRequest(String url, String method, List<NameValuePair> params) {
 
@@ -67,32 +67,35 @@ public class JSONArrayParser {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
-//			String line = null;
-//			while ((line = reader.readLine()) != null) {
-//				sb.append(line);				
-//			}
+			// String line = null;
+			// while ((line = reader.readLine()) != null) {
+			// sb.append(line);
+			// }
 			int b;
-			while((b=reader.read())!=-1){
-				if(b=='}'){
-					sb.append((char)b);	
+			while ((b = reader.read()) != -1) {
+				if (b == '}') {
+					sb.append((char) b);
 					sb.append(',');
-				}else{
-					sb.append((char)b);
-				}					
+				} else {
+					sb.append((char) b);
+				}
 			}
 			is.close();
 			json = sb.toString();
-//			System.out.println("json before---" + json);
-			json=json.substring(0, json.length()-1);
-			json='['+json+']';
+			// System.out.println("json before---" + json);
+			json = json.substring(0, json.length() - 1);
+			json = '[' + json + ']';
 			System.out.println("json after---" + json);
-		
+
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());
-		}		
-		try {			
-			jObj = new JSONArray(json);
-			
+		}
+		try {
+			if (!(json.equals(""))) {
+
+				jObj = new JSONArray(json);
+			}
+
 		} catch (JSONException e) {
 			Log.e("JSON PArser", "Error Parsing data" + e.toString());
 		}
