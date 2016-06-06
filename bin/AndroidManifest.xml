@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hewaiming.allwork"
+    package="com.hewaiming.ALWorkInfo"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -10,8 +10,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application      
-        android:allowBackup="true"     
+    <application
+        android:allowBackup="true"
         android:icon="@drawable/factory"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -30,9 +30,13 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.PotAgeActivity" >
         </activity>
-         <activity android:name="com.hewaiming.ALWorkInfo.ui.DayTableActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.DayTableActivity" >
         </activity>
-         <activity android:name="com.hewaiming.ALWorkInfo.ui.FaultRecActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.FaultRecActivity" >
+        </activity>
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.AlarmRecActivity" >
+        </activity>
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.RealRecActivity" >
         </activity>
     </application>
 

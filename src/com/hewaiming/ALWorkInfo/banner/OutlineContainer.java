@@ -1,6 +1,6 @@
 package com.hewaiming.ALWorkInfo.banner;
 
-import com.hewaiming.allwork.R;
+import com.hewaiming.ALWorkInfo.R;
 
 import android.content.Context;
 import android.graphics.Canvas;

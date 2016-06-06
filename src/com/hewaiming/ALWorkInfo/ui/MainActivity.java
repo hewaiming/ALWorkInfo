@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_JXRecord;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
-import com.hewaiming.allwork.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -125,10 +125,24 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			Bundle mbundle=new Bundle();
 			mbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			mbundle.putSerializable("JXList", (Serializable) JXList);
-		
-//			faultRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			faultRec_intent.putExtras(mbundle);			
 			startActivity(faultRec_intent);
+			break;
+		case 6:
+			Intent realRec_intent = new Intent(MainActivity.this, RealRecActivity.class);
+			Bundle realbundle=new Bundle();
+			realbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			realbundle.putSerializable("JXList", (Serializable) JXList);
+			realRec_intent.putExtras(realbundle);			
+			startActivity(realRec_intent);
+			break;
+		case 14:
+			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);
+			Bundle bundle_alarm=new Bundle();
+			bundle_alarm.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			bundle_alarm.putSerializable("JXList", (Serializable) JXList);
+			alarmRec_intent.putExtras(bundle_alarm);			
+			startActivity(alarmRec_intent);
 			break;
 		}
 

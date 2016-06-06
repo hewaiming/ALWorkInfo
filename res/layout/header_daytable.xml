@@ -15,7 +15,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="PotNo"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="potst"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="runTime"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="setv"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="realsetv"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -75,7 +75,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="workv"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -87,7 +87,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="averagev"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -99,7 +99,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="Aev"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -111,7 +111,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="Aetime"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -123,7 +123,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="Aecnt"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -135,7 +135,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="dybtime"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
     <TextView
@@ -147,7 +147,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="ddate"
-        android:textColor="@color/text_black"
+        android:textColor="@color/header_text"
         android:textSize="9sp" />
 
 </LinearLayout>

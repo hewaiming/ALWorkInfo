@@ -6,8 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.hewaiming.ALWorkInfo.R;
-import com.hewaiming.ALWorkInfo.bean.PotAge;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -23,12 +22,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PotAge_Adapter extends BaseAdapter {
+public class RealRecord_Adapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
-	private List<PotAge> mList;
+	private List<RealRecord> mList;
 
-	public PotAge_Adapter(Context mContext, List<PotAge> mList) {
+	public RealRecord_Adapter(Context mContext, List<RealRecord> mList) {
 		this.inflater = LayoutInflater.from(mContext);
 		this.mList = mList;
 	}
@@ -53,15 +52,16 @@ public class PotAge_Adapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		PotAge entity = mList.get(position);
+		RealRecord entity = mList.get(position);
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.item_potage, null);
+			convertView = inflater.inflate(R.layout.item_real_record, null);
 			holder.PotNo_tv = (TextView) convertView.findViewById(R.id.tv_PotNo);
-			holder.BeginTime_tv = (TextView) convertView.findViewById(R.id.tv_BeginTime);
-			holder.EndTime_tv = (TextView) convertView.findViewById(R.id.tv_EndTime);
-			holder.Age_tv = (TextView) convertView.findViewById(R.id.tv_Age);
+			holder.RecordNo_tv = (TextView) convertView.findViewById(R.id.tv_RecordNo);
+			holder.Param1_tv = (TextView) convertView.findViewById(R.id.tv_param1);
+			holder.Param2_tv = (TextView) convertView.findViewById(R.id.tv_param2);
+			holder.RecTime_tv = (TextView) convertView.findViewById(R.id.tv_RecTime);
 
 			convertView.setTag(holder);
 		} else {
@@ -70,20 +70,23 @@ public class PotAge_Adapter extends BaseAdapter {
 		TextPaint tPaint = holder.PotNo_tv.getPaint();
 		tPaint.setFakeBoldText(true);
 		holder.PotNo_tv.setText(entity.getPotNo() + "");
-		holder.BeginTime_tv.setText(entity.getBeginTime());
-		holder.EndTime_tv.setText(entity.getEndTime());
-		holder.Age_tv.setText(entity.getAge() + "");
+		holder.RecordNo_tv.setText(entity.getRecordNo());
+		holder.Param1_tv.setText(entity.getParam1());
+		holder.Param2_tv.setText(entity.getParam2());
+		holder.RecTime_tv.setText(entity.getRecTime());
 		return convertView;
 	}
 
 	class ViewHolder {
 		TextView PotNo_tv;
-		TextView BeginTime_tv;
-		TextView EndTime_tv;
-		TextView Age_tv;
+		TextView RecordNo_tv;
+		TextView Param1_tv;
+		TextView Param2_tv;
+		TextView RecTime_tv;
+
 	}
 
-	public void onDateChange(List<PotAge> mList) {
+	public void onDateChange(List<RealRecord> mList) {
 		this.mList = mList;
 		this.notifyDataSetChanged();
 

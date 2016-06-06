@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.PotV;
+import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
 public class JsonToBean_Area_Date {
@@ -161,10 +162,52 @@ public class JsonToBean_Area_Date {
 				
 				int recNo = jsonobj.getInt("RecordNo");
 				recNo=recNo-1;
-				Map mMap = JXList.get(recNo);
+				Map<String, Object> mMap = JXList.get(recNo);
 				System.out.println("jx_name"+mMap.get("jx_name").toString());
 				mFault.setRecordNo(mMap.get("jx_name").toString());
 				listBean.add(mFault);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+
+	public static List<RealRecord> JsonArrayToRealRecordBean(String data, List<Map<String, Object>> JXList) {
+	
+		List<RealRecord> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<RealRecord>();
+			listBean.clear();
+			System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				RealRecord mReal = new RealRecord();
+				mReal.setPotNo(jsonobj.getInt("PotNo"));
+				mReal.setRecTime(jsonobj.getString("DDate"));
+				
+				int recNo = jsonobj.getInt("RecordNo");
+				recNo=recNo-1;
+				Map<String, Object> mMap = JXList.get(recNo);
+				System.out.println("jx_name:"+mMap.get("jx_name").toString());
+				mReal.setRecordNo(mMap.get("jx_name").toString());					
+				
+				if (jsonobj.get("Val2").equals(null)){
+					mReal.setParam1("");
+				}else{
+					mReal.setParam1(jsonobj.getInt("Val2")+"");
+				}
+				if (jsonobj.get("Val3").equals(null)){
+					mReal.setParam2("");
+				}else{
+					mReal.setParam2(jsonobj.getInt("Val3")+"");
+				}			
+				
+				listBean.add(mReal);
 			}
 		} catch (JSONException e) {
 

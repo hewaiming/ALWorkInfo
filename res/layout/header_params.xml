@@ -15,7 +15,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="PotNo"
-        android:textColor="#000000"
+        android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="SetV"
-        android:textColor="#000000"
+        android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="NbTime"
-        android:textColor="#000000"
+        android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="AeTime"
-        android:textColor="#000000"
+        android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="ALF"
-        android:textColor="#000000"
+        android:textColor="@color/header_text"
         android:textSize="11sp" />
 
 </LinearLayout>

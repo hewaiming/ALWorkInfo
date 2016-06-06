@@ -46,7 +46,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FaultRecActivity extends Activity implements HttpGetListener, OnClickListener {
+public class AlarmRecActivity extends Activity implements HttpGetListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -57,8 +57,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 
 	private HttpPost_BeginDate_EndDate http_post;
 	private HeaderListView_AlarmRecord headerView;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
+	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AlarmRecordTable_potno_date.php";
+	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AlarmRecordTable_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
 
@@ -154,7 +154,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("¹ÊÕÏ¼ÇÂ¼");
+		tv_title.setText("±¨¾¯¼ÇÂ¼");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 

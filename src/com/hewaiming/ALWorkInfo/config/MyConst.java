@@ -1,6 +1,6 @@
 package com.hewaiming.ALWorkInfo.config;
 
-import com.hewaiming.allwork.R;
+import com.hewaiming.ALWorkInfo.R;
 
 import android.os.Environment;
 

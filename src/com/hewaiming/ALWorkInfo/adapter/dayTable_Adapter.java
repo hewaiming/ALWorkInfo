@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
-import com.hewaiming.allwork.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;

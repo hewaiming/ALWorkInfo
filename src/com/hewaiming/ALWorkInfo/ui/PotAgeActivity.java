@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
@@ -15,11 +16,6 @@ import com.hewaiming.ALWorkInfo.json.JsonToBeanMap;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
-import com.hewaiming.allwork.R;
-import com.hewaiming.allwork.R.id;
-import com.hewaiming.allwork.R.layout;
-import com.hewaiming.allwork.R.menu;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

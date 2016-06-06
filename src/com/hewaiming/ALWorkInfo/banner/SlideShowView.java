@@ -24,9 +24,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
+import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.banner.JazzyViewPager.TransitionEffect;
 import com.hewaiming.ALWorkInfo.config.MyConst;
-import com.hewaiming.allwork.R;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;

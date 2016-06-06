@@ -23,9 +23,9 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class JSONArrayParser {
-	static InputStream is = null;
-	static JSONArray jObj = null;
-	static String json = "";
+	 InputStream is = null;
+	 JSONArray jObj = null;
+	 String json = "";
 
 	// constructor
 	public JSONArrayParser() {
@@ -67,10 +67,10 @@ public class JSONArrayParser {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
-			// String line = null;
-			// while ((line = reader.readLine()) != null) {
-			// sb.append(line);
-			// }
+					// String line = null;
+					// while ((line = reader.readLine()) != null) {
+					// sb.append(line);
+					// }
 			int b;
 			while ((b = reader.read()) != -1) {
 				if (b == '}') {
@@ -81,18 +81,18 @@ public class JSONArrayParser {
 				}
 			}
 			is.close();
-			json = sb.toString();
-			// System.out.println("json before---" + json);
+			json="";
+			json = sb.toString();		
 			json = json.substring(0, json.length() - 1);
 			json = '[' + json + ']';
 			System.out.println("json after---" + json);
 
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());
+			return jObj;
 		}
 		try {
 			if (!(json.equals(""))) {
-
 				jObj = new JSONArray(json);
 			}
 

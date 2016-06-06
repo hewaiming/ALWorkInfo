@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
@@ -20,11 +21,6 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_area_date;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_dayTable;
-import com.hewaiming.allwork.R;
-import com.hewaiming.allwork.R.id;
-import com.hewaiming.allwork.R.layout;
-import com.hewaiming.allwork.R.menu;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +58,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 	private HttpGetData_date mhttpgetdata_date;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<dayTable> listBean;
+	private dayTable_Adapter daytable_Adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,14 +154,17 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data.equals(null) || data == "") {
+		if (data.equals("") || data == null) {
 			Toast.makeText(getApplicationContext(), "没有找到日报数据！", Toast.LENGTH_LONG).show();
+			if (listBean.size() > 0) { 
+				listBean.clear();		// 清除LISTVIEW 以前的内容
+				daytable_Adapter.onDateChange(listBean);
+			}
 		} else {
 			if (lv_daytable.getHeaderViewsCount() > 0) {
 				lv_daytable.removeHeaderView(headerView);
-			}
-			// PotNo,
-			// PotSt,RunTime,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate
+			}		
+			// PotNo,PotSt,RunTime,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate
 			headerView = new HeaderListView_dayTable(this);// 添加表头
 			headerView.setTvPotNo("槽号");
 			headerView.setTvPotSt("槽状态");
@@ -183,12 +183,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 
 			listBean = new ArrayList<dayTable>();
 			listBean = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
-
-			// ArrayAdapter adapter = new ArrayAdapter<SetParams>(this,
-			// android.R.layout.simple_list_item_1, listBean);
-			// lv_params.setAdapter(adapter);
-			// lv_params.setAdapter(sadapter);
-			dayTable_Adapter daytable_Adapter = new dayTable_Adapter(this, listBean);
+			
+			daytable_Adapter = new dayTable_Adapter(this, listBean);
 			lv_daytable.setAdapter(daytable_Adapter);
 		}
 	}
@@ -199,8 +195,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_submit:
-			listBean.clear();
+		case R.id.btn_submit:			
 			http_post = (HttpPost_area_date) new HttpPost_area_date(url, this, this, Integer.toString(areaId), ddate)
 					.execute();
 		}

@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="55dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="7dp"
         android:layout_weight="1"
         android:text="PotNo"
@@ -25,10 +25,37 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="86dp"
+        android:layout_marginRight="48dp"
         android:layout_marginTop="7dp"
         android:layout_weight="2"
         android:text="BeginTime"
+        android:textColor="@color/header_text"
+        android:textSize="12sp" />
+    
+    
+    <TextView
+        android:id="@+id/tv_param1_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="2"
+        android:text="EndTime"
+        android:textColor="@color/header_text"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/tv_param2_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="2"
+        android:text="EndTime"
         android:textColor="@color/header_text"
         android:textSize="12sp" />
 
@@ -38,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="7dp"
         android:layout_marginTop="7dp"
         android:layout_weight="2"
         android:text="EndTime"

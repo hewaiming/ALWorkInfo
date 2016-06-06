@@ -74,7 +74,7 @@ public class HttpPost_area_date extends AsyncTask<String, Void, String> {
 
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
 		// full json response
-		Log.d("Login attempt", json.toString());
+		Log.d("dayTable---", json.toString());
 		return json.toString();
 	}
 

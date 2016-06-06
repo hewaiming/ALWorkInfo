@@ -80,6 +80,7 @@ public class HttpPost_JsonArray {
 		
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());
+			return null;
 		}
 		// try parse the string to a JSON object
 		try {
