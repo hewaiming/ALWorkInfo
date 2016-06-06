@@ -17,7 +17,8 @@ import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_Area;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_PotNo;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area_date;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_AlarmRecord;
@@ -58,16 +59,19 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
 
-	private HttpPost_BeginDate_EndDate http_post;
+	private HttpPost_BeginDate_EndDate_Area http_post;
+	private HttpPost_BeginDate_EndDate_PotNo http_post_potno;
 	private HeaderListView_AlarmRecord headerView;
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
 	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
-	
+
 	private String PotNo, BeginDate, EndDate;
 
 	private List<String> dateBean = new ArrayList<String>();
-	private List<Map<String,Object>> JXList=new ArrayList<Map<String,Object>>();
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private List<String> PotNoList;
+	private List<FaultRecord> listBean = null;
+	private FaultRecord_Adapter faultRec_Adapter = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -204,7 +208,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 			}
 
 		});
-		findBtn = (Button) findViewById(R.id.btn_faultRec);
+		findBtn = (Button) findViewById(R.id.btn_ok);
 		findBtn.setOnClickListener(this);
 	}
 
@@ -249,33 +253,31 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		}
 		PotNoList.add(0, "全部槽号");
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+		spinner_potno.setId(0);
 	}
 
 	@Override
 	public void GetDataUrl(String data) {
 		if (data.equals(null) || data == "") {
 			Toast.makeText(getApplicationContext(), "没有找到日报数据！", Toast.LENGTH_LONG).show();
+			listBean.clear();
+			faultRec_Adapter.notifyDataSetChanged();
 		} else {
 			if (lv_faultRec.getHeaderViewsCount() > 0) {
 				lv_faultRec.removeHeaderView(headerView);
 			}
-				
+
 			headerView = new HeaderListView_AlarmRecord(this);// 添加表头
 			headerView.setTvPotNo("槽号");
 			headerView.setTvRecordNo("记录名称");
-			headerView.setTvRecTime("发生时刻");	
+			headerView.setTvRecTime("发生时刻");
 
 			lv_faultRec.addHeaderView(headerView);
 
-			List<FaultRecord> listBean = new ArrayList<FaultRecord>();
+			listBean = new ArrayList<FaultRecord>();
 			listBean.clear();
-			listBean = JsonToBean_Area_Date.JsonArrayToFaultRecordBean(data,JXList);
-
-			// ArrayAdapter adapter = new ArrayAdapter<SetParams>(this,
-			// android.R.layout.simple_list_item_1, listBean);
-			// lv_params.setAdapter(adapter);
-			// lv_params.setAdapter(sadapter);
-			FaultRecord_Adapter faultRec_Adapter = new FaultRecord_Adapter(this, listBean);
+			listBean = JsonToBean_Area_Date.JsonArrayToFaultRecordBean(data, JXList);
+			faultRec_Adapter = new FaultRecord_Adapter(this, listBean);
 			lv_faultRec.setAdapter(faultRec_Adapter);
 		}
 	}
@@ -286,16 +288,17 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_faultRec:
+		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
 				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url,1,
+					http_post = (HttpPost_BeginDate_EndDate_Area) new HttpPost_BeginDate_EndDate_Area(area_url,
 							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
 				} else {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2,PotNo, BeginDate,
-							EndDate, this, this).execute();
+
+					http_post_potno = (HttpPost_BeginDate_EndDate_PotNo) new HttpPost_BeginDate_EndDate_PotNo(potno_url,
+							PotNo, BeginDate, EndDate, this, this).execute();
 				}
 			}
 			break;

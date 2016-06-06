@@ -61,6 +61,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 
 	private HttpGetData_date mhttpgetdata_date;
 	private List<String> dateBean = new ArrayList<String>();
+	private List<dayTable> listBean;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +151,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 			}
 
 		});
-		findBtn = (Button) findViewById(R.id.btn_daytable);
+		findBtn = (Button) findViewById(R.id.btn_submit);
 		findBtn.setOnClickListener(this);
 	}
 
@@ -180,7 +181,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 
 			lv_daytable.addHeaderView(headerView);
 
-			List<dayTable> listBean = new ArrayList<dayTable>();
+			listBean = new ArrayList<dayTable>();
 			listBean = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
 
 			// ArrayAdapter adapter = new ArrayAdapter<SetParams>(this,
@@ -198,38 +199,11 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_daytable:
+		case R.id.btn_submit:
+			listBean.clear();
 			http_post = (HttpPost_area_date) new HttpPost_area_date(url, this, this, Integer.toString(areaId), ddate)
 					.execute();
 		}
 	}
-
-	/*@Override
-	public void GetALLDayUrl(String data) {
-		// 初始化日期控件
-		dateBean = new ArrayList<String>();
-		dateBean = JsonToBean_Area_Date.JsonArrayToDate(data);
-		Date_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dateBean);
-		// 设置下拉列表的风格
-		Date_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		spinner_date.setAdapter(Date_adapter);
-		spinner_date.setVisibility(View.VISIBLE);
-		ddate = spinner_date.getItemAtPosition(0).toString();
-
-		spinner_date.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				ddate = spinner_date.getItemAtPosition(position).toString();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
-			}
-		});
-
-	}
-*/
+	
 }

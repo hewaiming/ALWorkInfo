@@ -145,11 +145,12 @@ public class JsonToBean_Area_Date {
 	}
 
 	public static List<FaultRecord> JsonArrayToFaultRecordBean(String data, List<Map<String, Object>> JXList) {
-		ArrayList<FaultRecord> listBean = null;
+		List<FaultRecord> listBean = null;
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<FaultRecord>();
+			listBean.clear();
 			System.out.println("jsonarray.FaultRecord---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 

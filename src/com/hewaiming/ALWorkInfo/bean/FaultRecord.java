@@ -28,7 +28,8 @@ public String getRecTime() {
 	return RecTime;
 }
 public void setRecTime(String recTime) {
-	RecTime = recTime;
+	String temp=recTime.substring(0, recTime.length()-4);
+	RecTime = temp;
 }
 @Override
 public String toString() {

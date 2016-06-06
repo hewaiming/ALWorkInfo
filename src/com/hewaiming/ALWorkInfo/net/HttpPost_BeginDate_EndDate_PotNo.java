@@ -28,36 +28,34 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> {
+public class HttpPost_BeginDate_EndDate_PotNo extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
-	private String Area_PotNo;
-	private int type;
-	private String BeginDate,EndDate;
+	private String PotNo;
+	private String BeginDate, EndDate;
 	// 声明接口
 	private HttpGetListener listener;
 	private JSONArrayParser jsonParser = new JSONArrayParser();
 
-	public HttpPost_BeginDate_EndDate() {
+	public HttpPost_BeginDate_EndDate_PotNo() {
 
 	}
 
-	public HttpPost_BeginDate_EndDate( String url, int type,String area,String beginDate,
-			String endDate, HttpGetListener listener,Context mContext) {
-		super();
+	public HttpPost_BeginDate_EndDate_PotNo(String url, String potno, String beginDate, String endDate,
+			HttpGetListener listener, Context mContext) {
+
 		this.mContext = mContext;
 		this.url = url;
-		this.Area_PotNo = area;
-	    this.type=type;
+		this.PotNo = potno;
 		this.BeginDate = beginDate;
 		this.EndDate = endDate;
 		this.listener = listener;
 	}
 
-	public HttpPost_BeginDate_EndDate(String url) {
+	public HttpPost_BeginDate_EndDate_PotNo(String url) {
 		this.url = url;
-	}	
+	}
 
 	@Override
 	protected void onPreExecute() {
@@ -74,15 +72,12 @@ public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> 
 	protected String doInBackground(String... params) {
 		// Building Parameters
 		List<NameValuePair> mparams = new ArrayList<NameValuePair>();
-	   if(type==1){
-		   mparams.add(new BasicNameValuePair("areaID", Area_PotNo)); //全部槽号
-	   }else if(type==2){
-		   mparams.add(new BasicNameValuePair("PotNo", Area_PotNo)); //全部槽号 
-	   }
-//		mparams.add(new BasicNameValuePair("areaID", Area)); //全部槽号
-		
-		mparams.add(new BasicNameValuePair("BeginDate",BeginDate ));
-		mparams.add(new BasicNameValuePair("EndDate",EndDate)); 
+		mparams.clear();
+
+		mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 全部槽号
+		mparams.add(new BasicNameValuePair("potnoBeginDate", BeginDate));
+		mparams.add(new BasicNameValuePair("potnoEndDate", EndDate));
+
 
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
 		// full json response

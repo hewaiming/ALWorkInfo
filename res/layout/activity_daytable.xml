@@ -13,36 +13,14 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        layout="@layout/back_include" />
+        layout="@layout/include_back" />
 
-    <LinearLayout
+    <include
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:background="@color/base_bg_white"
-        android:orientation="vertical" >
-
-        <Spinner
-            android:id="@+id/spinner_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/spinner_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btn_daytable"
-            style="@style/Smile.TextView._White"
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="6dp"            android:background="@drawable/btn_login_selector"
-            android:text="确定"
-            android:textSize="12sp" >
-        </Button>
-    </LinearLayout>
+        android:layout_height="wrap_content"     
+		android:layout_margin="6dp"
+        layout="@layout/include_select_area_date" />
+   
 
     <ListView
         android:id="@+id/lv_daytable"
