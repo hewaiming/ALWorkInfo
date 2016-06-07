@@ -65,9 +65,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
-		dateBean = getIntent().getStringArrayListExtra("date_table");
-		// mhttpgetdata_date = (HttpGetData_global) new
-		// HttpGetData_global(getdate_url, this, this).execute();
+		dateBean = getIntent().getStringArrayListExtra("date_table");	
 		init_area();
 		init_date();
 		init_title();
@@ -155,7 +153,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnCli
 	@Override
 	public void GetDataUrl(String data) {
 		if (data.equals("") || data == null) {
-			Toast.makeText(getApplicationContext(), "没有找到日报数据！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到[日报]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean.size() > 0) { 
 				listBean.clear();		// 清除LISTVIEW 以前的内容
 				daytable_Adapter.onDateChange(listBean);

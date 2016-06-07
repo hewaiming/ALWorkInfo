@@ -7,27 +7,26 @@
 
     <TextView
         android:id="@+id/tv_PotNo_head"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="7dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="7dp"
-        android:layout_weight="1"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="7dp"       
         android:text="PotNo"
         android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_RecordNo_head"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="48dp"
+        android:layout_marginRight="38dp"
         android:layout_marginTop="7dp"
-        android:layout_weight="2"
+      
         android:text="BeginTime"
         android:textColor="@color/header_text"
         android:textSize="12sp" />
@@ -35,39 +34,36 @@
     
     <TextView
         android:id="@+id/tv_param1_head"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="7dp"
-        android:layout_weight="2"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="7dp"      
         android:text="EndTime"
         android:textColor="@color/header_text"
         android:textSize="12sp" />
     
     <TextView
         android:id="@+id/tv_param2_head"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="7dp"
-        android:layout_weight="2"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="7dp"       
         android:text="EndTime"
         android:textColor="@color/header_text"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_RecTime_head"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="7dp"
-        android:layout_marginTop="7dp"
-        android:layout_weight="2"
+        android:layout_marginTop="7dp"      
         android:text="EndTime"
         android:textColor="@color/header_text"
         android:textSize="12sp" />

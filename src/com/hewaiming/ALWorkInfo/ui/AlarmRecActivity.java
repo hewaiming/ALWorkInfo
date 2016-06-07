@@ -255,7 +255,7 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 	public void GetDataUrl(String data) {
 	
 		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "从服务器上没有找到故障记录！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到[报警记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean.size() > 0) { 
 				listBean.clear();		// 清除LISTVIEW 以前的内容
 				faultRec_Adapter.onDateChange(listBean);

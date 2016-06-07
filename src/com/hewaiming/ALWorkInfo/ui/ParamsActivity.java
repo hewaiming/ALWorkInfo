@@ -109,7 +109,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	@Override
 	public void GetDataUrl(String data) {
 		if (data.equals(null) || data == "") {
-			Toast.makeText(getApplicationContext(), "没有找到数据！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到【常用参数】数据！", Toast.LENGTH_LONG).show();
 		} else {
 			if (lv_params.getHeaderViewsCount() > 0) {
 				lv_params.removeHeaderView(headerView);

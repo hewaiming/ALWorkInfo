@@ -111,7 +111,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	@Override
 	public void GetDataUrl(String data) {
 		if (data.equals(null) || data == "") {
-			Toast.makeText(getApplicationContext(), "没有找到数据！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到[槽龄表]数据！", Toast.LENGTH_LONG).show();
 		} else {
 			if (lv_potage.getHeaderViewsCount() > 0) {
 				lv_potage.removeHeaderView(headerView);

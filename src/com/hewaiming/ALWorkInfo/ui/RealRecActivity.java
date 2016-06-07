@@ -157,7 +157,7 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("解析记录");
+		tv_title.setText("实时记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 
@@ -258,7 +258,7 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 	public void GetDataUrl(String data) {
 	
 		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "从服务器上没有找到解析记录！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到[实时记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean.size() > 0) { 
 				listBean.clear();		// 清除LISTVIEW 以前的内容
 				realRec_Adapter.onDateChange(listBean);

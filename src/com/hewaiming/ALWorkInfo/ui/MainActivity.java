@@ -104,21 +104,21 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 		switch (position) {
 		case 0:
 			Intent Paramsintent = new Intent(MainActivity.this, ParamsActivity.class);
-			startActivity(Paramsintent);
+			startActivity(Paramsintent);  //常用参数
 			break;
 		case 1:
 			Intent DayTable_intent = new Intent(MainActivity.this, DayTableActivity.class);
 			DayTable_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
-			startActivity(DayTable_intent);
+			startActivity(DayTable_intent);  //槽日报
 			break;
-		case 11:
+		case 2:
 			// Intent youtubeIntent = new Intent(MainActivity.this,
 			// YoutubeActivity.class);
 			// startActivity(youtubeIntent);
 			break;
 		case 3:
 			Intent Potage_intent = new Intent(MainActivity.this, PotAgeActivity.class);
-			startActivity(Potage_intent);
+			startActivity(Potage_intent);  //槽龄表
 			break;
 		case 5:
 			Intent faultRec_intent = new Intent(MainActivity.this, FaultRecActivity.class);
@@ -126,7 +126,7 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			mbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			mbundle.putSerializable("JXList", (Serializable) JXList);
 			faultRec_intent.putExtras(mbundle);			
-			startActivity(faultRec_intent);
+			startActivity(faultRec_intent);   //故障记录
 			break;
 		case 6:
 			Intent realRec_intent = new Intent(MainActivity.this, RealRecActivity.class);
@@ -134,7 +134,12 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			realbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			realbundle.putSerializable("JXList", (Serializable) JXList);
 			realRec_intent.putExtras(realbundle);			
-			startActivity(realRec_intent);
+			startActivity(realRec_intent);   //实时记录
+			break;
+		case 7:
+			Intent operate_intent = new Intent(MainActivity.this, OperateRecActivity.class);
+			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			startActivity(operate_intent);    //操作记录
 			break;
 		case 14:
 			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);
@@ -142,7 +147,7 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			bundle_alarm.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			bundle_alarm.putSerializable("JXList", (Serializable) JXList);
 			alarmRec_intent.putExtras(bundle_alarm);			
-			startActivity(alarmRec_intent);
+			startActivity(alarmRec_intent);    //报警记录
 			break;
 		}
 

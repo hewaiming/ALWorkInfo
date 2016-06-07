@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
+import com.hewaiming.ALWorkInfo.bean.OperateRecord;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
@@ -208,6 +209,48 @@ public class JsonToBean_Area_Date {
 				}			
 				
 				listBean.add(mReal);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+
+	
+	public static List<OperateRecord> JsonArrayToOperateRecordBean(String data) {
+		
+		List<OperateRecord> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<OperateRecord>();
+			listBean.clear();
+			System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				
+				OperateRecord mOp = new OperateRecord();
+				mOp.setObjectName(jsonobj.getString("ObjectName"));
+				mOp.setParamNameCH(jsonobj.getString("ParaNameCH"));
+				mOp.setDescription(jsonobj.getString("Description"));
+				mOp.setUserName(jsonobj.getString("UserName"));
+				mOp.setRecTime(jsonobj.getString("DDate"));			
+									
+				/*
+				if (jsonobj.get("Val2").equals(null)){
+					mReal.setParam1("");
+				}else{
+					mReal.setParam1(jsonobj.getInt("Val2")+"");
+				}
+				if (jsonobj.get("Val3").equals(null)){
+					mReal.setParam2("");
+				}else{
+					mReal.setParam2(jsonobj.getInt("Val3")+"");
+				}			*/
+				
+				listBean.add(mOp);
 			}
 		} catch (JSONException e) {
 

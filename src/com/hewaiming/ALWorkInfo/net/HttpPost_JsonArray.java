@@ -30,7 +30,6 @@ public class HttpPost_JsonArray {
 	// constructor
 	public HttpPost_JsonArray() {
 	}
-
 	// function get json from url
 	// by making HTTP POST or GET method
 	public JSONArray makeHttpRequest(String url, String method) {
