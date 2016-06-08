@@ -11,7 +11,7 @@ public class OperateRecord {
 	}
 
 	public OperateRecord(String objectName, String paramNameCH, String description, String userName, String recTime) {
-		super();
+	
 		ObjectName = objectName;
 		ParamNameCH = paramNameCH;
 		Description = description;
