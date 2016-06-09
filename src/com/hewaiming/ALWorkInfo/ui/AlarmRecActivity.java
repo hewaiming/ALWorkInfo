@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
-import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.FaultRecord_Adapter;
-import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
-import com.hewaiming.ALWorkInfo.adapter.dayTable_Adapter;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
@@ -253,14 +250,15 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 
 	@Override
 	public void GetDataUrl(String data) {
-	
+
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[报警记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean.size() > 0) { 
-				listBean.clear();		// 清除LISTVIEW 以前的内容
-				faultRec_Adapter.onDateChange(listBean);
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					faultRec_Adapter.onDateChange(listBean);
+				}
 			}
-
 		} else {
 			if (lv_faultRec.getHeaderViewsCount() > 0) {
 				lv_faultRec.removeHeaderView(headerView);
@@ -270,7 +268,7 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 			headerView.setTvPotNo("槽号");
 			headerView.setTvRecordNo("记录名称");
 			headerView.setTvRecTime("发生时刻");
-			
+
 			listBean = new ArrayList<FaultRecord>();
 			lv_faultRec.addHeaderView(headerView);
 			listBean.clear();

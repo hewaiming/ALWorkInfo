@@ -11,7 +11,6 @@ import com.hewaiming.ALWorkInfo.adapter.FaultRecord_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.RealRecord_Adapter;
-import com.hewaiming.ALWorkInfo.adapter.dayTable_Adapter;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
@@ -256,14 +255,15 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 
 	@Override
 	public void GetDataUrl(String data) {
-	
+
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[实时记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean.size() > 0) { 
-				listBean.clear();		// 清除LISTVIEW 以前的内容
-				realRec_Adapter.onDateChange(listBean);
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					realRec_Adapter.onDateChange(listBean);
+				}
 			}
-
 		} else {
 			if (lv_realRec.getHeaderViewsCount() > 0) {
 				lv_realRec.removeHeaderView(headerView);
@@ -275,7 +275,7 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 			headerView.setTvParam1("参数1");
 			headerView.setTvParam2("参数2");
 			headerView.setTvRecTime("发生时刻");
-			
+
 			listBean = new ArrayList<RealRecord>();
 			lv_realRec.addHeaderView(headerView);
 			listBean.clear();

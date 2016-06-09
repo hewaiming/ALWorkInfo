@@ -40,6 +40,8 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.OperateRecActivity" >
         </activity>
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.AeRecActivity" >
+        </activity>
     </application>
 
 </manifest>

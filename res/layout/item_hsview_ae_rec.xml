@@ -7,14 +7,14 @@
     android:padding="5dp" >
 
     <TextView
-        android:id="@+id/tv_ObjectName"
+        android:id="@+id/tv_PotNo"
         android:layout_width="38dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="5dp"
         android:textSize="11sp"
-        android:text="目标"
+        android:text="槽号"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text_black" />
 
@@ -23,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/tv_ObjectName"       
+        android:layout_toRightOf="@id/tv_PotNo"       
         android:focusable="false" >
 
         <com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView
@@ -40,46 +40,66 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/tv_ParamName"
+                    android:id="@+id/tv_DDate"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textSize="11sp"
-                    android:text="参数名称"
+                    android:textSize="10sp"
+                    android:text="效应时刻"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
 
                 <TextView
-                    android:id="@+id/tv_Description"
-                    android:layout_width="100dp"
+                    android:id="@+id/tv_AvgV"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:textSize="11sp"
-                    android:text="内容"
+                    android:text="平均电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
 
                 <TextView
-                    android:id="@+id/tv_RecTime"
-                    android:layout_width="80dp"
+                    android:id="@+id/tv_ContinueTime"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:textSize="11sp"
-                    android:text="修改时间"
+                    android:text="持续时间"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
 
                 <TextView
-                    android:id="@+id/tv_UserName"
+                    android:id="@+id/tv_WaitTime"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="11sp"
+                    android:text="等待时间"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black" />
+                 <TextView
+                    android:id="@+id/tv_Status"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="11sp"
+                    android:text="加料态"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black" />
+                  <TextView
+                    android:id="@+id/tv_MaxV"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:textSize="11sp"
-                    android:text="操作者"
+                    android:text="最高电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
             </LinearLayout>

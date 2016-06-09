@@ -82,8 +82,9 @@ public class dayTable {
 	public String getDdate() {
 		return Ddate;
 	}
-	public void setDdate(String ddate) {
-		Ddate = ddate;
+	public void setDdate(String ddate) {		
+		String temp=ddate.substring(0, ddate.length()-4);
+		Ddate = temp;
 	}
 	public dayTable() {
 		

@@ -8,10 +8,17 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.FaultRecord_Adapter;
+import com.hewaiming.ALWorkInfo.adapter.OperateRecord_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
+import com.hewaiming.ALWorkInfo.adapter.RealRecord_Adapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_OperateRecAdapter;
+import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
+import com.hewaiming.ALWorkInfo.bean.OperateRecord;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
+import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
@@ -24,60 +31,83 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_area_date;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_AlarmRecord;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
+import com.hewaiming.ALWorkInfo.view.HeaderListView_RealRecord;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_dayTable;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FaultRecActivity extends Activity implements HttpGetListener, OnClickListener {
+public class AeRecActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
 	private int areaId = 11;
-	private ListView lv_faultRec;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private HeaderListView_AlarmRecord headerView;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
+	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeRecord_potno_date.php";
+	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeRecord_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
-
 	private List<String> dateBean = new ArrayList<String>();
-	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
-	private List<String> PotNoList;
-	private List<FaultRecord> listBean = null;
-	private FaultRecord_Adapter faultRec_Adapter = null;
+	private List<String> PotNoList=null;
+	private List<AeRecord> listBean = null;
+	private HSView_AeRecAdapter AeRec_Adapter = null;
+	private RelativeLayout mHead;
+	private ListView lv_AeRec;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_faultrec);
+		setContentView(R.layout.activity_ae_record);
 		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
+		init_HSView();
+	}
+
+	private void init_HSView() { 
+		mHead = (RelativeLayout) findViewById(R.id.head); //表头处理
+		mHead.setFocusable(true);
+		mHead.setClickable(true);
+		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+
+		lv_AeRec = (ListView) findViewById(R.id.lv_AeRec);
+		lv_AeRec.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_AeRec.setCacheColorHint(0);
+		lv_AeRec.setOnScrollListener(this);
+
 	}
 
 	private void init_potNo() {
@@ -153,14 +183,13 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("故障记录");
+		tv_title.setText("效应记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 
 	}
 
 	private void init_area() {
-		lv_faultRec = (ListView) findViewById(R.id.lv_faultRec);
 		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
@@ -254,29 +283,21 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	public void GetDataUrl(String data) {
 
 		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[故障记录]数据，可能无符合条件数据！！", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "没有获取到[效应记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean != null) {
 				if (listBean.size() > 0) {
 					listBean.clear(); // 清除LISTVIEW 以前的内容
-					faultRec_Adapter.onDateChange(listBean);
+					AeRec_Adapter.onDateChange(listBean);
 				}
 			}
 		} else {
-			if (lv_faultRec.getHeaderViewsCount() > 0) {
-				lv_faultRec.removeHeaderView(headerView);
-			}
 
-			headerView = new HeaderListView_AlarmRecord(this);// 添加表头
-			headerView.setTvPotNo("槽号");
-			headerView.setTvRecordNo("记录名称");
-			headerView.setTvRecTime("发生时刻");
-
-			listBean = new ArrayList<FaultRecord>();
-			lv_faultRec.addHeaderView(headerView);
+			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			listBean = JsonToBean_Area_Date.JsonArrayToFaultRecordBean(data, JXList);
-			faultRec_Adapter = new FaultRecord_Adapter(this, listBean);
-			lv_faultRec.setAdapter(faultRec_Adapter);
+			listBean = JsonToBean_Area_Date.JsonArrayToAeRecordBean(data);
+			AeRec_Adapter = new HSView_AeRecAdapter(this, R.layout.item_hsview_ae_rec, listBean, mHead);
+
+			lv_AeRec.setAdapter(AeRec_Adapter);
 		}
 	}
 
@@ -300,6 +321,30 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 				}
 			}
 			break;
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+	}
+
+	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
+
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
+			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			HorizontalScrollView headSrcrollView2 = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView.onTouchEvent(arg1);
+			headSrcrollView2.onTouchEvent(arg1);
+			return false;
 		}
 	}
 

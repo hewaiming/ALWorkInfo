@@ -112,9 +112,7 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			startActivity(DayTable_intent);  //槽日报
 			break;
 		case 2:
-			// Intent youtubeIntent = new Intent(MainActivity.this,
-			// YoutubeActivity.class);
-			// startActivity(youtubeIntent);
+			
 			break;
 		case 3:
 			Intent Potage_intent = new Intent(MainActivity.this, PotAgeActivity.class);
@@ -140,6 +138,11 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 			Intent operate_intent = new Intent(MainActivity.this, OperateRecActivity.class);
 			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(operate_intent);    //操作记录
+			break;
+		case 11:
+			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
+			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			startActivity(aeRec_intent);    //操作记录
 			break;
 		case 14:
 			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);

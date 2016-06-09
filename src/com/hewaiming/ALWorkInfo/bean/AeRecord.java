@@ -77,8 +77,9 @@ public class AeRecord {
 		return Ddate;
 	}
 
-	public void setDdate(String ddate) {
-		Ddate = ddate;
+	public void setDdate(String recTime) {		
+		String temp=recTime.substring(0, recTime.length()-4);
+		Ddate = temp;
 	}
 
 	@Override

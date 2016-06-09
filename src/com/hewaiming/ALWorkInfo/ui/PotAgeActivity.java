@@ -45,6 +45,8 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	private HttpPost_area http_post;
 	private HeaderListView_PotAge headerView;
 	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotAgeTable.php";
+	private List<PotAge> listBean=null;
+	private PotAge_Adapter potage_Adapter=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,12 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	public void GetDataUrl(String data) {
 		if (data.equals(null) || data == "") {
 			Toast.makeText(getApplicationContext(), "没有获取到[槽龄表]数据！", Toast.LENGTH_LONG).show();
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					potage_Adapter.onDateChange(listBean);
+				}
+			}
 		} else {
 			if (lv_potage.getHeaderViewsCount() > 0) {
 				lv_potage.removeHeaderView(headerView);
@@ -123,18 +131,9 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 			headerView.setTvAge("槽年代");			
 			lv_potage.addHeaderView(headerView);
 			
-			List<PotAge> listBean=new ArrayList<PotAge>();
-			listBean = JsonToBean.JsonArrayToPotAgeBean(data);
-			/*List<Map<String, SetParams>> listBeanMap = new ArrayList<Map<String,SetParams>>();
-			listBeanMap.clear();;
-			listBeanMap = JsonToBeanMap.JsonArrayToSetParamsBean(data);
-			SimpleAdapter sadapter = new SimpleAdapter(this, listBeanMap, R.layout.item_params,
-					new String[] { "PotNo", "SetV", "NBTime", "AETime", "ALF" },
-					new int[] { R.id.tv_PotNo, R.id.tv_SetV, R.id.tv_NbTime, R.id.tv_AeTime, R.id.tv_ALF });*/
-//			ArrayAdapter adapter = new ArrayAdapter<SetParams>(this, android.R.layout.simple_list_item_1, listBean);
-//			lv_params.setAdapter(adapter);
-//			lv_params.setAdapter(sadapter);
-			PotAge_Adapter potage_Adapter=new PotAge_Adapter(this,listBean);
+			listBean=new ArrayList<PotAge>();
+			listBean = JsonToBean.JsonArrayToPotAgeBean(data);		
+			potage_Adapter=new PotAge_Adapter(this,listBean);
 			lv_potage.setAdapter(potage_Adapter);
 		}
 	}

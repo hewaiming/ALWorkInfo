@@ -42,6 +42,8 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	private HttpPost_area http_post;
 	private HeaderListView_Params headerView;
 	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotSetValueTable.php";
+	private List<SetParams> listBean = null;
+	private Params_Adapter mAdapter = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +110,14 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data.equals(null) || data == "") {
+		if (data.equals("") || data == null) {
 			Toast.makeText(getApplicationContext(), "没有获取到【常用参数】数据！", Toast.LENGTH_LONG).show();
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					mAdapter.onDateChange(listBean);
+				}
+			}
 		} else {
 			if (lv_params.getHeaderViewsCount() > 0) {
 				lv_params.removeHeaderView(headerView);
@@ -121,19 +129,23 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			headerView.setTvAETime("AE间隔");
 			headerView.setTvALF("氟化铝下料量");
 			lv_params.addHeaderView(headerView);
-			
-			List<SetParams> listBean=new ArrayList<SetParams>();
+
+			listBean = new ArrayList<SetParams>();
 			listBean = JsonToBean.JsonArrayToSetParamsBean(data);
-			/*List<Map<String, SetParams>> listBeanMap = new ArrayList<Map<String,SetParams>>();
-			listBeanMap.clear();;
-			listBeanMap = JsonToBeanMap.JsonArrayToSetParamsBean(data);
-			SimpleAdapter sadapter = new SimpleAdapter(this, listBeanMap, R.layout.item_params,
-					new String[] { "PotNo", "SetV", "NBTime", "AETime", "ALF" },
-					new int[] { R.id.tv_PotNo, R.id.tv_SetV, R.id.tv_NbTime, R.id.tv_AeTime, R.id.tv_ALF });*/
-//			ArrayAdapter adapter = new ArrayAdapter<SetParams>(this, android.R.layout.simple_list_item_1, listBean);
-//			lv_params.setAdapter(adapter);
-//			lv_params.setAdapter(sadapter);
-			Params_Adapter mAdapter=new Params_Adapter(this,listBean);
+			/*
+			 * List<Map<String, SetParams>> listBeanMap = new
+			 * ArrayList<Map<String,SetParams>>(); listBeanMap.clear();;
+			 * listBeanMap = JsonToBeanMap.JsonArrayToSetParamsBean(data);
+			 * SimpleAdapter sadapter = new SimpleAdapter(this, listBeanMap,
+			 * R.layout.item_params, new String[] { "PotNo", "SetV", "NBTime",
+			 * "AETime", "ALF" }, new int[] { R.id.tv_PotNo, R.id.tv_SetV,
+			 * R.id.tv_NbTime, R.id.tv_AeTime, R.id.tv_ALF });
+			 */
+			// ArrayAdapter adapter = new ArrayAdapter<SetParams>(this,
+			// android.R.layout.simple_list_item_1, listBean);
+			// lv_params.setAdapter(adapter);
+			// lv_params.setAdapter(sadapter);
+			mAdapter = new Params_Adapter(this, listBean);
 			lv_params.setAdapter(mAdapter);
 		}
 	}

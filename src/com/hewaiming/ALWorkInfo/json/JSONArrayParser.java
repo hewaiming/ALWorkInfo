@@ -82,10 +82,15 @@ public class JSONArrayParser {
 			}
 			is.close();
 			json="";
-			json = sb.toString();		
-			json = json.substring(0, json.length() - 1);
-			json = '[' + json + ']';
-			System.out.println("json after---" + json);
+			json = sb.toString();	
+			if (json.equals("")){
+				return jObj;  //无数据，直接返回空
+			}else{
+				json = json.substring(0, json.length() - 1);
+				json = '[' + json + ']';
+				System.out.println("json after---" + json);
+			}
+			
 
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());

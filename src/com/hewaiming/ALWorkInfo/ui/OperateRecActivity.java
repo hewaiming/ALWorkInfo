@@ -12,7 +12,6 @@ import com.hewaiming.ALWorkInfo.adapter.OperateRecord_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.RealRecord_Adapter;
-import com.hewaiming.ALWorkInfo.adapter.dayTable_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_OperateRecAdapter;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
@@ -62,7 +61,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class OperateRecActivity extends Activity implements HttpGetListener,OnScrollListener, OnClickListener {
+public class OperateRecActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -71,7 +70,7 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private HeaderListView_RealRecord headerView;
+	// private HeaderListView_RealRecord headerView;
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/OperateRecord_potno_date.php";
 	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/OperateRecord_area_date.php";
 
@@ -82,7 +81,7 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 	private List<String> PotNoList;
 	private List<OperateRecord> listBean = null;
 	private HSView_OperateRecAdapter operateRec_Adapter = null;
-	private RelativeLayout mHead;	
+	private RelativeLayout mHead;
 	private ListView lv_OperateRec;
 
 	@Override
@@ -102,12 +101,12 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 		mHead = (RelativeLayout) findViewById(R.id.head);
 		mHead.setFocusable(true);
 		mHead.setClickable(true);
-		mHead.setBackgroundColor(0x90D9FF);
+		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
 		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
 		lv_OperateRec = (ListView) findViewById(R.id.lv_OperateRec);
 		lv_OperateRec.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
-		lv_OperateRec.setCacheColorHint(0);		
+		lv_OperateRec.setCacheColorHint(0);
 		lv_OperateRec.setOnScrollListener(this);
 
 	}
@@ -191,7 +190,7 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 
 	}
 
-	private void init_area() {	
+	private void init_area() {
 		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
@@ -286,11 +285,12 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[操作记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean.size() > 0) {
-				listBean.clear(); // 清除LISTVIEW 以前的内容
-				operateRec_Adapter.onDateChange(listBean);
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					operateRec_Adapter.onDateChange(listBean);
+				}
 			}
-
 		} else {
 
 			listBean = new ArrayList<OperateRecord>();
@@ -344,14 +344,15 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -364,6 +365,6 @@ public class OperateRecActivity extends Activity implements HttpGetListener,OnSc
 			headSrcrollView2.onTouchEvent(arg1);
 			return false;
 		}
-	}	
+	}
 
 }
