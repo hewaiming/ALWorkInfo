@@ -2,35 +2,26 @@ package com.hewaiming.ALWorkInfo.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
-import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
-import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
-import com.hewaiming.ALWorkInfo.json.JsonToBeanMap;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
-import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
+
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;

@@ -6,7 +6,6 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView.OnScrollChangedListener;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
-import com.hewaiming.ALWorkInfo.bean.OperateRecord;
 
 import android.content.Context;
 import android.graphics.Color;
