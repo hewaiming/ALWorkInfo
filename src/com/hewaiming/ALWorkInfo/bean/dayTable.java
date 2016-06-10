@@ -1,6 +1,6 @@
 package com.hewaiming.ALWorkInfo.bean;
 
-public class dayTable {	
+public class dayTable {
 	private int PotNo;
 	private String PotSt;
 	private int RunTime;
@@ -13,7 +13,7 @@ public class dayTable {
 	private int AeCnt;
 	private int DybTime;
 	private String Ddate;
-	
+
 	public dayTable(int potNo, String potSt, int runTime, double averageV, double realSetV, double setV, double workV,
 			double aeV, int aeTime, int aeCnt, int dybTime, String ddate) {
 		super();
@@ -30,64 +30,84 @@ public class dayTable {
 		DybTime = dybTime;
 		Ddate = ddate;
 	}
-	
+
 	public int getPotNo() {
 		return PotNo;
 	}
+
 	public void setPotNo(int potNo) {
 		PotNo = potNo;
 	}
+
 	public String getPotSt() {
 		return PotSt;
 	}
+
 	public void setPotSt(String potSt) {
 		PotSt = potSt;
 	}
+
 	public double getAverageV() {
 		return AverageV;
 	}
+
 	public void setAverageV(double averageV) {
 		AverageV = averageV;
 	}
+
 	public double getRealSetV() {
 		return RealSetV;
 	}
+
 	public void setRealSetV(double realSetV) {
 		RealSetV = realSetV;
 	}
+
 	public double getSetV() {
 		return SetV;
 	}
+
 	public void setSetV(double setV) {
 		SetV = setV;
 	}
+
 	public double getWorkV() {
 		return WorkV;
 	}
+
 	public void setWorkV(double workV) {
 		WorkV = workV;
 	}
+
 	public double getAeV() {
 		return AeV;
 	}
+
 	public void setAeV(double aeV) {
 		AeV = aeV;
 	}
+
 	public int getAeTime() {
 		return AeTime;
 	}
+
 	public void setAeTime(int aeTime) {
 		AeTime = aeTime;
 	}
+
 	public String getDdate() {
 		return Ddate;
 	}
-	public void setDdate(String ddate) {		
-		String temp=ddate.substring(0, ddate.length()-4);
-		Ddate = temp;
+
+	public void setDdate(String ddate) {
+		if (ddate.length() > 10) {
+			String temp = ddate.substring(0, 10);
+			Ddate = temp;
+		}
 	}
+
 	public dayTable() {
-		
+
 	}
 
 	public int getRunTime() {
@@ -120,5 +140,5 @@ public class dayTable {
 				+ ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime="
 				+ AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", Ddate=" + Ddate + "]";
 	}
-	
+
 }

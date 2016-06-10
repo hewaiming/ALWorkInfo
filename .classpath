@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/universal-image-loader-1.8.6-with-sources.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/mpandroidchartlibrary-2-2-4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

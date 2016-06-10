@@ -82,7 +82,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	public List<PotV> JsonArrayToPotVBean(String data) {
+	public static List<PotV> JsonArrayToPotVBean(String data) {
 		ArrayList<PotV> listBean = null;
 		try {
 			JSONArray jsonarray = new JSONArray(data);
@@ -376,7 +376,7 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setAverageV(jsonobj.getDouble("AverageV"));
 				}
-				
+
 				if (jsonobj.get("WorkV").equals(null)) {
 					mBean.setWorkV(0);
 				} else {
@@ -406,7 +406,7 @@ public class JsonToBean_Area_Date {
 					mBean.setDdate("");
 				} else {
 					mBean.setDdate(jsonobj.getString("Ddate"));
-				}				
+				}
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {

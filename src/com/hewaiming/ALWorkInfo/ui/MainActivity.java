@@ -30,7 +30,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
-public class MainActivity extends Activity implements OnItemClickListener,HttpGetJXRecord_Listener, HttpGetDate_Listener {
+public class MainActivity extends Activity
+		implements OnItemClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
 
 	private GridView gridView;
 	private SimpleAdapter adapter;
@@ -55,8 +56,8 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 	}
 
 	private void init_commData() {
-		mhttpgetdata_date = (HttpGetData_date) new HttpGetData_date(get_dateTable_url,this,this).execute();
-		mHttpGetData_JXRecord = (HttpGetData_JXRecord) new HttpGetData_JXRecord(get_JXName_url,this,this).execute();
+		mhttpgetdata_date = (HttpGetData_date) new HttpGetData_date(get_dateTable_url, this, this).execute();
+		mHttpGetData_JXRecord = (HttpGetData_JXRecord) new HttpGetData_JXRecord(get_JXName_url, this, this).execute();
 	}
 
 	private void init() {
@@ -103,53 +104,58 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 		switch (position) {
 		case 0:
 			Intent Paramsintent = new Intent(MainActivity.this, ParamsActivity.class);
-			startActivity(Paramsintent);  //常用参数
+			startActivity(Paramsintent); // 常用参数
 			break;
 		case 1:
 			Intent DayTable_intent = new Intent(MainActivity.this, DayTableActivity.class);
 			DayTable_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
-			startActivity(DayTable_intent);  //槽日报
+			startActivity(DayTable_intent); // 槽日报
 			break;
 		case 2:
-			
+
 			break;
 		case 3:
 			Intent Potage_intent = new Intent(MainActivity.this, PotAgeActivity.class);
-			startActivity(Potage_intent);  //槽龄表
+			startActivity(Potage_intent); // 槽龄表
+			break;
+		case 4:
+			Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);
+			potv_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			startActivity(potv_intent); // 槽压曲线
 			break;
 		case 5:
 			Intent faultRec_intent = new Intent(MainActivity.this, FaultRecActivity.class);
-			Bundle mbundle=new Bundle();
+			Bundle mbundle = new Bundle();
 			mbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			mbundle.putSerializable("JXList", (Serializable) JXList);
-			faultRec_intent.putExtras(mbundle);			
-			startActivity(faultRec_intent);   //故障记录
+			faultRec_intent.putExtras(mbundle);
+			startActivity(faultRec_intent); // 故障记录
 			break;
 		case 6:
 			Intent realRec_intent = new Intent(MainActivity.this, RealRecActivity.class);
-			Bundle realbundle=new Bundle();
+			Bundle realbundle = new Bundle();
 			realbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			realbundle.putSerializable("JXList", (Serializable) JXList);
-			realRec_intent.putExtras(realbundle);			
-			startActivity(realRec_intent);   //实时记录
+			realRec_intent.putExtras(realbundle);
+			startActivity(realRec_intent); // 实时记录
 			break;
 		case 7:
 			Intent operate_intent = new Intent(MainActivity.this, OperateRecActivity.class);
 			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
-			startActivity(operate_intent);    //操作记录
+			startActivity(operate_intent); // 操作记录
 			break;
 		case 11:
 			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
 			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
-			startActivity(aeRec_intent);    //操作记录
+			startActivity(aeRec_intent); // 操作记录
 			break;
 		case 14:
 			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);
-			Bundle bundle_alarm=new Bundle();
+			Bundle bundle_alarm = new Bundle();
 			bundle_alarm.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			bundle_alarm.putSerializable("JXList", (Serializable) JXList);
-			alarmRec_intent.putExtras(bundle_alarm);			
-			startActivity(alarmRec_intent);    //报警记录
+			alarmRec_intent.putExtras(bundle_alarm);
+			startActivity(alarmRec_intent); // 报警记录
 			break;
 		}
 
@@ -160,19 +166,19 @@ public class MainActivity extends Activity implements OnItemClickListener,HttpGe
 		// 得到日期
 		date_table = new ArrayList<String>();
 		date_table = JsonToBean_Area_Date.JsonArrayToDate(data);
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00")); 
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String todayValue = sdf.format(dt);
-		date_record = new ArrayList<String>(date_table); // 记录日期		
-		date_record.add(0,todayValue);
+		date_record = new ArrayList<String>(date_table); // 记录日期
+		date_record.add(0, todayValue);
 
 	}
 
 	@Override
 	public void GetJXRecordUrl(String data) {
-		JXList=new ArrayList<Map<String, Object>>();
-		JXList=JsonToBean_Area_Date.JsonArrayToJXRecord(data);
-		
+		JXList = new ArrayList<Map<String, Object>>();
+		JXList = JsonToBean_Area_Date.JsonArrayToJXRecord(data);
+
 	}
 }

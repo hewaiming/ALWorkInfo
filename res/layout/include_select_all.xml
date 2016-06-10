@@ -7,32 +7,60 @@
     android:background="@color/base_bg_white"
     android:orientation="vertical" >
 
-    <Spinner
-        android:id="@+id/spinner_area"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:orientation="horizontal" >
+        <Spinner
+            android:id="@+id/spinner_area"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:prompt="@string/area"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner_PotNo"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:orientation="horizontal" >
+        <Spinner
+            android:id="@+id/spinner_PotNo"
+            android:layout_width="match_parent"
+            android:prompt="@string/potno"
+            android:spinnerMode="dialog"
+            android:layout_height="36dp" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner_Begindate"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:orientation="horizontal" >   
+        <Spinner
+            android:id="@+id/spinner_Begindate"
+            android:layout_width="match_parent"
+            android:prompt="@string/begindate"
+            android:spinnerMode="dialog"
+            android:layout_height="36dp" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner_Enddate"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:orientation="horizontal" >
+        <Spinner
+            android:id="@+id/spinner_Enddate"
+            android:layout_width="match_parent"
+            android:prompt="@string/enddate"
+            android:spinnerMode="dialog"
+            android:layout_height="36dp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_ok"
         style="@style/Smile.TextView._White"
-        android:layout_width="160dp"
+        android:layout_width="260dp"
         android:layout_height="35dp"
-        android:layout_gravity="center"       
+        android:layout_gravity="center"
         android:background="@drawable/btn_login_selector"
         android:text="确  定"
         android:textSize="14sp" >

@@ -42,6 +42,8 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.AeRecActivity" >
         </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.PotVLineActivity" >
+        </activity>
     </application>
 
 </manifest>
