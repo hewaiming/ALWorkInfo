@@ -35,7 +35,7 @@ public class MyConst {
 			"http://img2.imgtn.bdimg.com/it/u=3658918502,1121333212&fm=21&gp=0.jpg" };
 	
 	public static final String[] iconName = { "常用参数", "日报", "效应报表", "槽龄", "槽压曲线", "故障记录", "实时记录", "操作记录", 
-			"槽状态","测量数据", "效应次数最多", "效应记录","槽故障最多","下料异常", "报警记录" ,"实时曲线"};
+			"槽状态","测量数据", "效应槽", "效应记录","槽故障最多","下料异常", "报警记录" ,"实时曲线"};
 	
 	public static final int[] drawable = { R.drawable.set_params, R.drawable.day_table, R.drawable.ae_table, R.drawable.pot_age,
 			R.drawable.potv, R.drawable.fault_list, R.drawable.jx_record, R.drawable.update_params,

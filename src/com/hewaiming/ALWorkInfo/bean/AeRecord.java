@@ -25,6 +25,19 @@ public class AeRecord {
 		Ddate = ddate;
 	}
 
+	public AeRecord(int potNo, int waitTime) {
+		super();
+		PotNo = potNo;
+		WaitTime = waitTime;
+	}
+
+	public AeRecord(int potNo, int continueTime, String ddate) {
+		super();
+		PotNo = potNo;
+		ContinueTime = continueTime;
+		Ddate = ddate;
+	}
+
 	public int getPotNo() {
 		return PotNo;
 	}

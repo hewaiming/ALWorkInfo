@@ -144,6 +144,11 @@ public class MainActivity extends Activity
 			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(operate_intent); // 操作记录
 			break;
+		case 10:
+			Intent aemost_intent = new Intent(MainActivity.this, AeMostActivity.class);
+			aemost_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			startActivity(aemost_intent); // 效应槽
+			break;
 		case 11:
 			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
 			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
