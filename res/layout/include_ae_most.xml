@@ -20,7 +20,7 @@
             android:drawableBottom="@drawable/tab"
             android:gravity="center"
             android:tag="0"
-            android:text="AA"
+            android:text="效应次数排序"
             android:textColor="@color/tab_color" />
 
         <RadioButton
@@ -32,7 +32,7 @@
             android:drawableBottom="@drawable/tab"
             android:gravity="center"
             android:tag="1"
-            android:text="BB"
+            android:text="效应持续时间排序"
             android:textColor="@color/tab_color" />
 
     </RadioGroup>

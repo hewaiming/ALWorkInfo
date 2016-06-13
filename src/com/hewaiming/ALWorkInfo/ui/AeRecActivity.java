@@ -249,7 +249,6 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 
 	@Override
 	public void GetDataUrl(String data) {
-
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[效应记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean != null) {

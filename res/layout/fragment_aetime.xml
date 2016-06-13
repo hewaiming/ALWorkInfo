@@ -10,7 +10,7 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-        layout="@layout/item_hsview_ae_rec" />
+        layout="@layout/item_hsview_aetime" />
 
     <ListView
         android:id="@+id/lv_AeTime"

@@ -415,5 +415,100 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
+	//效应次数统计
+	public static List<AeRecord> JsonArrayToAeCntBean(String data) {
+
+		List<AeRecord> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<AeRecord>();
+			listBean.clear();
+			System.out.println("jsonarray.AeCnt---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+
+				AeRecord mBean = new AeRecord();
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo(0);
+				} else {
+					mBean.setPotNo(jsonobj.getInt("PotNo"));
+				}
+				
+				if (jsonobj.get("AeCnt").equals(null)) {
+					mBean.setWaitTime(0);
+				} else {
+					mBean.setWaitTime(jsonobj.getInt("AeCnt"));
+				}			
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+//效应时间长
+	public static List<AeRecord> JsonArrayToAeTimeBean(String data) {
+
+		List<AeRecord> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<AeRecord>();
+			listBean.clear();
+			System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+
+				AeRecord mBean = new AeRecord();
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo(0);
+				} else {
+					mBean.setPotNo(jsonobj.getInt("PotNo"));
+				}
+
+				if (jsonobj.get("Ddate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("Ddate"));
+				}
+				if (jsonobj.get("AverageVoltage").equals(null)) {
+					mBean.setAverageV(0);
+				} else {
+					mBean.setAverageV(jsonobj.getDouble("AverageVoltage"));
+				}
+				if (jsonobj.get("ContinuanceTime").equals(null)) {
+					mBean.setContinueTime(0);
+				} else {
+					mBean.setContinueTime(jsonobj.getInt("ContinuanceTime"));
+				}
+
+//				if (jsonobj.get("WaitTime").equals(null)) {
+//					mBean.setWaitTime(0);
+//				} else {
+//					mBean.setWaitTime(jsonobj.getInt("WaitTime"));
+//				}
+
+//				if (jsonobj.get("Status").equals(null)) {
+//					mBean.setStatus("");
+//				} else {
+//					mBean.setStatus(jsonobj.getString("Status"));
+//				}
+				if (jsonobj.get("MaxVoltage").equals(null)) {
+					mBean.setMaxV(0);
+				} else {
+					mBean.setMaxV(jsonobj.getDouble("MaxVoltage"));
+				}				
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
 
 }

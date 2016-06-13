@@ -85,13 +85,13 @@ public class HSView_AeCntAdapter extends BaseAdapter {
 			convertView = mInflater.inflate(id_row_layout, null);
 			holder = new ViewHolder();
 
-			MyHScrollView scrollView1 = (MyHScrollView) convertView.findViewById(R.id.horizontalScrollView1);
+			MyHScrollView scrollView1 = (MyHScrollView) convertView.findViewById(R.id.horizontalScrollView_AeCnt);
 
 			holder.scrollView = scrollView1;
 			holder.tvPotNo = (TextView) convertView.findViewById(R.id.tv_PotNo);
 			holder.tvAeCnt = (TextView) convertView.findViewById(R.id.tv_AeCnt);			
 
-			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
+			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView_AeCnt);
 			headSrcrollView.AddOnScrollChangedListener(new OnScrollChangedListenerImp(scrollView1));
 
 			convertView.setTag(holder);
@@ -104,7 +104,7 @@ public class HSView_AeCntAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.tvPotNo.setText(entity.getPotNo()+"");
-		holder.tvAeCnt.setText(entity.getDdate());	
+		holder.tvAeCnt.setText(entity.getWaitTime()+"");	
 
 		return convertView;
 	}

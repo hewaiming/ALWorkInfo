@@ -43,4 +43,6 @@ public class MyConst {
 			R.drawable.fault_more,R.drawable.nb_abnorm ,R.drawable.alarm_list,R.drawable.real_potv};
 	
 	public static final String ACTION_REGISTER_SUCCESS_FINISH = "register.success.finish";// 注册成功之后登陆页面退出
+
+	public static final String[] Areas_ALL = { "所有厂房","一厂房","二厂房","一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };;
 }

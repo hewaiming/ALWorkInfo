@@ -89,9 +89,9 @@ public class HSView_AeTimeAdapter extends BaseAdapter {
 
 			holder.scrollView = scrollView1;
 			holder.tvPotNo = (TextView) convertView.findViewById(R.id.tv_PotNo);
-			holder.tvDdate = (TextView) convertView.findViewById(R.id.tv_DDate);
-			holder.tvAvgV = (TextView) convertView.findViewById(R.id.tv_AvgV);
+			holder.tvDdate = (TextView) convertView.findViewById(R.id.tv_DDate);			
 			holder.tvContinueTime = (TextView) convertView.findViewById(R.id.tv_ContinueTime);		
+			holder.tvAvgV = (TextView) convertView.findViewById(R.id.tv_AvgV);
 			holder.tvMaxV = (TextView) convertView.findViewById(R.id.tv_MaxV);
 
 			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
@@ -107,10 +107,10 @@ public class HSView_AeTimeAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.tvPotNo.setText(entity.getPotNo()+"");
-		holder.tvDdate.setText(entity.getDdate());
-		holder.tvAvgV.setText(entity.getAverageV()+"");
+		holder.tvDdate.setText(entity.getDdate());	
 		holder.tvContinueTime.setText(entity.getContinueTime()+"");		
-
+		holder.tvAvgV.setText(entity.getAverageV()+"");
+		holder.tvMaxV.setText(entity.getMaxV()+"");
 		return convertView;
 	}
 

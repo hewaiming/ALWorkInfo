@@ -27,6 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         layout="@layout/include_ae_most"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 </LinearLayout>
