@@ -46,6 +46,10 @@
         </activity>
          <activity android:name="com.hewaiming.ALWorkInfo.ui.AeMostActivity" >
         </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.CraftLineActivity" >
+        </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.ShowCraftLineActivity" >
+        </activity>
     </application>
 
 </manifest>

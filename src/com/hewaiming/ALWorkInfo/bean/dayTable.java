@@ -1,6 +1,8 @@
 package com.hewaiming.ALWorkInfo.bean;
 
-public class dayTable {
+import java.io.Serializable;
+
+public class dayTable implements Serializable {
 	private int PotNo;
 	private String PotSt;
 	private int RunTime;
@@ -12,27 +14,31 @@ public class dayTable {
 	private int AeTime;
 	private int AeCnt;
 	private int DybTime;
-	private String Ddate;
-
-	public dayTable(int potNo, String potSt, int runTime, double averageV, double realSetV, double setV, double workV,
-			double aeV, int aeTime, int aeCnt, int dybTime, String ddate) {
-		super();
-		PotNo = potNo;
-		PotSt = potSt;
-		RunTime = runTime;
-		AverageV = averageV;
-		RealSetV = realSetV;
-		SetV = setV;
-		WorkV = workV;
-		AeV = aeV;
-		AeTime = aeTime;
-		AeCnt = aeCnt;
-		DybTime = dybTime;
-		Ddate = ddate;
-	}
+	private int YhlCnt;
+	private int FhlCnt;
+	private int AlCntZSL;  //指示出铝量
+	private int ZF;    //噪音
+	private String Ddate;	
 
 	public int getPotNo() {
 		return PotNo;
+	}
+
+	public int getYhlCnt() {
+		return YhlCnt;
+	}
+
+	
+	public void setYhlCnt(int yhlCnt) {
+		YhlCnt = yhlCnt;
+	}
+
+	public int getFhlCnt() {
+		return FhlCnt;
+	}
+
+	public void setFhlCnt(int fhlCnt) {
+		FhlCnt = fhlCnt;
 	}
 
 	public void setPotNo(int potNo) {
@@ -134,11 +140,28 @@ public class dayTable {
 		DybTime = dybTime;
 	}
 
+	public int getAlCntZSL() {
+		return AlCntZSL;
+	}
+
+	public void setAlCntZSL(int alCntZSL) {
+		AlCntZSL = alCntZSL;
+	}
+
+	public int getZF() {
+		return ZF;
+	}
+
+	public void setZF(int zF) {
+		ZF = zF;
+	}
+
 	@Override
 	public String toString() {
 		return "dayTable [PotNo=" + PotNo + ", PotSt=" + PotSt + ", RunTime=" + RunTime + ", AverageV=" + AverageV
 				+ ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime="
-				+ AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", Ddate=" + Ddate + "]";
-	}
+				+ AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", YhlCnt=" + YhlCnt + ", FhlCnt=" + FhlCnt
+				+ ", AlCntZSL=" + AlCntZSL + ", ZF=" + ZF + ", Ddate=" + Ddate + "]";
+	}	
 
 }

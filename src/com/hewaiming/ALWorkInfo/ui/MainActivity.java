@@ -152,8 +152,13 @@ public class MainActivity extends Activity
 		case 11:
 			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
 			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
-			startActivity(aeRec_intent); // 操作记录
+			startActivity(aeRec_intent); // 效应记录
 			break;
+		case 13:
+			Intent craft_intent = new Intent(MainActivity.this, CraftLineActivity.class);
+			craft_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
+			startActivity(craft_intent); // 工艺曲线
+			break;	
 		case 14:
 			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);
 			Bundle bundle_alarm = new Bundle();
