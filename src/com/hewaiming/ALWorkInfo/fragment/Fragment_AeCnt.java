@@ -38,7 +38,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.fragment_aecnt, container, false);		
+		mView = inflater.inflate(R.layout.fragment_aecnt, container, false);
 		return mView;
 	}
 
@@ -48,6 +48,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 		mActivity = (AeMostActivity) activity;
 		mActivity.setHandler(mHandler);
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -63,51 +64,43 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 		lv_AeCnt.setCacheColorHint(0);
 		lv_AeCnt.setOnScrollListener(this);
 
-		
 	}
 
 	@Override
 	public void onClick(View v) {
 
-		// switch (v.getId()) {
-		// case R.id.tv_text:
-		// tv_text.setText("卡卡卡");
-		// break;
-		//
-		// default:
-		// break;
-		// }
-
 	}
+
 	public Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				if (msg.obj.equals("")) {
-//					Toast.makeText(getApplication(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-					if (listBean_AeCnt != null) {
-						if (listBean_AeCnt.size() > 0) {
-							listBean_AeCnt.clear(); // 清除LISTVIEW 以前的内容
-							AeCnt_Adapter.onDateChange(listBean_AeCnt);
-						}
-					}
-				} else {
-					init_adapter(msg.obj.toString());					
-				}
+				init_adapter(msg.obj.toString());
 				break;
 			}
 		}
 	};
-	
 
 	private void init_adapter(String data) {
-		listBean_AeCnt = new ArrayList<AeRecord>(); //初始化效应次数适配器
-		listBean_AeCnt.clear();
-		listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
-		AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt, mHead_AeCnt);
-		lv_AeCnt.setAdapter(AeCnt_Adapter);
-		
+		if (data.equals("")) {
+			Toast.makeText(this.getActivity(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean_AeCnt != null) {
+				if (listBean_AeCnt.size() > 0) {
+					listBean_AeCnt.clear(); // 清除LISTVIEW 以前的内容
+					AeCnt_Adapter.onDateChange(listBean_AeCnt);
+				}
+			}
+		} else {
+			listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
+			listBean_AeCnt.clear();
+			listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
+			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt,
+					mHead_AeCnt);
+			lv_AeCnt.setAdapter(AeCnt_Adapter);
+		}
+
 	};
+
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -145,10 +138,11 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 				}
 			}
 		} else {
-			listBean_AeCnt = new ArrayList<AeRecord>(); //初始化适配器
+			listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化适配器
 			listBean_AeCnt.clear();
 			listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
-			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt, mHead_AeCnt);
+			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt,
+					mHead_AeCnt);
 			lv_AeCnt.setAdapter(AeCnt_Adapter);
 		}
 

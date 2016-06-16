@@ -50,6 +50,8 @@
         </activity>
          <activity android:name="com.hewaiming.ALWorkInfo.ui.ShowCraftLineActivity" >
         </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.MeasueTableActivity" >
+        </activity>
     </application>
 
 </manifest>

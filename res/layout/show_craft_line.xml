@@ -79,6 +79,24 @@
                 android:layout_marginBottom="6dp" />
 
             <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_ALCntJH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_FeCnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_SiCnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_FZB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,6 +110,12 @@
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_LSP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_DJZSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp" />

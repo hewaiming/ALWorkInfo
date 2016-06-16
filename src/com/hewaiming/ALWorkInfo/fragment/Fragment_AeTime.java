@@ -23,6 +23,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	private View mView;
@@ -44,34 +45,35 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 		mActivity = (AeMostActivity) activity;
 		mActivity.setHandler_AeTime(mHandler_AeTime);
 	}
+
 	public Handler mHandler_AeTime = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 2:
-				if (msg.obj.equals("")) {
-//					Toast.makeText(getApplication(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-					if (listBean_AeTime != null) {
-						if (listBean_AeTime.size() > 0) {
-							listBean_AeTime.clear(); // 清除LISTVIEW 以前的内容
-							AeTime_Adapter.onDateChange(listBean_AeTime);
-						}
-					}
-				} else {
-					init_adapter(msg.obj.toString());					
-				}
+				init_adapter(msg.obj.toString());
 				break;
 			}
 		}
 	};
-	
 
 	private void init_adapter(String data) {
-		listBean_AeTime = new ArrayList<AeRecord>(); //初始化效应时间长 适配器
-		listBean_AeTime.clear();
-		listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeTimeBean(data);
-		AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(), R.layout.item_hsview_aetime, listBean_AeTime, mHead_AeTime);
-		lv_AeTime.setAdapter(AeTime_Adapter);
-		
+		if (data.equals("")) {
+			Toast.makeText(this.getActivity(), "没有获取到[效应槽：持续时间最长]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean_AeTime != null) {
+				if (listBean_AeTime.size() > 0) {
+					listBean_AeTime.clear(); // 清除LISTVIEW 以前的内容
+					AeTime_Adapter.onDateChange(listBean_AeTime);
+				}
+			}
+		} else {
+			listBean_AeTime = new ArrayList<AeRecord>(); // 初始化效应时间长 适配器
+			listBean_AeTime.clear();
+			listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeTimeBean(data);
+			AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(), R.layout.item_hsview_aetime, listBean_AeTime,
+					mHead_AeTime);
+			lv_AeTime.setAdapter(AeTime_Adapter);
+		}
+
 	};
 
 	@Override
@@ -114,24 +116,18 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 		}
 	}
 
-	/*@Override
-	public void GetAeTimeDataUrl(String data) {
-		if (data.equals("")) {
-			Toast.makeText(this.getActivity(), "没有获取到[效应槽]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean_AeTime != null) {
-				if (listBean_AeTime.size() > 0) {
-					listBean_AeTime.clear(); // 清除LISTVIEW 以前的内容
-					AeTime_Adapter.onDateChange(listBean_AeTime);
-				}
-			}
-		} else {
-			listBean_AeTime = new ArrayList<AeRecord>();
-			listBean_AeTime.clear();
-			listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeRecordBean(data);
-			AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(), R.layout.item_hsview_ae_rec, listBean_AeTime,
-					mHead_AeTime);
-			lv_AeTime.setAdapter(AeTime_Adapter);
-		}
-
-	}*/
+	/*
+	 * @Override public void GetAeTimeDataUrl(String data) { if
+	 * (data.equals("")) { Toast.makeText(this.getActivity(),
+	 * "没有获取到[效应槽]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show(); if (listBean_AeTime
+	 * != null) { if (listBean_AeTime.size() > 0) { listBean_AeTime.clear(); //
+	 * 清除LISTVIEW 以前的内容 AeTime_Adapter.onDateChange(listBean_AeTime); } } } else
+	 * { listBean_AeTime = new ArrayList<AeRecord>(); listBean_AeTime.clear();
+	 * listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeRecordBean(data);
+	 * AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(),
+	 * R.layout.item_hsview_ae_rec, listBean_AeTime, mHead_AeTime);
+	 * lv_AeTime.setAdapter(AeTime_Adapter); }
+	 * 
+	 * }
+	 */
 }

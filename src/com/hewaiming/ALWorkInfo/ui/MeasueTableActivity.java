@@ -1,113 +1,82 @@
 package com.hewaiming.ALWorkInfo.ui;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
-import com.hewaiming.ALWorkInfo.InterFace.LoadAeTimeInterface;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_MeasueTableAdapter;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
-import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.HorizontalScrollView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CraftLineActivity extends Activity implements HttpGetListener,LoadAeTimeInterface, OnClickListener, OnCheckedChangeListener {
+public class MeasueTableActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
-	private ArrayAdapter<String> PotNo_adapter;	
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTable_Craft.php";
-	private String measue_potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
+	private ArrayAdapter<String> PotNo_adapter;
+
+	private HttpPost_BeginDate_EndDate http_post;
+	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
+	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_area_date.php";
+
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
-	private List<dayTable> listBean_daytable = null;
-	private List<CheckBox> list_cb = new ArrayList<CheckBox>();
-	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
-	private String selitems = "";
-	private HttpPost_BeginDate_EndDate daytable_http_post;
-	private HttpPost_BeginDate_EndDate_other measuetable_http_post;
-	private List<MeasueTable> listBean_measuetable=null;
+	private List<MeasueTable> listBean = null;
+	private HSView_MeasueTableAdapter measue_Adapter = null;
+	private RelativeLayout mHead;
+	private ListView lv_MeasueTable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_craft_line);
-		dateBean = getIntent().getStringArrayListExtra("date_table");
+		setContentView(R.layout.activity_measue_table);
+		dateBean = getIntent().getStringArrayListExtra("date_record");
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
-		init_items();
+		init_HSView();
 	}
 
-	private void init_items() {
-		cb0 = (CheckBox) findViewById(R.id.chkbox_SetV);
-		cb1 = (CheckBox) findViewById(R.id.chkbox_WorkV);
-		cb2 = (CheckBox) findViewById(R.id.chkbox_AvgV);
-		cb3 = (CheckBox) findViewById(R.id.chkbox_Noise);
-		cb4 = (CheckBox) findViewById(R.id.chkbox_SetALF);
-		cb5 = (CheckBox) findViewById(R.id.chkbox_ALF);
-		cb6 = (CheckBox) findViewById(R.id.chkbox_AeCnt);
-		cb7 = (CheckBox) findViewById(R.id.chkbox_ALO);
-		cb8 = (CheckBox) findViewById(R.id.chkbox_ALzs);
-		cb9 = (CheckBox) findViewById(R.id.chkbox_ALjh);
-		cb10 = (CheckBox) findViewById(R.id.chkbox_FeCnt);
-		cb11 = (CheckBox) findViewById(R.id.chkbox_SiCnt);
-		cb12 = (CheckBox) findViewById(R.id.chkbox_FZB);
-		cb13 = (CheckBox) findViewById(R.id.chkbox_DJWD);
-		cb14 = (CheckBox) findViewById(R.id.chkbox_LSP);
-		cb15 = (CheckBox) findViewById(R.id.chkbox_DJZSP);
-		list_cb.add(cb0);
-		list_cb.add(cb1);
-		list_cb.add(cb2);
-		list_cb.add(cb3);
-		list_cb.add(cb4);
-		list_cb.add(cb5);
-		list_cb.add(cb6);
-		list_cb.add(cb7);
-		list_cb.add(cb8);
-		list_cb.add(cb9);
-		list_cb.add(cb10);
-		list_cb.add(cb11);
-		list_cb.add(cb12);
-		list_cb.add(cb13);
-		list_cb.add(cb14);
-		list_cb.add(cb15);
-		for (CheckBox cb : list_cb) {
-			cb.setOnCheckedChangeListener(this);
-		}
-		// for (int i = 0; i < chkbox.length; i++) {
-		// chkbox[i].setOnCheckedChangeListener(this);
-		// }
+	private void init_HSView() {
+		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
+		mHead.setFocusable(true);
+		mHead.setClickable(true);
+		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+
+		lv_MeasueTable = (ListView) findViewById(R.id.lv_MeasueTable);
+		lv_MeasueTable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_MeasueTable.setCacheColorHint(0);
+		lv_MeasueTable.setOnScrollListener(this);
 
 	}
 
@@ -117,6 +86,7 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 		for (int i = 1101; i <= 1136; i++) {
 			PotNoList.add(i + "");
 		}
+		PotNoList.add(0, "全部槽号");
 		PotNo_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PotNoList);
 		PotNo_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner_potno.setAdapter(PotNo_adapter);
@@ -126,14 +96,16 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = PotNoList.get(position).toString();
+
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				Toast.makeText(getApplicationContext(), "没有选择槽号", 1).show();
+
 			}
 
 		});
+
 	}
 
 	private void init_date() {
@@ -181,7 +153,7 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("工艺曲线");
+		tv_title.setText("测量数据");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 
@@ -272,29 +244,31 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 			}
 			break;
 		}
+		PotNoList.add(0, "全部槽号");
 		spinner_potno.setSelection(0);
 		PotNo = PotNoList.get(0).toString();
-		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+		PotNo_adapter.notifyDataSetChanged();// 通知数据改变		
 	}
 
 	@Override
 	public void GetDataUrl(String data) {
 
 		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[工艺参数]日报数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-
+			Toast.makeText(getApplicationContext(), "没有获取到[测量数据]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					measue_Adapter.onDateChange(listBean);
+				}
+			}
 		} else {
-			listBean_daytable = new ArrayList<dayTable>();
-			listBean_daytable = JsonToMultiList.JsonArrayToDayTableBean(data);
-			/*Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
-			Bundle mbundle = new Bundle();
-			mbundle.putString("PotNo", PotNo);
-			mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
-			mbundle.putSerializable("list_daytable", (Serializable) listBean_daytable);
-			mbundle.putString("SELITEMS", selitems);
-			show_intent.putExtras(mbundle);
-			startActivity(show_intent); // 显示工艺曲线图
-*/
+
+			listBean = new ArrayList<MeasueTable>();
+			listBean.clear();
+			listBean = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
+			measue_Adapter = new HSView_MeasueTableAdapter(this, R.layout.item_hsview_measuetable, listBean, mHead);
+
+			lv_MeasueTable.setAdapter(measue_Adapter);
 		}
 	}
 
@@ -308,40 +282,13 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				try {
-					Date bdate = df.parse(BeginDate);
-					Date edate = df.parse(EndDate);
-					long TIME_DAY_MILLISECOND = 86400000;
-					Long days = (edate.getTime() - bdate.getTime()) / (TIME_DAY_MILLISECOND);
-					if (days >= 70) {
-						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>=70,请重新选择日期", 1).show();
-					} else {
-						// 选定各项曲线部位
-						selitems = "";
-						for (CheckBox cBox : list_cb) {
-							if (cBox.isChecked()) {
-								selitems += cBox.getText() + ",";
-							}
-							daytable_http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-									BeginDate, EndDate, this, this).execute();  //从日报取数据
-							
-							measuetable_http_post = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(potno_url, 2, PotNo,
-									BeginDate, EndDate, this, this).execute();  //从测量数据取数据
-							
-							Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
-							Bundle mbundle = new Bundle();
-							mbundle.putString("PotNo", PotNo);
-							mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
-							mbundle.putSerializable("list_daytable", (Serializable) listBean_daytable);
-							mbundle.putSerializable("list_measuetable", (Serializable) listBean_measuetable);
-							mbundle.putString("SELITEMS", selitems);
-							show_intent.putExtras(mbundle);
-							startActivity(show_intent); // 显示工艺曲线图
-						}
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
+				if (PotNo == "全部槽号") {
+					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
+							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
+				} else {
+
+					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
+							BeginDate, EndDate, this, this).execute();
 				}
 			}
 			break;
@@ -349,22 +296,27 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		Log.i("chkbox", buttonView.getText().toString() + isChecked);
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void GetAeTimeDataUrl(String data) {
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+	}
 
-		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[工艺参数]测量数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
 
-		} else {
-			listBean_measuetable = new ArrayList<MeasueTable>();
-			listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);			
-
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
+			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			HorizontalScrollView headSrcrollView2 = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView.onTouchEvent(arg1);
+			headSrcrollView2.onTouchEvent(arg1);
+			return false;
 		}
-		
 	}
 
 }

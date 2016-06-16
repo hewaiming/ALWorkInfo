@@ -11,10 +11,13 @@ import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
+import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
+
+import android.R.string;
 
 public class JsonToBean_Area_Date {
 
@@ -415,7 +418,8 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-	//效应次数统计
+
+	// 效应次数统计
 	public static List<AeRecord> JsonArrayToAeCntBean(String data) {
 
 		List<AeRecord> listBean = null;
@@ -435,12 +439,12 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setPotNo(jsonobj.getInt("PotNo"));
 				}
-				
+
 				if (jsonobj.get("AeCnt").equals(null)) {
 					mBean.setWaitTime(0);
 				} else {
 					mBean.setWaitTime(jsonobj.getInt("AeCnt"));
-				}			
+				}
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
@@ -449,7 +453,8 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-//效应时间长
+
+	// 效应时间长
 	public static List<AeRecord> JsonArrayToAeTimeBean(String data) {
 
 		List<AeRecord> listBean = null;
@@ -486,22 +491,131 @@ public class JsonToBean_Area_Date {
 					mBean.setContinueTime(jsonobj.getInt("ContinuanceTime"));
 				}
 
-//				if (jsonobj.get("WaitTime").equals(null)) {
-//					mBean.setWaitTime(0);
-//				} else {
-//					mBean.setWaitTime(jsonobj.getInt("WaitTime"));
-//				}
+				// if (jsonobj.get("WaitTime").equals(null)) {
+				// mBean.setWaitTime(0);
+				// } else {
+				// mBean.setWaitTime(jsonobj.getInt("WaitTime"));
+				// }
 
-//				if (jsonobj.get("Status").equals(null)) {
-//					mBean.setStatus("");
-//				} else {
-//					mBean.setStatus(jsonobj.getString("Status"));
-//				}
+				// if (jsonobj.get("Status").equals(null)) {
+				// mBean.setStatus("");
+				// } else {
+				// mBean.setStatus(jsonobj.getString("Status"));
+				// }
 				if (jsonobj.get("MaxVoltage").equals(null)) {
 					mBean.setMaxV(0);
 				} else {
 					mBean.setMaxV(jsonobj.getDouble("MaxVoltage"));
-				}				
+				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+
+	// 网络字符流数据转换为 测量数据LIST
+	public static List<MeasueTable> JsonArrayToMeasueTableBean(String data) {
+
+		List<MeasueTable> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<MeasueTable>();
+			listBean.clear();
+			System.out.println("jsonarray. MeasueTable---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				MeasueTable mBean = new MeasueTable();
+
+				// PotNo, Ddate,ALCnt, LSP,
+				// DJZSP;DJWD;FZB;FeCnt;SiCnt;ALOCnt;CaFCnt;MgCnt;MLSP;LDYJ;JHCL;
+
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo("");
+				} else {
+					mBean.setPotNo(String.valueOf(jsonobj.getInt("PotNo")));
+				}
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				if (jsonobj.get("AlCnt").equals(null)) {
+					mBean.setALCnt("");
+				} else {
+					mBean.setALCnt(String.valueOf(jsonobj.getInt("AlCnt")));
+				}
+				if (jsonobj.get("Lsp").equals(null)) {
+					mBean.setLSP("");
+				} else {
+					mBean.setLSP(String.valueOf(jsonobj.getInt("Lsp")));
+				}
+				if (jsonobj.get("Djzsp").equals(null)) {
+					mBean.setDJZSP("");
+				} else {
+					mBean.setDJZSP(String.valueOf(jsonobj.getInt("Djzsp")));
+				}
+
+				if (jsonobj.get("Djwd").equals(null)) {
+					mBean.setDJWD("");
+				} else {
+					mBean.setDJWD(String.valueOf(jsonobj.getInt("Djwd")));
+				}
+				if (jsonobj.get("Fzb").equals(null)) {
+					mBean.setFZB("");
+				} else {
+					mBean.setFZB(String.valueOf(jsonobj.getDouble("Fzb")));
+				}
+				if (jsonobj.get("FeCnt").equals(null)) {
+					mBean.setFeCnt("");
+				} else {
+					mBean.setFeCnt(String.valueOf(jsonobj.getDouble("FeCnt")));
+				}
+
+				if (jsonobj.get("SiCnt").equals(null)) {
+					mBean.setSiCnt("");
+				} else {
+					mBean.setSiCnt(String.valueOf(jsonobj.getDouble("SiCnt")));
+				}
+
+				if (jsonobj.get("AlOCnt").equals(null)) {
+					mBean.setALOCnt("");
+				} else {
+					mBean.setALOCnt(String.valueOf(jsonobj.getDouble("AlOCnt")));
+				}
+
+				if (jsonobj.get("CaFCnt").equals(null)) {
+					mBean.setCaFCnt("");
+				} else {
+					mBean.setCaFCnt(String.valueOf(jsonobj.getDouble("CaFCnt")));
+				}
+
+				if (jsonobj.get("MgCnt").equals(null)) {
+					mBean.setMgCnt("");
+				} else {
+					mBean.setMgCnt(String.valueOf(jsonobj.getDouble("MgCnt")));
+				}
+
+				if (jsonobj.get("MLsp").equals(null)) {
+					mBean.setMLSP("");
+				} else {
+					mBean.setMLSP(String.valueOf(jsonobj.getInt("MLsp")));
+				}
+				if (jsonobj.get("LDYJ").equals(null)) {
+					mBean.setLDYJ("");
+				} else {
+					mBean.setLDYJ(String.valueOf(jsonobj.getInt("LDYJ")));
+				}
+				if (jsonobj.get("JHCL").equals(null)) {
+					mBean.setJHCL("");
+				} else {
+					mBean.setJHCL(String.valueOf(jsonobj.getInt("JHCL")));
+				}
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
