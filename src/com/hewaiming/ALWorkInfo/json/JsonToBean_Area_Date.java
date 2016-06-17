@@ -17,8 +17,6 @@ import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
-import android.R.string;
-
 public class JsonToBean_Area_Date {
 
 	public static List<dayTable> JsonArrayToDayTableBean_Other(String data) {
@@ -404,6 +402,16 @@ public class JsonToBean_Area_Date {
 					mBean.setDybTime(0);
 				} else {
 					mBean.setDybTime(jsonobj.getInt("DybTime"));
+				}
+				if (jsonobj.get("FhlCnt").equals(null)) {
+					mBean.setFhlCnt(0);
+				} else {
+					mBean.setFhlCnt(jsonobj.getInt("FhlCnt"));
+				}
+				if (jsonobj.get("AlCntZSL").equals(null)) {
+					mBean.setAlCntZSL(0);
+				} else {
+					mBean.setAlCntZSL(jsonobj.getInt("AlCntZSL"));
 				}
 				if (jsonobj.get("Ddate").equals(null)) {
 					mBean.setDdate("");

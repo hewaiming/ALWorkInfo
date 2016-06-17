@@ -6,7 +6,6 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView.OnScrollChangedListener;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
-import com.hewaiming.ALWorkInfo.bean.dayTable;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -102,7 +101,7 @@ public class HSView_MeasueTableAdapter extends BaseAdapter {
 			holder.tvCaFCnt = (TextView) convertView.findViewById(R.id.tv_CaFCnt);
 			holder.tvMgCnt = (TextView) convertView.findViewById(R.id.tv_MgCnt);
 			holder.tvMLSP = (TextView) convertView.findViewById(R.id.tv_MLSP);
-			holder.tvLDYJ = (TextView) convertView.findViewById(R.id.tv_LDWJ);
+			holder.tvLDYJ = (TextView) convertView.findViewById(R.id.tv_LDYJ);
 			holder.tvJHCL = (TextView) convertView.findViewById(R.id.tv_JHCL);			
 
 			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);

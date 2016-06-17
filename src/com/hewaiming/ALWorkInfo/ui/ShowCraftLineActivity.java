@@ -26,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
@@ -34,29 +35,28 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 	private String PotNo;
 	// private LineChart mLineChart;
 	private String SelDate;
-	private List<dayTable> list_daytable = null;
+	private List<dayTable> list_daytable = new ArrayList<dayTable>();
 	private XAxis xAxis;
 	private YAxis yAxis_left, yAxis_right;
 	private LineChart[] mCharts = new LineChart[16];
 	private String selector;
-	private List<MeasueTable> list_measuetable=null;
+	private List<MeasueTable> list_measuetable = new ArrayList<MeasueTable>();
 	public static final String[] TitleName = { "设定电压", "工作电压", "平均电压", "噪声", "设定氟化铝量", "氟化铝料量", "效应次数", "氧化铝料量",
 			"出铝指示量", "计划出铝量", "铁含量", "硅含量", "分子比", "电解温度", "铝水平", "电解质水平" };
 
-	public static final int[] COLORS = { 0xFF00FF00, 0xFFFF0000,0xFFFF0000,0xFF0000FF };
-//	BLACK       = 0xFF000000;
-//    public static final int DKGRAY      = 0xFF444444;
-//    public static final int GRAY        = 0xFF888888;
-//    public static final int LTGRAY      = 0xFFCCCCCC;
-//    public static final int WHITE       = 0xFFFFFFFF;
-//    public static final int RED         = 0xFFFF0000;
-//    public static final int GREEN       = 0xFF00FF00;
-//    public static final int BLUE        = 0xFF0000FF;
-//    public static final int YELLOW      = 0xFFFFFF00;
-//    public static final int CYAN        = 0xFF00FFFF;
-//    public static final int MAGENTA     = 0xFFFF00FF
-	
-	
+	public static final int[] COLORS = { 0xFF00FF00, 0xFFFF0000, 0xFFFF0000, 0xFF0000FF };
+	// BLACK = 0xFF000000;
+	// public static final int DKGRAY = 0xFF444444;
+	// public static final int GRAY = 0xFF888888;
+	// public static final int LTGRAY = 0xFFCCCCCC;
+	// public static final int WHITE = 0xFFFFFFFF;
+	// public static final int RED = 0xFFFF0000;
+	// public static final int GREEN = 0xFF00FF00;
+	// public static final int BLUE = 0xFF0000FF;
+	// public static final int YELLOW = 0xFFFFFF00;
+	// public static final int CYAN = 0xFF00FFFF;
+	// public static final int MAGENTA = 0xFFFF00FF
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -67,9 +67,15 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		selector = getIntent().getStringExtra("SELITEMS");
 		list_daytable = new ArrayList<dayTable>();
 		list_daytable = (List<dayTable>) getIntent().getSerializableExtra("list_daytable");
-		list_measuetable=(List<MeasueTable>) getIntent().getSerializableExtra("list_measuetable");
-		init_title();
 
+		if (list_daytable==null) {
+			Toast.makeText(getApplicationContext(), "从日报数据中传送过来的参数为空！", 1).show();
+		}
+		list_measuetable = (List<MeasueTable>) getIntent().getSerializableExtra("list_measuetable");
+		if (list_measuetable==null) {
+			Toast.makeText(getApplicationContext(), "从测量数据报表中传送过来的参数为空！", 1).show();
+		}
+		init_title();
 		mCharts[0] = (LineChart) findViewById(R.id.chart_SetV);
 		mCharts[1] = (LineChart) findViewById(R.id.chart_WorkV);
 		mCharts[2] = (LineChart) findViewById(R.id.chart_AvgV);
@@ -87,29 +93,31 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		mCharts[14] = (LineChart) findViewById(R.id.chart_LSP);
 		mCharts[15] = (LineChart) findViewById(R.id.chart_DJZSP);
 		ISshow_Chart();
-        
-		for (int i = 0; i < mCharts.length; i++) {
-			if (i<9){
-				LineData mLineData = getLineDatafromDayTable(i, list_daytable.size(), 1); //从槽日报去数据
-				showChart(mCharts[i], mLineData, Color.rgb(255, 255, 255));
-			}else {
-				LineData mLineData = getLineDatafromMeasueTable(i, list_measuetable.size(), 1); //从测量数据取数据
-				showChart(mCharts[i], mLineData, Color.rgb(255, 255, 255));
-			}		
-			
-		}
 
+		for (int i = 0; i < mCharts.length; i++) {
+			if (i < 9) {
+				if (list_daytable!=null) {
+					LineData mLineData = getLineDatafromDayTable(i, list_daytable.size(), 1); // 从槽日报去数据
+					showChart(mCharts[i], mLineData, Color.rgb(255, 255, 255));
+				}
+			} else {
+				if (list_measuetable!=null) {
+					LineData mLineData = getLineDatafromMeasueTable(i, list_measuetable.size(), 1); // 从测量数据取数据
+					showChart(mCharts[i], mLineData, Color.rgb(255, 255, 255));
+				}
+			}
+		}
 	}
 
 	private void ISshow_Chart() {
-		for(int i=0;i<mCharts.length;i++){
-			if (selector.contains(TitleName[i])){
+		for (int i = 0; i < mCharts.length; i++) {
+			if (selector.contains(TitleName[i])) {
 				mCharts[i].setVisibility(View.VISIBLE);
-			}else{
-				mCharts[i].setVisibility(View.GONE);  //选中则显示，否则隐藏
+			} else {
+				mCharts[i].setVisibility(View.GONE); // 选中则显示，否则隐藏
 			}
 		}
-		
+
 	}
 
 	private void init_title() {
@@ -124,7 +132,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 	private void showChart(LineChart lineChart, LineData mLineData, int color) {
 		lineChart.setDrawBorders(false); // 是否在折线图上添加边框
-		lineChart.setMinimumHeight(300);   
+		lineChart.setMinimumHeight(300);
 		lineChart.setDescription("");// 数据描述
 		// 如果没有数据的时候，会显示这个，类似listview的emtpyview
 		lineChart.setNoDataTextDescription("你需要为曲线图提供数据.");
@@ -232,34 +240,25 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 				float value_AlZSL = (float) (list_daytable.get(i).getAlCntZSL() * range);
 				yValues.add(new Entry(value_AlZSL, i)); // y轴的 出铝指示量
 				break;
-		/*	case 9:
-				float value_AlZSL = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_AlZSL, i)); // y轴的 计划出铝量
-				break;
-			case 10:
-				float value_FZB = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_FZB, i)); // y轴的 铁含量
-				break;
-			case 11:
-				float value_FZB = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_FZB, i)); // y轴的 硅含量
-				break;
-			case 12:
-				float value_FZB = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
-				break;
-			case 13:
-				float value_DJWD = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
-				break;
-			case 14:
-				float value_LSP = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_LSP, i)); // y轴的 铝水平
-				break;
-			case 15:
-				float value_LSP = (float) (list_daytable.get(i).getAlCntZSL() * range);
-				yValues.add(new Entry(value_LSP, i)); // y轴的 电解质水平
-				break;*/
+			/*
+			 * case 9: float value_AlZSL = (float)
+			 * (list_daytable.get(i).getAlCntZSL() * range); yValues.add(new
+			 * Entry(value_AlZSL, i)); // y轴的 计划出铝量 break; case 10: float
+			 * value_FZB = (float) (list_daytable.get(i).getAlCntZSL() * range);
+			 * yValues.add(new Entry(value_FZB, i)); // y轴的 铁含量 break; case 11:
+			 * float value_FZB = (float) (list_daytable.get(i).getAlCntZSL() *
+			 * range); yValues.add(new Entry(value_FZB, i)); // y轴的 硅含量 break;
+			 * case 12: float value_FZB = (float)
+			 * (list_daytable.get(i).getAlCntZSL() * range); yValues.add(new
+			 * Entry(value_FZB, i)); // y轴的 分子比 break; case 13: float value_DJWD
+			 * = (float) (list_daytable.get(i).getAlCntZSL() * range);
+			 * yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度 break; case
+			 * 14: float value_LSP = (float) (list_daytable.get(i).getAlCntZSL()
+			 * * range); yValues.add(new Entry(value_LSP, i)); // y轴的 铝水平 break;
+			 * case 15: float value_LSP = (float)
+			 * (list_daytable.get(i).getAlCntZSL() * range); yValues.add(new
+			 * Entry(value_LSP, i)); // y轴的 电解质水平 break;
+			 */
 			}
 
 		}
@@ -272,9 +271,9 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		// lineDataSet_SetV.setAxisDependency(AxisDependency.LEFT);
 		mlineDataSet.setLineWidth(1.5f); // 线宽
 		mlineDataSet.setCircleSize(1f);// 显示的圆形大小
-		mlineDataSet.setColor(COLORS[id]/4);// 显示颜色
-		mlineDataSet.setCircleColor(COLORS[id]/4);// 圆形的颜色
-		mlineDataSet.setHighLightColor(COLORS[id]/4); // 高亮的线的颜色
+		mlineDataSet.setColor(COLORS[id] / 4);// 显示颜色
+		mlineDataSet.setCircleColor(COLORS[id] / 4);// 圆形的颜色
+		mlineDataSet.setHighLightColor(COLORS[id] / 4); // 高亮的线的颜色
 
 		List<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
 		lineDataSets.add(mlineDataSet); // add 设定电压
@@ -293,117 +292,105 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		for (int i = 0; i < count; i++) {
 			xValues.add(list_measuetable.get(i).getDdate().toString());// x轴显示的数据，这里默认使用数字下标显示
 			switch (id) {
-			/*case 0:
-				float yvalue_SetV = (float) (list_daytable.get(i).getSetV() * range);
-				yValues.add(new Entry(yvalue_SetV, i)); // y轴的 设定电压
-				break;
-			case 1:
-				float yvalue_WorkV = (float) (list_daytable.get(i).getWorkV() * range);
-				yValues.add(new Entry(yvalue_WorkV, i)); // y轴的 工作电压
-				break;
-			case 2:
-				float value_AvgV = (float) (list_daytable.get(i).getAverageV() * range);
-				yValues.add(new Entry(value_AvgV, i)); // y轴的 平均电压
-				break;
-			case 3:
-				float value_Noise = (float) (list_daytable.get(i).getZF() * range);
-				yValues.add(new Entry(value_Noise, i)); // y轴的 噪音
-				break;
-			case 4:
-				// float value_SetALF = (float) (list_daytable.get(i).getgetZF()
-				// * range);
-				// yValues.add(new Entry(value_Noise, i)); // y轴的 设定氟化铝
-				break;
-			case 5:
-				float value_ALF = (float) (list_daytable.get(i).getFhlCnt() * range);
-				yValues.add(new Entry(value_ALF, i)); // y轴的 氟化铝料量
-				break;
-			case 6:
-				float value_AeCnt = (float) (list_daytable.get(i).getAeCnt() * range);
-				yValues.add(new Entry(value_AeCnt, i)); // y轴的 效应次数
-				break;
-			case 7:
-				float value_YhlCnt = (float) (list_daytable.get(i).getYhlCnt() * range);
-				yValues.add(new Entry(value_YhlCnt, i)); // y轴的 氧化铝量
-				break;
-*/
-			case 8:
-				if (list_measuetable.get(i).getALCnt().equals("")){
-					float value_AlZSL = (float) (0 * range);
-					yValues.add(new Entry(value_AlZSL, i)); // y轴的 出铝指示量
-				}else{
-					float value_AlZSL = (float) (Integer.parseInt(list_measuetable.get(i).getALCnt()) * range);
-					yValues.add(new Entry(value_AlZSL, i)); // y轴的 出铝指示量
-				}				
-				break;
-				
+			/*
+			 * case 0: float yvalue_SetV = (float)
+			 * (list_daytable.get(i).getSetV() * range); yValues.add(new
+			 * Entry(yvalue_SetV, i)); // y轴的 设定电压 break; case 1: float
+			 * yvalue_WorkV = (float) (list_daytable.get(i).getWorkV() * range);
+			 * yValues.add(new Entry(yvalue_WorkV, i)); // y轴的 工作电压 break; case
+			 * 2: float value_AvgV = (float) (list_daytable.get(i).getAverageV()
+			 * * range); yValues.add(new Entry(value_AvgV, i)); // y轴的 平均电压
+			 * break; case 3: float value_Noise = (float)
+			 * (list_daytable.get(i).getZF() * range); yValues.add(new
+			 * Entry(value_Noise, i)); // y轴的 噪音 break; case 4: // float
+			 * value_SetALF = (float) (list_daytable.get(i).getgetZF() // *
+			 * range); // yValues.add(new Entry(value_Noise, i)); // y轴的 设定氟化铝
+			 * break; case 5: float value_ALF = (float)
+			 * (list_daytable.get(i).getFhlCnt() * range); yValues.add(new
+			 * Entry(value_ALF, i)); // y轴的 氟化铝料量 break; case 6: float
+			 * value_AeCnt = (float) (list_daytable.get(i).getAeCnt() * range);
+			 * yValues.add(new Entry(value_AeCnt, i)); // y轴的 效应次数 break; case
+			 * 7: float value_YhlCnt = (float) (list_daytable.get(i).getYhlCnt()
+			 * * range); yValues.add(new Entry(value_YhlCnt, i)); // y轴的 氧化铝量
+			 * break;
+//			 */
+//			case 8:
+//				if (list_measuetable.get(i).getALCnt().equals("")) {
+//					float value_AlZSL = (float) (0 * range);
+//					yValues.add(new Entry(value_AlZSL, i)); // y轴的 出铝指示量
+//				} else {
+//					float value_AlZSL = (float) (Integer.parseInt(list_measuetable.get(i).getALCnt()) * range);
+//					yValues.add(new Entry(value_AlZSL, i)); // y轴的 出铝指示量
+//				}
+//				break;
+
 			case 9:
-				if(list_measuetable.get(i).getJHCL().equals("")){
+				if (list_measuetable.get(i).getJHCL().equals("")) {
 					float value_AlJH = (float) (0 * range);
 					yValues.add(new Entry(value_AlJH, i)); // y轴的 计划出铝量 0
-				}else{
+				} else {
 					float value_AlJH = (float) (Integer.parseInt(list_measuetable.get(i).getJHCL()) * range);
 					yValues.add(new Entry(value_AlJH, i)); // y轴的 计划出铝量
-				}			
+				}
 				break;
 			case 10:
-				if(list_measuetable.get(i).getFeCnt().equals("")){
+				if (list_measuetable.get(i).getFeCnt().equals("")) {
 					float value_FeCnt = (float) (0 * range);
 					yValues.add(new Entry(value_FeCnt, i)); // y轴的 铁含量 0
-				}else{
+				} else {
 					float value_FeCnt = (float) (Float.parseFloat(list_measuetable.get(i).getFeCnt()) * range);
 					yValues.add(new Entry(value_FeCnt, i)); // y轴的 铁含量
 				}
-			
+
 				break;
 			case 11:
-				if(list_measuetable.get(i).getSiCnt().equals("")){
+				if (list_measuetable.get(i).getSiCnt().equals("")) {
 					float value_SiCnt = (float) (0 * range);
 					yValues.add(new Entry(value_SiCnt, i)); // y轴的 硅含量 0
-				}else{
+				} else {
 					float value_SiCnt = (float) (Float.parseFloat(list_measuetable.get(i).getSiCnt()) * range);
 					yValues.add(new Entry(value_SiCnt, i)); // y轴的 硅含量
-				}				
+				}
 				break;
-				
+
 			case 12:
-				if (list_measuetable.get(i).getFeCnt().equals("")){
+				if (list_measuetable.get(i).getFeCnt().equals("")) {
 					float value_FZB = (float) (0 * range);
 					yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
-				}else{
+				} else {
 					float value_FZB = (float) (Float.parseFloat(list_measuetable.get(i).getFZB()) * range);
 					yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
-				}			
+				}
 				break;
-				
+
 			case 13:
-				if (list_measuetable.get(i).getDJWD().equals("")){
+				if (list_measuetable.get(i).getDJWD().equals("")) {
 					float value_DJWD = (float) (0 * range);
 					yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
-				}else{
+				} else {
 					float value_DJWD = (float) (Integer.parseInt(list_measuetable.get(i).getDJWD()) * range);
 					yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
 				}
-				
+
 				break;
-				
+
 			case 14:
-				if (list_measuetable.get(i).getLSP().equals("")){
+				if (list_measuetable.get(i).getLSP().equals("")) {
 					float value_LSP = (float) (0 * range);
-					yValues.add(new Entry(value_LSP, i)); 
-				}else{
+					yValues.add(new Entry(value_LSP, i));
+				} else {
 					float value_LSP = (float) (Integer.parseInt(list_measuetable.get(i).getLSP()) * range);
 					yValues.add(new Entry(value_LSP, i)); // y轴的 铝水平
-				}				
+				}
 				break;
 			case 15:
-				if (list_measuetable.get(i).getDJZSP().equals("")){
+				if (list_measuetable.get(i).getDJZSP().equals("")) {
 					float value_DJZSP = (float) (0 * range);
 					yValues.add(new Entry(value_DJZSP, i));
-				}else{
+				} else {
 					float value_DJZSP = (float) (Integer.parseInt(list_measuetable.get(i).getDJZSP()) * range);
 					yValues.add(new Entry(value_DJZSP, i)); // y轴的 电解质水平
-				}				
+				}
 				break;
 			}
 
@@ -417,9 +404,9 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		// lineDataSet_SetV.setAxisDependency(AxisDependency.LEFT);
 		mlineDataSet.setLineWidth(1.5f); // 线宽
 		mlineDataSet.setCircleSize(1f);// 显示的圆形大小
-		mlineDataSet.setColor(COLORS[id]/4);// 显示颜色
-		mlineDataSet.setCircleColor(COLORS[id]/4);// 圆形的颜色
-		mlineDataSet.setHighLightColor(COLORS[id]/4); // 高亮的线的颜色
+		mlineDataSet.setColor(COLORS[id] / 4);// 显示颜色
+		mlineDataSet.setCircleColor(COLORS[id] / 4);// 圆形的颜色
+		mlineDataSet.setHighLightColor(COLORS[id] / 4); // 高亮的线的颜色
 
 		List<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
 		lineDataSets.add(mlineDataSet); // add 设定电压
@@ -429,6 +416,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 		return lineData;
 	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

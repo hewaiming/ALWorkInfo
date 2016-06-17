@@ -20,6 +20,28 @@ public class dayTable implements Serializable {
 	private int ZF;    //дывє
 	private String Ddate;	
 
+	public dayTable(int potNo, String potSt, int runTime, double averageV, double realSetV, double setV, double workV,
+			double aeV, int aeTime, int aeCnt, int dybTime, int yhlCnt, int fhlCnt, int alCntZSL, int zF,
+			String ddate) {
+		super();
+		PotNo = potNo;
+		PotSt = potSt;
+		RunTime = runTime;
+		AverageV = averageV;
+		RealSetV = realSetV;
+		SetV = setV;
+		WorkV = workV;
+		AeV = aeV;
+		AeTime = aeTime;
+		AeCnt = aeCnt;
+		DybTime = dybTime;
+		YhlCnt = yhlCnt;
+		FhlCnt = fhlCnt;
+		AlCntZSL = alCntZSL;
+		ZF = zF;
+		Ddate = ddate;
+	}
+
 	public int getPotNo() {
 		return PotNo;
 	}

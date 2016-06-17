@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -14,9 +15,10 @@ import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
-import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_Latch;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other_Latch;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,13 +38,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CraftLineActivity extends Activity implements HttpGetListener,LoadAeTimeInterface, OnClickListener, OnCheckedChangeListener {
+public class CraftLineActivity extends Activity
+		implements HttpGetListener, LoadAeTimeInterface, OnClickListener, OnCheckedChangeListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
-	private ArrayAdapter<String> PotNo_adapter;	
+	private ArrayAdapter<String> PotNo_adapter;
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTable_Craft.php";
 	private String measue_potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
 	private String PotNo, BeginDate, EndDate;
@@ -54,7 +57,14 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 	private String selitems = "";
 	private HttpPost_BeginDate_EndDate daytable_http_post;
 	private HttpPost_BeginDate_EndDate_other measuetable_http_post;
-	private List<MeasueTable> listBean_measuetable=null;
+	private List<MeasueTable> listBean_measuetable = null;
+	private CountDownLatch latch;
+	private JSONDayTable work_day;
+	private JSONMeasueTable work_measue;
+	private String measuedata;
+	private String daydata;
+	private HttpPost_BeginDate_EndDate_Latch LATCH_daytable_http_post;
+	private HttpPost_BeginDate_EndDate_other_Latch LATCH_measuetable_http_post;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -285,16 +295,23 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 
 		} else {
 			listBean_daytable = new ArrayList<dayTable>();
-			listBean_daytable = JsonToMultiList.JsonArrayToDayTableBean(data);
-			/*Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
-			Bundle mbundle = new Bundle();
-			mbundle.putString("PotNo", PotNo);
-			mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
-			mbundle.putSerializable("list_daytable", (Serializable) listBean_daytable);
-			mbundle.putString("SELITEMS", selitems);
-			show_intent.putExtras(mbundle);
-			startActivity(show_intent); // 显示工艺曲线图
-*/
+			listBean_daytable = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
+			// work_day = new
+			// JSONDayTable("DayTable",latch,listBean_daytable,data);
+			// work_day.start();
+			// listBean_daytable =
+			// JsonToMultiList.JsonArrayToDayTableBean(data);
+			// latch.countDown();
+			/*
+			 * Intent show_intent = new Intent(CraftLineActivity.this,
+			 * ShowCraftLineActivity.class); Bundle mbundle = new Bundle();
+			 * mbundle.putString("PotNo", PotNo);
+			 * mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
+			 * mbundle.putSerializable("list_daytable", (Serializable)
+			 * listBean_daytable); mbundle.putString("SELITEMS", selitems);
+			 * show_intent.putExtras(mbundle); startActivity(show_intent); //
+			 * 显示工艺曲线图
+			 */
 		}
 	}
 
@@ -323,12 +340,49 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 							if (cBox.isChecked()) {
 								selitems += cBox.getText() + ",";
 							}
-							daytable_http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-									BeginDate, EndDate, this, this).execute();  //从日报取数据
-							
-							measuetable_http_post = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(potno_url, 2, PotNo,
-									BeginDate, EndDate, this, this).execute();  //从测量数据取数据
-							
+						}
+						if (selitems.equals("")) {
+							Toast.makeText(getApplicationContext(), "没有选中任何一项工艺参数，请选择工艺参数项！", 1).show();
+							break;
+						} else {
+							latch = new CountDownLatch(2);						
+							daytable_http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url,
+									2, PotNo, BeginDate, EndDate, this, this);
+							measuetable_http_post = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(
+									measue_potno_url, 2, PotNo, BeginDate, EndDate, this, this); // 从测量数据取数据
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									System.out.println("daytable_http_post.execute()....");
+									daytable_http_post.execute();
+									latch.countDown();
+								}
+							}).start();
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									System.out.println("measuetable_http_post.execute....");
+									measuetable_http_post.execute();
+									latch.countDown();
+								}
+							}).start();
+
+							// LATCH_daytable_http_post =
+							// (HttpPost_BeginDate_EndDate_Latch) new
+							// HttpPost_BeginDate_EndDate_Latch(
+							// latch, potno_url, 2, PotNo, BeginDate, EndDate,
+							// this, this).execute(); // 从日报取数据
+							//
+							// LATCH_measuetable_http_post =
+							// (HttpPost_BeginDate_EndDate_other_Latch) new
+							// HttpPost_BeginDate_EndDate_other_Latch(
+							// latch, measue_potno_url, 2, PotNo, BeginDate,
+							// EndDate, this, this).execute(); // 从测量数据取数据
+							// LATCH_daytable_http_post.execute();
+							// LATCH_measuetable_http_post.execute();
+							// work_day.start();
+							// work_measue.start();
+							latch.await();// 等待所有工人完成工作
 							Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
 							Bundle mbundle = new Bundle();
 							mbundle.putString("PotNo", PotNo);
@@ -340,7 +394,7 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 							startActivity(show_intent); // 显示工艺曲线图
 						}
 					}
-				} catch (ParseException e) {
+				} catch (ParseException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -360,11 +414,60 @@ public class CraftLineActivity extends Activity implements HttpGetListener,LoadA
 			Toast.makeText(getApplicationContext(), "没有获取到[工艺参数]测量数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 
 		} else {
+
 			listBean_measuetable = new ArrayList<MeasueTable>();
-			listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);			
+			listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
+			// work_measue = new
+			// JSONMeasueTable("measueTable",latch,listBean_measuetable,data);
+			// work_measue.start();
+			// listBean_measuetable =
+			// JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
+			// latch.countDown();
 
 		}
-		
 	}
 
+	// 获取日报数据 LIST 进程
+	static class JSONDayTable extends Thread {
+		String workerName;
+		CountDownLatch latch;
+		List<dayTable> result;
+		String data;
+
+		public JSONDayTable(String workerName, CountDownLatch latch, List<dayTable> listDay, String remotedata) {
+			this.workerName = workerName;
+			this.latch = latch;
+			this.result = listDay;
+			this.data = remotedata;
+			System.out.println(workerName + "初始化成功");
+		}
+
+		@Override
+		public void run() {
+			result = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
+			latch.countDown();
+		}
+	}
+
+	// 获取测量数据 LIST 进程
+	static class JSONMeasueTable extends Thread {
+		String workerName;
+		CountDownLatch latch;
+		List<MeasueTable> result;
+		String data;
+
+		public JSONMeasueTable(String workerName, CountDownLatch latch, List<MeasueTable> list, String remotedata) {
+			this.workerName = workerName;
+			this.latch = latch;
+			this.result = list;
+			this.data = remotedata;
+			System.out.println(workerName + "初始化成功");
+		}
+
+		@Override
+		public void run() {
+			result = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
+			latch.countDown();
+		}
+	}
 }

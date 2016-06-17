@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="氧化铝含量"
+                    android:text="氧化铝浓度"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
                     android:textSize="10sp" />
@@ -166,18 +166,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="MLSP"
+                    android:text="侧壁温度"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/tv_LDWJ"
+                    android:id="@+id/tv_LDYJ"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="LDYJ"
+                    android:text="阳极压降"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
                     android:textSize="10sp" />

@@ -2,6 +2,7 @@ package com.hewaiming.ALWorkInfo.net;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -15,22 +16,23 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> {
+public class HttpPost_BeginDate_EndDate_Latch extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
 	private String Area_PotNo;
 	private int type;
 	private String BeginDate, EndDate;
+	CountDownLatch latch;
 	// 声明接口
 	private HttpGetListener listener;
 	private JSONArrayParser jsonParser = new JSONArrayParser();
 
-	public HttpPost_BeginDate_EndDate() {
+	public HttpPost_BeginDate_EndDate_Latch() {
 
 	}
 
-	public HttpPost_BeginDate_EndDate(String url, int type, String area, String beginDate, String endDate,
+	public HttpPost_BeginDate_EndDate_Latch(CountDownLatch mlatch,String url, int type, String area, String beginDate, String endDate,
 			HttpGetListener listener, Context mContext) {
 
 		this.mContext = mContext;
@@ -40,20 +42,22 @@ public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> 
 		this.BeginDate = beginDate;
 		this.EndDate = endDate;
 		this.listener = listener;
+		this.latch=mlatch;
+		
 	}
 
-	public HttpPost_BeginDate_EndDate(String url) {
+	public HttpPost_BeginDate_EndDate_Latch(String url) {
 		this.url = url;
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-//		pDialog = new ProgressDialog(mContext);
-//		pDialog.setMessage("数据下载....");
-//		pDialog.setIndeterminate(false);
-//		pDialog.setCancelable(true);
-//		pDialog.show();
+		pDialog = new ProgressDialog(mContext);
+		pDialog.setMessage("数据下载....");
+		pDialog.setIndeterminate(false);
+		pDialog.setCancelable(true);
+		pDialog.show();
 
 	}
 
@@ -86,9 +90,12 @@ public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> 
 
 	@Override
 	protected void onPostExecute(String result) {
-//		pDialog.dismiss();
+		pDialog.dismiss();
 		listener.GetDataUrl(result);
+		latch.countDown();
+		System.out.println("Daytable Latch finish!");
 		super.onPostExecute(result);
+		
 	}
 
 }

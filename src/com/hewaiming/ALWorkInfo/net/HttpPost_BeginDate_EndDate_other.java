@@ -49,11 +49,11 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("数据下载....");
-		pDialog.setIndeterminate(false);
-		pDialog.setCancelable(true);
-		pDialog.show();
+//		pDialog = new ProgressDialog(mContext);
+//		pDialog.setMessage("数据下载....");
+//		pDialog.setIndeterminate(false);
+//		pDialog.setCancelable(true);
+//		pDialog.show();
 
 	}
 
@@ -86,7 +86,7 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 
 	@Override
 	protected void onPostExecute(String result) {
-		pDialog.dismiss();
+//		pDialog.dismiss();
 		listener.GetAeTimeDataUrl(result);
 		super.onPostExecute(result);
 	}

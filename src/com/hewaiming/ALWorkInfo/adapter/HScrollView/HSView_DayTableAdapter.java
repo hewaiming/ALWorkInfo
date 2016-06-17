@@ -99,6 +99,8 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 			holder.tvAeTime = (TextView) convertView.findViewById(R.id.tv_AeTime);
 			holder.tvAeCnt = (TextView) convertView.findViewById(R.id.tv_AeCnt);
 			holder.tvDybTime = (TextView) convertView.findViewById(R.id.tv_DybTime);
+			holder.tvALFCnt = (TextView) convertView.findViewById(R.id.tv_ALFCnt);
+			holder.tvALCntZSL = (TextView) convertView.findViewById(R.id.tv_ALCntZSL);
 			holder.tvDdate = (TextView) convertView.findViewById(R.id.tv_Ddate);
 			
 			
@@ -126,6 +128,8 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 		holder.tvAeTime.setText(entity.getAeTime()+"");
 		holder.tvAeCnt.setText(entity.getAeCnt()+"");
 		holder.tvDybTime.setText(entity.getDybTime()+"");
+		holder.tvALFCnt.setText(entity.getFhlCnt()+"");
+		holder.tvALCntZSL.setText(entity.getAlCntZSL()+"");
 		holder.tvDdate.setText(entity.getDdate());		
 
 		return convertView;
@@ -155,6 +159,8 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 		TextView tvAeTime;
 		TextView tvAeCnt;
 		TextView tvDybTime;
+		TextView tvALFCnt;  //氟化铝下料量
+		TextView tvALCntZSL; //出铝指示量
 		TextView tvDdate;
 		HorizontalScrollView scrollView;
 	}
