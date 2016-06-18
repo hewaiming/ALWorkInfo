@@ -6,21 +6,25 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 
 import com.hewaiming.ALWorkInfo.R;
-import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
-import com.hewaiming.ALWorkInfo.InterFace.LoadAeTimeInterface;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyConst;
+import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_Latch;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
-import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other_Latch;
+import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,12 +38,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class CraftLineActivity extends Activity
-		implements HttpGetListener, LoadAeTimeInterface, OnClickListener, OnCheckedChangeListener {
+		implements OnClickListener, OnCheckedChangeListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -55,22 +60,16 @@ public class CraftLineActivity extends Activity
 	private List<CheckBox> list_cb = new ArrayList<CheckBox>();
 	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
 	private String selitems = "";
-	private HttpPost_BeginDate_EndDate daytable_http_post;
-	private HttpPost_BeginDate_EndDate_other measuetable_http_post;
 	private List<MeasueTable> listBean_measuetable = null;
-	private CountDownLatch latch;
-	private JSONDayTable work_day;
-	private JSONMeasueTable work_measue;
-	private String measuedata;
-	private String daydata;
-	private HttpPost_BeginDate_EndDate_Latch LATCH_daytable_http_post;
-	private HttpPost_BeginDate_EndDate_other_Latch LATCH_measuetable_http_post;
+	private ProgressBar pbar;
+	private ProgressDialog m_ProgressDialog=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_craft_line);
+		pbar=(ProgressBar) findViewById(R.id.pbar_loading);
 		dateBean = getIntent().getStringArrayListExtra("date_table");
 		init_area();
 		init_potNo();
@@ -84,12 +83,12 @@ public class CraftLineActivity extends Activity
 		cb1 = (CheckBox) findViewById(R.id.chkbox_WorkV);
 		cb2 = (CheckBox) findViewById(R.id.chkbox_AvgV);
 		cb3 = (CheckBox) findViewById(R.id.chkbox_Noise);
-		cb4 = (CheckBox) findViewById(R.id.chkbox_SetALF);
+		cb4 = (CheckBox) findViewById(R.id.chkbox_DYBTime);
 		cb5 = (CheckBox) findViewById(R.id.chkbox_ALF);
 		cb6 = (CheckBox) findViewById(R.id.chkbox_AeCnt);
 		cb7 = (CheckBox) findViewById(R.id.chkbox_ALO);
 		cb8 = (CheckBox) findViewById(R.id.chkbox_ALzs);
-		cb9 = (CheckBox) findViewById(R.id.chkbox_ALjh);
+		cb9 = (CheckBox) findViewById(R.id.chkbox_ALCnt);
 		cb10 = (CheckBox) findViewById(R.id.chkbox_FeCnt);
 		cb11 = (CheckBox) findViewById(R.id.chkbox_SiCnt);
 		cb12 = (CheckBox) findViewById(R.id.chkbox_FZB);
@@ -114,10 +113,7 @@ public class CraftLineActivity extends Activity
 		list_cb.add(cb15);
 		for (CheckBox cb : list_cb) {
 			cb.setOnCheckedChangeListener(this);
-		}
-		// for (int i = 0; i < chkbox.length; i++) {
-		// chkbox[i].setOnCheckedChangeListener(this);
-		// }
+		}	
 
 	}
 
@@ -286,34 +282,7 @@ public class CraftLineActivity extends Activity
 		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
 	}
-
-	@Override
-	public void GetDataUrl(String data) {
-
-		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[工艺参数]日报数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-
-		} else {
-			listBean_daytable = new ArrayList<dayTable>();
-			listBean_daytable = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
-			// work_day = new
-			// JSONDayTable("DayTable",latch,listBean_daytable,data);
-			// work_day.start();
-			// listBean_daytable =
-			// JsonToMultiList.JsonArrayToDayTableBean(data);
-			// latch.countDown();
-			/*
-			 * Intent show_intent = new Intent(CraftLineActivity.this,
-			 * ShowCraftLineActivity.class); Bundle mbundle = new Bundle();
-			 * mbundle.putString("PotNo", PotNo);
-			 * mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
-			 * mbundle.putSerializable("list_daytable", (Serializable)
-			 * listBean_daytable); mbundle.putString("SELITEMS", selitems);
-			 * show_intent.putExtras(mbundle); startActivity(show_intent); //
-			 * 显示工艺曲线图
-			 */
-		}
-	}
+	
 
 	@Override
 	public void onClick(View v) {
@@ -321,10 +290,12 @@ public class CraftLineActivity extends Activity
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_ok:
+		case R.id.btn_ok:	
+			m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this,    
+		              "请等待...", "正在获取工艺参数数据 ...", true);
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
-			} else {
+			} else {				
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				try {
 					Date bdate = df.parse(BeginDate);
@@ -344,57 +315,14 @@ public class CraftLineActivity extends Activity
 						if (selitems.equals("")) {
 							Toast.makeText(getApplicationContext(), "没有选中任何一项工艺参数，请选择工艺参数项！", 1).show();
 							break;
-						} else {
-							latch = new CountDownLatch(2);						
-							daytable_http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url,
-									2, PotNo, BeginDate, EndDate, this, this);
-							measuetable_http_post = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(
-									measue_potno_url, 2, PotNo, BeginDate, EndDate, this, this); // 从测量数据取数据
-							new Thread(new Runnable() {
-								@Override
-								public void run() {
-									System.out.println("daytable_http_post.execute()....");
-									daytable_http_post.execute();
-									latch.countDown();
-								}
-							}).start();
-							new Thread(new Runnable() {
-								@Override
-								public void run() {
-									System.out.println("measuetable_http_post.execute....");
-									measuetable_http_post.execute();
-									latch.countDown();
-								}
-							}).start();
-
-							// LATCH_daytable_http_post =
-							// (HttpPost_BeginDate_EndDate_Latch) new
-							// HttpPost_BeginDate_EndDate_Latch(
-							// latch, potno_url, 2, PotNo, BeginDate, EndDate,
-							// this, this).execute(); // 从日报取数据
-							//
-							// LATCH_measuetable_http_post =
-							// (HttpPost_BeginDate_EndDate_other_Latch) new
-							// HttpPost_BeginDate_EndDate_other_Latch(
-							// latch, measue_potno_url, 2, PotNo, BeginDate,
-							// EndDate, this, this).execute(); // 从测量数据取数据
-							// LATCH_daytable_http_post.execute();
-							// LATCH_measuetable_http_post.execute();
-							// work_day.start();
-							// work_measue.start();
-							latch.await();// 等待所有工人完成工作
-							Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
-							Bundle mbundle = new Bundle();
-							mbundle.putString("PotNo", PotNo);
-							mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
-							mbundle.putSerializable("list_daytable", (Serializable) listBean_daytable);
-							mbundle.putSerializable("list_measuetable", (Serializable) listBean_measuetable);
-							mbundle.putString("SELITEMS", selitems);
-							show_intent.putExtras(mbundle);
-							startActivity(show_intent); // 显示工艺曲线图
+						} else {		
+//							m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this,    
+//						              "请等待...", "正在获取工艺参数数据 ...", true); 
+							showCraft();	//并发进程方式取数据				
+							m_ProgressDialog.dismiss();
 						}
 					}
-				} catch (ParseException | InterruptedException e) {
+				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
@@ -402,72 +330,89 @@ public class CraftLineActivity extends Activity
 		}
 	}
 
+	private void showCraft() {
+		
+		ExecutorService exec = Executors.newCachedThreadPool();
+		final CyclicBarrier barrier = new CyclicBarrier(2, new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("所有工艺参数都OK，开始happy去");
+				Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
+				Bundle mbundle = new Bundle();
+				mbundle.putString("PotNo", PotNo);
+				mbundle.putString("Begin_End_Date", BeginDate + " 至 " + EndDate);
+				mbundle.putSerializable("list_daytable", (Serializable) listBean_daytable);
+				mbundle.putSerializable("list_measuetable", (Serializable) listBean_measuetable);
+				mbundle.putString("SELITEMS", selitems);
+				show_intent.putExtras(mbundle);
+				startActivity(show_intent); // 显示工艺曲线图
+			}
+		});
+
+		exec.execute(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("测量数据OK，其他哥们呢");
+				
+				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+				mparams.clear();
+				mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 槽号
+				mparams.add(new BasicNameValuePair("BeginDate", BeginDate));
+				mparams.add(new BasicNameValuePair("EndDate", EndDate));
+				JSONArrayParser jsonParser = new JSONArrayParser();
+				JSONArray json = jsonParser.makeHttpRequest(measue_potno_url, "POST", mparams);
+				if (json != null) {
+					Log.d("工艺参数：测量数据", json.toString());// 从服务器返回有数据
+					listBean_measuetable = new ArrayList<MeasueTable>();
+					listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(json.toString());
+				} else {
+					Log.i("工艺参数：测量数据 ---", "从PHP服务器无数据返回！");
+				}
+
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		exec.execute(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("日报数据OK，其他哥们呢");
+				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+				mparams.clear();
+				mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 槽号
+				mparams.add(new BasicNameValuePair("BeginDate", BeginDate));
+				mparams.add(new BasicNameValuePair("EndDate", EndDate));
+				JSONArrayParser jsonParser = new JSONArrayParser();
+				JSONArray json = jsonParser.makeHttpRequest(potno_url, "POST", mparams);
+				if (json != null) {
+					Log.d("工艺参数：日报数据", json.toString());// 从服务器返回有数据
+					listBean_daytable = new ArrayList<dayTable>();
+					listBean_daytable = JsonToMultiList.JsonArrayToDayTableBean(json.toString());
+				} else {
+					Log.i("工艺参数：日报数据 ---", "从PHP服务器无数据返回！");
+				}
+
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		exec.shutdown();	
+	}
+
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		Log.i("chkbox", buttonView.getText().toString() + isChecked);
 	}
+	
 
-	@Override
-	public void GetAeTimeDataUrl(String data) {
-
-		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[工艺参数]测量数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-
-		} else {
-
-			listBean_measuetable = new ArrayList<MeasueTable>();
-			listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
-			// work_measue = new
-			// JSONMeasueTable("measueTable",latch,listBean_measuetable,data);
-			// work_measue.start();
-			// listBean_measuetable =
-			// JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
-			// latch.countDown();
-
-		}
-	}
-
-	// 获取日报数据 LIST 进程
-	static class JSONDayTable extends Thread {
-		String workerName;
-		CountDownLatch latch;
-		List<dayTable> result;
-		String data;
-
-		public JSONDayTable(String workerName, CountDownLatch latch, List<dayTable> listDay, String remotedata) {
-			this.workerName = workerName;
-			this.latch = latch;
-			this.result = listDay;
-			this.data = remotedata;
-			System.out.println(workerName + "初始化成功");
-		}
-
-		@Override
-		public void run() {
-			result = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
-			latch.countDown();
-		}
-	}
-
-	// 获取测量数据 LIST 进程
-	static class JSONMeasueTable extends Thread {
-		String workerName;
-		CountDownLatch latch;
-		List<MeasueTable> result;
-		String data;
-
-		public JSONMeasueTable(String workerName, CountDownLatch latch, List<MeasueTable> list, String remotedata) {
-			this.workerName = workerName;
-			this.latch = latch;
-			this.result = list;
-			this.data = remotedata;
-			System.out.println(workerName + "初始化成功");
-		}
-
-		@Override
-		public void run() {
-			result = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
-			latch.countDown();
-		}
-	}
 }

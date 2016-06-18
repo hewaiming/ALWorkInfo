@@ -31,11 +31,17 @@ public class JsonToMultiList {
 					mBean.setPotNo(jsonobj.getInt("PotNo"));
 				}		
 
+				if (jsonobj.get("SetNB").equals(null)) {
+					mBean.setSetNB(0);
+				} else {
+					mBean.setSetNB(jsonobj.getInt("SetNB"));
+				}				
+				
 				if (jsonobj.get("SetV").equals(null)) {
 					mBean.setSetV(0);
 				} else {
 					mBean.setSetV(jsonobj.getDouble("SetV"));
-				}				
+				}		
 				if (jsonobj.get("AverageV").equals(null)) {
 					mBean.setAverageV(0);
 				} else {
@@ -57,6 +63,12 @@ public class JsonToMultiList {
 				} else {
 					mBean.setFhlCnt(jsonobj.getInt("FhlCnt"));
 				}	
+				
+				if (jsonobj.get("DybTime").equals(null)) {
+					mBean.setDybTime(0);
+				} else {
+					mBean.setDybTime(jsonobj.getInt("DybTime"));
+				}
 				if (jsonobj.get("AeCnt").equals(null)) {
 					mBean.setAeCnt(0);
 				} else {

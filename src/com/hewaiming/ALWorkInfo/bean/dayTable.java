@@ -5,8 +5,9 @@ import java.io.Serializable;
 public class dayTable implements Serializable {
 	private int PotNo;
 	private String PotSt;
+	private int SetNB;
 	private int RunTime;
-	private double AverageV;
+	private double AverageV;	
 	private double RealSetV;
 	private double SetV;
 	private double WorkV;
@@ -41,6 +42,31 @@ public class dayTable implements Serializable {
 		ZF = zF;
 		Ddate = ddate;
 	}
+	
+
+	public dayTable(int potNo, String potSt, int setNB, int runTime, double averageV, double realSetV, double setV,
+			double workV, double aeV, int aeTime, int aeCnt, int dybTime, int yhlCnt, int fhlCnt, int alCntZSL, int zF,
+			String ddate) {
+		super();
+		PotNo = potNo;
+		PotSt = potSt;
+		SetNB = setNB;
+		RunTime = runTime;
+		AverageV = averageV;
+		RealSetV = realSetV;
+		SetV = setV;
+		WorkV = workV;
+		AeV = aeV;
+		AeTime = aeTime;
+		AeCnt = aeCnt;
+		DybTime = dybTime;
+		YhlCnt = yhlCnt;
+		FhlCnt = fhlCnt;
+		AlCntZSL = alCntZSL;
+		ZF = zF;
+		Ddate = ddate;
+	}
+
 
 	public int getPotNo() {
 		return PotNo;
@@ -138,6 +164,13 @@ public class dayTable implements Serializable {
 
 	}
 
+	public int getSetNB() {
+		return SetNB;
+	}
+
+	public void setSetNB(int setNB) {
+		SetNB = setNB;
+	}
 	public int getRunTime() {
 		return RunTime;
 	}
@@ -178,12 +211,15 @@ public class dayTable implements Serializable {
 		ZF = zF;
 	}
 
+
 	@Override
 	public String toString() {
-		return "dayTable [PotNo=" + PotNo + ", PotSt=" + PotSt + ", RunTime=" + RunTime + ", AverageV=" + AverageV
-				+ ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime="
-				+ AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", YhlCnt=" + YhlCnt + ", FhlCnt=" + FhlCnt
-				+ ", AlCntZSL=" + AlCntZSL + ", ZF=" + ZF + ", Ddate=" + Ddate + "]";
-	}	
+		return "dayTable [PotNo=" + PotNo + ", PotSt=" + PotSt + ", SetNB=" + SetNB + ", RunTime=" + RunTime
+				+ ", AverageV=" + AverageV + ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV="
+				+ AeV + ", AeTime=" + AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", YhlCnt=" + YhlCnt
+				+ ", FhlCnt=" + FhlCnt + ", AlCntZSL=" + AlCntZSL + ", ZF=" + ZF + ", Ddate=" + Ddate + "]";
+	}
+
+
 
 }
