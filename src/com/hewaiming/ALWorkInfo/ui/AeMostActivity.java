@@ -29,6 +29,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -68,6 +70,8 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	private LoadAeTimeInterface listener_AeTime = null;
 	private Handler mHandler,mHandler_AeTime;
 	private View layout_Ae;
+	private ImageButton isShowingBtn;
+	private LinearLayout showArea=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +206,10 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 		tv_title.setText("效应槽");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		
+		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -263,6 +271,15 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 		case R.id.btn_back:
 			finish();
 			break;
+		case R.id.btn_isSHOW:    //显示或隐藏
+			if (showArea.getVisibility()==View.GONE){
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			}else{
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
+			break;	
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();

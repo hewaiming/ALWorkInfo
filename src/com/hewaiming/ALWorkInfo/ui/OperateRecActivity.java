@@ -25,6 +25,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -53,6 +55,9 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 	private HSView_OperateRecAdapter operateRec_Adapter = null;
 	private RelativeLayout mHead;
 	private ListView lv_OperateRec;
+	private ImageButton isShowingBtn;
+	private LinearLayout showArea=null;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +162,9 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 		tv_title.setText("操作记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW); //显示或隐藏
+		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -246,8 +254,11 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 			break;
 		}
 		PotNoList.add(0, "全部槽号");
+		
+		spinner_potno.setSelection(0);
+		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
-		spinner_potno.setId(0);
+		
 	}
 
 	@Override
@@ -294,6 +305,15 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 		case R.id.btn_back:
 			finish();
 			break;
+		case R.id.btn_isSHOW:
+			if (showArea.getVisibility()==View.GONE){
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			}else{
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
+			break;	
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();

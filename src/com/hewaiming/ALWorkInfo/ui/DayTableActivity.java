@@ -25,6 +25,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 public class DayTableActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
+	private ImageButton isShowingBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
@@ -49,7 +52,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private List<dayTable> listBean = null;
 	private HSView_DayTableAdapter daytable_Adapter = null;
 	private RelativeLayout mHead;
-	private ListView lv_daytable;
+	private ListView lv_daytable;	
+	private  LinearLayout showArea=null; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +158,9 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		tv_title.setText("槽日报");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -243,8 +250,10 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			break;
 		}
 		PotNoList.add(0, "全部槽号");
+		spinner_potno.setSelection(0);
+		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
-		spinner_potno.setId(0);
+		
 	}
 
 	@Override
@@ -275,6 +284,15 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		case R.id.btn_back:
 			finish();
 			break;
+		case R.id.btn_isSHOW:
+			if (showArea.getVisibility()==View.GONE){
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			}else{
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
+			break;	
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();

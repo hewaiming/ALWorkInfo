@@ -7,14 +7,19 @@ import java.util.Map;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.RealRecord_Adapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_OperateRecAdapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.ui.OperateRecActivity.ListViewAndHeadViewTouchLinstener;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_RealRecord;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -22,12 +27,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 
-public class RealRecActivity extends Activity implements HttpGetListener, OnClickListener {
+public class RealRecActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -37,7 +48,7 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private HeaderListView_RealRecord headerView;
+
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
 	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/RealRecordTable_area_date.php";
 
@@ -47,7 +58,11 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private List<String> PotNoList;
 	private List<RealRecord> listBean = null;
-	private RealRecord_Adapter realRec_Adapter = null;
+	private HSView_RealRecordAdapter realRec_Adapter = null;
+	private ImageButton isShowingBtn;
+	private LinearLayout showArea = null;
+	private RelativeLayout mHead;
+	private ListView lv_RealRec;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +75,21 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 		init_potNo();
 		init_date();
 		init_title();
+		init_HSView();
+	}
+
+	private void init_HSView() {
+		mHead = (RelativeLayout) findViewById(R.id.head);
+		mHead.setFocusable(true);
+		mHead.setClickable(true);
+		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+
+		lv_RealRec = (ListView) findViewById(R.id.lv_RealRec);
+		lv_RealRec.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_RealRec.setCacheColorHint(0);
+		lv_RealRec.setOnScrollListener(this);
+
 	}
 
 	private void init_potNo() {
@@ -138,6 +168,10 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 		tv_title.setText("实时记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -228,8 +262,10 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 			break;
 		}
 		PotNoList.add(0, "全部槽号");
+		spinner_potno.setSelection(0);
+		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
-		spinner_potno.setId(0);
+	
 	}
 
 	@Override
@@ -244,22 +280,13 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 				}
 			}
 		} else {
-			if (lv_realRec.getHeaderViewsCount() > 0) {
-				lv_realRec.removeHeaderView(headerView);
-			}
-
-			headerView = new HeaderListView_RealRecord(this);// 添加表头
-			headerView.setTvPotNo("槽号");
-			headerView.setTvRecordNo("记录名称");
-			headerView.setTvParam1("参数1");
-			headerView.setTvParam2("参数2");
-			headerView.setTvRecTime("发生时刻");
 
 			listBean = new ArrayList<RealRecord>();
-			lv_realRec.addHeaderView(headerView);
 			listBean.clear();
 			listBean = JsonToBean_Area_Date.JsonArrayToRealRecordBean(data, JXList);
-			realRec_Adapter = new RealRecord_Adapter(this, listBean);
+
+			realRec_Adapter = new HSView_RealRecordAdapter(this, R.layout.item_hsview_real_record, listBean, mHead);
+
 			lv_realRec.setAdapter(realRec_Adapter);
 		}
 	}
@@ -269,6 +296,15 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 		switch (v.getId()) {
 		case R.id.btn_back:
 			finish();
+			break;
+		case R.id.btn_isSHOW: // 显示或隐藏
+			if (showArea.getVisibility() == View.GONE) {
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			} else {
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
 			break;
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
@@ -284,6 +320,30 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnClic
 				}
 			}
 			break;
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+	}
+
+	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
+
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
+			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			HorizontalScrollView headSrcrollView2 = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView.onTouchEvent(arg1);
+			headSrcrollView2.onTouchEvent(arg1);
+			return false;
 		}
 	}
 

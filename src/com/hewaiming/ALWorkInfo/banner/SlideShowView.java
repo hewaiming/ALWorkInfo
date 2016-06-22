@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.banner.JazzyViewPager.TransitionEffect;
+import com.hewaiming.ALWorkInfo.config.ImageLoadOptions;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -43,6 +44,8 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
  */
 
 public class SlideShowView extends FrameLayout {
+
+	private static DisplayImageOptions options;
 
 	private JazzyViewPager mJazzy;
 
@@ -62,6 +65,8 @@ public class SlideShowView extends FrameLayout {
 	private List<ImageView> imageViewsList;
 	// 放圆点的View的list
 	private List<View> dotViewsList;
+	
+	private boolean[] firstRun;
 
 	// 当前轮播页
 	private int currentItem = 1;
@@ -117,6 +122,7 @@ public class SlideShowView extends FrameLayout {
 	 * 初始化相关Data
 	 */
 	private void initData() {
+		
 		imageUrls = new ArrayList<String>();
 		imageViewsList = new ArrayList<ImageView>();
 		dotViewsList = new ArrayList<View>();
@@ -134,9 +140,14 @@ public class SlideShowView extends FrameLayout {
 
 		LinearLayout dotLayout = (LinearLayout) findViewById(R.id.dotLayout);
 		dotLayout.removeAllViews();
-
+		
+		firstRun=new boolean[imageUrls.size()+2];  //初始化 第一次运行标记数组
+        for(int i=0;i<firstRun.length;i++){
+        	firstRun[i]=true;
+        }
 		// 热点个数与图片特殊相等
 		for (int i = 0; i < imageUrls.size(); i++) {
+		
 			ImageView view = new ImageView(context);
 			view.setTag(imageUrls.get(i));
 			view.setBackgroundResource(R.drawable.banner_default);
@@ -233,11 +244,19 @@ public class SlideShowView extends FrameLayout {
 	 *
 	 */
 	private class MainAdapter extends PagerAdapter {
+	
 
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
+			
 			ImageView imageView = imageViewsList.get(position);
-			imageLoader.displayImage(imageView.getTag() + "", imageView);
+			if(firstRun[position]){
+				imageLoader.displayImage(imageView.getTag() + "", imageView); //节省流量 ，第一次运行才从网络去图片
+				firstRun[position]=false;
+			}
+			
+//			imageLoader.displayImage(imageView.getTag() + "", imageView);
+			
 			((ViewPager) container).addView(imageViewsList.get(position));
 			mJazzy.setObjectForPosition(imageViewsList.get(position), position);
 			return imageViewsList.get(position);
@@ -337,6 +356,7 @@ public class SlideShowView extends FrameLayout {
 		// or you can create default configuration by
 		// ImageLoaderConfiguration.createDefault(this);
 		// method.
+		options=new ImageLoadOptions().getOptions();
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 				.memoryCacheExtraOptions(480, 800) // maxwidth, max
@@ -356,7 +376,8 @@ public class SlideShowView extends FrameLayout {
 
 				.tasksProcessingOrder(QueueProcessingType.LIFO).discCacheFileCount(100) // 缓存的文件数量
 				.discCache(new UnlimitedDiscCache(cacheDir))// 自定义缓存路径
-				.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+//				.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+				.defaultDisplayImageOptions(options)
 				.imageDownloader(new BaseImageDownloader(context, 5 * 1000, 30 * 1000)) // connectTimeout
 																						// (5
 																						// s),

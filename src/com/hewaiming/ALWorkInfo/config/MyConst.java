@@ -29,10 +29,11 @@ public class MyConst {
 	
 	public static final String[] Areas = { "一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };
 	
-	public static final String[] pic_address = { "http://l-pics.livejournal.com/drugoi/pic/016122t7.jpg",
-			"http://a1.att.hudong.com/36/53/300000764046129956537520286_950.jpg",
-			"http://www.sxaz.com.cn/images/yejingongcheng.jpg", "http://p0.so.qhimg.com/t0153ac11436adb683f.jpg",
-			"http://img2.imgtn.bdimg.com/it/u=3658918502,1121333212&fm=21&gp=0.jpg" };
+	public static final String[] pic_address = { "http://125.64.59.11:8000/scgy/android/banner/1.jpg",
+			"http://125.64.59.11:8000/scgy/android/banner/2.jpg",
+			"http://125.64.59.11:8000/scgy/android/banner/3.jpg", 
+			"http://125.64.59.11:8000/scgy/android/banner/4.jpg",
+			"http://125.64.59.11:8000/scgy/android/banner/5.jpg" };
 	
 	public static final String[] iconName = { "常用参数", "日报", "效应报表", "槽龄", "槽压曲线", "故障记录", "实时记录", "操作记录", 
 			"槽状态","测量数据", "效应槽", "效应记录","槽故障最多","工艺曲线", "报警记录" ,"实时曲线"};

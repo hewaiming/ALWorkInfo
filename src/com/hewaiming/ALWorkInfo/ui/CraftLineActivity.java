@@ -37,6 +37,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -63,6 +65,8 @@ public class CraftLineActivity extends Activity
 	private List<MeasueTable> listBean_measuetable = null;
 	private ProgressBar pbar;
 	private ProgressDialog m_ProgressDialog=null;
+	private ImageButton isShowingBtn;
+	private LinearLayout showArea=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +194,10 @@ public class CraftLineActivity extends Activity
 		tv_title.setText("工艺曲线");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		
+		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -290,6 +298,15 @@ public class CraftLineActivity extends Activity
 		case R.id.btn_back:
 			finish();
 			break;
+		case R.id.btn_isSHOW:    //显示或隐藏
+			if (showArea.getVisibility()==View.GONE){
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			}else{
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
+			break;	
 		case R.id.btn_ok:	
 			m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this,    
 		              "请等待...", "正在获取工艺参数数据 ...", true);

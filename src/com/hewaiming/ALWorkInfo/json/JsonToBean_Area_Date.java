@@ -126,6 +126,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
+	//解析记录名 LIST
 	public static List<Map<String, Object>> JsonArrayToJXRecord(String data) {
 
 		List<Map<String, Object>> RXList = new ArrayList<Map<String, Object>>();
@@ -138,6 +139,19 @@ public class JsonToBean_Area_Date {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", jsonobj.getString("RecordNo"));
 				map.put("jx_name", jsonobj.getString("Name1"));
+				
+				if (jsonobj.get("Name2").equals(null)) {
+					map.put("jx_name2", "");
+				} else {
+					map.put("jx_name2", jsonobj.getString("Name2"));
+				}
+				
+				if (jsonobj.get("Name3").equals(null)) {
+					map.put("jx_name3", "");
+				} else {
+					map.put("jx_name3", jsonobj.getString("Name3"));
+				}
+				
 				RXList.add(map);
 			}
 		} catch (JSONException e) {
@@ -185,7 +199,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<RealRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
+			System.out.println("jsonarray.RealRecord :length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -197,17 +211,21 @@ public class JsonToBean_Area_Date {
 				recNo = recNo - 1;
 				Map<String, Object> mMap = JXList.get(recNo);
 				System.out.println("jx_name:" + mMap.get("jx_name").toString());
+				
+				String name2_tmp=mMap.get("jx_name2").toString(); //记录名 参数2
+				String name3_tmp=mMap.get("jx_name3").toString();
+				
 				mReal.setRecordNo(mMap.get("jx_name").toString());
 
 				if (jsonobj.get("Val2").equals(null)) {
 					mReal.setParam1("");
 				} else {
-					mReal.setParam1(jsonobj.getInt("Val2") + "");
+					mReal.setParam1(name2_tmp+jsonobj.getInt("Val2"));
 				}
 				if (jsonobj.get("Val3").equals(null)) {
 					mReal.setParam2("");
 				} else {
-					mReal.setParam2(jsonobj.getInt("Val3") + "");
+					mReal.setParam2(name3_tmp+jsonobj.getInt("Val3") + "");
 				}
 
 				listBean.add(mReal);

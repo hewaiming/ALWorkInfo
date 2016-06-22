@@ -34,6 +34,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,8 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private List<String> PotNoList = null;
 	private List<PotV> listBean = null;
 	private LineChart mLineChart;
+	private ImageButton isShowingBtn;
+	private  LinearLayout showArea=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +145,9 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		tv_title.setText("槽压曲线图");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn.setOnClickListener(this);
 
 	}
 
@@ -362,6 +369,15 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_back:
 			finish();
 			break;
+		case R.id.btn_isSHOW:
+			if (showArea.getVisibility()==View.GONE){
+				showArea.setVisibility(View.VISIBLE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+			}else{
+				showArea.setVisibility(View.GONE);
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+			}
+			break;	
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();

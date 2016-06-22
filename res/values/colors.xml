@@ -18,6 +18,7 @@
     <color name="base_menu_left_bg">#393c44</color>
     <color name="pull_refresh_textview">#000000</color>
     <color name="base_color_text_black">#3e3e39</color>
+     <color name="base_color_text_blue">#1E90FF</color>
     <color name="base_color_text_gray">#9fa0a0</color>
     <color name="base_color_text_white">#ffffff</color>
     <color name="home_item_color_bg">#f4f6f6</color>
