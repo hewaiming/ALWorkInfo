@@ -112,7 +112,8 @@ public class MainActivity extends Activity
 			startActivity(DayTable_intent); // 槽日报
 			break;
 		case 2:
-
+			Intent Ae5day_intent = new Intent(MainActivity.this, Ae5DayActivity.class);			
+			startActivity(Ae5day_intent); // 效应情报表		
 			break;
 		case 3:
 			Intent Potage_intent = new Intent(MainActivity.this, PotAgeActivity.class);

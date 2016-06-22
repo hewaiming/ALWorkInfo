@@ -58,6 +58,8 @@
         </activity>
          <activity android:name="com.hewaiming.ALWorkInfo.ui.MeasueTableActivity" >
         </activity>
+          <activity android:name="com.hewaiming.ALWorkInfo.ui.Ae5DayActivity" >
+        </activity>
     </application>
 
 </manifest>

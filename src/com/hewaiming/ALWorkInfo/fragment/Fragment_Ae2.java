@@ -1,0 +1,117 @@
+package com.hewaiming.ALWorkInfo.fragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
+import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.HorizontalScrollView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+public class Fragment_Ae2 extends Fragment implements OnScrollListener {
+	private View mView;
+	private RelativeLayout mHead_Ae;
+	private ListView lv_Ae;
+	private List<AeRecord> listBean_Ae = null;
+	private HSView_AeRecAdapter Ae_Adapter = null;
+	private Ae5DayActivity mActivity;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		mView = inflater.inflate(R.layout.fragment_ae1, container, false);
+		return mView;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mActivity = (Ae5DayActivity) activity;
+		mActivity.setHandler_Ae2(mHandler_Ae);
+	}
+
+	public Handler mHandler_Ae = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 2:
+				init_adapter(msg.obj);
+				break;
+			}
+		}
+	};
+
+	private void init_adapter(Object data) {
+		if (data.equals("")) {
+			Toast.makeText(this.getActivity(), "没有获取到[效应情报表]前一次AE，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean_Ae != null) {
+				if (listBean_Ae.size() > 0) {
+					listBean_Ae.clear(); // 清除LISTVIEW 以前的内容
+					Ae_Adapter.onDateChange(listBean_Ae);
+				}
+			}
+		} else {
+			listBean_Ae = new ArrayList<AeRecord>(); // 初始化效应记录 适配器
+			listBean_Ae.clear();
+			listBean_Ae = (List<AeRecord>) (data);
+			Ae_Adapter = new HSView_AeRecAdapter(this.getActivity(), R.layout.item_hsview_ae_rec, listBean_Ae,
+					mHead_Ae);
+			lv_Ae.setAdapter(Ae_Adapter);
+		}
+
+	};
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+
+		super.onActivityCreated(savedInstanceState);
+		mHead_Ae = (RelativeLayout) mView.findViewById(R.id.head_Ae1); // 表头处理
+		mHead_Ae.setFocusable(true);
+		mHead_Ae.setClickable(true);
+		mHead_Ae.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead_Ae.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+
+		lv_Ae = (ListView) mView.findViewById(R.id.lv_Ae1);
+		lv_Ae.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_Ae.setCacheColorHint(0);
+		lv_Ae.setOnScrollListener(this);
+
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+
+	}
+
+	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
+
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
+			HorizontalScrollView headSrcrollView_AeTime = (HorizontalScrollView) mHead_Ae
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView_AeTime.onTouchEvent(arg1);
+			return false;
+		}
+	}
+}
