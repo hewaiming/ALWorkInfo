@@ -1,6 +1,7 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private RadioGroup group;
 	private Handler mHandler_Ae1,mHandler_Ae2,mHandler_Ae3,mHandler_Ae4,mHandler_Ae5;
 	
-	private List<Map<String,List<AeRecord>>> list_5day=null;
+	private Map<String,List<AeRecord>> map_5day=null;
 	private View layout_Ae;
 
 	@Override
@@ -85,7 +86,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 
 			@Override
 			public void onPageSelected(int arg0) {
-				Log.v("asdf", "onPageSelected");
+				Log.v("onPageSelected", "onPageSelected:"+arg0);
 				getTabState(arg0);
 
 			}
@@ -227,32 +228,32 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 			
 		} else {
 
-			list_5day = new ArrayList<Map<String,List<AeRecord>>>();
-			list_5day.clear();
-			list_5day = JsonToMultiList.JsonArrayToAeRecord_5DayBean(data);
+			map_5day = new HashMap<String,List<AeRecord>>();
+//			map_5day.clear();
+			map_5day = JsonToMultiList.JsonArrayToAeRecord_5DayBean(data);
 		
 			Message msg1 = new Message();
-			msg1.obj = list_5day.get(0).get("ae1");
+			msg1.obj = map_5day.get("ae1");
 			msg1.what = 1;
 			mHandler_Ae1.sendMessage(msg1);
 			
 			Message msg2 = new Message();
-			msg2.obj = list_5day.get(1).get("ae2");
+			msg2.obj = map_5day.get("ae2");
 			msg2.what = 2;
 			mHandler_Ae2.sendMessage(msg2);
 			
 			Message msg3 = new Message();
-			msg3.obj = list_5day.get(2).get("ae3");
+			msg3.obj = map_5day.get("ae3");
 			msg3.what =3;
 			mHandler_Ae3.sendMessage(msg3);
 			
 			Message msg4 = new Message();
-			msg4.obj = list_5day.get(3).get("ae4");
+			msg4.obj = map_5day.get("ae4");
 			msg4.what = 4;
 			mHandler_Ae4.sendMessage(msg4);
 			
 			Message msg5 = new Message();
-			msg5.obj = list_5day.get(4).get("ae5");
+			msg5.obj = map_5day.get("ae5");
 			msg5.what = 5;
 			mHandler_Ae5.sendMessage(msg5);			
 			

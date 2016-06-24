@@ -18,9 +18,15 @@ import com.hewaiming.ALWorkInfo.net.HttpGetData_JXRecord;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
 		implements OnItemClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
@@ -45,6 +52,7 @@ public class MainActivity extends Activity
 	private String get_JXName_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/getJXRecordName.php";
 	private HttpGetData_date mhttpgetdata_date;
 	private HttpGetData_JXRecord mHttpGetData_JXRecord;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,38 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 		init();
 		init_commData();
+		mContext = this;
+	}	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			dialog_exit();
+			return true;
+		}
+		return true;
+	}
+
+	protected void dialog_exit() {
+		AlertDialog.Builder builder = new Builder(mContext);
+		builder.setMessage("确定要退出吗?");
+		builder.setTitle("提示");
+		builder.setPositiveButton("确认", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// AccoutList.this.finish();
+				// System.exit(1);
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
+		});
+		builder.setNegativeButton("取消", new android.content.DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
 	}
 
 	private void init_commData() {
@@ -112,8 +152,8 @@ public class MainActivity extends Activity
 			startActivity(DayTable_intent); // 槽日报
 			break;
 		case 2:
-			Intent Ae5day_intent = new Intent(MainActivity.this, Ae5DayActivity.class);			
-			startActivity(Ae5day_intent); // 效应情报表		
+			Intent Ae5day_intent = new Intent(MainActivity.this, Ae5DayActivity.class);
+			startActivity(Ae5day_intent); // 效应情报表
 			break;
 		case 3:
 			Intent Potage_intent = new Intent(MainActivity.this, PotAgeActivity.class);
@@ -145,7 +185,7 @@ public class MainActivity extends Activity
 			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(operate_intent); // 操作记录
 			break;
-		
+
 		case 9:
 			Intent measue_intent = new Intent(MainActivity.this, MeasueTableActivity.class);
 			measue_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
@@ -165,7 +205,7 @@ public class MainActivity extends Activity
 			Intent craft_intent = new Intent(MainActivity.this, CraftLineActivity.class);
 			craft_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
 			startActivity(craft_intent); // 工艺曲线
-			break;	
+			break;
 		case 14:
 			Intent alarmRec_intent = new Intent(MainActivity.this, AlarmRecActivity.class);
 			Bundle bundle_alarm = new Bundle();

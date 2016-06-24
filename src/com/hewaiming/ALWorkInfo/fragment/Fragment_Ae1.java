@@ -108,9 +108,9 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
-			HorizontalScrollView headSrcrollView_AeTime = (HorizontalScrollView) mHead_Ae
+			HorizontalScrollView headSrcrollView_Ae = (HorizontalScrollView) mHead_Ae
 					.findViewById(R.id.horizontalScrollView1);
-			headSrcrollView_AeTime.onTouchEvent(arg1);
+			headSrcrollView_Ae.onTouchEvent(arg1);
 			return false;
 		}
 	}

@@ -61,8 +61,14 @@ public class HttpPost_area_date extends AsyncTask<String, Void, String> {
 
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
 		// full json response
-		Log.d("dayTable---", json.toString());
-		return json.toString();
+		if(json!=null){
+			Log.d("dayTabl-----json.toString()", json.toString());// full json response
+			return json.toString();
+		}else{
+			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");
+			return "";
+		}		
+		
 	}
 
 	@Override

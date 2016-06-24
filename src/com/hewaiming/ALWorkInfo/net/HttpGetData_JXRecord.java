@@ -58,10 +58,14 @@ public class HttpGetData_JXRecord extends AsyncTask<String, Void, String> {
 		// Building Parameters
 		// mparams.add(new BasicNameValuePair("date","" ));
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST");
-		// full json response
-		Log.d("Login attempt", json.toString());
-
-		return json.toString();
+		if(json!=null){
+			Log.d("解析记录名json.toString()", json.toString());// full json response
+			return json.toString();
+		}else{
+			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");
+			return "";
+		}			
+		
 	}
 
 	@Override

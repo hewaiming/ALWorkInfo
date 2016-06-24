@@ -21,15 +21,24 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.config.MyConst;
+import com.hewaiming.ALWorkInfo.floatButton.ALWorkInfoApplication;
+import com.hewaiming.ALWorkInfo.floatButton.FloatView;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -55,7 +64,11 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private List<PotV> listBean = null;
 	private LineChart mLineChart;
 	private ImageButton isShowingBtn;
-	private  LinearLayout showArea=null;
+	private LinearLayout showArea = null;
+
+	private FloatView floatView = null; // 以下是FLOAT BUTTON
+	private WindowManager windowManager = null;
+	private WindowManager.LayoutParams windowManagerParams = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +80,14 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		init_potNo();
 		init_date();
 		init_title();
+		createView(); // 创建浮动按钮
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// 在程序退出(Activity销毁）时销毁悬浮窗口
+		windowManager.removeView(floatView);
 	}
 
 	private void init_potNo() {
@@ -140,13 +161,13 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private void init_title() {
 		mLineChart = (LineChart) findViewById(R.id.chart_PotV);
 		mLineChart.setVisibility(View.GONE);
-		;
+
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("槽压曲线图");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
@@ -235,7 +256,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 				PotNoList.add(i + "");
 			}
 			break;
-		}		
+		}
 		spinner_potno.setSelection(0);
 		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
@@ -271,9 +292,9 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		// enable / disable grid background
 		lineChart.setDrawGridBackground(false); // 是否显示表格颜色
 		lineChart.setGridBackgroundColor(Color.WHITE & 0x70FFFFFF); // 表格的的颜色，在这里是是给颜色设置一个透明度
-		
+
 		lineChart.setTouchEnabled(true); // 设置是否可以触摸
-	
+
 		lineChart.setDragEnabled(true);// 是否可以拖拽
 		lineChart.setScaleEnabled(true);// 是否可以缩放
 		// lineChart.getAxisRight().setEnabled(true); // 右边 的坐标轴
@@ -294,7 +315,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		// mLegend.setTypeface(mTf);// 字体
 
 		// 左边Y轴 槽压
-		YAxis yAxis_potv = lineChart.getAxisLeft();		
+		YAxis yAxis_potv = lineChart.getAxisLeft();
 		yAxis_potv.setEnabled(true);
 		yAxis_potv.setDrawAxisLine(true);
 		yAxis_potv.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
@@ -363,6 +384,54 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		return lineData;
 	}
 
+	private void createView() {
+		floatView = new FloatView(getApplicationContext());
+		floatView.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				 Toast.makeText(getApplicationContext(), "show RealRECORD", 1).show();//显示实时记录
+				 
+				
+			}
+		});
+		floatView.setImageResource(R.drawable.real_record); // 这里简单的用自带的icon来做演示
+		floatView.setAdjustViewBounds(true);
+		floatView.setMaxWidth(100);
+		floatView.setMaxHeight(50);		
+		// 获取WindowManager
+		windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+		// 设置LayoutParams(全局变量）相关参数
+		windowManagerParams = ((ALWorkInfoApplication) getApplication()).getWindowParams();
+
+		windowManagerParams.type = LayoutParams.TYPE_PHONE; // 设置window type
+		windowManagerParams.format = PixelFormat.TRANSPARENT; // 设置图片格式，效果为背景透明
+		// 设置Window flag
+		windowManagerParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
+		/*
+		 * 注意，flag的值可以为： 下面的flags属性的效果形同“锁定”。 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+		 * LayoutParams.FLAG_NOT_TOUCH_MODAL 不影响后面的事件
+		 * LayoutParams.FLAG_NOT_FOCUSABLE 不可聚焦 LayoutParams.FLAG_NOT_TOUCHABLE
+		 * 不可触摸
+		 */
+		// 调整悬浮窗口至左上角，便于调整坐标
+		windowManagerParams.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+		// 以屏幕左上角为原点，设置x、y初始值
+
+		int width = windowManager.getDefaultDisplay().getWidth(); // 获取屏幕的高度和宽度
+		int height = windowManager.getDefaultDisplay().getHeight();
+
+		windowManagerParams.width = width;
+		windowManagerParams.height = height;
+		// 设置悬浮窗口长宽数据
+		windowManagerParams.width = LayoutParams.WRAP_CONTENT;
+		windowManagerParams.height = LayoutParams.WRAP_CONTENT;
+		// 显示myFloatView图像
+
+		windowManager.addView(floatView, windowManagerParams);
+	}
+
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -370,14 +439,14 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			finish();
 			break;
 		case R.id.btn_isSHOW:
-			if (showArea.getVisibility()==View.GONE){
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;	
+			break;
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();

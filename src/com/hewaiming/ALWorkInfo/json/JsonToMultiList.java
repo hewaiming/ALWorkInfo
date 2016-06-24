@@ -101,8 +101,8 @@ public class JsonToMultiList {
 		return listBean;
 	}
 
-	public static List<Map<String, List<AeRecord>>> JsonArrayToAeRecord_5DayBean(String data) {
-		List<Map<String, List<AeRecord>>> listBean = null;
+	public static Map<String, List<AeRecord>> JsonArrayToAeRecord_5DayBean(String data) {
+		Map<String, List<AeRecord>> mapBean = null;
 		List<AeRecord> list1 = null;
 		List<AeRecord> list2 = null;
 		List<AeRecord> list3 = null;
@@ -111,7 +111,7 @@ public class JsonToMultiList {
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 
-			listBean = new ArrayList<Map<String, List<AeRecord>>>();
+			mapBean = new HashMap<String, List<AeRecord>>();
 			list1 = new ArrayList<AeRecord>();
 			list2 = new ArrayList<AeRecord>();
 			list3 = new ArrayList<AeRecord>();
@@ -178,24 +178,16 @@ public class JsonToMultiList {
 					break;
 				}
 			}
-			Map<String, List<AeRecord>> map1 = new HashMap<String, List<AeRecord>>();
-			map1.put("ae1", list1);
-			Map<String, List<AeRecord>> map2 = new HashMap<String, List<AeRecord>>();
-			map2.put("ae2", list2);
-			Map<String, List<AeRecord>> map3 = new HashMap<String, List<AeRecord>>();
-			map3.put("ae3", list3);
-			Map<String, List<AeRecord>> map4 = new HashMap<String, List<AeRecord>>();
-			map4.put("ae4", list4);
-			Map<String, List<AeRecord>> map5 = new HashMap<String, List<AeRecord>>();
-			map5.put("ae5", list5);
-			listBean.add(map1);
-			listBean.add(map2);
-			listBean.add(map3);
-			listBean.add(map4);
-			listBean.add(map5);
+			mapBean.put("ae1", list1);
+			mapBean.put("ae2", list2);
+			mapBean.put("ae3", list3);
+			mapBean.put("ae4", list4);
+			mapBean.put("ae5", list5);
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return listBean;
-	}
+		return mapBean;
+ }
+
 }

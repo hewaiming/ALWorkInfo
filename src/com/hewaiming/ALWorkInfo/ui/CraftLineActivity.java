@@ -63,7 +63,7 @@ public class CraftLineActivity extends Activity
 	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
 	private String selitems = "";
 	private List<MeasueTable> listBean_measuetable = null;
-	private ProgressBar pbar;
+	
 	private ProgressDialog m_ProgressDialog=null;
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;
@@ -73,7 +73,7 @@ public class CraftLineActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_craft_line);
-		pbar=(ProgressBar) findViewById(R.id.pbar_loading);
+		
 		dateBean = getIntent().getStringArrayListExtra("date_table");
 		init_area();
 		init_potNo();
@@ -157,6 +157,7 @@ public class CraftLineActivity extends Activity
 		spinner_endDate.setAdapter(Date_adapter);
 		spinner_beginDate.setVisibility(View.VISIBLE);
 		spinner_endDate.setVisibility(View.VISIBLE);
+		spinner_beginDate.setSelection(15);
 		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
 		EndDate = spinner_endDate.getItemAtPosition(0).toString();
 
@@ -332,17 +333,15 @@ public class CraftLineActivity extends Activity
 						if (selitems.equals("")) {
 							Toast.makeText(getApplicationContext(), "没有选中任何一项工艺参数，请选择工艺参数项！", 1).show();
 							break;
-						} else {		
-//							m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this,    
-//						              "请等待...", "正在获取工艺参数数据 ...", true); 
+						} else {	
 							showCraft();	//并发进程方式取数据				
-							m_ProgressDialog.dismiss();
+//							m_ProgressDialog.dismiss();
 						}
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-			}
+			}		
 			break;
 		}
 	}
@@ -362,6 +361,7 @@ public class CraftLineActivity extends Activity
 				mbundle.putSerializable("list_measuetable", (Serializable) listBean_measuetable);
 				mbundle.putString("SELITEMS", selitems);
 				show_intent.putExtras(mbundle);
+				m_ProgressDialog.dismiss();
 				startActivity(show_intent); // 显示工艺曲线图
 			}
 		});

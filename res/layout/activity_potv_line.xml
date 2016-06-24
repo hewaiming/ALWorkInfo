@@ -14,12 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         layout="@layout/include_back" />
+
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         layout="@layout/include_select_all" />
-  <!--   
+    <!--
     <include
         android:id="@+id/head"      
         android:layout_width="match_parent"
@@ -27,9 +28,11 @@
         android:layout_marginTop="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginLeft="6dp"
-        layout="@layout/item_hsview_ae_rec" /> -->   
-   <com.github.mikephil.charting.charts.LineChart        
-        android:id="@+id/chart_PotV"        
+        layout="@layout/item_hsview_ae_rec" />
+    -->
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart_PotV"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
