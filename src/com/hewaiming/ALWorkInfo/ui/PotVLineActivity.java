@@ -23,6 +23,7 @@ import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.floatButton.ALWorkInfoApplication;
 import com.hewaiming.ALWorkInfo.floatButton.FloatView;
+import com.hewaiming.ALWorkInfo.floatButton.FloatingActionButton;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
@@ -31,14 +32,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -69,6 +68,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private FloatView floatView = null; // 以下是FLOAT BUTTON
 	private WindowManager windowManager = null;
 	private WindowManager.LayoutParams windowManagerParams = null;
+	private  FloatingActionButton show_RealRec_btn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +80,16 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 		init_potNo();
 		init_date();
 		init_title();
-		createView(); // 创建浮动按钮
+		show_RealRec_btn=(FloatingActionButton) findViewById(R.id.floatBtn_show_realRec);
+		show_RealRec_btn.setOnClickListener(this);
+//		createView(); // 创建浮动按钮
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		// 在程序退出(Activity销毁）时销毁悬浮窗口
-		windowManager.removeView(floatView);
+//		windowManager.removeView(floatView);
 	}
 
 	private void init_potNo() {
@@ -278,6 +280,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			listBean = JsonToBean_Area_Date.JsonArrayToPotVBean(data);
 			LineData mLineData = getLineData(listBean.size(), 1);
 			showChart(mLineChart, mLineData, Color.rgb(255, 255, 255));
+			show_RealRec_btn.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -468,6 +471,9 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 					e.printStackTrace();
 				}
 			}
+			break;
+		case R.id.floatBtn_show_realRec:
+			Toast.makeText(getApplicationContext(), "ok", 1).show();
 			break;
 		}
 	}

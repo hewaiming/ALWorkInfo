@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hewaiming.ALWorkInfo.ui.ParamsActivity" >
+    tools:context="com.hewaiming.ALWorkInfo.ui.AeRecActivity" >
 
     <include
         android:layout_width="match_parent"
@@ -21,24 +21,32 @@
         android:layout_margin="6dp"
         layout="@layout/include_select_all" />
 
-    <include
-        android:id="@+id/head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
-        layout="@layout/item_hsview_ae_rec" />
-
-    <ListView
-        android:id="@+id/lv_AeRec"
+    <LinearLayout
+        android:id="@+id/Layout_AeRecord"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="1dp"
-        android:background="@color/LV_bg"
-        android:scrollbars="horizontal" >
-    </ListView>
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <include
+            android:id="@+id/head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            layout="@layout/item_hsview_ae_rec" />
+
+        <ListView
+            android:id="@+id/lv_AeRec"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/LV_bg"
+            android:scrollbars="horizontal" >
+        </ListView>
+    </LinearLayout>
 
 </LinearLayout>

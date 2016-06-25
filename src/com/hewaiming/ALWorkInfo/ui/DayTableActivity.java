@@ -53,7 +53,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private HSView_DayTableAdapter daytable_Adapter = null;
 	private RelativeLayout mHead;
 	private ListView lv_daytable;	
-	private  LinearLayout showArea=null; 
+	private  LinearLayout showArea=null;
+	private View layout_daytable; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +155,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	}
 
 	private void init_title() {
+		layout_daytable=findViewById(R.id.Layout_daytable);		
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("槽日报");
 		backBtn = (Button) findViewById(R.id.btn_back);
@@ -306,6 +308,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 							BeginDate, EndDate, this, this).execute();
 				}
 			}
+			layout_daytable.setVisibility(View.VISIBLE);
 			break;
 		}
 	}
@@ -325,11 +328,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);
-			HorizontalScrollView headSrcrollView2 = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);
-			headSrcrollView.onTouchEvent(arg1);
-			headSrcrollView2.onTouchEvent(arg1);
+					.findViewById(R.id.horizontalScrollView1);			
+			headSrcrollView.onTouchEvent(arg1);		
 			return false;
 		}
 	}

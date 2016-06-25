@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
@@ -641,6 +642,41 @@ public class JsonToBean_Area_Date {
 					mBean.setJHCL("");
 				} else {
 					mBean.setJHCL(String.valueOf(jsonobj.getInt("JHCL")));
+				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+
+	//π ’œ¬ Õ≥º∆
+	public static List<FaultMost> JsonArrayToFaultCntBean(String data) {
+
+		List<FaultMost> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+
+			listBean = new ArrayList<FaultMost>();
+			listBean.clear();
+			System.out.println("jsonarray.FaultMost---length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+
+				FaultMost mBean = new FaultMost();
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo(0);
+				} else {
+					mBean.setPotNo(jsonobj.getInt("PotNo"));
+				}
+
+				if (jsonobj.get("FaultCnt").equals(null)) {
+					mBean.setFaultCnt(0);
+				} else {
+					mBean.setFaultCnt(jsonobj.getInt("FaultCnt"));
 				}
 				listBean.add(mBean);
 			}

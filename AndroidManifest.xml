@@ -61,6 +61,8 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.Ae5DayActivity" >
         </activity>
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.FaultMostActivity" >
+        </activity>
     </application>
 
 </manifest>

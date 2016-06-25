@@ -2,5 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item name="jazzy_key" type="id"/>
+    <item name="fab_expand_menu_button" type="id"/>
+    <item name="fab_label" type="id"/>
 
 </resources>

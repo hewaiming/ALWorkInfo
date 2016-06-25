@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
-import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_MeasueTableAdapter;
-import com.hewaiming.ALWorkInfo.bean.MeasueTable;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_FaultMostAdapter;
+import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -33,85 +33,54 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MeasueTableActivity extends Activity implements HttpGetListener, OnScrollListener, OnClickListener {
-	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
+public class FaultMostActivity extends Activity implements HttpGetListener, OnClickListener,OnScrollListener {
+	private Spinner spinner_area, spinner_PotNo, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
-	private ArrayAdapter<String> PotNo_adapter;
-
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_area_date.php";
-
-	private String PotNo, BeginDate, EndDate;
+	private String fault_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultMost_area_date.php";
+	private String BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
-	private List<String> PotNoList = null;
-	private List<MeasueTable> listBean = null;
-	private HSView_MeasueTableAdapter measue_Adapter = null;
-	private RelativeLayout mHead;
-	private ListView lv_MeasueTable;
-	private ImageButton isShowingBtn;
+
+	private List<FaultMost> listBean = null;
+	private HSView_FaultMostAdapter FaultMost_Adapter = null;
+
 	private LinearLayout showArea=null;
-	private View layout_list;
+	private View layout_faultmost;
+	private ImageButton isShowingBtn;
+	private RelativeLayout mHead;
+	private ListView lv_FaultMost;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_measue_table);
+		setContentView(R.layout.activity_fault_most);
+		layout_faultmost=findViewById(R.id.Layout_FaultMost);
 		dateBean = getIntent().getStringArrayListExtra("date_record");
 		init_area();
-		init_potNo();
 		init_date();
-		init_title();
 		init_HSView();
+		init_title();
 	}
-
 	private void init_HSView() {
-		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
+		mHead = (RelativeLayout) findViewById(R.id.head);
 		mHead.setFocusable(true);
 		mHead.setClickable(true);
 		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
 		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
-		lv_MeasueTable = (ListView) findViewById(R.id.lv_MeasueTable);
-		lv_MeasueTable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
-		lv_MeasueTable.setCacheColorHint(0);
-		lv_MeasueTable.setOnScrollListener(this);
-
-	}
-
-	private void init_potNo() {
-		spinner_potno = (Spinner) findViewById(R.id.spinner_PotNo);
-		PotNoList = new ArrayList<String>();
-		for (int i = 1101; i <= 1136; i++) {
-			PotNoList.add(i + "");
-		}
-		PotNoList.add(0, "全部槽号");
-		PotNo_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PotNoList);
-		PotNo_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner_potno.setAdapter(PotNo_adapter);
-		spinner_potno.setVisibility(View.VISIBLE);
-		spinner_potno.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				PotNo = PotNoList.get(position).toString();
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
-			}
-
-		});
-
+		lv_FaultMost = (ListView) findViewById(R.id.lv_FaultMost);
+		lv_FaultMost.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_FaultMost.setCacheColorHint(0);
+		lv_FaultMost.setOnScrollListener(this);
 	}
 
 	private void init_date() {
+		spinner_PotNo = (Spinner) findViewById(R.id.spinner_PotNo);
+		spinner_PotNo.setVisibility(View.GONE);
 		spinner_beginDate = (Spinner) findViewById(R.id.spinner_Begindate);
 		spinner_endDate = (Spinner) findViewById(R.id.spinner_Enddate);
 		Date_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dateBean);
@@ -155,9 +124,8 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 	}
 
 	private void init_title() {
-		layout_list=findViewById(R.id.Layout_Measue);
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("测量数据");
+		tv_title.setText("故障最多");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 		
@@ -168,9 +136,8 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 	}
 
 	private void init_area() {
-		spinner_area = (Spinner) findViewById(R.id.spinner_area);
-
-		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
+		spinner_area = (Spinner) findViewById(R.id.spinner_area);       
+		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas_ALL);
 		// 设置下拉列表的风格
 		Area_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// 将adapter 添加到spinner中
@@ -181,26 +148,33 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				switch (position) {
 				case 0:
-					areaId = 11;
+					areaId = 66;
 					break;
 				case 1:
-					areaId = 12;
+					areaId = 61;
 					break;
 				case 2:
-					areaId = 13;
+					areaId = 62;
 					break;
 				case 3:
-					areaId = 21;
+					areaId = 11;
 					break;
 				case 4:
-					areaId = 22;
+					areaId = 12;
 					break;
 				case 5:
+					areaId = 13;
+					break;
+				case 6:
+					areaId = 21;
+					break;
+				case 7:
+					areaId = 22;
+					break;
+				case 8:
 					areaId = 23;
 					break;
 				}
-
-				PotNoChanged(areaId);
 			}
 
 			@Override
@@ -211,73 +185,6 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		});
 		findBtn = (Button) findViewById(R.id.btn_ok);
 		findBtn.setOnClickListener(this);
-	}
-
-	protected void PotNoChanged(int areaId2) {
-		switch (areaId2) {
-		case 11:
-			PotNoList.clear();
-			for (int i = 1101; i <= 1136; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		case 12:
-			PotNoList.clear();
-			for (int i = 1201; i <= 1237; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		case 13:
-			PotNoList.clear();
-			for (int i = 1301; i <= 1337; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		case 21:
-			PotNoList.clear();
-			for (int i = 2101; i <= 2136; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		case 22:
-			PotNoList.clear();
-			for (int i = 2201; i <= 2237; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		case 23:
-			PotNoList.clear();
-			for (int i = 2301; i <= 2337; i++) {
-				PotNoList.add(i + "");
-			}
-			break;
-		}
-		PotNoList.add(0, "全部槽号");
-		spinner_potno.setSelection(0);
-		PotNo = PotNoList.get(0).toString();
-		PotNo_adapter.notifyDataSetChanged();// 通知数据改变		
-	}
-
-	@Override
-	public void GetDataUrl(String data) {
-
-		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[测量数据]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean != null) {
-				if (listBean.size() > 0) {
-					listBean.clear(); // 清除LISTVIEW 以前的内容
-					measue_Adapter.onDateChange(listBean);
-				}
-			}
-		} else {
-
-			listBean = new ArrayList<MeasueTable>();
-			listBean.clear();
-			listBean = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(data);
-			measue_Adapter = new HSView_MeasueTableAdapter(this, R.layout.item_hsview_measuetable, listBean, mHead);
-
-			lv_MeasueTable.setAdapter(measue_Adapter);
-		}
 	}
 
 	@Override
@@ -299,40 +206,54 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
-				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
-							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
-				} else {
-
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-							BeginDate, EndDate, this, this).execute();
-				}
+				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(fault_url, 1,
+						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
+				
+				layout_faultmost.setVisibility(View.VISIBLE);
 			}
-			layout_list.setVisibility(View.VISIBLE);
 			break;
 		}
 	}
 
 	@Override
+	public void GetDataUrl(String data) {
+		if (data.equals("")) {
+			Toast.makeText(getApplicationContext(), "没有获取到[故障率最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean != null) {
+				if (listBean.size() > 0) {
+					listBean.clear(); // 清除LISTVIEW 以前的内容
+					FaultMost_Adapter.onDateChange(listBean);
+				}
+			}
+		} else {
+
+			listBean = new ArrayList<FaultMost>();
+			listBean.clear();
+			listBean = JsonToBean_Area_Date.JsonArrayToFaultCntBean(data);
+
+			FaultMost_Adapter = new HSView_FaultMostAdapter(this, R.layout.item_hsview_faultmost, listBean, mHead);
+
+			lv_FaultMost.setAdapter(FaultMost_Adapter);
+		}
+	
+	}
+	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
+		
 	}
-
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
-	}
-
+		// TODO Auto-generated method stub		
+	}	
 	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);			
-			headSrcrollView.onTouchEvent(arg1);
-		
+					.findViewById(R.id.horizontalScrollView_FaultMost);			
+			headSrcrollView.onTouchEvent(arg1);			
 			return false;
 		}
 	}
-
 }

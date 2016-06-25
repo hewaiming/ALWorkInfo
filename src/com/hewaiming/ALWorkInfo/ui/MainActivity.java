@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class MainActivity extends Activity
 		implements OnItemClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
@@ -200,6 +198,11 @@ public class MainActivity extends Activity
 			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
 			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(aeRec_intent); // 效应记录
+			break;
+		case 12:
+			Intent faultmost_intent = new Intent(MainActivity.this, FaultMostActivity.class);
+			faultmost_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			startActivity(faultmost_intent); // 故障率排序
 			break;
 		case 13:
 			Intent craft_intent = new Intent(MainActivity.this, CraftLineActivity.class);

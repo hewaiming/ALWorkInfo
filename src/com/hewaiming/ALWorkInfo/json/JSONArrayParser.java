@@ -64,7 +64,7 @@ public class JSONArrayParser {
 		}
 
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "GBK"), 8);
 			StringBuilder sb = new StringBuilder();
 					// String line = null;
 					// while ((line = reader.readLine()) != null) {

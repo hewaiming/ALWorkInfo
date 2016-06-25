@@ -54,6 +54,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private ListView lv_AeRec;
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;
+	private View layout_list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +155,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	}
 
 	private void init_title() {
+		layout_list=findViewById(R.id.Layout_AeRecord);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("效应记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
@@ -306,6 +308,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 							BeginDate, EndDate, this, this).execute();
 				}
 			}
+			layout_list.setVisibility(View.VISIBLE);
 			break;
 		}
 	}
@@ -325,11 +328,9 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);
-			HorizontalScrollView headSrcrollView2 = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);
+					.findViewById(R.id.horizontalScrollView1);			
 			headSrcrollView.onTouchEvent(arg1);
-			headSrcrollView2.onTouchEvent(arg1);
+		
 			return false;
 		}
 	}
