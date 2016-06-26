@@ -6,7 +6,7 @@ import java.util.List;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.InterFace.LoadAeCntInterface;
-import com.hewaiming.ALWorkInfo.InterFace.LoadAeTimeInterface;
+import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
 import com.hewaiming.ALWorkInfo.adapter.MyPageAdapter;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_AeCnt;
@@ -38,7 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AeMostActivity extends FragmentActivity implements HttpGetListener, LoadAeTimeInterface, OnClickListener {
+public class AeMostActivity extends FragmentActivity implements HttpGetListener, HttpGetListener_other, OnClickListener {
 	private Spinner spinner_area, spinner_PotNo, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -67,7 +67,7 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	private int AE_CNT_TIME = 88;
 	// ÉùÃ÷½Ó¿Ú
 	private LoadAeCntInterface listener_AeCnt = null;
-	private LoadAeTimeInterface listener_AeTime = null;
+	private HttpGetListener_other listener_AeTime = null;
 	private Handler mHandler,mHandler_AeTime;
 	private View layout_Ae;
 	private ImageButton isShowingBtn;
@@ -312,7 +312,7 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	}
 
 	@Override
-	public void GetAeTimeDataUrl(String data) {
+	public void GetOtherDataUrl(String data) {
 		if (data != null) {
 			Message msg = new Message();
 			msg.obj = data;

@@ -158,8 +158,11 @@ public class MainActivity extends Activity
 			startActivity(Potage_intent); // ≤€¡‰±Ì
 			break;
 		case 4:
-			Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);
-			potv_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);				
+			Bundle potv_bundle = new Bundle();
+			potv_bundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			potv_bundle.putSerializable("JXList", (Serializable) JXList);
+			potv_intent.putExtras(potv_bundle);
 			startActivity(potv_intent); // ≤€—π«˙œﬂ
 			break;
 		case 5:

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -19,13 +20,18 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
+import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
+import com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.PotV;
+import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.floatButton.ALWorkInfoApplication;
 import com.hewaiming.ALWorkInfo.floatButton.FloatView;
 import com.hewaiming.ALWorkInfo.floatButton.FloatingActionButton;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,22 +39,29 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PotVLineActivity extends Activity implements HttpGetListener, OnClickListener {
+public class PotVLineActivity extends Activity
+		implements HttpGetListener, HttpGetListener_other, OnClickListener, OnScrollListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -57,9 +70,11 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private ArrayAdapter<String> PotNo_adapter;
 	private HttpPost_BeginDate_EndDate http_post;
 	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotVoltage.php";
+	private String RealRec_URL = "http://125.64.59.11:8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private List<PotV> listBean = null;
 	private LineChart mLineChart;
 	private ImageButton isShowingBtn;
@@ -68,28 +83,52 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 	private FloatView floatView = null; // 以下是FLOAT BUTTON
 	private WindowManager windowManager = null;
 	private WindowManager.LayoutParams windowManagerParams = null;
-	private  FloatingActionButton show_RealRec_btn;
+	private FloatingActionButton show_RealRec_btn;
+	private ListView lv_realrec;
+	private RelativeLayout mHead;
+	private HttpPost_BeginDate_EndDate_other http_post_getRealRec;
+	private Context mContext;
+	private List<RealRecord> listBean_RealRec = null;
+	private HSView_RealRecordAdapter realRec_Adapter;
+	private com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel sbv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potv_line);
+		mContext = this;
 		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
-		show_RealRec_btn=(FloatingActionButton) findViewById(R.id.floatBtn_show_realRec);
+		init_HSView();
+		show_RealRec_btn = (FloatingActionButton) findViewById(R.id.floatBtn_show_realRec); // 创建浮动按钮
 		show_RealRec_btn.setOnClickListener(this);
-//		createView(); // 创建浮动按钮
+		sbv = (SlideBottomPanel) findViewById(R.id.sbv);
+		// createView(); // 创建浮动按钮
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// 在程序退出(Activity销毁）时销毁悬浮窗口
-//		windowManager.removeView(floatView);
+		// windowManager.removeView(floatView); // 在程序退出(Activity销毁）时销毁悬浮窗口
+	}
+
+	private void init_HSView() {
+		mHead = (RelativeLayout) findViewById(R.id.head);
+		mHead.setFocusable(true);
+		mHead.setClickable(true);
+		mHead.setBackgroundColor(Color.parseColor("#ffffff"));
+		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+
+		lv_realrec = (ListView) findViewById(R.id.lv_realrec_potno);
+		lv_realrec.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_realrec.setCacheColorHint(0);
+		lv_realrec.setOnScrollListener(this);
+
 	}
 
 	private void init_potNo() {
@@ -107,6 +146,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = PotNoList.get(position).toString();
+				show_RealRec_btn.setVisibility(View.GONE);
 			}
 
 			@Override
@@ -136,6 +176,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				BeginDate = spinner_beginDate.getItemAtPosition(position).toString();
+				show_RealRec_btn.setVisibility(View.GONE);
 			}
 
 			@Override
@@ -150,6 +191,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				EndDate = spinner_endDate.getItemAtPosition(position).toString();
+				show_RealRec_btn.setVisibility(View.GONE);
 			}
 
 			@Override
@@ -274,7 +316,7 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 					listBean.clear(); // 清除LISTVIEW 以前的内容
 				}
 			}
-		} else {
+		} else {			
 			listBean = new ArrayList<PotV>();
 			listBean.clear();
 			listBean = JsonToBean_Area_Date.JsonArrayToPotVBean(data);
@@ -389,19 +431,18 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 
 	private void createView() {
 		floatView = new FloatView(getApplicationContext());
-		floatView.setOnClickListener( new OnClickListener() {
-			
+		floatView.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				 Toast.makeText(getApplicationContext(), "show RealRECORD", 1).show();//显示实时记录
-				 
-				
+				Toast.makeText(getApplicationContext(), "show RealRECORD", 1).show();// 显示实时记录
+
 			}
 		});
 		floatView.setImageResource(R.drawable.real_record); // 这里简单的用自带的icon来做演示
 		floatView.setAdjustViewBounds(true);
 		floatView.setMaxWidth(100);
-		floatView.setMaxHeight(50);		
+		floatView.setMaxHeight(50);
 		// 获取WindowManager
 		windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 		// 设置LayoutParams(全局变量）相关参数
@@ -433,7 +474,6 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 
 		windowManager.addView(floatView, windowManagerParams);
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -473,9 +513,65 @@ public class PotVLineActivity extends Activity implements HttpGetListener, OnCli
 			}
 			break;
 		case R.id.floatBtn_show_realRec:
-			Toast.makeText(getApplicationContext(), "ok", 1).show();
+			// Toast.makeText(getApplicationContext(), "ok", 1).show();		
+			sbv.displayPanel();
+			http_post_getRealRec = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(RealRec_URL,
+					2, PotNo, BeginDate, EndDate, this, this).execute();
 			break;
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (sbv.isPanelShowing()) {
+			sbv.hide();
+			return;
+		} else {
+			sbv.displayPanel();
+		}
+		super.onBackPressed();
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+
+	}
+
+	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
+
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
+			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView.onTouchEvent(arg1);
+			return false;
+		}
+	}
+
+	@Override
+	public void GetOtherDataUrl(String Data) {
+		if (Data.equals("")) {
+			Toast.makeText(getApplicationContext(), "没有获取到[实时记录]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			if (listBean_RealRec != null) {
+				if (listBean_RealRec.size() > 0) {
+					listBean_RealRec.clear(); // 清除LISTVIEW 以前的内容
+					realRec_Adapter.onDateChange(listBean_RealRec);
+				}
+			}
+		} else {
+			listBean_RealRec = new ArrayList<RealRecord>();
+			listBean_RealRec.clear();
+			listBean_RealRec = JsonToBean_Area_Date.JsonArrayToRealRecordBean(Data, JXList);
+			realRec_Adapter = new HSView_RealRecordAdapter(mContext, R.layout.item_hsview_real_record, listBean_RealRec,
+					mHead);
+			lv_realrec.setAdapter(realRec_Adapter);
+		}
+	}
 }

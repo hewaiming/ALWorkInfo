@@ -7,7 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
-import com.hewaiming.ALWorkInfo.InterFace.LoadAeTimeInterface;
+import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
 import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 
 import android.app.ProgressDialog;
@@ -23,7 +23,7 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 	private int type;
 	private String BeginDate, EndDate;
 	// ÉùÃ÷½Ó¿Ú
-	private LoadAeTimeInterface listener;
+	private HttpGetListener_other listener;
 	private JSONArrayParser jsonParser = new JSONArrayParser();
 
 	public HttpPost_BeginDate_EndDate_other() {
@@ -31,7 +31,7 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 	}
 
 	public HttpPost_BeginDate_EndDate_other(String url, int type, String area, String beginDate, String endDate,
-			LoadAeTimeInterface listener, Context mContext) {
+			HttpGetListener_other listener, Context mContext) {
 
 		this.mContext = mContext;
 		this.url = url;
@@ -87,7 +87,7 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 	@Override
 	protected void onPostExecute(String result) {
 		pDialog.dismiss();
-		listener.GetAeTimeDataUrl(result);
+		listener.GetOtherDataUrl(result);
 		super.onPostExecute(result);
 	}
 

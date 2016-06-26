@@ -23,6 +23,7 @@ public class WelcomeActivity extends Activity {
 	private Button okBtn;
 	private ImageView mImage;
 	private DisplayImageOptions options;
+	private Boolean runTimer=true;
 	private static final String image_url="http://125.64.59.11:8000/scgy/android/banner/face.jpg";
 
 	@Override
@@ -36,28 +37,28 @@ public class WelcomeActivity extends Activity {
 		ImageConfig config=new ImageConfig(this);
 		config.initImageLoader();
 		options=new ImageLoadOptions().getOptions();
-		ImageLoader.getInstance().displayImage(image_url, mImage,options);
-		
-		
+		ImageLoader.getInstance().displayImage(image_url, mImage,options);			
 		okBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				runTimer=false;
 				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
 				startActivity(intent);
-				finish();
-				
+				finish();					
 			}
 		});
-
-		(new Timer()).schedule(new TimerTask() {
-			@Override
-			public void run() {
-				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		}, 3000);
+        if(runTimer)  {
+        	(new Timer()).schedule(new TimerTask() {
+    			@Override
+    			public void run() {
+    				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+    				startActivity(intent);
+    				finish();
+    			}
+    		}, 3000);
+        }
+		
 	}
 
 }
