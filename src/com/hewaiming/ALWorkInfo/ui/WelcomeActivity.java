@@ -23,8 +23,9 @@ public class WelcomeActivity extends Activity {
 	private Button okBtn;
 	private ImageView mImage;
 	private DisplayImageOptions options;
-	private Boolean runTimer=true;
-	private static final String image_url="http://125.64.59.11:8000/scgy/android/banner/face.jpg";
+	private Boolean runTimer = true;
+	private Timer timer;
+	private static final String image_url = "http://125.64.59.11:8000/scgy/android/banner/face.jpg";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,33 +33,33 @@ public class WelcomeActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.welcome);
-		okBtn=(Button) findViewById(R.id.btn_ok);
-		mImage=(ImageView) findViewById(R.id.welcome);
-		ImageConfig config=new ImageConfig(this);
+		okBtn = (Button) findViewById(R.id.btn_ok);
+		mImage = (ImageView) findViewById(R.id.welcome);
+		ImageConfig config = new ImageConfig(this);
 		config.initImageLoader();
-		options=new ImageLoadOptions().getOptions();
-		ImageLoader.getInstance().displayImage(image_url, mImage,options);			
+		options = new ImageLoadOptions().getOptions();
+		ImageLoader.getInstance().displayImage(image_url, mImage, options);
+		timer = new Timer();
 		okBtn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				runTimer=false;
+				timer.cancel();
 				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
 				startActivity(intent);
-				finish();					
+				finish();
 			}
-		});
-        if(runTimer)  {
-        	(new Timer()).schedule(new TimerTask() {
-    			@Override
-    			public void run() {
-    				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-    				startActivity(intent);
-    				finish();
-    			}
-    		}, 3000);
-        }
-		
+		});				
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				
+					Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+					startActivity(intent);
+					finish();			
+			}
+		}, 3000);
+
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.hewaiming.ALWorkInfo.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -12,6 +14,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -21,6 +24,7 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,13 +52,14 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
-	private List<String> PotNoList=null;
+	private List<String> PotNoList = null;
 	private List<dayTable> listBean = null;
 	private HSView_DayTableAdapter daytable_Adapter = null;
 	private RelativeLayout mHead;
-	private ListView lv_daytable;	
-	private  LinearLayout showArea=null;
-	private View layout_daytable; 
+	private ListView lv_daytable;
+	private LinearLayout showArea = null;
+	private View layout_daytable;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +67,46 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
 		dateBean = getIntent().getStringArrayListExtra("date_table");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_HSView();
+		init_listview();
 	}
 
-	private void init_HSView() { 
-		mHead = (RelativeLayout) findViewById(R.id.head); //表头处理
-		mHead.setFocusable(true);
-		mHead.setClickable(true);
-		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
-		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
-
+	private void init_listview() {
 		lv_daytable = (ListView) findViewById(R.id.lv_daytable);
 		lv_daytable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_daytable.setCacheColorHint(0);
 		lv_daytable.setOnScrollListener(this);
+		lv_daytable.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				PotNo = String.valueOf(listBean.get(position).getPotNo());
+//				Toast.makeText(getApplicationContext(), PotNo, 1).show();
+				Intent potv_intent = new Intent(DayTableActivity.this, ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", PotNo);
+				potv_bundle.putString("Begin_Date", BeginDate);
+				potv_bundle.putString("End_Date", EndDate);
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // 槽压曲线图
+
+			}
+		});
+
+	}
+
+	private void init_HSView() {
+		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
+		mHead.setFocusable(true);
+		mHead.setClickable(true);
+		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
 	}
 
@@ -155,13 +182,13 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	}
 
 	private void init_title() {
-		layout_daytable=findViewById(R.id.Layout_daytable);		
+		layout_daytable = findViewById(R.id.Layout_daytable);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("槽日报");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
@@ -255,7 +282,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		spinner_potno.setSelection(0);
 		PotNo = PotNoList.get(0).toString();
 		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
-		
+
 	}
 
 	@Override
@@ -287,14 +314,14 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			finish();
 			break;
 		case R.id.btn_isSHOW:
-			if (showArea.getVisibility()==View.GONE){
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;	
+			break;
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
@@ -328,8 +355,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);			
-			headSrcrollView.onTouchEvent(arg1);		
+					.findViewById(R.id.horizontalScrollView1);
+			headSrcrollView.onTouchEvent(arg1);
 			return false;
 		}
 	}

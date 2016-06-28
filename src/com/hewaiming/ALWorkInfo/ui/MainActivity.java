@@ -146,7 +146,10 @@ public class MainActivity extends Activity
 			break;
 		case 1:
 			Intent DayTable_intent = new Intent(MainActivity.this, DayTableActivity.class);
-			DayTable_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
+			Bundle DayTablebundle = new Bundle();
+			DayTablebundle.putStringArrayList("date_table", (ArrayList<String>) date_table);
+			DayTablebundle.putSerializable("JXList", (Serializable) JXList);
+			DayTable_intent.putExtras(DayTablebundle);			
 			startActivity(DayTable_intent); // 槽日报
 			break;
 		case 2:
@@ -194,7 +197,10 @@ public class MainActivity extends Activity
 			break;
 		case 10:
 			Intent aemost_intent = new Intent(MainActivity.this, AeMostActivity.class);
-			aemost_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			Bundle aemostBundle=new Bundle();
+			aemostBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			aemostBundle.putSerializable("JXList", (Serializable) JXList);
+			aemost_intent.putExtras(aemostBundle);				
 			startActivity(aemost_intent); // 效应槽
 			break;
 		case 11:

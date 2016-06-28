@@ -1,15 +1,20 @@
 package com.hewaiming.ALWorkInfo.fragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeTimeAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
+import com.hewaiming.ALWorkInfo.ui.DayTableActivity;
+import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -32,6 +39,12 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	private List<AeRecord> listBean_AeTime = null;
 	private HSView_AeTimeAdapter AeTime_Adapter = null;
 	private AeMostActivity mActivity;
+	private String PotNo;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+
+	public Fragment_AeTime(List<Map<String, Object>> jXList2) {
+		this.JXList=jXList2;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +56,8 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mActivity = (AeMostActivity) activity;
-		mActivity.setHandler_AeTime(mHandler_AeTime);
+		mActivity.setHandler_AeTime(mHandler_AeTime);		
+		
 	}
 
 	public Handler mHandler_AeTime = new Handler() {
@@ -90,6 +104,23 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 		lv_AeTime.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_AeTime.setCacheColorHint(0);
 		lv_AeTime.setOnScrollListener(this);
+		lv_AeTime.setOnItemClickListener(new OnItemClickListener() {		
+		
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				PotNo = String.valueOf(listBean_AeTime.get(position).getPotNo());
+//				Toast.makeText(getApplicationContext(), PotNo, 1).show();
+				Intent potv_intent = new Intent( getActivity(), ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", PotNo);
+				potv_bundle.putString("Begin_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("End_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // 槽压曲线图
+				
+			}
+		});
 
 	}
 
@@ -115,19 +146,5 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 			return false;
 		}
 	}
-
-	/*
-	 * @Override public void GetAeTimeDataUrl(String data) { if
-	 * (data.equals("")) { Toast.makeText(this.getActivity(),
-	 * "没有获取到[效应槽]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show(); if (listBean_AeTime
-	 * != null) { if (listBean_AeTime.size() > 0) { listBean_AeTime.clear(); //
-	 * 清除LISTVIEW 以前的内容 AeTime_Adapter.onDateChange(listBean_AeTime); } } } else
-	 * { listBean_AeTime = new ArrayList<AeRecord>(); listBean_AeTime.clear();
-	 * listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeRecordBean(data);
-	 * AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(),
-	 * R.layout.item_hsview_ae_rec, listBean_AeTime, mHead_AeTime);
-	 * lv_AeTime.setAdapter(AeTime_Adapter); }
-	 * 
-	 * }
-	 */
+	
 }

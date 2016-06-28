@@ -302,7 +302,8 @@ public class SlideBottomPanel extends FrameLayout {
 				float value = (float) animation.getAnimatedValue();
 				ViewHelper.setY(mPanel, value);
 				if (mDarkFrameLayout != null && mIsFade && value < t) {
-					mDarkFrameLayout.fade((int) ((1 - value / t) * DarkFrameLayout.MAX_ALPHA));
+//					mDarkFrameLayout.fade((int) ((1 - value / t) * DarkFrameLayout.MAX_ALPHA));
+					mDarkFrameLayout.fade(0);
 				}
 			}
 		});
@@ -353,7 +354,7 @@ public class SlideBottomPanel extends FrameLayout {
 				if (mDarkFrameLayout != null && mIsFade
 						&& mDarkFrameLayout.getCurrentAlpha() != DarkFrameLayout.MAX_ALPHA) {
 					mDarkFrameLayout.fade(
-							(int) ((1 - value / (mMeasureHeight - mTitleHeightNoDisplay)) * DarkFrameLayout.MAX_ALPHA));
+							(int) ((1 - value / (mMeasureHeight - mTitleHeightNoDisplay)) *DarkFrameLayout.MAX_ALPHA));
 				}
 			}
 		});

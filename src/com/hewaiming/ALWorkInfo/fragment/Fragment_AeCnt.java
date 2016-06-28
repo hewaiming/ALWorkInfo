@@ -1,16 +1,26 @@
 package com.hewaiming.ALWorkInfo.fragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
 import com.hewaiming.ALWorkInfo.InterFace.LoadAeCntInterface;
+import com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeCntAdapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
+import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
+import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
+import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,20 +31,35 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnClickListener, OnScrollListener {
+public class Fragment_AeCnt extends Fragment
+		implements  LoadAeCntInterface, OnClickListener, OnScrollListener {
 
+	private Context mContext;
 	private RelativeLayout mHead_AeCnt;
 	private ListView lv_AeCnt;
+
 	private View mView;
 	private List<AeRecord> listBean_AeCnt = null;
+
 	private HSView_AeCntAdapter AeCnt_Adapter = null;
+
 	private AeMostActivity mActivity;
+	protected String PotNo, BeginDate, EndDate;	
+
+	private ListViewAndHeadViewTouchLinstener lvAndHVTouchListener;
+
+	public Fragment_AeCnt(Context mContext) {
+		this.mContext = mContext;
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,18 +78,22 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
+		lvAndHVTouchListener=new ListViewAndHeadViewTouchLinstener();
+	
 		mHead_AeCnt = (RelativeLayout) mView.findViewById(R.id.head_AeCnt); // 表头处理
 		mHead_AeCnt.setFocusable(true);
 		mHead_AeCnt.setClickable(true);
 		mHead_AeCnt.setBackgroundColor(Color.parseColor("#fffffb"));
-		mHead_AeCnt.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		mHead_AeCnt.setOnTouchListener(lvAndHVTouchListener);
 
 		lv_AeCnt = (ListView) mView.findViewById(R.id.lv_AeCnt);
-		lv_AeCnt.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lv_AeCnt.setOnTouchListener(lvAndHVTouchListener);
 		lv_AeCnt.setCacheColorHint(0);
-		lv_AeCnt.setOnScrollListener(this);
-
+		lv_AeCnt.setOnScrollListener(this);		
+		
 	}
+
+	
 
 	@Override
 	public void onClick(View v) {
@@ -77,6 +106,10 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 			case 1:
 				init_adapter(msg.obj.toString());
 				break;
+			case 2:
+				BeginDate = msg.obj.toString();
+			case 3:
+				EndDate = msg.obj.toString();
 			}
 		}
 	};
@@ -97,18 +130,20 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt,
 					mHead_AeCnt);
 			lv_AeCnt.setAdapter(AeCnt_Adapter);
+			
 		}
 
 	};
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+       
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+		 
+		
 	}
 
 	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
@@ -117,11 +152,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView_AeCnt = (HorizontalScrollView) mHead_AeCnt
 					.findViewById(R.id.horizontalScrollView_AeCnt);
-			// HorizontalScrollView headSrcrollView_AeTime =
-			// (HorizontalScrollView) mHead_AeTime
-			// .findViewById(R.id.horizontalScrollView1);
-			headSrcrollView_AeCnt.onTouchEvent(arg1);
-			// headSrcrollView_AeTime.onTouchEvent(arg1);
+			headSrcrollView_AeCnt.onTouchEvent(arg1);	
 
 			return false;
 		}
@@ -129,6 +160,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 
 	@Override
 	public void GetAeCntDataUrl(String data) {
+	
 		if (data.equals("")) {
 			Toast.makeText(this.getActivity(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
 			if (listBean_AeCnt != null) {
@@ -146,5 +178,6 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 			lv_AeCnt.setAdapter(AeCnt_Adapter);
 		}
 
-	}
+	}	
+	
 }

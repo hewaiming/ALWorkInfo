@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
  */
 public class DarkFrameLayout extends FrameLayout {
 
-    public static final int MAX_ALPHA = 0X9f;
+    public static final int MAX_ALPHA = 0X8f;
 
     private int alpha = 0x00;
     private Paint mFadePaint;
@@ -40,6 +40,7 @@ public class DarkFrameLayout extends FrameLayout {
     }
 
     private void drawFade(Canvas canvas) {
+    	
         mFadePaint.setColor(Color.argb(alpha, 0, 0, 0));
         canvas.drawRect(0, 0, getMeasuredWidth(), getHeight(), mFadePaint);
     }
@@ -59,7 +60,7 @@ public class DarkFrameLayout extends FrameLayout {
         return slideBottomPanel.isPanelShowing();
     }
 
-    public int getCurrentAlpha() {
+    public int getCurrentAlpha() {   
         return alpha;
     }
 

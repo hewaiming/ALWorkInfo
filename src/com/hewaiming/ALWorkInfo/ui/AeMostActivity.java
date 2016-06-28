@@ -2,18 +2,22 @@ package com.hewaiming.ALWorkInfo.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.InterFace.BackHandlerInterface;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.InterFace.LoadAeCntInterface;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
 import com.hewaiming.ALWorkInfo.adapter.MyPageAdapter;
 import com.hewaiming.ALWorkInfo.config.MyConst;
+import com.hewaiming.ALWorkInfo.fragment.BackHandledFragment;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_AeCnt;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_AeTime;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,7 +42,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AeMostActivity extends FragmentActivity implements HttpGetListener, HttpGetListener_other, OnClickListener {
+public class AeMostActivity extends FragmentActivity
+		implements BackHandlerInterface, HttpGetListener, HttpGetListener_other, OnClickListener {
 	private Spinner spinner_area, spinner_PotNo, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -53,10 +58,10 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	private String BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 
-//	private List<AeRecord> listBean_AeTime = null;
-//	private List<AeRecord> listBean_AeCnt = null;
-//	private HSView_AeTimeAdapter AeTime_Adapter = null;
-//	private HSView_AeCntAdapter AeCnt_Adapter = null;
+	// private List<AeRecord> listBean_AeTime = null;
+	// private List<AeRecord> listBean_AeCnt = null;
+	// private HSView_AeTimeAdapter AeTime_Adapter = null;
+	// private HSView_AeCntAdapter AeCnt_Adapter = null;
 	private ArrayList<Fragment> fragments;
 
 	private ViewPager pager;
@@ -68,18 +73,24 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	// 声明接口
 	private LoadAeCntInterface listener_AeCnt = null;
 	private HttpGetListener_other listener_AeTime = null;
-	private Handler mHandler,mHandler_AeTime;
+	private Handler mHandler, mHandler_AeTime;
 	private View layout_Ae;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea=null;
+	private LinearLayout showArea = null;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private Context mContext;
+
+	private BackHandledFragment selectedFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_most);
-		layout_Ae=findViewById(R.id.AeMost);
+		mContext = this;
+		layout_Ae = findViewById(R.id.AeMost);
 		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		init_area();
 		init_date();
 		init_title();
@@ -88,8 +99,8 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_AeCnt());
-		fragments.add(new Fragment_AeTime());
+		fragments.add(new Fragment_AeCnt(mContext));
+		fragments.add(new Fragment_AeTime(JXList));
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);
@@ -206,15 +217,15 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 		tv_title.setText("效应槽");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
 
 	private void init_area() {
-		spinner_area = (Spinner) findViewById(R.id.spinner_area);       
+		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas_ALL);
 		// 设置下拉列表的风格
 		Area_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -271,15 +282,15 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_isSHOW:    //显示或隐藏
-			if (showArea.getVisibility()==View.GONE){
+		case R.id.btn_isSHOW: // 显示或隐藏
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;	
+			break;
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
@@ -301,6 +312,14 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 			msg.obj = data;
 			msg.what = 1;
 			mHandler.sendMessage(msg);
+			Message msg_date1 = new Message();
+			msg_date1.obj = BeginDate;
+			msg_date1.what = 2;
+			mHandler.sendMessage(msg_date1);
+			Message msg_date2 = new Message();
+			msg_date2.obj = EndDate;
+			msg_date2.what = 3;
+			mHandler.sendMessage(msg_date2);
 		}
 		// listener_AeCnt.GetAeCntDataUrl(data);
 
@@ -323,7 +342,34 @@ public class AeMostActivity extends FragmentActivity implements HttpGetListener,
 	}
 
 	public void setHandler_AeTime(Handler mHandler_AeTime2) {
-		mHandler_AeTime=mHandler_AeTime2;
-		
+		mHandler_AeTime = mHandler_AeTime2;
+
+	}
+
+	@Override
+	public void setSelectedFragment(BackHandledFragment backHandledFragment) {
+		this.selectedFragment =backHandledFragment;
+
+	}
+
+	@Override
+	public void onBackPressed() {
+		 if (getFragmentManager().findFragmentByTag("Fragment_AeCnt") != null
+	                && getFragmentManager().findFragmentByTag("Fragment_AeCnt")
+	                        .isVisible()) {
+//			 getFragmentManager().findFragmentByTag("fragmentAeCnt").getView().get
+//			 if (sbv.isPanelShowing()) {
+//					sbv.hide();
+//					return;
+//				} else {
+//					sbv.displayPanel();
+//				}			 
+			 
+		 }		 
+		 
+//	            finish();
+//	            return;
+
+		super.onBackPressed();
 	}
 }

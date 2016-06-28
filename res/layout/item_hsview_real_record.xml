@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/tv_PotNo"
-        android:layout_width="38dp"
+        android:layout_width="22dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="5dp"
-        android:textSize="11sp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="3dp"
+        android:textSize="10sp"
         android:text="槽号"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text_black" />
@@ -45,25 +45,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textSize="11sp"
+                    android:textSize="10sp"
                     android:text="记录名称"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
 
                 <TextView
                     android:id="@+id/tv_Name2"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textSize="11sp"
+                    android:textSize="10sp"
                     android:text="参数1"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />
 
                 <TextView
                     android:id="@+id/tv_Name3"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
