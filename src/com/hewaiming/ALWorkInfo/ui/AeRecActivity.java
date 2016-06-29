@@ -61,8 +61,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private LinearLayout showArea=null;
 	private View layout_list;
 	private boolean hideAction;
-	private View include_selector;
-	
+	private View include_selector;	
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 
 	@Override

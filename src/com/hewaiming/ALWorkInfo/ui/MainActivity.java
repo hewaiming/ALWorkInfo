@@ -176,10 +176,14 @@ public class MainActivity extends Activity
 			break;
 		case 5:
 			Intent faultRec_intent = new Intent(MainActivity.this, FaultRecActivity.class);
-			Bundle mbundle = new Bundle();
-			mbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
-			mbundle.putSerializable("JXList", (Serializable) JXList);
-			faultRec_intent.putExtras(mbundle);
+			Bundle bundle_faultRec = new Bundle();
+			bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			bundle_faultRec.putBoolean("Hide_Action", false);
+			bundle_faultRec.putString("PotNo", "1101");
+			bundle_faultRec.putString("Begin_Date", date_record.get(0));				
+			bundle_faultRec.putString("End_Date", date_record.get(0));
+			bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
+			faultRec_intent.putExtras(bundle_faultRec);			
 			startActivity(faultRec_intent); // π ’œº«¬º
 			break;
 		case 6:
@@ -223,7 +227,10 @@ public class MainActivity extends Activity
 			break;
 		case 12:
 			Intent faultmost_intent = new Intent(MainActivity.this, FaultMostActivity.class);
-			faultmost_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			Bundle bundle_faultmost=new Bundle();
+			bundle_faultmost.putSerializable("JXList", (Serializable) JXList);
+			bundle_faultmost.putStringArrayList("date_record", (ArrayList<String>) date_record);			
+			faultmost_intent.putExtras(bundle_faultmost);
 			startActivity(faultmost_intent); // π ’œ¬ ≈≈–Ú
 			break;
 		case 13:

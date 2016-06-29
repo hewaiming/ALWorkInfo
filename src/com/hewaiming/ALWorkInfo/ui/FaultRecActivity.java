@@ -51,19 +51,52 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	private List<FaultRecord> listBean = null;
 	private FaultRecord_Adapter faultRec_Adapter = null;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea=null;
+	private LinearLayout showArea = null;
+	private boolean hideAction;
+	private View include_selector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faultrec);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();		
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
+		if(hideAction){			
+			lv_faultRec.setVisibility(View.VISIBLE);
+			include_selector=findViewById(R.id.include_selector);
+			include_selector.setVisibility(View.GONE);
+			GetDataFromNet();
+		}
+	}
+
+	private void GetDataFromNet() {
+		if (EndDate.compareTo(BeginDate) < 0) {
+			Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
+		} else {
+			if (PotNo == "全部槽号") {
+				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
+						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
+			} else {
+
+				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
+						BeginDate, EndDate, this, this).execute();
+			}
+		}
+		
+	}
+
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		BeginDate = getIntent().getStringExtra("Begin_Date");
+		EndDate = getIntent().getStringExtra("End_Date");
+		PotNo = getIntent().getStringExtra("PotNo");
+		hideAction = getIntent().getBooleanExtra("Hide_Action", false);
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+
 	}
 
 	private void init_potNo() {
@@ -105,8 +138,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		spinner_endDate.setAdapter(Date_adapter);
 		spinner_beginDate.setVisibility(View.VISIBLE);
 		spinner_endDate.setVisibility(View.VISIBLE);
-		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
-		EndDate = spinner_endDate.getItemAtPosition(0).toString();
+//		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
+//		EndDate = spinner_endDate.getItemAtPosition(0).toString();
 
 		spinner_beginDate.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -142,8 +175,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		tv_title.setText("故障记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
@@ -235,10 +268,10 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 			break;
 		}
 		PotNoList.add(0, "全部槽号");
-		
+
 		spinner_potno.setSelection(0);
 		PotNo = PotNoList.get(0).toString();
-		PotNo_adapter.notifyDataSetChanged();// 通知数据改变		
+		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
 	}
 
 	@Override
@@ -277,28 +310,17 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_isSHOW:    //显示或隐藏
-			if (showArea.getVisibility()==View.GONE){
+		case R.id.btn_isSHOW: // 显示或隐藏
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;		
+			break;
 		case R.id.btn_ok:
-			if (EndDate.compareTo(BeginDate) < 0) {
-				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
-			} else {
-				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
-							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
-				} else {
-
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-							BeginDate, EndDate, this, this).execute();
-				}
-			}
+			GetDataFromNet();
 			break;
 		}
 	}

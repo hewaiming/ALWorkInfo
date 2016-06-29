@@ -1,7 +1,9 @@
 package com.hewaiming.ALWorkInfo.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -12,6 +14,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -21,6 +24,7 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,6 +56,7 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private ImageButton isShowingBtn;
 	private RelativeLayout mHead;
 	private ListView lv_FaultMost;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,17 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fault_most);
 		layout_faultmost=findViewById(R.id.Layout_FaultMost);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
+		GetDataFromIntent();
+		
 		init_area();
 		init_date();
 		init_HSView();
 		init_title();
+	}
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		
 	}
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head);
@@ -76,6 +87,22 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		lv_FaultMost.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_FaultMost.setCacheColorHint(0);
 		lv_FaultMost.setOnScrollListener(this);
+		lv_FaultMost.setOnItemClickListener(new OnItemClickListener() {		
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent faultRec_intent = new Intent(FaultMostActivity.this, FaultRecActivity.class);
+				Bundle bundle_faultRec = new Bundle();
+				bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) dateBean);
+				bundle_faultRec.putBoolean("Hide_Action", true);
+				bundle_faultRec.putString("PotNo",String.valueOf(listBean.get(position).getPotNo()));
+				bundle_faultRec.putString("Begin_Date", BeginDate);				
+				bundle_faultRec.putString("End_Date", EndDate);
+				bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
+				faultRec_intent.putExtras(bundle_faultRec);			
+				startActivity(faultRec_intent); // ¹ÊÕÏ¼ÇÂ¼				
+			}
+		});
 	}
 
 	private void init_date() {
