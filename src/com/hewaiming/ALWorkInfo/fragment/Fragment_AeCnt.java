@@ -3,6 +3,7 @@ package com.hewaiming.ALWorkInfo.fragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
@@ -16,6 +17,8 @@ import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
+import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
+import com.hewaiming.ALWorkInfo.ui.MainActivity;
 import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
 
 import android.app.Activity;
@@ -48,7 +51,8 @@ public class Fragment_AeCnt extends Fragment
 
 	private View mView;
 	private List<AeRecord> listBean_AeCnt = null;
-
+	private List<String> dateBean = new ArrayList<String>();
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private HSView_AeCntAdapter AeCnt_Adapter = null;
 
 	private AeMostActivity mActivity;
@@ -56,9 +60,10 @@ public class Fragment_AeCnt extends Fragment
 
 	private ListViewAndHeadViewTouchLinstener lvAndHVTouchListener;
 
-	public Fragment_AeCnt(Context mContext) {
+	public Fragment_AeCnt(Context mContext, List<String> dateBean, List<Map<String, Object>> jXList) {
 		this.mContext = mContext;
-
+		this.dateBean=dateBean;
+		this.JXList=jXList;
 	}
 
 	@Override
@@ -90,6 +95,22 @@ public class Fragment_AeCnt extends Fragment
 		lv_AeCnt.setOnTouchListener(lvAndHVTouchListener);
 		lv_AeCnt.setCacheColorHint(0);
 		lv_AeCnt.setOnScrollListener(this);		
+		lv_AeCnt.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent aeRec_intent = new Intent(getActivity(), AeRecActivity.class);
+				Bundle bundle_AeRec = new Bundle();
+				bundle_AeRec.putStringArrayList("date_record",  (ArrayList<String>)dateBean);
+				bundle_AeRec.putBoolean("Hide_Action", true);
+				bundle_AeRec.putString("PotNo", String.valueOf(listBean_AeCnt.get(position).getPotNo()));
+				bundle_AeRec.putString("Begin_Date", BeginDate);				
+				bundle_AeRec.putString("End_Date", EndDate);	
+				bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
+				aeRec_intent.putExtras(bundle_AeRec);				
+				startActivity(aeRec_intent); // Ð§Ó¦¼ÇÂ¼				
+			}
+		});
 		
 	}
 
@@ -108,8 +129,10 @@ public class Fragment_AeCnt extends Fragment
 				break;
 			case 2:
 				BeginDate = msg.obj.toString();
+				break;
 			case 3:
 				EndDate = msg.obj.toString();
+				break;
 			}
 		}
 	};

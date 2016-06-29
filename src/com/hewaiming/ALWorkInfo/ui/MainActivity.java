@@ -42,9 +42,9 @@ public class MainActivity extends Activity
 	private SimpleAdapter adapter;
 	private List<Map<String, Object>> dataList;
 
-	private List<String> date_record; // 记录日期
-	private List<String> date_table; // 报表日期
-	private List<Map<String, Object>> JXList; // 记录号名
+	private List<String> date_record = null; // 记录日期
+	private List<String> date_table = null; // 报表日期
+	private List<Map<String, Object>> JXList = null; // 记录号名
 
 	private String get_dateTable_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/getDate.php";
 	private String get_JXName_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/getJXRecordName.php";
@@ -60,7 +60,7 @@ public class MainActivity extends Activity
 		init();
 		init_commData();
 		mContext = this;
-	}	
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -94,8 +94,14 @@ public class MainActivity extends Activity
 	}
 
 	private void init_commData() {
-		mhttpgetdata_date = (HttpGetData_date) new HttpGetData_date(get_dateTable_url, this, this).execute();
-		mHttpGetData_JXRecord = (HttpGetData_JXRecord) new HttpGetData_JXRecord(get_JXName_url, this, this).execute();
+		if (date_table == null) {
+			mhttpgetdata_date = (HttpGetData_date) new HttpGetData_date(get_dateTable_url, this, this).execute();
+		}
+		if (JXList == null) {
+			mHttpGetData_JXRecord = (HttpGetData_JXRecord) new HttpGetData_JXRecord(get_JXName_url, this, this)
+					.execute();
+		}
+
 	}
 
 	private void init() {
@@ -149,7 +155,7 @@ public class MainActivity extends Activity
 			Bundle DayTablebundle = new Bundle();
 			DayTablebundle.putStringArrayList("date_table", (ArrayList<String>) date_table);
 			DayTablebundle.putSerializable("JXList", (Serializable) JXList);
-			DayTable_intent.putExtras(DayTablebundle);			
+			DayTable_intent.putExtras(DayTablebundle);
 			startActivity(DayTable_intent); // 槽日报
 			break;
 		case 2:
@@ -161,7 +167,7 @@ public class MainActivity extends Activity
 			startActivity(Potage_intent); // 槽龄表
 			break;
 		case 4:
-			Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);				
+			Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);
 			Bundle potv_bundle = new Bundle();
 			potv_bundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			potv_bundle.putSerializable("JXList", (Serializable) JXList);
@@ -197,15 +203,22 @@ public class MainActivity extends Activity
 			break;
 		case 10:
 			Intent aemost_intent = new Intent(MainActivity.this, AeMostActivity.class);
-			Bundle aemostBundle=new Bundle();
+			Bundle aemostBundle = new Bundle();
 			aemostBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			aemostBundle.putSerializable("JXList", (Serializable) JXList);
-			aemost_intent.putExtras(aemostBundle);				
+			aemost_intent.putExtras(aemostBundle);
 			startActivity(aemost_intent); // 效应槽
 			break;
 		case 11:
 			Intent aeRec_intent = new Intent(MainActivity.this, AeRecActivity.class);
-			aeRec_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
+			Bundle bundle_AeRec = new Bundle();
+			bundle_AeRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			bundle_AeRec.putBoolean("Hide_Action", false);
+			bundle_AeRec.putString("PotNo", "1101");
+			bundle_AeRec.putString("Begin_Date", date_record.get(0));				
+			bundle_AeRec.putString("End_Date", date_record.get(0));
+			bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
+			aeRec_intent.putExtras(bundle_AeRec);
 			startActivity(aeRec_intent); // 效应记录
 			break;
 		case 12:

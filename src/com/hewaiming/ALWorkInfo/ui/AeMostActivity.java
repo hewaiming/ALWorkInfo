@@ -99,7 +99,7 @@ public class AeMostActivity extends FragmentActivity
 
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_AeCnt(mContext));
+		fragments.add(new Fragment_AeCnt(mContext,dateBean,JXList));
 		fragments.add(new Fragment_AeTime(JXList));
 
 		pager = (ViewPager) findViewById(R.id.pager);

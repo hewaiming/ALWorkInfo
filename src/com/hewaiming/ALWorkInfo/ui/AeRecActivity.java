@@ -1,7 +1,10 @@
 package com.hewaiming.ALWorkInfo.ui;
 
+import java.io.Serializable;
+import java.security.KeyStore.PrivateKeyEntry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -12,6 +15,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -21,6 +25,7 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,18 +60,39 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;
 	private View layout_list;
+	private boolean hideAction;
+	private View include_selector;
+	
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_record);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
+		GetDataFromIntent();		
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_HSView();
+		if(hideAction){			
+			layout_list.setVisibility(View.VISIBLE);
+			include_selector=findViewById(R.id.include_select_all);
+			include_selector.setVisibility(View.GONE);
+			GetDataFromNet();
+		}
+		
+	}
+
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		BeginDate=getIntent().getStringExtra("Begin_Date");
+		EndDate=getIntent().getStringExtra("End_Date");
+		PotNo=getIntent().getStringExtra("PotNo");
+		hideAction=getIntent().getBooleanExtra("Hide_Action", false);
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		
 	}
 
 	private void init_HSView() { 
@@ -80,6 +106,21 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 		lv_AeRec.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_AeRec.setCacheColorHint(0);
 		lv_AeRec.setOnScrollListener(this);
+		lv_AeRec.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent potv_intent = new Intent( AeRecActivity.this, ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position).getPotNo()));
+				potv_bundle.putString("Begin_Date", listBean.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("End_Date", listBean.get(position).getDdate().substring(0, 10));
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // 槽压曲线图
+				
+			}
+		});
 
 	}
 
@@ -122,8 +163,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 		spinner_endDate.setAdapter(Date_adapter);
 		spinner_beginDate.setVisibility(View.VISIBLE);
 		spinner_endDate.setVisibility(View.VISIBLE);
-		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
-		EndDate = spinner_endDate.getItemAtPosition(0).toString();
+//		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
+//		EndDate = spinner_endDate.getItemAtPosition(0).toString();
 
 		spinner_beginDate.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -296,21 +337,26 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 			}
 			break;	
 		case R.id.btn_ok:
-			if (EndDate.compareTo(BeginDate) < 0) {
-				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
-			} else {
-				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
-							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
-				} else {
-
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-							BeginDate, EndDate, this, this).execute();
-				}
-			}
-			layout_list.setVisibility(View.VISIBLE);
+			GetDataFromNet();			
 			break;
 		}
+	}
+
+	
+	private void GetDataFromNet() {
+		if (EndDate.compareTo(BeginDate) < 0) {
+			Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
+		} else {
+			if (PotNo == "全部槽号") {
+				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
+						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
+			} else {
+
+				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
+						BeginDate, EndDate, this, this).execute();
+			}
+		}
+		layout_list.setVisibility(View.VISIBLE);
 	}
 
 	@Override

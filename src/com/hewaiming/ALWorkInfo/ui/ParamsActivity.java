@@ -46,11 +46,12 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 		setContentView(R.layout.activity_params);
 		init();
 		init_title();
+		DoGetDataFromNet();
 	}
 
 	private void init_title() {
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText("常用槽参数");
+		tv_title.setText("常用参数");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 
@@ -90,6 +91,8 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 					areaId = 23;
 					break;
 				}
+				DoGetDataFromNet();
+
 			}
 
 			@Override
@@ -100,6 +103,11 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 		});
 		findBtn = (Button) findViewById(R.id.btn_params);
 		findBtn.setOnClickListener(this);
+	}
+
+	protected void DoGetDataFromNet() {
+		http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+
 	}
 
 	@Override
@@ -126,19 +134,6 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 
 			listBean = new ArrayList<SetParams>();
 			listBean = JsonToBean.JsonArrayToSetParamsBean(data);
-			/*
-			 * List<Map<String, SetParams>> listBeanMap = new
-			 * ArrayList<Map<String,SetParams>>(); listBeanMap.clear();;
-			 * listBeanMap = JsonToBeanMap.JsonArrayToSetParamsBean(data);
-			 * SimpleAdapter sadapter = new SimpleAdapter(this, listBeanMap,
-			 * R.layout.item_params, new String[] { "PotNo", "SetV", "NBTime",
-			 * "AETime", "ALF" }, new int[] { R.id.tv_PotNo, R.id.tv_SetV,
-			 * R.id.tv_NbTime, R.id.tv_AeTime, R.id.tv_ALF });
-			 */
-			// ArrayAdapter adapter = new ArrayAdapter<SetParams>(this,
-			// android.R.layout.simple_list_item_1, listBean);
-			// lv_params.setAdapter(adapter);
-			// lv_params.setAdapter(sadapter);
 			mAdapter = new Params_Adapter(this, listBean);
 			lv_params.setAdapter(mAdapter);
 		}
@@ -151,7 +146,8 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			finish();
 			break;
 		case R.id.btn_params:
-			http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+			DoGetDataFromNet();
+			break;
 		}
 	}
 

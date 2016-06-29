@@ -46,6 +46,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 		setContentView(R.layout.activity_potage);
 		init();
 		init_title();
+		DoGetDataFromNet();
 	}
 
 	private void init_title() {
@@ -89,6 +90,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 					areaId = 23;
 					break;
 				}
+				DoGetDataFromNet();
 			}
 
 			@Override
@@ -136,8 +138,14 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 			finish();
 			break;
 		case R.id.btn_potage:
-			http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+			DoGetDataFromNet();		
+			break;
 		}
+	}
+
+	private void DoGetDataFromNet() {
+		http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+		
 	}
 
 }

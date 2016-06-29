@@ -65,9 +65,11 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_5day);
 		layout_Ae = findViewById(R.id.Ae5Day);
+		layout_Ae.setVisibility(View.VISIBLE);
 		init_area();
 		init_title();
 		init_Tab();
+		DoGetDataFromNet();
 	}
 
 	private void init_Tab() {
@@ -207,7 +209,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 					areaId = 23;
 					break;
 				}
-
+				DoGetDataFromNet();
 			}
 
 			@Override
@@ -266,13 +268,17 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_ok:			
-			http_post = (HttpPost_area) new HttpPost_area(area_url, this, this, Integer.toString(areaId)).execute();
-			layout_Ae.setVisibility(View.VISIBLE);
+		case R.id.btn_ok:	
+			DoGetDataFromNet();				
 			break;
 		}
 	}
 	
+	private void DoGetDataFromNet() {
+		http_post = (HttpPost_area) new HttpPost_area(area_url, this, this, Integer.toString(areaId)).execute();
+		
+	}
+
 	public void setHandler_Ae1(Handler mHandler_Ae) {
 		mHandler_Ae1=mHandler_Ae;
 		
