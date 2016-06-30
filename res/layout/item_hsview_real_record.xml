@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/tv_PotNo"
-        android:layout_width="22dp"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="1dp"
@@ -41,7 +41,7 @@
 
                 <TextView
                     android:id="@+id/tv_Name1"
-                    android:layout_width="90dp"
+                    android:layout_width="86dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
@@ -52,7 +52,7 @@
 
                 <TextView
                     android:id="@+id/tv_Name2"
-                    android:layout_width="70dp"
+                    android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
@@ -63,7 +63,7 @@
 
                 <TextView
                     android:id="@+id/tv_Name3"
-                    android:layout_width="70dp"
+                    android:layout_width="66dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"

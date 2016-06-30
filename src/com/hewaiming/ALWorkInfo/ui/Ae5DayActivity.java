@@ -58,6 +58,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	
 	private Map<String,List<AeRecord>> map_5day=null;
 	private View layout_Ae;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +67,25 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		setContentView(R.layout.activity_ae_5day);
 		layout_Ae = findViewById(R.id.Ae5Day);
 		layout_Ae.setVisibility(View.VISIBLE);
+		GetDataFromIntent();
 		init_area();
 		init_title();
 		init_Tab();
 		DoGetDataFromNet();
 	}
 
+	private void GetDataFromIntent() {
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		
+	}
+
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_Ae1());
-		fragments.add(new Fragment_Ae2());
-		fragments.add(new Fragment_Ae3());
-		fragments.add(new Fragment_Ae4());
-		fragments.add(new Fragment_Ae5());		
+		fragments.add(new Fragment_Ae1(JXList));
+		fragments.add(new Fragment_Ae2(JXList));
+		fragments.add(new Fragment_Ae3(JXList));
+		fragments.add(new Fragment_Ae4(JXList));
+		fragments.add(new Fragment_Ae5(JXList));		
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);

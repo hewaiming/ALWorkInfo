@@ -16,6 +16,7 @@ import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_JXRecord;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
+import com.hewaiming.ALWorkInfo.net.NetDetector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
 		implements OnItemClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
@@ -57,9 +59,19 @@ public class MainActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		init();
-		init_commData();
 		mContext = this;
+		init();
+		if (NetStatus()!=0 ) {		
+			init_commData();
+		}else{
+			Toast.makeText(getApplicationContext(), "网络异常！", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private int NetStatus() {
+		NetDetector netDetector=new NetDetector(mContext);
+		return netDetector.isConnectingToInternet();
+		
 	}
 
 	@Override
@@ -160,6 +172,9 @@ public class MainActivity extends Activity
 			break;
 		case 2:
 			Intent Ae5day_intent = new Intent(MainActivity.this, Ae5DayActivity.class);
+			Bundle bundle_Ae5 = new Bundle();
+			bundle_Ae5.putSerializable("JXList", (Serializable) JXList);
+			Ae5day_intent.putExtras(bundle_Ae5);
 			startActivity(Ae5day_intent); // 效应情报表
 			break;
 		case 3:
@@ -180,10 +195,10 @@ public class MainActivity extends Activity
 			bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			bundle_faultRec.putBoolean("Hide_Action", false);
 			bundle_faultRec.putString("PotNo", "1101");
-			bundle_faultRec.putString("Begin_Date", date_record.get(0));				
+			bundle_faultRec.putString("Begin_Date", date_record.get(0));
 			bundle_faultRec.putString("End_Date", date_record.get(0));
 			bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
-			faultRec_intent.putExtras(bundle_faultRec);			
+			faultRec_intent.putExtras(bundle_faultRec);
 			startActivity(faultRec_intent); // 故障记录
 			break;
 		case 6:
@@ -219,7 +234,7 @@ public class MainActivity extends Activity
 			bundle_AeRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			bundle_AeRec.putBoolean("Hide_Action", false);
 			bundle_AeRec.putString("PotNo", "1101");
-			bundle_AeRec.putString("Begin_Date", date_record.get(0));				
+			bundle_AeRec.putString("Begin_Date", date_record.get(0));
 			bundle_AeRec.putString("End_Date", date_record.get(0));
 			bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
 			aeRec_intent.putExtras(bundle_AeRec);
@@ -227,9 +242,9 @@ public class MainActivity extends Activity
 			break;
 		case 12:
 			Intent faultmost_intent = new Intent(MainActivity.this, FaultMostActivity.class);
-			Bundle bundle_faultmost=new Bundle();
+			Bundle bundle_faultmost = new Bundle();
 			bundle_faultmost.putSerializable("JXList", (Serializable) JXList);
-			bundle_faultmost.putStringArrayList("date_record", (ArrayList<String>) date_record);			
+			bundle_faultmost.putStringArrayList("date_record", (ArrayList<String>) date_record);
 			faultmost_intent.putExtras(bundle_faultmost);
 			startActivity(faultmost_intent); // 故障率排序
 			break;

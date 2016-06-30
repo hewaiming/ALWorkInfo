@@ -1,5 +1,6 @@
 package com.hewaiming.ALWorkInfo.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,13 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_AlarmRecord;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -58,12 +61,37 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faultrec);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();		
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
+		init_ListView();
+	}
+
+	private void init_ListView() {
+		lv_faultRec = (ListView) findViewById(R.id.lv_faultRec);
+		lv_faultRec.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent potv_intent = new Intent( AlarmRecActivity.this, ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position).getPotNo()));
+				potv_bundle.putString("Begin_Date", listBean.get(position).getRecTime().substring(0, 10));
+				potv_bundle.putString("End_Date", listBean.get(position).getRecTime().substring(0, 10));
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
+				
+			}
+		});
+		
+	}
+
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");		
 	}
 
 	private void init_potNo() {
@@ -150,7 +178,7 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 	}
 
 	private void init_area() {
-		lv_faultRec = (ListView) findViewById(R.id.lv_faultRec);
+	
 		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);

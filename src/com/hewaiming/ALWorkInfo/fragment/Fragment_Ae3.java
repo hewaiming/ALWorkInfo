@@ -1,14 +1,18 @@
 package com.hewaiming.ALWorkInfo.fragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
+import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +22,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,6 +37,11 @@ public class Fragment_Ae3 extends Fragment implements OnScrollListener {
 	private List<AeRecord> listBean_Ae = null;
 	private HSView_AeRecAdapter Ae_Adapter = null;
 	private Ae5DayActivity mActivity;
+	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+
+	public Fragment_Ae3(List<Map<String, Object>> jXList) {
+		this.JXList=jXList;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,6 +100,21 @@ public class Fragment_Ae3 extends Fragment implements OnScrollListener {
 		lv_Ae.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_Ae.setCacheColorHint(0);
 		lv_Ae.setOnScrollListener(this);
+		lv_Ae.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent potv_intent = new Intent( getActivity(), ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", String.valueOf(listBean_Ae.get(position).getPotNo()));
+				potv_bundle.putString("Begin_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("End_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
+				
+			}
+		});
 
 	}
 

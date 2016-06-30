@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.ImageConfig;
 import com.hewaiming.ALWorkInfo.config.ImageLoadOptions;
+import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -17,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class WelcomeActivity extends Activity {
 	// private Animation animation;
@@ -38,7 +40,11 @@ public class WelcomeActivity extends Activity {
 		ImageConfig config = new ImageConfig(this);
 		config.initImageLoader();
 		options = new ImageLoadOptions().getOptions();
-		ImageLoader.getInstance().displayImage(image_url, mImage, options);
+		NetDetector netDetector=new NetDetector(getApplicationContext()); //判断是否有WIFI
+		if (netDetector.isConnectingToInternet()==1){
+//			Toast.makeText(getApplicationContext(), "当前网络:WIFI", Toast.LENGTH_LONG).show();
+			ImageLoader.getInstance().displayImage(image_url, mImage, options); 
+		}		
 		timer = new Timer();
 		okBtn.setOnClickListener(new OnClickListener() {
 
