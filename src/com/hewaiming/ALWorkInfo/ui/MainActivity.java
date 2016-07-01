@@ -261,6 +261,11 @@ public class MainActivity extends Activity
 			alarmRec_intent.putExtras(bundle_alarm);
 			startActivity(alarmRec_intent); // 报警记录
 			break;
+		case 15:
+			Intent realtime_intent = new Intent(MainActivity.this, RealTimeLineActivity.class);
+//			realtime_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
+			startActivity(realtime_intent); // 实时曲线
+			break;
 		}
 
 	}
