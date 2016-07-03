@@ -17,12 +17,14 @@ public class Params_Adapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private List<SetParams> mList;
+	private Context mContext;
 //	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 //	DisplayImageOptions options;
 
 	public Params_Adapter(Context mContext, List<SetParams> mList) {
 		this.inflater = LayoutInflater.from(mContext);
 		this.mList = mList;
+		this.mContext=mContext;
 //		options = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.nopic).showImageOnLoading(R.drawable.loading)
 //				.showImageOnFail(R.drawable.ic_error).resetViewBeforeLoading(true).cacheOnDisc(true)
 //				.cacheInMemory(true).imageScaleType(ImageScaleType.EXACTLY).bitmapConfig(Bitmap.Config.RGB_565)
@@ -55,10 +57,15 @@ public class Params_Adapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.item_params, null);
 			holder.PotNo_tv = (TextView) convertView.findViewById(R.id.tv_PotNo);
+			holder.PotNo_tv.setTextColor(mContext.getResources().getColor(R.color.text_black));
 			holder.SetV_tv = (TextView) convertView.findViewById(R.id.tv_SetV);
+			holder.SetV_tv.setTextColor(mContext.getResources().getColor(R.color.text_black));
 			holder.NBTime_tv = (TextView) convertView.findViewById(R.id.tv_NbTime);
+			holder.NBTime_tv.setTextColor(mContext.getResources().getColor(R.color.text_black));
 			holder.AETime_tv = (TextView) convertView.findViewById(R.id.tv_AeTime);
+			holder.AETime_tv.setTextColor(mContext.getResources().getColor(R.color.text_black));
 			holder.ALF_tv = (TextView) convertView.findViewById(R.id.tv_ALF);
+			holder.ALF_tv.setTextColor(mContext.getResources().getColor(R.color.text_black));
 		
 			convertView.setTag(holder);
 		} else {

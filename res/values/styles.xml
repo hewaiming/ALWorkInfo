@@ -71,5 +71,8 @@
     <style name="Smile.TextView._Blue">
         <item name="android:textColor">@color/base_color_text_blue</item>
     </style>
+    <style name="Smile.TextView._Green">
+        <item name="android:textColor">@color/base_color_text_green</item>
+    </style>
 
 </resources>

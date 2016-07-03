@@ -38,10 +38,10 @@ public class MyConst {
 	public static final String[] iconName = { "常用参数", "日报", "效应报表", "槽龄", "槽压曲线", "故障记录", "实时记录", "操作记录", 
 			"槽状态","测量数据", "效应槽", "效应记录","槽故障最多","工艺曲线", "报警记录" ,"实时曲线"};
 	
-	public static final int[] drawable = { R.drawable.set_params, R.drawable.day_table, R.drawable.ae_table, R.drawable.pot_age,
-			R.drawable.potv, R.drawable.fault_list, R.drawable.jx_record, R.drawable.update_params,
-			R.drawable.pot_status, R.drawable.measure, R.drawable.ae_nums, R.drawable.ae_long,
-			R.drawable.fault_more,R.drawable.nb_abnorm ,R.drawable.alarm_list,R.drawable.real_potv};
+	public static final int[] drawable = { R.drawable.params, R.drawable.daytable, R.drawable.aetable, R.drawable.ages,
+			R.drawable.potv, R.drawable.faultrecord, R.drawable.realrecord, R.drawable.operaterecord,
+			R.drawable.potstatus, R.drawable.measue, R.drawable.aemost, R.drawable.aerecord,
+			R.drawable.faultmost,R.drawable.gongyi ,R.drawable.alertrecord,R.drawable.realtime};
 	
 	public static final String ACTION_REGISTER_SUCCESS_FINISH = "register.success.finish";// 注册成功之后登陆页面退出
 

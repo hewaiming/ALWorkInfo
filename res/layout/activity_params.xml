@@ -50,7 +50,7 @@
         android:id="@+id/lv_params"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="6dp"
+        android:layout_margin="6dp"        
         android:background="@color/base_bg_white"
         android:scrollbars="horizontal" >
     </ListView>

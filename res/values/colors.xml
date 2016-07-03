@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="head_bg">#6699FF</color>
+    <color name="head_bg">#8BC34A</color>
     <color name="text_white">#ffffff</color>
     <color name="base_bg_gray">#EEEEEE</color>
-    <color name="header_bg">#F7F7F7</color>
+    <color name="header_bg">#DCEDC8</color>
     <color name="base_bg_white">#ffffff</color>
-    <color name="text_black">#000000</color>
-    <color name="text_gray2">#555555</color>
+    <color name="text_black">#212121</color>
+    <color name="text_gray2">#727272</color>
     <color name="text_green">#007600</color>
     <color name="header_plus_bg">#CCCCCC</color>
-    <color name="header_text">#666666</color>
+    <color name="header_text">#727272</color>
     <color name="holo_blue">#FF33E5B5</color>
     <color name="base_actionbar_bg">#000000</color>
     <color name="base_action_bar_title_color">#2f2725</color>
@@ -19,6 +19,7 @@
     <color name="pull_refresh_textview">#000000</color>
     <color name="base_color_text_black">#3e3e39</color>
     <color name="base_color_text_blue">#1E90FF</color>
+     <color name="base_color_text_green">#8BC34A</color>
     <color name="base_color_text_gray">#9fa0a0</color>
     <color name="base_color_text_white">#ffffff</color>
     <color name="home_item_color_bg">#f4f6f6</color>
@@ -53,7 +54,7 @@
     <color name="half_black">#808080</color>
     <color name="white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
-    <color name="pink">#e91e63</color>
+    <color name="pink">#FF4081</color>
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>

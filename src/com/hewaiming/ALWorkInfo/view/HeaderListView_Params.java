@@ -36,10 +36,15 @@ public class HeaderListView_Params extends LinearLayout {
 		// 以下两句的顺序不能调换，要先addView，然后才能通过findViewById找到该TextView
 		addView(view);
 		tvPotNo=(TextView) view.findViewById(R.id.tv_PotNo_head);
+		tvPotNo.setTextColor(context.getResources().getColor(R.color.header_text));
 		tvSetV=(TextView) view.findViewById(R.id.tv_SetV_head);
+		tvSetV.setTextColor(context.getResources().getColor(R.color.header_text));
 		tvNBTime=(TextView) view.findViewById(R.id.tv_NbTime_head);
+		tvNBTime.setTextColor(context.getResources().getColor(R.color.header_text));
 		tvAETime=(TextView) view.findViewById(R.id.tv_AeTime_head);
+		tvAETime.setTextColor(context.getResources().getColor(R.color.header_text));
 		tvALF=(TextView) view.findViewById(R.id.tv_ALF_head);
+		tvALF.setTextColor(context.getResources().getColor(R.color.header_text));
 		
 	}
 }
