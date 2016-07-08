@@ -320,8 +320,8 @@ public class CraftLineActivity extends Activity
 					Date edate = df.parse(EndDate);
 					long TIME_DAY_MILLISECOND = 86400000;
 					Long days = (edate.getTime() - bdate.getTime()) / (TIME_DAY_MILLISECOND);
-					if (days >= 70) {
-						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>=70,请重新选择日期", 1).show();
+					if (days > 31) {
+						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>31,请重新选择日期", 1).show();
 					} else {
 						// 选定各项曲线部位
 						selitems = "";

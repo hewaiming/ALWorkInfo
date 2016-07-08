@@ -263,7 +263,12 @@ public class MainActivity extends Activity
 			break;
 		case 15:
 			Intent realtime_intent = new Intent(MainActivity.this, RealTimeLineActivity.class);
+			Bundle bundle_realtime = new Bundle();
+//			bundle_realtime.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			bundle_realtime.putBoolean("Hide_Action", false);
+			bundle_realtime.putString("PotNo", "1101");
 //			realtime_intent.putStringArrayListExtra("date_table", (ArrayList<String>) date_table);
+			realtime_intent.putExtras(bundle_realtime);
 			startActivity(realtime_intent); // ÊµÊ±ÇúÏß
 			break;
 		}

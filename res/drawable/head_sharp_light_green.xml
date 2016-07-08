@@ -10,7 +10,7 @@
 	    android:startColor="#388E3C" 
 	    android:endColor="#8BC34A"	  
     />
-    <corners android:radius="4dp" />
+    <corners android:radius="0dp" />
 
     <stroke
         android:width="0dp"

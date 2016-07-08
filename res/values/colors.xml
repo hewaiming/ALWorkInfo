@@ -58,5 +58,7 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="green">#2ecc71</color>
+    <color name="green_pressed">#27ae60</color>
 
 </resources>
