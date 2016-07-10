@@ -40,7 +40,7 @@
             android:visibility="gone"
             fab:fab_colorNormal="@color/green"
             fab:fab_colorPressed="@color/green_pressed"
-            fab:fab_icon="@drawable/fab_realrecord"
+            fab:fab_icon="@drawable/realrecord_text"
             fab:fab_size="mini" />
     </FrameLayout>
 

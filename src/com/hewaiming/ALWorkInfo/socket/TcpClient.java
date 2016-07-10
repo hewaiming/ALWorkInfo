@@ -4,12 +4,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.hewaiming.ALWorkInfo.bean.PotStatus;
-import com.hewaiming.ALWorkInfo.bean.RealTime;
-
+import bean.PotStatus;
+import bean.RealTime;
 
 /**
- * TCP Socket瀹㈡埛绔?
+ * TCP Socket客户端
  * 
  * @author jzj1993
  * @since 2015-2-22
@@ -22,18 +21,18 @@ public abstract class TcpClient implements Runnable {
 	private SocketTransceiver transceiver;
 
 	/**
-	 * 寤虹珛杩炴帴
+	 * 建立连接
 	 * <p>
-	 * 杩炴帴鐨勫缓绔嬪皢鍦ㄦ柊绾跨▼涓繘琛?
+	 * 连接的建立将在新线程中进行
 	 * <p>
-	 * 杩炴帴寤虹珛鎴愬姛锛屽洖璋儃@code onConnect()}
+	 * 连接建立成功，回调{@code onConnect()}
 	 * <p>
-	 * 杩炴帴寤虹珛澶辫触锛屽洖璋儃@code onConnectFailed()}
+	 * 连接建立失败，回调{@code onConnectFailed()}
 	 * 
 	 * @param hostIP
-	 *            鏈嶅姟鍣ㄤ富鏈篒P
+	 *            服务器主机IP
 	 * @param port
-	 *            绔彛
+	 *            端口
 	 */
 	public void connect(String hostIP, int port) {
 		this.hostIP = hostIP;
@@ -60,6 +59,7 @@ public abstract class TcpClient implements Runnable {
 
 				@Override
 				public void onReceive(InetAddress addr, RealTime rTime) {
+					System.out.println("receive:"+rTime.toString());
 					TcpClient.this.onReceive(this, rTime);  //import
 					
 				}
@@ -80,9 +80,9 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	/**
-	 * 鏂紑杩炴帴
+	 * 断开连接
 	 * <p>
-	 * 杩炴帴鏂紑锛屽洖璋儃@code onDisconnect()}
+	 * 连接断开，回调{@code onDisconnect()}
 	 */
 	public void disconnect() {
 		if (transceiver != null) {
@@ -92,45 +92,45 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	/**
-	 * 鍒ゆ柇鏄惁杩炴帴
+	 * 判断是否连接
 	 * 
-	 * @return 褰撳墠澶勪簬杩炴帴鐘舵?侊紝鍒欒繑鍥瀟rue
+	 * @return 当前处于连接状态，则返回true
 	 */
 	public boolean isConnected() {
 		return connect;
 	}
 
 	/**
-	 * 鑾峰彇Socket鏀跺彂鍣?
+	 * 获取Socket收发器
 	 * 
-	 * @return 鏈繛鎺ュ垯杩斿洖null
+	 * @return 未连接则返回null
 	 */
 	public SocketTransceiver getTransceiver() {
 		return isConnected() ? transceiver : null;
 	}
 
 	/**
-	 * 杩炴帴寤虹珛
+	 * 连接建立
 	 * 
 	 * @param transceiver
-	 *            SocketTransceiver瀵硅薄
+	 *            SocketTransceiver对象
 	 */
 	public abstract void onConnect(SocketTransceiver transceiver);
 
 	/**
-	 * 杩炴帴寤虹珛澶辫触
+	 * 连接建立失败
 	 */
 	public abstract void onConnectFailed();
 
 	/**
-	 * 鎺ユ敹鍒版暟鎹?
+	 * 接收到数据
 	 * <p>
-	 * 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨?
+	 * 注意：此回调是在新线程中执行的
 	 * 
 	 * @param transceiver
-	 *            SocketTransceiver瀵硅薄
+	 *            SocketTransceiver对象
 	 * @param s
-	 *            瀛楃涓?
+	 *            字符串
 	 */
 	public abstract void onReceive(SocketTransceiver transceiver, String s);
 	
@@ -138,12 +138,12 @@ public abstract class TcpClient implements Runnable {
 	
 	public abstract void onReceive(SocketTransceiver transceiver, ArrayList<PotStatus> potStatus);
 	/**
-	 * 杩炴帴鏂紑
+	 * 连接断开
 	 * <p>
-	 * 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨?
+	 * 注意：此回调是在新线程中执行的
 	 * 
 	 * @param transceiver
-	 *            SocketTransceiver瀵硅薄
+	 *            SocketTransceiver对象
 	 */
 	public abstract void onDisconnect(SocketTransceiver transceiver);
 }

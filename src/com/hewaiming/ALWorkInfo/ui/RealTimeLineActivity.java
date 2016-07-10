@@ -12,6 +12,7 @@ import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
@@ -23,9 +24,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.hewaiming.ALWorkInfo.R;
-import com.hewaiming.ALWorkInfo.bean.PotStatus;
-import com.hewaiming.ALWorkInfo.bean.RealTime;
-import com.hewaiming.ALWorkInfo.bean.RequestAction;
 import com.hewaiming.ALWorkInfo.config.DemoBase;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -56,9 +54,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
+import bean.PotStatus;
+import bean.RealTime;
+import bean.RequestAction;
 
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
-	String hostIP = "192.168.15.18";
+	String hostIP = "192.168.0.104";
 	int port = 1234;
 	private LineChart mChart;
 	private TextView tv_title;
@@ -107,6 +108,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {
+//			System.out.println(realTime.toString());
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -122,9 +124,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 						Calendar c = Calendar.getInstance();
 
-						data.addXValue(String.valueOf(c.get(Calendar.MINUTE)) + ':' + c.get(Calendar.MILLISECOND));
-						// data.addEntry(new Entry((float) (Math.random() * 40)
-						// + 30f, set.getEntryCount()), 0);
+						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)) + "." + c.get(Calendar.MILLISECOND));
+					
 						data.addEntry(new Entry((float) realTime.getPotv(), set.getEntryCount()), 0);
 						// let the chart know it's data has changed
 						mChart.notifyDataSetChanged();
@@ -135,11 +136,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 						// move to the latest entry
 						mChart.moveViewToX(data.getXValCount() - 31);
-						// mChart.invalidate();
-						// this automatically refreshes the chart (calls
-						// invalidate())
-						// mChart.moveViewTo(data.getXValCount()-7, 55f,
-						// AxisDependency.LEFT);
+					
 					}
 
 				}
@@ -171,8 +168,9 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		init_title();
 		init_area();
 		init_potNo();
-		timer = new Timer();
 		connect();
+		timer = new Timer();
+	
 		if (hideAction) {
 			include_selector = findViewById(R.id.include_select_all);
 			include_selector.setVisibility(View.GONE);
@@ -220,7 +218,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		// get the legend (only possible after setting data)
 		Legend l = mChart.getLegend();
-
+        l.setPosition(LegendPosition.BELOW_CHART_CENTER);  
 		// modify the legend ...
 		// l.setPosition(LegendPosition.LEFT_OF_CHART);
 		l.setForm(LegendForm.LINE);
@@ -238,7 +236,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		YAxis leftAxis = mChart.getAxisLeft();
 		// leftAxis.setTypeface(tf);
 		leftAxis.setTextColor(Color.BLUE);
-		leftAxis.setAxisMaxValue(100f);
+		leftAxis.setAxisMaxValue(7100f);
 		leftAxis.setAxisMinValue(0f);
 		leftAxis.setDrawGridLines(true);
 
@@ -394,65 +392,60 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.realtime, menu);
-		return true;
-	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//
+//		switch (item.getItemId()) {
+//		case R.id.actionAdd: {
+//			addEntry();
+//			break;
+//		}
+//		case R.id.actionClear: {
+//			mChart.clearValues();
+//			Toast.makeText(this, "Chart cleared!", Toast.LENGTH_SHORT).show();
+//			break;
+//		}
+//		case R.id.actionFeedMultiple: {
+//			SendActionToServer();
+//			break;
+//		}
+//		}
+//		return true;
+//	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-		case R.id.actionAdd: {
-			addEntry();
-			break;
-		}
-		case R.id.actionClear: {
-			mChart.clearValues();
-			Toast.makeText(this, "Chart cleared!", Toast.LENGTH_SHORT).show();
-			break;
-		}
-		case R.id.actionFeedMultiple: {
-			SendActionToServer();
-			break;
-		}
-		}
-		return true;
-	}
-
-	private void addEntry() {
-
-		LineData data = mChart.getData();
-		if (data != null) {
-			ILineDataSet set = data.getDataSetByIndex(0);
-			// set.addEntry(...); // can be called as well
-
-			if (set == null) {
-				set = createSet();
-				data.addDataSet(set);
-			}
-
-			Calendar c = Calendar.getInstance();
-
-			data.addXValue(String.valueOf(c.get(Calendar.MINUTE)) + ':' + c.get(Calendar.MILLISECOND));
-			data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
-
-			// let the chart know it's data has changed
-			mChart.notifyDataSetChanged();
-
-			// limit the number of visible entries
-			mChart.setVisibleXRangeMaximum(30);
-			// mChart.setVisibleYRange(30, AxisDependency.LEFT);
-
-			// move to the latest entry
-			mChart.moveViewToX(data.getXValCount() - 31);
-			// mChart.invalidate();
-			// this automatically refreshes the chart (calls invalidate())
-			// mChart.moveViewTo(data.getXValCount()-7, 55f,
-			// AxisDependency.LEFT);
-		}
-	}
+//	private void addEntry() {
+//
+//		LineData data = mChart.getData();
+//		if (data != null) {
+//			ILineDataSet set = data.getDataSetByIndex(0);
+//			// set.addEntry(...); // can be called as well
+//
+//			if (set == null) {
+//				set = createSet();
+//				data.addDataSet(set);
+//			}
+//
+//			Calendar c = Calendar.getInstance();
+//
+//			data.addXValue(String.valueOf(c.get(Calendar.MINUTE)) + ':' + c.get(Calendar.MILLISECOND));
+//			data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
+//
+//			// let the chart know it's data has changed
+//			mChart.notifyDataSetChanged();
+//
+//			// limit the number of visible entries
+//			mChart.setVisibleXRangeMaximum(30);
+//			// mChart.setVisibleYRange(30, AxisDependency.LEFT);
+//
+//			// move to the latest entry
+//			mChart.moveViewToX(data.getXValCount() - 31);
+//			// mChart.invalidate();
+//			// this automatically refreshes the chart (calls invalidate())
+//			// mChart.moveViewTo(data.getXValCount()-7, 55f,
+//			// AxisDependency.LEFT);
+//		}
+//	}
 
 	private LineDataSet createSet() {
 
@@ -461,7 +454,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		set.setColor(ColorTemplate.getHoloBlue());
 		set.setCircleColor(Color.BLUE);
 		set.setLineWidth(2f);
-		set.setCircleRadius(4f);
+		set.setCircleRadius(1f);
 		set.setFillAlpha(65);
 		set.setFillColor(ColorTemplate.getHoloBlue());
 		set.setHighLightColor(Color.rgb(244, 117, 117));

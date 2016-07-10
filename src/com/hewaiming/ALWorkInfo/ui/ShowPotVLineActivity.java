@@ -297,7 +297,7 @@ public class ShowPotVLineActivity extends Activity
 
 			}
 		});
-		floatView.setImageResource(R.drawable.real_record); // 这里简单的用自带的icon来做演示
+		floatView.setImageResource(R.drawable.realrecord_text); // 这里简单的用自带的icon来做演示
 		floatView.setAdjustViewBounds(true);
 		floatView.setMaxWidth(100);
 		floatView.setMaxHeight(50);

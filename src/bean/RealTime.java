@@ -1,4 +1,4 @@
-package com.hewaiming.ALWorkInfo.bean;
+package bean;
 
 import java.io.Serializable;
 

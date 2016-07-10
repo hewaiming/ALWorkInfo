@@ -8,12 +8,13 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.hewaiming.ALWorkInfo.bean.PotStatus;
-import com.hewaiming.ALWorkInfo.bean.RealTime;
-import com.hewaiming.ALWorkInfo.bean.RequestAction;
+import bean.PotStatus;
+import bean.RealTime;
+import bean.RequestAction;
+
 
 /**
- * Socket鏀跺彂鍣? 閫氳繃Socket鍙戦?佹暟鎹紝骞朵娇鐢ㄦ柊绾跨▼鐩戝惉Socket鎺ユ敹鍒扮殑鏁版嵁
+ * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
  * 
  * @author jzj1993
  * @since 2015-2-22
@@ -28,10 +29,10 @@ public abstract class SocketTransceiver implements Runnable {
 	private boolean runFlag;
 
 	/**
-	 * 瀹炰緥鍖?
+	 * 实例化
 	 * 
 	 * @param socket
-	 *            宸茬粡寤虹珛杩炴帴鐨剆ocket
+	 *            已经建立连接的socket
 	 */
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
@@ -39,18 +40,18 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
-	 * 鑾峰彇杩炴帴鍒扮殑Socket鍦板潃
+	 * 获取连接到的Socket地址
 	 * 
-	 * @return InetAddress瀵硅薄
+	 * @return InetAddress对象
 	 */
 	public InetAddress getInetAddress() {
 		return addr;
 	}
 
 	/**
-	 * 寮?鍚疭ocket鏀跺彂
+	 * 开启Socket收发
 	 * <p>
-	 * 濡傛灉寮?鍚け璐ワ紝浼氭柇寮?杩炴帴骞跺洖璋儃@code onDisconnect()}
+	 * 如果开启失败，会断开连接并回调{@code onDisconnect()}
 	 */
 	public void start() {
 		runFlag = true;
@@ -58,9 +59,9 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
-	 * 鏂紑杩炴帴(涓诲姩)
+	 * 断开连接(主动)
 	 * <p>
-	 * 杩炴帴鏂紑鍚庯紝浼氬洖璋儃@code onDisconnect()}
+	 * 连接断开后，会回调{@code onDisconnect()}
 	 */
 	public void stop() {
 		runFlag = false;
@@ -73,11 +74,11 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
-	 * 鍙戦?佸瓧绗︿覆
+	 * 发送字符串
 	 * 
 	 * @param s
-	 *            瀛楃涓?
-	 * @return 鍙戦?佹垚鍔熻繑鍥瀟rue
+	 *            字符串
+	 * @return 发送成功返回true
 	 */
 	public boolean send(String s) {
 		if (out != null) {
@@ -92,7 +93,7 @@ public abstract class SocketTransceiver implements Runnable {
 		return false;
 	}
 
-	// 鍚戞湇鍔＄鍙戦?佹搷浣滃懡浠?
+	// 向服务端发送操作命令
 	public boolean send(RequestAction action) {
 		if (out != null) {
 			try {
@@ -108,7 +109,7 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
-	 * 鐩戝惉Socket鎺ユ敹鐨勬暟鎹?(鏂扮嚎绋嬩腑杩愯)
+	 * 监听Socket接收的数据(新线程中运行)
 	 */
 	@Override
 	public void run() {
@@ -135,14 +136,10 @@ public abstract class SocketTransceiver implements Runnable {
 			} catch (ClassNotFoundException e) {			
 				e.printStackTrace();
 			}    
-			/*final ArrayList<PotStatus> pList=GetPotStatusFromServer(objectInputStream);
-			final RealTime rTime = GetRealTimeFromServer(in);   //浠ヤ笅鍙兘???
 			
-			this.onReceive(addr, pList);     
-			this.onReceive(addr, rTime);*/
 			
 		}
-		// 鏂紑杩炴帴
+		// 断开连接
 		try {
 			in.close();
 			out.close();
@@ -155,63 +152,33 @@ public abstract class SocketTransceiver implements Runnable {
 		}
 		this.onDisconnect(addr);
 	}
-
-	//浠庢湇鍔″櫒璇诲彇瀹炴椂鏇茬嚎鏁版嵁
-	private RealTime GetRealTimeFromServer(DataInputStream in) {
-		RealTime rTime = new RealTime();
-		try {
-			rTime.setCur(in.readInt());
-			rTime.setPotv(in.readInt());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return rTime;
-	}
 	
-	//浠庢湇鍔″櫒璇诲彇妲界姸鎬佹暟鎹?
-	private ArrayList<PotStatus> GetPotStatusFromServer(ObjectInputStream objectInputStream) {
-		ArrayList<PotStatus> list = new ArrayList<PotStatus>();
-		
-		try {
-			try {
-				list=(ArrayList<PotStatus>) objectInputStream.readObject();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return list;
-	}
 
 	/**
-	 * 鎺ユ敹鍒版暟鎹?
+	 * 接收到数据
 	 * <p>
-	 * 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨?
+	 * 注意：此回调是在新线程中执行的
 	 * 
 	 * @param addr
-	 *            杩炴帴鍒扮殑Socket鍦板潃
+	 *            连接到的Socket地址
 	 * @param s
-	 *            鏀跺埌鐨勫瓧绗︿覆
+	 *            收到的字符串
 	 */
 	public abstract void onReceive(InetAddress addr, String s);
 
-	// 鎺ュ彈鏈嶅姟绔彂閫佽繃鏉ョ殑瀹炴椂鏇茬嚎鏁版嵁
+	// 接受服务端发送过来的实时曲线数据
 	public abstract void onReceive(InetAddress addr, RealTime rTime);
 	
-	// 鎺ュ彈鏈嶅姟绔彂閫佽繃鏉ョ殑瀹炴椂鏇茬嚎鏁版嵁
+	// 接受服务端发送过来的实时曲线数据
 	public abstract void onReceive(InetAddress addr, ArrayList<PotStatus> potStatus);
 
 	/**
-	 * 杩炴帴鏂紑
+	 * 连接断开
 	 * <p>
-	 * 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨?
+	 * 注意：此回调是在新线程中执行的
 	 * 
 	 * @param addr
-	 *            杩炴帴鍒扮殑Socket鍦板潃
+	 *            连接到的Socket地址
 	 */
 	public abstract void onDisconnect(InetAddress addr);
 }
