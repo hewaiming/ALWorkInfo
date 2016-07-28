@@ -214,12 +214,20 @@ public class MainActivity extends Activity
 			operate_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(operate_intent); // 操作记录
 			break;
-
+		case 8:
+			Intent PotStatus_intent = new Intent(MainActivity.this, PotStatusActivity.class);
+			Bundle PotStatusBundle = new Bundle();
+//			PotStatusBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+			PotStatusBundle.putSerializable("JXList", (Serializable) JXList);
+			PotStatus_intent.putExtras(PotStatusBundle);
+			startActivity(PotStatus_intent); // 槽状态表
+			break;
 		case 9:
 			Intent measue_intent = new Intent(MainActivity.this, MeasueTableActivity.class);
 			measue_intent.putStringArrayListExtra("date_record", (ArrayList<String>) date_record);
 			startActivity(measue_intent); // 测量数据
 			break;
+		
 		case 10:
 			Intent aemost_intent = new Intent(MainActivity.this, AeMostActivity.class);
 			Bundle aemostBundle = new Bundle();

@@ -59,7 +59,7 @@ import bean.RealTime;
 import bean.RequestAction;
 
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
-	String hostIP = "192.168.0.104";
+	String hostIP = "192.168.15.18";
 	int port = 1234;
 	private LineChart mChart;
 	private TextView tv_title;
@@ -115,21 +115,31 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 					LineData data = mChart.getData();
 					if (data != null) {
 						ILineDataSet set = data.getDataSetByIndex(0);
+				
+						 ArrayList<Entry> yValueList = new ArrayList<>();
 						// set.addEntry(...); // can be called as well
+						ILineDataSet setCUR = data.getDataSetByIndex(1);
 
 						if (set == null) {
 							set = createSet();
 							data.addDataSet(set);
 						}
+						//实时系列电流
+						if (setCUR == null) {
+							setCUR = createSet_CUR();
+							data.addDataSet(setCUR);
+						}
 
 						Calendar c = Calendar.getInstance();
 
-						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)) + "." + c.get(Calendar.MILLISECOND));
+						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)) + "." + c.get(Calendar.SECOND));
 					
-						data.addEntry(new Entry((float) realTime.getPotv(), set.getEntryCount()), 0);
+						data.addEntry(new Entry((float) realTime.getPotv(), set.getEntryCount()), 0);//实时槽压数据
+					
+						data.addEntry(new Entry((float) realTime.getCur(), setCUR.getEntryCount()), 1);//实时系列电流
 						// let the chart know it's data has changed
 						mChart.notifyDataSetChanged();
-
+						mChart.invalidate();
 						// limit the number of visible entries
 						mChart.setVisibleXRangeMaximum(30);
 						// mChart.setVisibleYRange(30, AxisDependency.LEFT);
@@ -204,15 +214,17 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		// if disabled, scaling can be done on x- and y-axis separately
 		mChart.setPinchZoom(true);
+		
 
 		// set an alternative background color
 		mChart.setBackgroundColor(Color.WHITE);
 
 		data.setValueTextColor(Color.DKGRAY);
+		
 
 		// add empty data
-		mChart.setData(data);
-
+		mChart.setData(data);	
+        
 		// Typeface tf = Typeface.createFromAsset(getAssets(),
 		// "OpenSans-Regular.ttf");
 
@@ -238,10 +250,14 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		leftAxis.setTextColor(Color.BLUE);
 		leftAxis.setAxisMaxValue(7100f);
 		leftAxis.setAxisMinValue(0f);
-		leftAxis.setDrawGridLines(true);
+		leftAxis.setDrawGridLines(false);
 
 		YAxis rightAxis = mChart.getAxisRight();
-		rightAxis.setEnabled(false);
+		rightAxis.setTextColor(Color.RED);
+		rightAxis.setAxisMaxValue(2500f);
+		rightAxis.setAxisMinValue(0f);
+		rightAxis.setDrawGridLines(false);
+		rightAxis.setEnabled(true);
 	}
 
 	private void GetDataFromIntent() {
@@ -449,7 +465,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 	private LineDataSet createSet() {
 
-		LineDataSet set = new LineDataSet(null, PotNo + "实时曲线");
+		LineDataSet set = new LineDataSet(null, PotNo + "实时槽压");
 		set.setAxisDependency(AxisDependency.LEFT);
 		set.setColor(ColorTemplate.getHoloBlue());
 		set.setCircleColor(Color.BLUE);
@@ -461,9 +477,28 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		set.setValueTextColor(Color.BLUE);
 		set.setValueTextSize(9f);
 		set.setDrawValues(false);
+		set.setDrawCircles(false);
 		return set;
 	}
 
+	private LineDataSet createSet_CUR() {
+
+		LineDataSet set = new LineDataSet(null, "系列电流");
+		set.setAxisDependency(AxisDependency.RIGHT);
+		set.setColor(Color.RED);
+		set.setCircleColor(Color.RED);
+		set.setLineWidth(2f);
+		set.setCircleRadius(1f);
+		set.setFillAlpha(65);
+		set.setFillColor(Color.RED);
+		set.setHighLightColor(Color.rgb(244, 117, 117));
+		set.setValueTextColor(Color.RED);
+		set.setValueTextSize(9f);
+		set.setDrawValues(false);
+		set.setDrawCircles(false);
+		return set;
+	}
+	
 	private void SendActionToServer() {
 		if (timer == null) {
 			timer = new Timer();
@@ -486,7 +521,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 			}
 		};
-		timer.schedule(timerTask, 0, 1000);
+		timer.schedule(timerTask, 0, 3000);
 
 	}
 

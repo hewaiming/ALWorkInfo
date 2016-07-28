@@ -77,9 +77,9 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent potv_intent = new Intent( AlarmRecActivity.this, ShowPotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
-				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position).getPotNo()));
-				potv_bundle.putString("Begin_Date", listBean.get(position).getRecTime().substring(0, 10));
-				potv_bundle.putString("End_Date", listBean.get(position).getRecTime().substring(0, 10));
+				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position-1).getPotNo()));
+				potv_bundle.putString("Begin_Date", listBean.get(position-1).getRecTime().substring(0, 10));
+				potv_bundle.putString("End_Date", listBean.get(position-1).getRecTime().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
