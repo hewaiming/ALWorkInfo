@@ -12,6 +12,8 @@ import java.util.TimeZone;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
+import com.hewaiming.ALWorkInfo.Popup.ActionItem;
+import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_JXRecord;
@@ -30,17 +32,21 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class MainActivity extends Activity
-		implements OnItemClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
+		implements OnItemClickListener,OnClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
 
 	private GridView gridView;
+	private Button btnMore;
 	private SimpleAdapter adapter;
 	private List<Map<String, Object>> dataList;
 
@@ -53,6 +59,7 @@ public class MainActivity extends Activity
 	private HttpGetData_date mhttpgetdata_date;
 	private HttpGetData_JXRecord mHttpGetData_JXRecord;
 	private Context mContext;
+	private TitlePopup titlePopup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +130,22 @@ public class MainActivity extends Activity
 				new int[] { R.id.pic, R.id.name });
 		gridView.setAdapter(adapter);
 		gridView.setOnItemClickListener(this);
+		titlePopup = new TitlePopup(this, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		Popup_initData();
+		btnMore=(Button) findViewById(R.id.btn_more);
+		btnMore.setVisibility(View.VISIBLE);
+		btnMore.setOnClickListener(this);
 
 	}
 
+	private void Popup_initData(){
+		//给标题栏弹窗添加子类
+		titlePopup.addAction(new ActionItem(this, "设置远程服务器", R.drawable.mm_title_btn_compose_normal));
+		titlePopup.addAction(new ActionItem(this, "检查版本", R.drawable.mm_title_btn_receiver_normal));
+		titlePopup.addAction(new ActionItem(this, "关于", R.drawable.mm_title_btn_keyboard_normal));
+		titlePopup.addAction(new ActionItem(this, "扫一扫",  R.drawable.mm_title_btn_qrcode_normal));
+	}
+	
 	private List<Map<String, Object>> getData() {
 
 		for (int i = 0; i < MyConst.drawable.length; i++) {
@@ -302,5 +322,19 @@ public class MainActivity extends Activity
 		JXList = new ArrayList<Map<String, Object>>();
 		JXList = JsonToBean_Area_Date.JsonArrayToJXRecord(data);
 
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_more:
+//			startActivity(new Intent(MainActivity.this,DialogActivity.class));
+			titlePopup.show(v);
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 }

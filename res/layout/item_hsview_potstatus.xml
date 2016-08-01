@@ -108,7 +108,7 @@
 
                 <TextView
                     android:id="@+id/tv_SetNb"
-                    android:layout_width="24dp"
+                    android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
@@ -119,7 +119,7 @@
 
                 <TextView
                     android:id="@+id/tv_WorkNb"
-                    android:layout_width="24dp"
+                    android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"

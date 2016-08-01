@@ -42,13 +42,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_find"
+        android:id="@+id/btn_more"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:textColor="@color/text_white"
+        android:background="@drawable/more"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,14 +54,16 @@ import bean.RealTime;
 import bean.RequestAction;
 
 public class PotStatusActivity extends DemoBase implements OnScrollListener, OnClickListener {
-	String hostIP = "192.168.15.18";
-	int port = 1234;
+	private String ip;
+	private int port;
+	private Context ctx;
+	private SharedPreferences sp;
 	private Spinner spinner_area;
 	private Button backBtn;
-//	private ImageButton isShowingBtn;
+	// private ImageButton isShowingBtn;
 	private TextView tv_title;
 	private int areaId = 11;
-	private ArrayAdapter<String> Area_adapter;		
+	private ArrayAdapter<String> Area_adapter;
 
 	private String PotNo, BeginDate, EndDate;
 	private List<PotStatus> listBean = new ArrayList<PotStatus>();
@@ -68,10 +71,10 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private RelativeLayout mHead;
 	private ListView lv_PotStatus;
 	private LinearLayout showArea = null;
-//	private View layout_PotStatus;
+	// private View layout_PotStatus;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private Context mContext;
-	protected HSView_PotStatusAdapter PotStatus_Adapter=null;
+	protected HSView_PotStatusAdapter PotStatus_Adapter = null;
 	private Timer timer = null;
 	private TimerTask timerTask = null;
 
@@ -81,7 +84,12 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 		@Override
 		public void onConnect(SocketTransceiver transceiver) {
-			// TODO Auto-generated method stub
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					tv_title.setText("槽状态表：连接远程服务器成功！");					
+				}
+			});
 
 		}
 
@@ -90,7 +98,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(PotStatusActivity.this, "连接SOCKET失败", Toast.LENGTH_SHORT).show();
+					tv_title.setText("槽状态表：连接远程服务器失败！");
+					Toast.makeText(PotStatusActivity.this, "连接SOCKET失败，请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT).show();
 				}
 			});
 
@@ -111,12 +120,15 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					listBean=potStatus;					
-					System.out.println(listBean.toString());
-					PotStatus_Adapter = new HSView_PotStatusAdapter(mContext, R.layout.item_hsview_potstatus, potStatus, mHead);
-					lv_PotStatus.setAdapter(PotStatus_Adapter);					
-				}				
-			});			
+					listBean = new ArrayList<PotStatus>(potStatus);
+					if (listBean != null) {
+						if (listBean.size() > 0) {
+							// listBean.clear(); // 清除LISTVIEW 以前的内容
+							PotStatus_Adapter.onDateChange(listBean);
+						}
+					}
+				}
+			});
 		}
 
 		@Override
@@ -133,6 +145,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potstatus);
+		ctx = this;
+		initdate();// 获取服务器ip
 		// dateBean = getIntent().getStringArrayListExtra("date_table");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
@@ -141,14 +155,29 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		String todayValue = sdf.format(dt);
 		BeginDate = todayValue;
 		EndDate = todayValue;
-		mContext=this;
-		init_area();		
+		mContext = this;
+		init_area();
 		init_title();
 		init_HSView();
 		init_listview();
+		PotStatus_Adapter = new HSView_PotStatusAdapter(mContext, R.layout.item_hsview_potstatus, listBean, mHead);
+		lv_PotStatus.setAdapter(PotStatus_Adapter);
 		connect();
 		timer = new Timer();
 		SendActionToServer();
+	}
+
+	public void initdate() {
+		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
+		ip = sp.getString("ipstr", ip);
+		port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
+		if(ip==""){
+			Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
+		}
+		if(sp.getString("port", String.valueOf(port)) == null){
+			Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
+		}
+		// MyLog.i(TAG, "获取到ip端口:" + ip + ";" + port);
 	}
 
 	private void init_listview() {
@@ -209,6 +238,9 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		spinner_area.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (timerTask != null) {
+					timerTask.cancel();
+				}
 				switch (position) {
 				case 0:
 					areaId = 11;
@@ -238,30 +270,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			}
 
 		});
-		// findBtn = (Button) findViewById(R.id.btn_ok);
-		// findBtn.setOnClickListener(this);
+
 	}
-
-	/*public void GetDataUrl(String data) {
-
-		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[日报]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean != null) {
-				if (listBean.size() > 0) {
-					listBean.clear(); // 清除LISTVIEW 以前的内容
-					daytable_Adapter.onDateChange(listBean);
-				}
-			}
-		} else {
-
-			listBean = new ArrayList<dayTable>();
-			listBean.clear();
-			listBean = JsonToBean_Area_Date.JsonArrayToDayTableBean(data);
-			daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
-
-			lv_daytable.setAdapter(daytable_Adapter);
-		}
-	}*/
 
 	@Override
 	public void onClick(View v) {
@@ -270,43 +280,28 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			if (timer != null) {
 				timer.cancel();
 			}
+			client.disconnect();
 			finish();
 			break;
-	/*	case R.id.btn_isSHOW:
-			if (showArea.getVisibility() == View.GONE) {
-				showArea.setVisibility(View.VISIBLE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			} else {
-				showArea.setVisibility(View.GONE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
-			}
-			break;*/
-		/*case R.id.btn_ok:
-			if (EndDate.compareTo(BeginDate) < 0) {
-				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
-			} else {
-				if (PotNo == "全部槽号") {
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
-							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
-				} else {
-
-					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
-							BeginDate, EndDate, this, this).execute();
-				}
-			}
-			layout_daytable.setVisibility(View.VISIBLE);
-			break;*/
+		/*
+		 * case R.id.btn_isSHOW: if (showArea.getVisibility() == View.GONE) {
+		 * showArea.setVisibility(View.VISIBLE);
+		 * isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.
+		 * btn_up)); } else { showArea.setVisibility(View.GONE);
+		 * isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.
+		 * btn_down)); } break;
+		 */
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
+
 	}
 
 	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
@@ -319,21 +314,21 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			return false;
 		}
 	}
-	
+
 	private void connect() {
 		if (client.isConnected()) {
 			// 断开连接
 			client.disconnect();
 		} else {
 			try {
-				client.connect(hostIP, port);
+				client.connect(ip, port);
 			} catch (NumberFormatException e) {
 				Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void SendActionToServer() {
 		if (timer == null) {
 			timer = new Timer();
@@ -349,7 +344,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 					@Override
 					public void run() {
-						sendPotStatusAction();						
+						sendPotStatusAction();
 					}
 				});
 

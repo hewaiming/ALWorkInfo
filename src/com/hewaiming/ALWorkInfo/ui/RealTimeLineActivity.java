@@ -30,7 +30,9 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.socket.SocketTransceiver;
 import com.hewaiming.ALWorkInfo.socket.TcpClient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -59,8 +61,10 @@ import bean.RealTime;
 import bean.RequestAction;
 
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
-	String hostIP = "192.168.15.18";
-	int port = 1234;
+	private String ip;
+	private int port;	
+	private Context ctx;
+	SharedPreferences sp;
 	private LineChart mChart;
 	private TextView tv_title;
 	private Button backBtn;
@@ -85,7 +89,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		@Override
 		public void onConnect(SocketTransceiver transceiver) {
-			// TODO Auto-generated method stub
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					tv_title.setText(PotNo + "实时曲线"+"        连接远程服务器成功！");					
+				}
+			});
 
 		}
 
@@ -94,7 +103,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(RealTimeLineActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+					Toast.makeText(RealTimeLineActivity.this, "连接SOCKET失败。请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT).show();
+					tv_title.setText(PotNo + "实时曲线"+"        连接远程服务器失败！");		
 				}
 			});
 
@@ -166,7 +176,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		}
 
-	};
+	};	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +184,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_realtime_linechart);
+		ctx=this;
+		initdate();//获取服务器ip
 		GetDataFromIntent();
 		init_title();
 		init_area();
@@ -514,8 +526,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 					@Override
 					public void run() {
-						sendRealTimeAction();
-						// addEntry();
+						sendRealTimeAction();						
 					}
 				});
 
@@ -548,7 +559,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			if (timer != null) {
 				timer.cancel();
 			}
-			// DoRun=false;
+			client.disconnect();
 			finish();
 			break;
 		case R.id.btn_isSHOW: // 显示或隐藏
@@ -561,6 +572,9 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			}
 			break;
 		case R.id.btn_ok:
+			if (timerTask != null) {
+				timerTask.cancel();
+			}
 			tv_title.setText(PotNo + "实时曲线");
 			if (mChart != null) {
 				mChart.clearValues();
@@ -594,7 +608,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			client.disconnect();
 		} else {
 			try {
-				client.connect(hostIP, port);
+				client.connect(ip, port);
 			} catch (NumberFormatException e) {
 				Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
@@ -602,4 +616,16 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		}
 	}
 
+	public void initdate() {
+		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
+		ip = sp.getString("ipstr", ip);
+		port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
+		if(ip==""){
+			Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
+		}
+		if(sp.getString("port", String.valueOf(port)) == null){
+			Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
+		}
+		// MyLog.i(TAG, "获取到ip端口:" + ip + ";" + port);
+	}
 }
