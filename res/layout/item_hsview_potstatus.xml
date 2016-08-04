@@ -15,8 +15,8 @@
         android:layout_marginRight="5dp"
         android:text="槽号"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/text_black"
-        android:textSize="11sp" />
+        android:textColor="@color/text_gray2"
+        android:textSize="12sp" />
 
     <com.hewaiming.ALWorkInfo.HScrollListView.InterceptScrollContainer
         android:id="@+id/scroollContainter"
@@ -41,36 +41,36 @@
 
                 <TextView
                     android:id="@+id/tv_PotSt"
-                    android:layout_width="20dp"
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="槽状态"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_AutoRun"
-                    android:layout_width="20dp"
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="手/自"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_Operation"
-                    android:layout_width="20dp"
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="槽作业"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_FaultNo"
@@ -81,52 +81,52 @@
                     android:text="故障"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
                 
                 <TextView
                     android:id="@+id/tv_SetV"
-                    android:layout_width="26dp"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="设定电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_WorkV"
-                    android:layout_width="26dp"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="工作电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
 
                 <TextView
                     android:id="@+id/tv_SetNb"
-                    android:layout_width="22dp"
+                    android:layout_width="28dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="设定NB"
+                    android:text="设定 NB"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_WorkNb"
-                    android:layout_width="22dp"
+                    android:layout_width="28dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="实际NB"
+                    android:text="实际 NB"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_NBTime"
@@ -134,21 +134,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="NB时刻"
+                    android:text="NB 时刻"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_AeSpan"
-                    android:layout_width="20dp"
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="AE间隔"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_YJWZ"
@@ -159,7 +159,7 @@
                     android:text="阳极位置"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView>
     </com.hewaiming.ALWorkInfo.HScrollListView.InterceptScrollContainer>

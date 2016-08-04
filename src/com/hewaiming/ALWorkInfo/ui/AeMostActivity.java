@@ -52,16 +52,12 @@ public class AeMostActivity extends FragmentActivity
 
 	private HttpPost_BeginDate_EndDate http_post;
 	private HttpPost_BeginDate_EndDate_other http_post_other;
-	private String AeCnt_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeCnt_area_date.php";
-	private String AeTime_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeTime_area_date.php";
+	private String AeCnt_url = ":8000/scgy/android/odbcPhP/AeCnt_area_date.php";
+	private String AeTime_url = ":8000/scgy/android/odbcPhP/AeTime_area_date.php";
 
 	private String BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 
-	// private List<AeRecord> listBean_AeTime = null;
-	// private List<AeRecord> listBean_AeCnt = null;
-	// private HSView_AeTimeAdapter AeTime_Adapter = null;
-	// private HSView_AeCntAdapter AeCnt_Adapter = null;
 	private ArrayList<Fragment> fragments;
 
 	private ViewPager pager;
@@ -81,6 +77,8 @@ public class AeMostActivity extends FragmentActivity
 	private Context mContext;
 
 	private BackHandledFragment selectedFragment;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,18 +87,25 @@ public class AeMostActivity extends FragmentActivity
 		setContentView(R.layout.activity_ae_most);
 		mContext = this;
 		layout_Ae = findViewById(R.id.AeMost);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();
 		init_area();
 		init_date();
 		init_title();
 		init_Tab();
 	}
-
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		AeCnt_url="http://"+ip+AeCnt_url;
+		AeTime_url="http://"+ip+AeTime_url;
+	}
+	
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_AeCnt(mContext,dateBean,JXList));
-		fragments.add(new Fragment_AeTime(JXList));
+		fragments.add(new Fragment_AeCnt(mContext,dateBean,JXList,ip,port));
+		fragments.add(new Fragment_AeTime(JXList,ip,port));
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);
@@ -320,8 +325,7 @@ public class AeMostActivity extends FragmentActivity
 			msg_date2.obj = EndDate;
 			msg_date2.what = 3;
 			mHandler.sendMessage(msg_date2);
-		}
-		// listener_AeCnt.GetAeCntDataUrl(data);
+		}	
 
 	}
 
@@ -356,19 +360,10 @@ public class AeMostActivity extends FragmentActivity
 	public void onBackPressed() {
 		 if (getFragmentManager().findFragmentByTag("Fragment_AeCnt") != null
 	                && getFragmentManager().findFragmentByTag("Fragment_AeCnt")
-	                        .isVisible()) {
-//			 getFragmentManager().findFragmentByTag("fragmentAeCnt").getView().get
-//			 if (sbv.isPanelShowing()) {
-//					sbv.hide();
-//					return;
-//				} else {
-//					sbv.displayPanel();
-//				}			 
+	                        .isVisible()) {		 
 			 
-		 }		 
-		 
-//	            finish();
-//	            return;
+		 }			 
+
 
 		super.onBackPressed();
 	}

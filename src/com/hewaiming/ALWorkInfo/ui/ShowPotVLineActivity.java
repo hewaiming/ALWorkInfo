@@ -67,8 +67,8 @@ public class ShowPotVLineActivity extends Activity
 	private TextView tv_title;	
 	
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotVoltage.php";
-	private String RealRec_URL = "http://125.64.59.11:8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/PotVoltage.php";
+	private String RealRec_URL = ":8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
 	private String PotNo, BeginDate, EndDate;
 
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
@@ -90,6 +90,8 @@ public class ShowPotVLineActivity extends Activity
 	private com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel sbv;
 	private View Layout_select;
 	private View Layout_ok;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +99,11 @@ public class ShowPotVLineActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potv_line);
 		mContext = this;
-		BeginDate=getIntent().getStringExtra("Begin_Date");
-		EndDate=getIntent().getStringExtra("End_Date");
-		PotNo=getIntent().getStringExtra("PotNo");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();
+//		BeginDate=getIntent().getStringExtra("Begin_Date");
+//		EndDate=getIntent().getStringExtra("End_Date");
+//		PotNo=getIntent().getStringExtra("PotNo");
+//		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		init_title();
 		init_HSView();
 		hide_Layout();
@@ -111,6 +114,17 @@ public class ShowPotVLineActivity extends Activity
 		// createView(); // 创建浮动按钮
 	}
 
+	private void GetDataFromIntent() {		
+		BeginDate=getIntent().getStringExtra("Begin_Date");
+		EndDate=getIntent().getStringExtra("End_Date");
+		PotNo=getIntent().getStringExtra("PotNo");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");	
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		RealRec_URL="http://"+ip+RealRec_URL;
+	}
+	
 	private void init_GetRemoteData() {
 		mLineChart.setVisibility(View.VISIBLE);
 		http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,

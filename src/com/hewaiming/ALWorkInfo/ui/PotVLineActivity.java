@@ -69,8 +69,8 @@ public class PotVLineActivity extends Activity
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotVoltage.php";
-	private String RealRec_URL = "http://125.64.59.11:8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/PotVoltage.php";
+	private String RealRec_URL = ":8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
@@ -91,6 +91,8 @@ public class PotVLineActivity extends Activity
 	private List<RealRecord> listBean_RealRec = null;
 	private HSView_RealRecordAdapter realRec_Adapter;
 	private com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel sbv;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +100,7 @@ public class PotVLineActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potv_line);
 		mContext = this;
-		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();	
 		init_area();
 		init_potNo();
 		init_date();
@@ -109,6 +110,15 @@ public class PotVLineActivity extends Activity
 		show_RealRec_btn.setOnClickListener(this);
 		sbv = (SlideBottomPanel) findViewById(R.id.sbv);
 		// createView(); // 创建浮动按钮
+	}
+
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		RealRec_URL="http://"+ip+RealRec_URL;
 	}
 
 	@Override

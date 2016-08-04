@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.banner.JazzyViewPager.TransitionEffect;
@@ -65,9 +67,14 @@ public class SlideShowView extends FrameLayout {
 	private List<ImageView> imageViewsList;
 	// 放圆点的View的list
 	private List<View> dotViewsList;
-	
+
 	private boolean[] firstRun;
 
+	private SharedPreferences sp;
+
+	private String ip;
+
+	private int port;
 	// 当前轮播页
 	private int currentItem = 1;
 	// 定时任务
@@ -122,12 +129,35 @@ public class SlideShowView extends FrameLayout {
 	 * 初始化相关Data
 	 */
 	private void initData() {
-		
+
 		imageUrls = new ArrayList<String>();
 		imageViewsList = new ArrayList<ImageView>();
 		dotViewsList = new ArrayList<View>();
 		// TODO 异步任务获取图片，这里可以改写为通过网络获取图片地址
-		new GetListTask().execute("");
+		if (initdate(context)) {
+			new GetListTask().execute(ip);
+		}
+
+	}
+
+	public boolean initdate(Context ctx) {
+		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
+		if (sp != null) {
+			ip = sp.getString("ipstr", ip);
+			if (ip != null) {
+				if (sp.getString("port", String.valueOf(port)) != null) {
+					port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
+				} else {
+					Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
+					return false;
+				}
+			} else {
+				Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -136,18 +166,20 @@ public class SlideShowView extends FrameLayout {
 	private void initUI(Context context) {
 		if (imageUrls == null || imageUrls.size() == 0)
 			return;
+		if (!initdate(context))
+			return;
 		LayoutInflater.from(context).inflate(R.layout.layout_slideshow, this, true);
 
 		LinearLayout dotLayout = (LinearLayout) findViewById(R.id.dotLayout);
 		dotLayout.removeAllViews();
-		
-		firstRun=new boolean[imageUrls.size()+2];  //初始化 第一次运行标记数组
-        for(int i=0;i<firstRun.length;i++){
-        	firstRun[i]=true;
-        }
+
+		firstRun = new boolean[imageUrls.size() + 2]; // 初始化 第一次运行标记数组
+		for (int i = 0; i < firstRun.length; i++) {
+			firstRun[i] = true;
+		}
 		// 热点个数与图片特殊相等
 		for (int i = 0; i < imageUrls.size(); i++) {
-		
+
 			ImageView view = new ImageView(context);
 			view.setTag(imageUrls.get(i));
 			view.setBackgroundResource(R.drawable.banner_default);
@@ -244,19 +276,19 @@ public class SlideShowView extends FrameLayout {
 	 *
 	 */
 	private class MainAdapter extends PagerAdapter {
-	
 
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
-			
+
 			ImageView imageView = imageViewsList.get(position);
-			if(firstRun[position]){
-				imageLoader.displayImage(imageView.getTag() + "", imageView); //节省流量 ，第一次运行才从网络去图片
-				firstRun[position]=false;
+			if (firstRun[position]) {
+				imageLoader.displayImage(imageView.getTag() + "", imageView); // 节省流量
+																				// ，第一次运行才从网络去图片
+				firstRun[position] = false;
 			}
-			
-//			imageLoader.displayImage(imageView.getTag() + "", imageView);
-			
+
+			// imageLoader.displayImage(imageView.getTag() + "", imageView);
+
 			((ViewPager) container).addView(imageViewsList.get(position));
 			mJazzy.setObjectForPosition(imageViewsList.get(position), position);
 			return imageViewsList.get(position);
@@ -326,8 +358,8 @@ public class SlideShowView extends FrameLayout {
 			try {
 				// 这里一般调用服务端接口获取一组轮播图片，下面是从百度找的几个图片
 				String[] picAddress = MyConst.pic_address;
-				for (int i = 0; i< picAddress.length; i++) {
-					imageUrls.add(picAddress[i]);
+				for (int i = 0; i < picAddress.length; i++) {
+					imageUrls.add("http://" + params[0] + picAddress[i]);
 				}
 				return true;
 			} catch (Exception e) {
@@ -356,7 +388,7 @@ public class SlideShowView extends FrameLayout {
 		// or you can create default configuration by
 		// ImageLoaderConfiguration.createDefault(this);
 		// method.
-		options=new ImageLoadOptions().getOptions();
+		options = new ImageLoadOptions().getOptions();
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 				.memoryCacheExtraOptions(480, 800) // maxwidth, max
@@ -376,7 +408,7 @@ public class SlideShowView extends FrameLayout {
 
 				.tasksProcessingOrder(QueueProcessingType.LIFO).discCacheFileCount(100) // 缓存的文件数量
 				.discCache(new UnlimitedDiscCache(cacheDir))// 自定义缓存路径
-//				.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+				// .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
 				.defaultDisplayImageOptions(options)
 				.imageDownloader(new BaseImageDownloader(context, 5 * 1000, 30 * 1000)) // connectTimeout
 																						// (5

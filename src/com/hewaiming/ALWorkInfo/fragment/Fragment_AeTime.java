@@ -41,9 +41,13 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	private AeMostActivity mActivity;
 	private String PotNo;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private String ip;
+	private int port;
 
-	public Fragment_AeTime(List<Map<String, Object>> jXList2) {
+	public Fragment_AeTime(List<Map<String, Object>> jXList2,String mip,int mport) {
 		this.JXList=jXList2;
+		this.ip=mip;
+		this.port=mport;
 	}
 
 	@Override
@@ -116,6 +120,8 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 				potv_bundle.putString("Begin_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
 				

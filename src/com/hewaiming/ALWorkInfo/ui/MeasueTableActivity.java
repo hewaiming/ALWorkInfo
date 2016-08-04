@@ -2,6 +2,7 @@ package com.hewaiming.ALWorkInfo.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -42,8 +43,8 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_area_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
+	private String area_url = ":8000/scgy/android/odbcPhP/MeasueTable_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
@@ -55,20 +56,30 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;
 	private View layout_list;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measue_table);
-		dateBean = getIntent().getStringArrayListExtra("date_record");
+		GetDataFromIntent();	
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_HSView();
 	}
-
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
+//		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		area_url="http://"+ip+area_url;
+	}
+	
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
 		mHead.setFocusable(true);
@@ -80,7 +91,6 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		lv_MeasueTable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_MeasueTable.setCacheColorHint(0);
 		lv_MeasueTable.setOnScrollListener(this);
-
 	}
 
 	private void init_potNo() {

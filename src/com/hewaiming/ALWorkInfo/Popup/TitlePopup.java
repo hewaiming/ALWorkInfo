@@ -3,6 +3,7 @@ package com.hewaiming.ALWorkInfo.Popup;
 import java.util.ArrayList;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.ui.AboutActivity;
 import com.hewaiming.ALWorkInfo.ui.SettingActivity;
 
 import android.content.Context;
@@ -104,7 +105,8 @@ public class TitlePopup extends PopupWindow {
 					 arg1.getContext().startActivity(intent);					
 					break;
 				case 1:
-					Toast.makeText(mContext, index+"click", 1).show();
+					 Intent intentAbout=new Intent(mContext, AboutActivity.class);					
+					 arg1.getContext().startActivity(intentAbout);	
 					break;
 				
 				}

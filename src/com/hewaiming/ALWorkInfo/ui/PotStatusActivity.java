@@ -38,6 +38,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,8 +56,7 @@ import bean.RequestAction;
 
 public class PotStatusActivity extends DemoBase implements OnScrollListener, OnClickListener {
 	private String ip;
-	private int port;
-	private Context ctx;
+	private int port;	
 	private SharedPreferences sp;
 	private Spinner spinner_area;
 	private Button backBtn;
@@ -145,10 +145,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potstatus);
-		ctx = this;
-		initdate();// 获取服务器ip
-		// dateBean = getIntent().getStringArrayListExtra("date_table");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();		
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -166,26 +163,19 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		timer = new Timer();
 		SendActionToServer();
 	}
-
-	public void initdate() {
-		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
-		ip = sp.getString("ipstr", ip);
-		port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
-		if(ip==""){
-			Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
-		}
-		if(sp.getString("port", String.valueOf(port)) == null){
-			Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
-		}
-		// MyLog.i(TAG, "获取到ip端口:" + ip + ";" + port);
-	}
+	
+	private void GetDataFromIntent() {
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);	
+	}	
 
 	private void init_listview() {
 		lv_PotStatus = (ListView) findViewById(R.id.lv_PotStatus);
 		lv_PotStatus.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_PotStatus.setCacheColorHint(0);
 		lv_PotStatus.setOnScrollListener(this);
-		lv_PotStatus.setOnItemClickListener(new OnItemClickListener() {
+		/*lv_PotStatus.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -197,9 +187,30 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				potv_bundle.putString("Begin_Date", BeginDate);
 				potv_bundle.putString("End_Date", EndDate);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // 槽压曲线图
 
+			}				
+		});*/
+		lv_PotStatus.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				PotNo = String.valueOf(listBean.get(position).getPotNo());
+				// Toast.makeText(getApplicationContext(), PotNo, 1).show();
+				Intent potv_intent = new Intent(PotStatusActivity.this, ShowPotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", PotNo);
+				potv_bundle.putString("Begin_Date", BeginDate);
+				potv_bundle.putString("End_Date", EndDate);
+				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
+				potv_intent.putExtras(potv_bundle);
+				startActivity(potv_intent); // 槽压曲线图
+				return false;
 			}
 		});
 

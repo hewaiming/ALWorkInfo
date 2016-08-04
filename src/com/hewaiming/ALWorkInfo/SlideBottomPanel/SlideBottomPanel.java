@@ -38,8 +38,8 @@ public class SlideBottomPanel extends FrameLayout {
 	private static final int DEFAULT_TITLE_HEIGHT_NO_DISPLAY = 60;
 	private static final int DEFAULT_PANEL_HEIGHT = 380;
 	private static final int DEFAULT_MOVE_DISTANCE_TO_TRIGGER = 30;
-	private static final int DEFAULT_ANIMATION_DURATION = 250;
-	private static final int MAX_CLICK_TIME = 300;
+	private static final int DEFAULT_ANIMATION_DURATION = 150;
+	private static final int MAX_CLICK_TIME = 150;
 	private static final boolean DEFAULT_FADE = true;
 	private static final boolean DEFAULT_BOUNDARY = true;
 	private static final boolean DEFAULT_HIDE_PANEL_TITLE = false;

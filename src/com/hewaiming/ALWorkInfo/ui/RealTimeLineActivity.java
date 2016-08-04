@@ -63,8 +63,6 @@ import bean.RequestAction;
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
 	private String ip;
 	private int port;	
-	private Context ctx;
-	SharedPreferences sp;
 	private LineChart mChart;
 	private TextView tv_title;
 	private Button backBtn;
@@ -183,9 +181,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_realtime_linechart);
-		ctx=this;
-		initdate();//获取服务器ip
+		setContentView(R.layout.activity_realtime_linechart);	
 		GetDataFromIntent();
 		init_title();
 		init_area();
@@ -275,6 +271,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private void GetDataFromIntent() {
 		PotNo = getIntent().getStringExtra("PotNo");
 		hideAction = getIntent().getBooleanExtra("Hide_Action", false);
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
 		// JXList = (List<Map<String, Object>>)
 		// getIntent().getSerializableExtra("JXList");
 
@@ -420,61 +418,6 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 	}
 
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//
-//		switch (item.getItemId()) {
-//		case R.id.actionAdd: {
-//			addEntry();
-//			break;
-//		}
-//		case R.id.actionClear: {
-//			mChart.clearValues();
-//			Toast.makeText(this, "Chart cleared!", Toast.LENGTH_SHORT).show();
-//			break;
-//		}
-//		case R.id.actionFeedMultiple: {
-//			SendActionToServer();
-//			break;
-//		}
-//		}
-//		return true;
-//	}
-
-//	private void addEntry() {
-//
-//		LineData data = mChart.getData();
-//		if (data != null) {
-//			ILineDataSet set = data.getDataSetByIndex(0);
-//			// set.addEntry(...); // can be called as well
-//
-//			if (set == null) {
-//				set = createSet();
-//				data.addDataSet(set);
-//			}
-//
-//			Calendar c = Calendar.getInstance();
-//
-//			data.addXValue(String.valueOf(c.get(Calendar.MINUTE)) + ':' + c.get(Calendar.MILLISECOND));
-//			data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
-//
-//			// let the chart know it's data has changed
-//			mChart.notifyDataSetChanged();
-//
-//			// limit the number of visible entries
-//			mChart.setVisibleXRangeMaximum(30);
-//			// mChart.setVisibleYRange(30, AxisDependency.LEFT);
-//
-//			// move to the latest entry
-//			mChart.moveViewToX(data.getXValCount() - 31);
-//			// mChart.invalidate();
-//			// this automatically refreshes the chart (calls invalidate())
-//			// mChart.moveViewTo(data.getXValCount()-7, 55f,
-//			// AxisDependency.LEFT);
-//		}
-//	}
-
 	private LineDataSet createSet() {
 
 		LineDataSet set = new LineDataSet(null, PotNo + "实时槽压");
@@ -615,17 +558,5 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			}
 		}
 	}
-
-	public void initdate() {
-		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
-		ip = sp.getString("ipstr", ip);
-		port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
-		if(ip==""){
-			Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
-		}
-		if(sp.getString("port", String.valueOf(port)) == null){
-			Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
-		}
-		// MyLog.i(TAG, "获取到ip端口:" + ip + ";" + port);
-	}
+	
 }

@@ -59,7 +59,7 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST");
 		
 		if(json!=null){
-			Log.d("日期数据：json.toString()", json.toString());// full json response
+//			Log.d("日期数据：json.toString()", json.toString());// full json response
 			return json.toString();
 		}else{
 			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");

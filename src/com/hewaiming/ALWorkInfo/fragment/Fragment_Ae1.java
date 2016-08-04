@@ -38,9 +38,12 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 	private HSView_AeRecAdapter Ae_Adapter = null;
 	private Ae5DayActivity mActivity;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
-
-	public Fragment_Ae1(List<Map<String, Object>> jXList2) {
+    private String ip;
+    private int port;
+	public Fragment_Ae1(List<Map<String, Object>> jXList2,String mip,int mport) {
 		this.JXList=jXList2;
+		this.ip=mip;
+		this.port=mport;
 	}
 
 	@Override
@@ -110,6 +113,8 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 				potv_bundle.putString("Begin_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
 				

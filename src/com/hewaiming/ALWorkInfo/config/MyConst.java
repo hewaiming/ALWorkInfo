@@ -3,6 +3,7 @@ package com.hewaiming.ALWorkInfo.config;
 import com.hewaiming.ALWorkInfo.R;
 
 import android.os.Environment;
+import android.widget.Toast;
 
 public class MyConst {
 
@@ -29,11 +30,11 @@ public class MyConst {
 	
 	public static final String[] Areas = { "一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };
 	
-	public static final String[] pic_address = { "http://125.64.59.11:8000/scgy/android/banner/1.jpg",
-			"http://125.64.59.11:8000/scgy/android/banner/2.jpg",
-			"http://125.64.59.11:8000/scgy/android/banner/3.jpg", 
-			"http://125.64.59.11:8000/scgy/android/banner/4.jpg",
-			"http://125.64.59.11:8000/scgy/android/banner/5.jpg" };
+	public static final String[] pic_address = { ":8000/scgy/android/banner/1.jpg",
+			":8000/scgy/android/banner/2.jpg",
+			":8000/scgy/android/banner/3.jpg", 
+			":8000/scgy/android/banner/4.jpg",
+			":8000/scgy/android/banner/5.jpg" };
 	
 	public static final String[] iconName = { "常用参数", "日报", "效应报表", "槽龄", "槽压曲线", "故障记录", "实时记录", "操作记录", 
 			"槽状态","测量数据", "效应槽", "效应记录","槽故障最多","工艺曲线", "报警记录" ,"实时曲线"};
@@ -46,4 +47,5 @@ public class MyConst {
 	public static final String ACTION_REGISTER_SUCCESS_FINISH = "register.success.finish";// 注册成功之后登陆页面退出
 
 	public static final String[] Areas_ALL = { "所有厂房","一厂房","二厂房","一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };;
+	
 }

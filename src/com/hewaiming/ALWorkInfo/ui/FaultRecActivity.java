@@ -43,8 +43,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 
 	private HttpPost_BeginDate_EndDate http_post;
 	private HeaderListView_AlarmRecord headerView;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/FaultRecordTable_potno_date.php";
+	private String area_url = ":8000/scgy/android/odbcPhP/FaultRecordTable_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
 
@@ -57,6 +57,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	private LinearLayout showArea = null;
 	private boolean hideAction;
 	private View include_selector;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 				potv_bundle.putString("Begin_Date", listBean.get(position-1).getRecTime().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean.get(position-1).getRecTime().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
 				
@@ -121,7 +125,10 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		PotNo = getIntent().getStringExtra("PotNo");
 		hideAction = getIntent().getBooleanExtra("Hide_Action", false);
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		area_url="http://"+ip+area_url;
 	}
 
 	private void init_potNo() {

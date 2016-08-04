@@ -47,8 +47,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeRecord_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeRecord_area_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/AeRecord_potno_date.php";
+	private String area_url = ":8000/scgy/android/odbcPhP/AeRecord_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
@@ -63,6 +63,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private boolean hideAction;
 	private View include_selector;	
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,10 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 		PotNo=getIntent().getStringExtra("PotNo");
 		hideAction=getIntent().getBooleanExtra("Hide_Action", false);
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		area_url="http://"+ip+area_url;
 		
 	}
 
@@ -115,6 +121,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 				potv_bundle.putString("Begin_Date", listBean.get(position).getDdate().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
 				

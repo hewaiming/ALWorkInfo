@@ -35,18 +35,28 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	private ArrayAdapter<String> Area_adapter;
 	private HttpPost_area http_post;
 	private HeaderListView_PotAge headerView;
-	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotAgeTable.php";
+	private String url = ":8000/scgy/android/odbcPhP/PotAgeTable.php";
 	private List<PotAge> listBean=null;
 	private PotAge_Adapter potage_Adapter=null;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potage);
+		GetDataFromIntent();
 		init();
 		init_title();
 		DoGetDataFromNet();
+	}
+
+	private void GetDataFromIntent() {
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		url="http://"+ip+url;
+		
 	}
 
 	private void init_title() {

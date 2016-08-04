@@ -44,7 +44,7 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private HttpPost_BeginDate_EndDate http_post;
-	private String fault_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/FaultMost_area_date.php";
+	private String fault_url = ":8000/scgy/android/odbcPhP/FaultMost_area_date.php";
 	private String BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 
@@ -57,6 +57,8 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private RelativeLayout mHead;
 	private ListView lv_FaultMost;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_record");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		fault_url="http://"+ip+fault_url;
 		
 	}
 	private void init_HSView() {
@@ -99,6 +104,8 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 				bundle_faultRec.putString("Begin_Date", BeginDate);				
 				bundle_faultRec.putString("End_Date", EndDate);
 				bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
+				bundle_faultRec.putString("ip", ip);
+				bundle_faultRec.putInt("port", port);
 				faultRec_intent.putExtras(bundle_faultRec);			
 				startActivity(faultRec_intent); // ¹ÊÕÏ¼ÇÂ¼				
 			}

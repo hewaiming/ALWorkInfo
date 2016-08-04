@@ -48,7 +48,9 @@ public class Fragment_AeCnt extends Fragment
 	private Context mContext;
 	private RelativeLayout mHead_AeCnt;
 	private ListView lv_AeCnt;
-
+	private String ip;
+	private int port;
+	
 	private View mView;
 	private List<AeRecord> listBean_AeCnt = null;
 	private List<String> dateBean = new ArrayList<String>();
@@ -60,10 +62,12 @@ public class Fragment_AeCnt extends Fragment
 
 	private ListViewAndHeadViewTouchLinstener lvAndHVTouchListener;
 
-	public Fragment_AeCnt(Context mContext, List<String> dateBean, List<Map<String, Object>> jXList) {
+	public Fragment_AeCnt(Context mContext, List<String> dateBean, List<Map<String, Object>> jXList,String mip,int mport) {
 		this.mContext = mContext;
 		this.dateBean=dateBean;
 		this.JXList=jXList;
+		this.ip=mip;
+		this.port=mport;
 	}
 
 	@Override
@@ -95,8 +99,7 @@ public class Fragment_AeCnt extends Fragment
 		lv_AeCnt.setOnTouchListener(lvAndHVTouchListener);
 		lv_AeCnt.setCacheColorHint(0);
 		lv_AeCnt.setOnScrollListener(this);		
-		lv_AeCnt.setOnItemClickListener(new OnItemClickListener() {
-
+		lv_AeCnt.setOnItemClickListener(new OnItemClickListener() {	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent aeRec_intent = new Intent(getActivity(), AeRecActivity.class);
@@ -107,6 +110,8 @@ public class Fragment_AeCnt extends Fragment
 				bundle_AeRec.putString("Begin_Date", BeginDate);				
 				bundle_AeRec.putString("End_Date", EndDate);	
 				bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
+				bundle_AeRec.putString("ip", ip);
+				bundle_AeRec.putInt("port", port);
 				aeRec_intent.putExtras(bundle_AeRec);				
 				startActivity(aeRec_intent); // Ð§Ó¦¼ÇÂ¼				
 			}

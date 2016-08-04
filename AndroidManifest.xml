@@ -14,7 +14,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" /> 
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" /> 
+    
     <application
         android:name=".floatButton.ALWorkInfoApplication"
         android:allowBackup="true"
@@ -73,6 +75,8 @@
         <activity android:name="com.hewaiming.ALWorkInfo.ui.DialogActivity" >
         </activity>
          <activity android:name="com.hewaiming.ALWorkInfo.ui.SettingActivity" >
+        </activity>
+         <activity android:name="com.hewaiming.ALWorkInfo.ui.AboutActivity" >
         </activity>
     </application>
 

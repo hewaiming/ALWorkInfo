@@ -66,10 +66,10 @@ public class HttpPost_JsonArray {
 			}
 			is.close();
 			json = sb.toString();
-//			System.out.println("json before---" + json);
+
 			json=json.substring(0, json.length()-1);
 			json='['+json+']';
-			System.out.println("json after---" + json);
+//			System.out.println("json after---" + json);
 		
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());

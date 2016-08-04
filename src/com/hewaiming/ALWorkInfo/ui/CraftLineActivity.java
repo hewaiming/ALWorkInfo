@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -53,8 +54,8 @@ public class CraftLineActivity extends Activity
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTable_Craft.php";
-	private String measue_potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/dayTable_Craft.php";
+	private String measue_potno_url = ":8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
@@ -67,14 +68,15 @@ public class CraftLineActivity extends Activity
 	private ProgressDialog m_ProgressDialog=null;
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_craft_line);
-		
-		dateBean = getIntent().getStringArrayListExtra("date_table");
+		setContentView(R.layout.activity_craft_line);		
+		GetDataFromIntent();
 		init_area();
 		init_potNo();
 		init_date();
@@ -82,6 +84,15 @@ public class CraftLineActivity extends Activity
 		init_items();
 	}
 
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_table");
+//		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		measue_potno_url="http://"+ip+measue_potno_url;
+	}
+	
 	private void init_items() {
 		cb0 = (CheckBox) findViewById(R.id.chkbox_SetV);
 		cb1 = (CheckBox) findViewById(R.id.chkbox_WorkV);

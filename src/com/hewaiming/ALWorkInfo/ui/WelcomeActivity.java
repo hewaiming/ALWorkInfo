@@ -11,7 +11,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,14 +29,25 @@ public class WelcomeActivity extends Activity {
 	private DisplayImageOptions options;
 	private Boolean runTimer = true;
 	private Timer timer;
-	private static final String image_url = "http://125.64.59.11:8000/scgy/android/banner/face.jpg";
+	private Context ctx;
+	private SharedPreferences sp;
+	private String ip;
+	private static String image_url = ":8000/scgy/android/banner/face.jpg";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);		
 		setContentView(R.layout.welcome);
+		ctx=this;
+		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
+		if(sp!=null){
+			ip = sp.getString("ipstr", ip);
+			image_url="http://"+ip+image_url;
+		}else{
+			Toast.makeText(ctx, "请设置远程服务器IP和端口", 1).show();
+		}
+		
 		okBtn = (Button) findViewById(R.id.btn_ok);
 		mImage = (ImageView) findViewById(R.id.welcome);
 		ImageConfig config = new ImageConfig(this);
@@ -58,8 +71,7 @@ public class WelcomeActivity extends Activity {
 		});				
 		timer.schedule(new TimerTask() {
 			@Override
-			public void run() {
-				
+			public void run() {				
 					Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
 					startActivity(intent);
 					finish();			

@@ -47,7 +47,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
 	private HttpPost_area http_post;
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/AeRecord5Day_area.php";	
+	private String area_url = ":8000/scgy/android/odbcPhP/AeRecord5Day_area.php";	
 
 	private ArrayList<Fragment> fragments;
 	private ViewPager pager;
@@ -59,6 +59,8 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private Map<String,List<AeRecord>> map_5day=null;
 	private View layout_Ae;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +78,18 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 
 	private void GetDataFromIntent() {
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-		
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		area_url="http://"+ip+area_url;
 	}
 
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_Ae1(JXList));
-		fragments.add(new Fragment_Ae2(JXList));
-		fragments.add(new Fragment_Ae3(JXList));
-		fragments.add(new Fragment_Ae4(JXList));
-		fragments.add(new Fragment_Ae5(JXList));		
+		fragments.add(new Fragment_Ae1(JXList,ip,port));
+		fragments.add(new Fragment_Ae2(JXList,ip,port));
+		fragments.add(new Fragment_Ae3(JXList,ip,port));
+		fragments.add(new Fragment_Ae4(JXList,ip,port));
+		fragments.add(new Fragment_Ae5(JXList,ip,port));		
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);

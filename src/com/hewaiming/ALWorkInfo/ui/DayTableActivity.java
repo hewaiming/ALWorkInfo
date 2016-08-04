@@ -47,8 +47,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private ArrayAdapter<String> PotNo_adapter;
 
 	private HttpPost_BeginDate_EndDate http_post;
-	private String potno_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTable_potno_date.php";
-	private String area_url = "http://125.64.59.11:8000/scgy/android/odbcPhP/dayTable_area_date.php";
+	private String potno_url = ":8000/scgy/android/odbcPhP/dayTable_potno_date.php";
+	private String area_url = ":8000/scgy/android/odbcPhP/dayTable_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
@@ -60,20 +60,30 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private LinearLayout showArea = null;
 	private View layout_daytable;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
-		dateBean = getIntent().getStringArrayListExtra("date_table");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		GetDataFromIntent();	
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_HSView();
 		init_listview();
+	}
+
+	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_table");
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip=getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		potno_url="http://"+ip+potno_url;
+		area_url="http://"+ip+area_url;
 	}
 
 	private void init_listview() {
@@ -93,6 +103,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 				potv_bundle.putString("Begin_Date", BeginDate);
 				potv_bundle.putString("End_Date", EndDate);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putString("ip", ip);
+				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
 

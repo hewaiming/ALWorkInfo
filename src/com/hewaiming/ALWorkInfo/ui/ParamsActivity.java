@@ -2,6 +2,7 @@ package com.hewaiming.ALWorkInfo.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
@@ -35,18 +36,27 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	private ArrayAdapter<String> Area_adapter;
 	private HttpPost_area http_post;
 	private HeaderListView_Params headerView;
-	private String url = "http://125.64.59.11:8000/scgy/android/odbcPhP/PotSetValueTable.php";
+	private String url = ":8000/scgy/android/odbcPhP/PotSetValueTable.php";
 	private List<SetParams> listBean = null;
 	private Params_Adapter mAdapter = null;
+	private String ip;
+	private int port;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_params);
+		GetDataFromIntent();
 		init();
 		init_title();
 		DoGetDataFromNet();
+	}
+
+	private void GetDataFromIntent() {
+		ip=	getIntent().getStringExtra("ip");
+		port=getIntent().getIntExtra("port", 1234);
+		url="http://"+ip+url;		
 	}
 
 	private void init_title() {

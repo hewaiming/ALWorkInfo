@@ -41,7 +41,7 @@
             fab:fab_colorNormal="@color/green"
             fab:fab_colorPressed="@color/green_pressed"
             fab:fab_icon="@drawable/realrecord_text"
-            fab:fab_size="mini" />
+            fab:fab_size="normal" />
     </FrameLayout>
 
 </LinearLayout>
