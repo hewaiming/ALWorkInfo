@@ -5,13 +5,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import bean.PotStatus;
+import bean.PotStatusDATA;
 import bean.RealTime;
 
 /**
  * TCP Socket客户端
- * 
- * @author jzj1993
- * @since 2015-2-22
  */
 public abstract class TcpClient implements Runnable {
 
@@ -21,18 +19,10 @@ public abstract class TcpClient implements Runnable {
 	private SocketTransceiver transceiver;
 
 	/**
-	 * 建立连接
-	 * <p>
+	 * 建立连接	
 	 * 连接的建立将在新线程中进行
-	 * <p>
 	 * 连接建立成功，回调{@code onConnect()}
-	 * <p>
-	 * 连接建立失败，回调{@code onConnectFailed()}
-	 * 
-	 * @param hostIP
-	 *            服务器主机IP
-	 * @param port
-	 *            端口
+	 * 连接建立失败，回调{@code onConnectFailed()}	
 	 */
 	public void connect(String hostIP, int port) {
 		this.hostIP = hostIP;
@@ -44,12 +34,7 @@ public abstract class TcpClient implements Runnable {
 	public void run() {
 		try {
 			Socket socket = new Socket(hostIP, port);
-			transceiver = new SocketTransceiver(socket) {
-
-				@Override
-				public void onReceive(InetAddress addr, String s) {
-					TcpClient.this.onReceive(this, s);
-				}
+			transceiver = new SocketTransceiver(socket) {			
 
 				@Override
 				public void onDisconnect(InetAddress addr) {
@@ -59,16 +44,18 @@ public abstract class TcpClient implements Runnable {
 
 				@Override
 				public void onReceive(InetAddress addr, RealTime rTime) {
-					System.out.println("receive:"+rTime.toString());
+					//System.out.println("接受到实时数据"+rTime.toString());
 					TcpClient.this.onReceive(this, rTime);  //import
 					
 				}
-
 				@Override
-				public void onReceive(InetAddress addr, ArrayList<PotStatus> potStatus) {
+				public void onReceive(InetAddress addr, PotStatusDATA potStatus) {
+					//System.out.println("接受到 槽状态数据"+potStatus.toString());
 					TcpClient.this.onReceive(this, potStatus);  //import
 					
 				}
+				
+				
 			};
 			transceiver.start();
 			connect = true;
@@ -80,8 +67,7 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	/**
-	 * 断开连接
-	 * <p>
+	 * 断开连接	
 	 * 连接断开，回调{@code onDisconnect()}
 	 */
 	public void disconnect() {
@@ -92,8 +78,7 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	/**
-	 * 判断是否连接
-	 * 
+	 * 判断是否连接	
 	 * @return 当前处于连接状态，则返回true
 	 */
 	public boolean isConnected() {
@@ -101,8 +86,7 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	/**
-	 * 获取Socket收发器
-	 * 
+	 * 获取Socket收发器	
 	 * @return 未连接则返回null
 	 */
 	public SocketTransceiver getTransceiver() {
@@ -111,7 +95,6 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 连接建立
-	 * 
 	 * @param transceiver
 	 *            SocketTransceiver对象
 	 */
@@ -124,24 +107,17 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 接收到数据
-	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
 	 * @param transceiver
-	 *            SocketTransceiver对象
-	 * @param s
-	 *            字符串
-	 */
-	public abstract void onReceive(SocketTransceiver transceiver, String s);
+	 *            SocketTransceiver对象	
+	 */	
 	
 	public abstract void onReceive(SocketTransceiver transceiver, RealTime realTime);
 	
-	public abstract void onReceive(SocketTransceiver transceiver, ArrayList<PotStatus> potStatus);
+	public abstract void onReceive(SocketTransceiver transceiver, PotStatusDATA potStatus);
 	/**
 	 * 连接断开
-	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
 	 * @param transceiver
 	 *            SocketTransceiver对象
 	 */

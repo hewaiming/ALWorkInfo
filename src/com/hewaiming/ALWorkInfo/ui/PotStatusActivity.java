@@ -51,6 +51,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import bean.PotStatus;
+import bean.PotStatusDATA;
 import bean.RealTime;
 import bean.RequestAction;
 
@@ -66,6 +67,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private ArrayAdapter<String> Area_adapter;
 
 	private String PotNo, BeginDate, EndDate;
+	private PotStatusDATA pStatusDATA=null;
 	private List<PotStatus> listBean = new ArrayList<PotStatus>();
 
 	private RelativeLayout mHead;
@@ -103,37 +105,34 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				}
 			});
 
-		}
-
-		@Override
-		public void onReceive(SocketTransceiver transceiver, String s) {
-
-		}
+		}		
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, RealTime realTime) {
 
+		}		
+
+		@Override
+		public void onDisconnect(SocketTransceiver transceiver) {
+
 		}
 
 		@Override
-		public void onReceive(SocketTransceiver transceiver, final ArrayList<PotStatus> potStatus) {
+		public void onReceive(SocketTransceiver transceiver, final PotStatusDATA potStatus) {
 			handler.post(new Runnable() {
 				@Override
-				public void run() {
-					listBean = new ArrayList<PotStatus>(potStatus);
+				public void run() {					
+					listBean = new ArrayList<PotStatus>(potStatus.getPotData());
 					if (listBean != null) {
 						if (listBean.size() > 0) {
 							// listBean.clear(); // 清除LISTVIEW 以前的内容
+							
 							PotStatus_Adapter.onDateChange(listBean);
 						}
 					}
 				}
 			});
-		}
-
-		@Override
-		public void onDisconnect(SocketTransceiver transceiver) {
-
+			
 		}
 
 	};

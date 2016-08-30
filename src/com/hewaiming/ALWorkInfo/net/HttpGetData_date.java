@@ -35,20 +35,17 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 	public HttpGetData_date(String url, HttpGetDate_Listener listener, Context context) {
 		this.url = url;
 		this.listener = listener;
-		this.mContext = context;		
-
+		this.mContext = context;	
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-
 		pDialog = new ProgressDialog(mContext);
 		pDialog.setMessage("初始化日期数据....");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();
-
 	}
 
 	@Override

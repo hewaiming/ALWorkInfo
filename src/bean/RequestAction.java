@@ -20,7 +20,7 @@ public class RequestAction {
 		PotNo_Area = potNo_Area;
 	}
 
-	public RequestAction(byte actionId, String potNo_Area) {
+	public RequestAction(int actionId, String potNo_Area) {
 		super();
 		ActionId = actionId;
 		PotNo_Area = potNo_Area;
@@ -28,6 +28,11 @@ public class RequestAction {
 
 	public RequestAction() {
 		super();
+	}
+
+	@Override
+	public String toString() {
+		return "RequestAction [ActionId=" + ActionId + ", PotNo_Area=" + PotNo_Area + "]";
 	}
 
 }

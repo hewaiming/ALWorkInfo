@@ -58,6 +58,28 @@
             android:background="@color/LV_bg"
             android:scrollbars="horizontal" >
         </ListView>
+        <LinearLayout
+            android:id="@+id/Layout_Info"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="系列电压(V)">                
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="系列电流(KA)">                
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="厂房电压(V)">                
+            </TextView>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

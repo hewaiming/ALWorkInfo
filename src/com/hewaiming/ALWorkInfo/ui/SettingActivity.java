@@ -43,8 +43,8 @@ public class SettingActivity extends Activity {
 		edtport = (EditText) findViewById(R.id.et_PORT);		
 		sp = this.getSharedPreferences("SP", MODE_PRIVATE);
 		if(sp!=null){
-			edtip.setText(sp.getString("ipstr", ""));
-			edtport.setText(sp.getString("port", ""));
+			edtip.setText(sp.getString("ipstr", "125.64.59.11"));
+			edtport.setText(sp.getString("port", "1234"));
 		}		
 		btnFinish = (Button) findViewById(R.id.btn_back);
 		btnFinish.setOnClickListener(new OnClickListener() {
