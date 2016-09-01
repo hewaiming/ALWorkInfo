@@ -55,23 +55,29 @@
             android:orientation="vertical"
             android:visibility="visible" >
 
-            <ListView
-                android:id="@+id/lv_PotStatus"
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/LV_bg"
-                android:scrollbars="horizontal"
-                android:visibility="visible" >
-            </ListView>
+                android:layout_above="@+id/Layout_Info" >
+                <ListView
+                    android:id="@+id/lv_PotStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/LV_bg"
+                    android:scrollbars="horizontal"
+                    android:visibility="visible" >
+                </ListView>
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/Layout_Info"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:layout_alignParentBottom="true"              
+                android:layout_alignParentBottom="true"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/head_sharp_light_green"
                 android:orientation="horizontal"
@@ -80,8 +86,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
                     android:text="系列电压(V):"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
@@ -90,16 +96,16 @@
                     android:id="@+id/tv_sysV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:text="900.56"
-                     android:layout_gravity="center_vertical"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                     android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="22dp"
                     android:text="系列电流(KA):"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
@@ -108,7 +114,7 @@
                     android:id="@+id/tv_sysI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="200.25"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
@@ -116,8 +122,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                     android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="22dp"
                     android:text="厂房电压(V):"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
@@ -126,7 +132,7 @@
                     android:id="@+id/tv_RoomV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="300"
                     android:textColor="@color/base_color_text_white"
                     android:textSize="11sp" />
