@@ -16,6 +16,7 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -68,6 +69,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_record);

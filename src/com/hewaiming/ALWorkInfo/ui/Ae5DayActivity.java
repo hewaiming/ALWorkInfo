@@ -18,6 +18,7 @@ import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae5;
 import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -64,6 +65,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_5day);

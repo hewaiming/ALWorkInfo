@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -68,6 +69,7 @@ public class MainActivity extends Activity
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		mContext = this;
@@ -184,7 +186,11 @@ public class MainActivity extends Activity
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		if (JXList != null || date_record != null) {
+		boolean DoRun=false;
+		if(position==8 || position==15){
+			DoRun=true;
+		}
+		if (JXList != null || date_record != null || DoRun) {
 			switch (position) {
 			case 0:
 				Intent Paramsintent = new Intent(MainActivity.this, ParamsActivity.class);

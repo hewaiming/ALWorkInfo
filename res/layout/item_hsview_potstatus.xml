@@ -46,8 +46,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="槽状态"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textAppearance="?android:attr/textAppearanceMedium"                   
+                    android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_marginRight="5dp"
                     android:text="手/自"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_marginRight="5dp"
                     android:text="槽作业"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
                 <TextView
@@ -80,29 +80,29 @@
                     android:layout_marginRight="5dp"
                     android:text="故障"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
                 
                 <TextView
                     android:id="@+id/tv_SetV"
-                    android:layout_width="30dp"
+                    android:layout_width="32dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="设定电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_WorkV"
-                    android:layout_width="30dp"
+                    android:layout_width="32dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="工作电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
 
@@ -114,7 +114,7 @@
                     android:layout_marginRight="5dp"
                     android:text="设定 NB"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
                 <TextView
@@ -125,19 +125,30 @@
                     android:layout_marginRight="5dp"
                     android:text="实际 NB"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_NBTime"
-                    android:layout_width="30dp"
+                 <TextView
+                    android:id="@+id/tv_NbPlus"
+                    android:layout_width="28dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="NB 时刻"
+                    android:text="过欠"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
+                
+
+                <TextView
+                    android:id="@+id/tv_NBTime"
+                    android:layout_width="36dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="NB时刻"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_AeSpan"
@@ -147,9 +158,69 @@
                     android:layout_marginRight="5dp"
                     android:text="AE间隔"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="12sp" />
-
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+                
+                 <TextView
+                    android:id="@+id/tv_AeTime"
+                    android:layout_width="44dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="AE时刻"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+                  <TextView
+                    android:id="@+id/tv_AeV"
+                    android:layout_width="36dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="AE电压"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+                   <TextView
+                    android:id="@+id/tv_AeContinues"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="AE时间"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+                   <TextView
+                    android:id="@+id/tv_AeStatus"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="AE状态"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" /> 
+                    <TextView
+                    android:id="@+id/tv_AeCnt"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="AE次数"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="12sp" /> 
+                    <TextView
+                    android:id="@+id/tv_OStatus"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="加料态"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" /> 
                 <TextView
                     android:id="@+id/tv_YJWZ"
                     android:layout_width="30dp"
@@ -158,8 +229,18 @@
                     android:layout_marginRight="5dp"
                     android:text="阳极位置"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
+                    android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
+                 <TextView
+                    android:id="@+id/tv_Noise"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="噪音"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
             </LinearLayout>
         </com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView>
     </com.hewaiming.ALWorkInfo.HScrollListView.InterceptScrollContainer>

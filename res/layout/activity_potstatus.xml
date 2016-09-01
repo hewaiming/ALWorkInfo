@@ -48,38 +48,90 @@
             android:layout_marginTop="6dp"
             layout="@layout/item_hsview_potstatus" />
 
-        <ListView
-            android:id="@+id/lv_PotStatus"
+        <RelativeLayout
+            android:id="@+id/Layout_Context"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/LV_bg"
-            android:scrollbars="horizontal" >
-        </ListView>
-        <LinearLayout
-            android:id="@+id/Layout_Info"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="visible" >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="系列电压(V)">                
-            </TextView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="系列电流(KA)">                
-            </TextView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="厂房电压(V)">                
-            </TextView>
-        </LinearLayout>
+
+            <ListView
+                android:id="@+id/lv_PotStatus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/LV_bg"
+                android:scrollbars="horizontal"
+                android:visibility="visible" >
+            </ListView>
+
+            <LinearLayout
+                android:id="@+id/Layout_Info"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"              
+                android:layout_marginTop="6dp"
+                android:background="@drawable/head_sharp_light_green"
+                android:orientation="horizontal"
+                android:visibility="visible" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="系列电压(V):"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_sysV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="900.56"
+                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                     android:layout_gravity="center_vertical"
+                    android:text="系列电流(KA):"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_sysI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_gravity="center_vertical"
+                    android:text="200.25"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                     android:layout_gravity="center_vertical"
+                    android:text="厂房电压(V):"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_RoomV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_gravity="center_vertical"
+                    android:text="300"
+                    android:textColor="@color/base_color_text_white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

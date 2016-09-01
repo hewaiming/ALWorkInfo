@@ -13,6 +13,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -65,6 +66,7 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_operate_record);	

@@ -15,9 +15,7 @@ import bean.RequestAction;
 
 /**
  * Socket收发�? 通过Socket发�?�数据，并使用新线程监听Socket接收到的数据
- * 
- * @author jzj1993
- * @since 2015-2-22
+
  */
 public abstract class SocketTransceiver implements Runnable {
 
@@ -28,12 +26,6 @@ public abstract class SocketTransceiver implements Runnable {
 	protected ObjectInputStream objectInputStream;
 	private boolean runFlag;
 
-	/**
-	 * 实例�?
-	 * 
-	 * @param socket
-	 *            已经建立连接的socket
-	 */
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
 		this.addr = socket.getInetAddress();
@@ -105,6 +97,7 @@ public abstract class SocketTransceiver implements Runnable {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				//GetNoData++;
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

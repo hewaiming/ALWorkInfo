@@ -62,12 +62,11 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private Spinner spinner_area;
 	private Button backBtn;
 	// private ImageButton isShowingBtn;
-	private TextView tv_title;
+	private TextView tv_title,tv_SysV,tv_SysI,tv_RoomV;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
 
-	private String PotNo, BeginDate, EndDate;
-	private PotStatusDATA pStatusDATA=null;
+	private String PotNo, BeginDate, EndDate;	
 	private List<PotStatus> listBean = new ArrayList<PotStatus>();
 
 	private RelativeLayout mHead;
@@ -121,13 +120,15 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		public void onReceive(SocketTransceiver transceiver, final PotStatusDATA potStatus) {
 			handler.post(new Runnable() {
 				@Override
-				public void run() {					
+				public void run() {		
+					tv_SysV.setText((potStatus.getSysV())/10.0+"");
+					tv_SysI.setText((potStatus.getSysI())/100.0+"");
+					tv_RoomV.setText((potStatus.getRoomV())/100.0+"");
 					listBean = new ArrayList<PotStatus>(potStatus.getPotData());
 					if (listBean != null) {
 						if (listBean.size() > 0) {
-							// listBean.clear(); // 清除LISTVIEW 以前的内容
-							
-							PotStatus_Adapter.onDateChange(listBean);
+							// listBean.clear(); // 清除LISTVIEW 以前的内容								
+							PotStatus_Adapter.onDateChange(listBean);							
 						}
 					}
 				}
@@ -218,8 +219,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
 		mHead.setFocusable(true);
-		mHead.setClickable(true);
-		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setClickable(true);		
+		mHead.setBackgroundColor(Color.parseColor("#fffff7"));
 		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
 	}
@@ -230,6 +231,9 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		tv_title.setText("槽状态表");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		tv_SysV=(TextView) findViewById(R.id.tv_sysV);
+		tv_SysI=(TextView) findViewById(R.id.tv_sysI);
+		tv_RoomV=(TextView) findViewById(R.id.tv_RoomV);
 		// isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		// showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		// isShowingBtn.setOnClickListener(this);
@@ -360,7 +364,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 			}
 		};
-		timer.schedule(timerTask, 0, 3000);
+		timer.schedule(timerTask, 0, 2000);
 
 	}
 

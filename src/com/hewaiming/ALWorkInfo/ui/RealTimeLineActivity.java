@@ -34,6 +34,7 @@ import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -64,7 +65,7 @@ import bean.RequestAction;
 
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
 	private String ip;
-	private int port;	
+	private int port;
 	private LineChart mChart;
 	private TextView tv_title;
 	private Button backBtn;
@@ -92,7 +93,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					tv_title.setText(PotNo + "实时曲线"+"        连接远程服务器成功！");					
+					tv_title.setText(PotNo + "实时曲线" + "        连接远程服务器成功！");
 				}
 			});
 
@@ -103,18 +104,18 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(RealTimeLineActivity.this, "连接SOCKET失败。请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT).show();
-					tv_title.setText(PotNo + "实时曲线"+"        连接远程服务器失败！");		
+					Toast.makeText(RealTimeLineActivity.this, "连接SOCKET失败。请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT)
+							.show();
+					tv_title.setText(PotNo + "实时曲线" + "        连接远程服务器失败！");
 				}
 			});
 
 		}
-		
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {
-//			System.out.println(realTime.toString());
-			if (realTime.getPotNo()!=Integer.valueOf(PotNo)){
+			// System.out.println(realTime.toString());
+			if (realTime.getPotNo() != Integer.valueOf(PotNo)) {
 				return;
 			}
 			handler.post(new Runnable() {
@@ -122,8 +123,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 				public void run() {
 					LineData data = mChart.getData();
 					if (data != null) {
-						ILineDataSet set = data.getDataSetByIndex(0);				
-						 ArrayList<Entry> yValueList = new ArrayList<>();
+						ILineDataSet set = data.getDataSetByIndex(0);
+						ArrayList<Entry> yValueList = new ArrayList<>();
 						// set.addEntry(...); // can be called as well
 						ILineDataSet setCUR = data.getDataSetByIndex(1);
 
@@ -131,62 +132,63 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 							set = createSet();
 							data.addDataSet(set);
 						}
-						//实时系列电流
+						// 实时系列电流
 						if (setCUR == null) {
 							setCUR = createSet_CUR();
 							data.addDataSet(setCUR);
 						}
 
 						Calendar c = Calendar.getInstance();
-						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)) + "." + c.get(Calendar.SECOND));
-					
-						data.addEntry(new Entry((float) realTime.getPotv(), set.getEntryCount()), 0);//实时槽压数据
-					    
-						data.addEntry(new Entry((float) (realTime.getCur()/10), setCUR.getEntryCount()), 1);//实时系列电流
+						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE)) + "."
+								+ c.get(Calendar.SECOND));
+
+						data.addEntry(new Entry((float) realTime.getPotv(), set.getEntryCount()), 0);// 实时槽压数据
+
+						data.addEntry(new Entry((float) (realTime.getCur() / 10), setCUR.getEntryCount()), 1);// 实时系列电流
 						// let the chart know it's data has changed
 						mChart.notifyDataSetChanged();
 						mChart.invalidate();
 						// limit the number of visible entries
 						mChart.setVisibleXRangeMaximum(30);
-						// mChart.setVisibleYRange(30, AxisDependency.LEFT);
+						// mChart.setVisibleYRangeMaximum(30,
+						// AxisDependency.LEFT);
 
 						// move to the latest entry
 						mChart.moveViewToX(data.getXValCount() - 31);
-					
+
 					}
 
 				}
 			});
 
 		}
-		
 
 		@Override
-		public void onDisconnect(SocketTransceiver transceiver) {			
+		public void onDisconnect(SocketTransceiver transceiver) {
 
 		}
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, PotStatusDATA potStatus) {
-			
-			
+
 		}
 
-	};	
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_realtime_linechart);	
+		setContentView(R.layout.activity_realtime_linechart);
 		GetDataFromIntent();
 		init_title();
 		init_area();
 		init_potNo();
 		connect();
 		timer = new Timer();
-	
+
 		if (hideAction) {
 			include_selector = findViewById(R.id.include_select_all);
 			include_selector.setVisibility(View.GONE);
@@ -202,7 +204,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 	private void GetDataFromNet() {
 		SendActionToServer();
-		
+
 	}
 
 	private void showRealTimeLine(LineData data) {
@@ -219,7 +221,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		mChart.setDrawGridBackground(true);
 
 		// if disabled, scaling can be done on x- and y-axis separately
-		mChart.setPinchZoom(true);		
+		mChart.setPinchZoom(true);
 
 		// set an alternative background color
 		mChart.setBackgroundColor(Color.WHITE);
@@ -227,14 +229,14 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		data.setValueTextColor(Color.DKGRAY);
 
 		// add empty data
-		mChart.setData(data);	
-        
+		mChart.setData(data);
+
 		// Typeface tf = Typeface.createFromAsset(getAssets(),
 		// "OpenSans-Regular.ttf");
 
 		// get the legend (only possible after setting data)
 		Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.BELOW_CHART_CENTER);  
+		l.setPosition(LegendPosition.BELOW_CHART_CENTER);
 		// modify the legend ...
 		// l.setPosition(LegendPosition.LEFT_OF_CHART);
 		l.setForm(LegendForm.LINE);
@@ -256,7 +258,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		leftAxis.setAxisMinValue(3500f);
 		leftAxis.setDrawGridLines(true);
 		leftAxis.setEnabled(true);
-		
+
 		YAxis rightAxis = mChart.getAxisRight();
 		rightAxis.setTextColor(Color.RED);
 		rightAxis.setAxisMaxValue(2300f);
@@ -268,8 +270,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private void GetDataFromIntent() {
 		PotNo = getIntent().getStringExtra("PotNo");
 		hideAction = getIntent().getBooleanExtra("Hide_Action", false);
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
 		// JXList = (List<Map<String, Object>>)
 		// getIntent().getSerializableExtra("JXList");
 
@@ -450,7 +452,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		set.setDrawCircles(true);
 		return set;
 	}
-	
+
 	private void SendActionToServer() {
 		if (timer == null) {
 			timer = new Timer();
@@ -466,13 +468,13 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 					@Override
 					public void run() {
-						sendRealTimeAction();						
+						sendRealTimeAction();
 					}
 				});
 
 			}
 		};
-		timer.schedule(timerTask, 0, 2000);
+		timer.schedule(timerTask, 0, 1000);
 
 	}
 
@@ -555,5 +557,5 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			}
 		}
 	}
-	
+
 }

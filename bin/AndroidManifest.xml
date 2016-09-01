@@ -54,7 +54,8 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.PotVLineActivity" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.AeMostActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.AeMostActivity" 
+             android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.CraftLineActivity" >
         </activity>
@@ -62,13 +63,15 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.MeasueTableActivity" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.Ae5DayActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.Ae5DayActivity" 
+                  android:screenOrientation="portrait">"
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.FaultMostActivity" >
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.RealTimeLineActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.RealTimeLineActivity"
+             android:screenOrientation="portrait" >
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.PotStatusActivity" >
         </activity>       
