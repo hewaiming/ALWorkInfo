@@ -9,6 +9,7 @@ import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView.OnScrollChangedLis
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -123,6 +124,7 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			//convertView.setBackgroundColor(colors[position % 2]);
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
 		holder.tvPotNo.setText(entity.getPotNo()+"");
 		if(entity.getStatus().equals("NORM")){
 			holder.tvPotSt.setText("");  //’˝≥£≤€
@@ -190,12 +192,15 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		
 		holder.tvNoise.setTextColor(Color.DKGRAY);
 		holder.tvNoise.setText(entity.getNoise()+"");
-		if ((entity.getStatus().equals("Õ£≤€")) || (entity.getComerr()>=0)){			
+		if (!(entity.getStatus().equals("Õ£≤€")) && ((entity.getComerr()+35)!=0)){	
+//		¥¶¿Ì∑«Õ£≤€£¨Õ®—∂π ’œ
+			//holder.tvPotSt.setText("");  
 			holder.tvAutoRun.setText("");
 			holder.tvOperation.setText("");
-			holder.tvFaultNo.setText("");
+			holder.tvFaultNo.setTextColor(Color.RED);
+			holder.tvFaultNo.setText(entity.getComerr()+"");
 			holder.tvSetV.setText("");	
-//			holder.tvWorkV.setText("");
+			holder.tvWorkV.setText("");
 			holder.tvSetNb.setText("");
 			holder.tvWorkNb.setText("");
 			holder.tvNbPlus.setText("");
@@ -210,8 +215,29 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvYJWZ.setText("");		
 			holder.tvNoise.setText("");			
 		}		
-		if (entity.getComerr()==0){
-			holder.tvWorkV.setText("");
+		if (entity.getStatus().equals("Õ£≤€")){
+			
+			holder.tvPotSt.setText("Õ£≤€");  
+			holder.tvAutoRun.setText("");
+			holder.tvOperation.setText("");
+			//holder.tvFaultNo.setTextColor(Color.RED);
+			holder.tvFaultNo.setText("");
+			holder.tvSetV.setText("");	
+			//holder.tvWorkV.setText("");
+			holder.tvSetNb.setText("");
+			holder.tvWorkNb.setText("");
+			holder.tvNbPlus.setText("");
+			holder.tvNbTime.setText("");
+			holder.tvAeSpan.setText("");
+			holder.tvAeTime.setText("");
+			holder.tvAeV.setText("");
+			holder.tvAeContinues.setText("");
+			holder.tvAeStatus.setText("");
+			holder.tvAeCnt.setText("");			
+			holder.tvOStatus.setText("");
+			holder.tvYJWZ.setText("");		
+			holder.tvNoise.setText("");	
+			
 		}
 		return convertView;
 	}

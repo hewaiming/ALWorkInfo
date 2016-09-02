@@ -23,9 +23,11 @@ import com.hewaiming.ALWorkInfo.socket.SocketTransceiver;
 import com.hewaiming.ALWorkInfo.socket.TcpClient;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -58,7 +61,7 @@ import bean.RequestAction;
 public class PotStatusActivity extends DemoBase implements OnScrollListener, OnClickListener {
 	private String ip;
 	private int port;	
-	private SharedPreferences sp;
+	//private SharedPreferences sp;
 	private Spinner spinner_area;
 	private Button backBtn;
 	// private ImageButton isShowingBtn;
@@ -162,6 +165,10 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		connect();
 		timer = new Timer();
 		SendActionToServer();
+		if (!MyConst.GetDataFromSharePre(mContext,"PotStatus_Show")){
+			MyConst.GuideDialog_show(mContext,"PotStatus_Show");  //第一次显示
+		}		
+		
 	}
 	
 	private void GetDataFromIntent() {
@@ -378,5 +385,5 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			e.printStackTrace();
 		}
 	}
-
+	
 }

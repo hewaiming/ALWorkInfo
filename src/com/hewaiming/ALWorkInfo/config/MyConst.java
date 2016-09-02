@@ -2,7 +2,14 @@ package com.hewaiming.ALWorkInfo.config;
 
 import com.hewaiming.ALWorkInfo.R;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Environment;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MyConst {
@@ -48,4 +55,36 @@ public class MyConst {
 
 	public static final String[] Areas_ALL = { "所有厂房","一厂房","二厂房","一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };;
 	
+	public static void GuideDialog_show(final Context mContext,final String showName) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_Fullscreen);
+		dialog.setContentView(R.layout.activity_guide_dialog);
+		ImageView iv = (ImageView) dialog.findViewById(R.id.ivNavigater_click);
+		iv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				SharedPreferences sp;
+				sp = mContext.getSharedPreferences("GuideDiaLogIsShow", mContext.MODE_PRIVATE);
+				if (sp!=null){
+					Editor editor = sp.edit();
+					editor.putBoolean(showName, true);				
+					if (!editor.commit()){
+						Toast.makeText(mContext.getApplicationContext(), "保存【引导界面显示】参数失败"+showName, 1).show();
+					}
+				}
+			}
+		});
+		dialog.show();
+	}
+	
+	public static boolean GetDataFromSharePre(Context mContext,String showName) {		
+		SharedPreferences sp;
+		sp = mContext.getSharedPreferences("GuideDiaLogIsShow", mContext.MODE_PRIVATE);
+		if(sp!=null){
+			 return sp.getBoolean(showName, false);			
+		}	
+		return false;
+	}
+
 }

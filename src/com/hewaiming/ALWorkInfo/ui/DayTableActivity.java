@@ -14,7 +14,12 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -63,6 +69,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private String ip;
 	private int port;
+	protected Context mContext;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
+		mContext=this;
 		GetDataFromIntent();	
 		init_area();
 		init_potNo();
@@ -77,6 +85,9 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		init_title();
 		init_HSView();
 		init_listview();
+		if (!MyConst.GetDataFromSharePre(mContext,"DayTable_Show")){
+			MyConst.GuideDialog_show(mContext,"DayTable_Show");  //第一次显示
+		}		
 	}
 
 	private void GetDataFromIntent() {

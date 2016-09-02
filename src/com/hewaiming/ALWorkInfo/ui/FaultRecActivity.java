@@ -15,6 +15,7 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_AlarmRecord;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 	private View include_selector;
 	private String ip;
 	private int port;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faultrec);
+		mContext=this;
 		GetDataFromIntent();		
 		init_area();
 		init_potNo();
@@ -78,6 +81,9 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 			include_selector=findViewById(R.id.include_selector);
 			include_selector.setVisibility(View.GONE);
 			GetDataFromNet();
+		}
+		if (!MyConst.GetDataFromSharePre(mContext,"FaultRec_Show")){
+			MyConst.GuideDialog_show(mContext,"FaultRec_Show");  //第一次显示
 		}
 	}
 

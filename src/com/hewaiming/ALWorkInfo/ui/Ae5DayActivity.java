@@ -18,6 +18,7 @@ import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae5;
 import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -62,6 +63,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private String ip;
 	private int port;
+	private Context ctx;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +73,15 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		setContentView(R.layout.activity_ae_5day);
 		layout_Ae = findViewById(R.id.Ae5Day);
 		layout_Ae.setVisibility(View.VISIBLE);
+		ctx=this;
 		GetDataFromIntent();
 		init_area();
 		init_title();
 		init_Tab();
 		DoGetDataFromNet();
+		if (!MyConst.GetDataFromSharePre(ctx,"AE5Day_Show")){
+			MyConst.GuideDialog_show(ctx,"AE5Day_Show");  //第一次显示
+		}
 	}
 
 	private void GetDataFromIntent() {

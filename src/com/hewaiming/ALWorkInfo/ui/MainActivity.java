@@ -190,7 +190,7 @@ public class MainActivity extends Activity
 		if(position==8 || position==15){
 			DoRun=true;
 		}
-		if (JXList != null || date_record != null || DoRun) {
+		if ((JXList != null && date_record != null) || DoRun) {
 			switch (position) {
 			case 0:
 				Intent Paramsintent = new Intent(MainActivity.this, ParamsActivity.class);

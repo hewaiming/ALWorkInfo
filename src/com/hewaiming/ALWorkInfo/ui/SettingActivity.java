@@ -93,8 +93,7 @@ public class SettingActivity extends Activity {
 		if(sp!=null){
 			ip = sp.getString("ipstr", ip);
 			port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
-		}
-	
+		}	
 		// MyLog.i(TAG, "获取到ip端口:" + ip + ";" + port);
 	}
 }
