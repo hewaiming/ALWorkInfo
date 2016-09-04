@@ -8,6 +8,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_OperateRecAdapter;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -70,6 +71,7 @@ public class OperateRecActivity extends Activity implements HttpGetListener, OnS
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_operate_record);	
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init_area();
 		init_potNo();

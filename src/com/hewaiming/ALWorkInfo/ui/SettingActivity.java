@@ -1,6 +1,7 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,7 +23,7 @@ import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 	private Button btnsave, btnFinish;
-	private EditText edtip;
+	private AutoCompleteTextView edtip;
 	private EditText edtport;
 	SharedPreferences sp;
 	private String TAG = "=Setting=";
@@ -28,18 +31,25 @@ public class SettingActivity extends Activity {
 	private Context ctx;
 	private String ip;
 	private int port;
+	private String[] IPAddress={"125.64.59.11","218.203.253.168"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
+		MyApplication.getInstance().addActivity(this);
 		ctx=this;
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("远程服务器设置");
 
 		btnsave = (Button) findViewById(R.id.btn_save);
-		edtip = (EditText) findViewById(R.id.et_IP);
+		edtip = (AutoCompleteTextView) findViewById(R.id.et_IP);
+		
+		ArrayAdapter<String> av = new ArrayAdapter<String>(this,
+				android.R.layout.simple_dropdown_item_1line, IPAddress);		
+		edtip.setAdapter(av);
+		
 		edtport = (EditText) findViewById(R.id.et_PORT);		
 		sp = this.getSharedPreferences("SP", MODE_PRIVATE);
 		if(sp!=null){
@@ -71,8 +81,9 @@ public class SettingActivity extends Activity {
 					
 					Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 					startActivity(i);    //第一种重启程序
-					
+					finish();
 					/*ActivityManager am = (ActivityManager) SettingActivity.this.getSystemService(ACTIVITY_SERVICE);
 					if( android.os.Build.VERSION.SDK_INT < 8){
 					    am.restartPackage(getBaseContext().getPackageName());

@@ -44,18 +44,18 @@ public abstract class TcpClient implements Runnable {
 
 				@Override
 				public void onReceive(InetAddress addr, RealTime rTime) {
-					//System.out.println("接受到实时数据"+rTime.toString());
-					if(rTime!=null) {
-						TcpClient.this.onReceive(this, rTime);  //import
-					}
+					//System.out.println("接受到实时数据"+rTime.toString());					
+					TcpClient.this.onReceive(this, rTime);  //import
+				
 					
 				}
 				@Override
 				public void onReceive(InetAddress addr, PotStatusDATA potStatus) {
 					//System.out.println("接受到 槽状态数据"+potStatus.toString());
-					if (potStatus!=null){
+					TcpClient.this.onReceive(this, potStatus);  //import
+					/*if (potStatus!=null){
 						TcpClient.this.onReceive(this, potStatus);  //import
-					}					
+					}	*/				
 				}
 				
 				

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
@@ -77,7 +78,8 @@ public class CraftLineActivity extends Activity
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_craft_line);		
+		setContentView(R.layout.activity_craft_line);	
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init_area();
 		init_potNo();

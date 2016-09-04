@@ -10,6 +10,7 @@ import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.InterFace.LoadAeCntInterface;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
 import com.hewaiming.ALWorkInfo.adapter.MyPageAdapter;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.fragment.BackHandledFragment;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_AeCnt;
@@ -87,6 +88,7 @@ public class AeMostActivity extends FragmentActivity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_most);
+		MyApplication.getInstance().addActivity(this);
 		mContext = this;
 		layout_Ae = findViewById(R.id.AeMost);
 		GetDataFromIntent();
@@ -94,6 +96,9 @@ public class AeMostActivity extends FragmentActivity
 		init_date();
 		init_title();
 		init_Tab();
+		if (!MyConst.GetDataFromSharePre(mContext,"AeMost_Show")){
+			MyConst.GuideDialog_show(mContext,"AeMost_Show");  //第一次显示
+		}	
 	}
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_record");

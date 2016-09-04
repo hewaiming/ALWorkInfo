@@ -9,12 +9,14 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.FaultRecord_Adapter;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_AlarmRecord;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -58,6 +60,7 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 	private LinearLayout showArea=null;
 	private String ip;
 	private int port;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +68,17 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faultrec);
+		MyApplication.getInstance().addActivity(this);	
 		GetDataFromIntent();		
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_ListView();
+		mContext=this;
+		if (!MyConst.GetDataFromSharePre(mContext,"AlarmRec_Show")){
+			MyConst.GuideDialog_show(mContext,"AlarmRec_Show");  //第一次显示
+		}	
 	}
 
 	private void init_ListView() {

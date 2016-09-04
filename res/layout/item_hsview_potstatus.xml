@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="工作电压"
+                    android:text="工作 电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />

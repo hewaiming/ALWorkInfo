@@ -9,6 +9,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.MyPageAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae1;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae2;
@@ -71,6 +72,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_5day);
+		MyApplication.getInstance().addActivity(this);
 		layout_Ae = findViewById(R.id.Ae5Day);
 		layout_Ae.setVisibility(View.VISIBLE);
 		ctx=this;

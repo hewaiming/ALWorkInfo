@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.ImageConfig;
 import com.hewaiming.ALWorkInfo.config.ImageLoadOptions;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -39,6 +40,7 @@ public class WelcomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);		
 		setContentView(R.layout.welcome);
+		MyApplication.getInstance().addActivity(this);
 		ctx=this;
 		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
 		if(sp!=null){
@@ -65,6 +67,7 @@ public class WelcomeActivity extends Activity {
 			public void onClick(View v) {
 				timer.cancel();
 				Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				startActivity(intent);
 				finish();
 			}

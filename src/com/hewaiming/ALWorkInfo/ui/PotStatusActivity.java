@@ -16,6 +16,7 @@ import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_PotStatusAdapter;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.DemoBase;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -60,16 +61,16 @@ import bean.RequestAction;
 
 public class PotStatusActivity extends DemoBase implements OnScrollListener, OnClickListener {
 	private String ip;
-	private int port;	
-	//private SharedPreferences sp;
+	private int port;
+	// private SharedPreferences sp;
 	private Spinner spinner_area;
 	private Button backBtn;
 	// private ImageButton isShowingBtn;
-	private TextView tv_title,tv_SysV,tv_SysI,tv_RoomV;
+	private TextView tv_title, tv_SysV, tv_SysI, tv_RoomV;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
 
-	private String PotNo, BeginDate, EndDate;	
+	private String PotNo, BeginDate, EndDate;
 	private List<PotStatus> listBean = new ArrayList<PotStatus>();
 
 	private RelativeLayout mHead;
@@ -91,7 +92,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					tv_title.setText("槽状态表：连接远程服务器成功！");					
+					tv_title.setText("槽状态表：连接远程服务器成功！");
 				}
 			});
 
@@ -103,16 +104,17 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				@Override
 				public void run() {
 					tv_title.setText("槽状态表：连接远程服务器失败！");
-					Toast.makeText(PotStatusActivity.this, "连接SOCKET失败，请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT).show();
+					Toast.makeText(PotStatusActivity.this, "连接SOCKET失败，请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT)
+							.show();
 				}
 			});
 
-		}		
+		}
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, RealTime realTime) {
 
-		}		
+		}
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
@@ -121,22 +123,26 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, final PotStatusDATA potStatus) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {		
-					tv_SysV.setText((potStatus.getSysV())/10.0+"");
-					tv_SysI.setText((potStatus.getSysI())/100.0+"");
-					tv_RoomV.setText((potStatus.getRoomV())/100.0+"");
-					listBean = new ArrayList<PotStatus>(potStatus.getPotData());
-					if (listBean != null) {
-						if (listBean.size() > 0) {
-							// listBean.clear(); // 清除LISTVIEW 以前的内容								
-							PotStatus_Adapter.onDateChange(listBean);							
+			if (potStatus == null) {
+				tv_title.setText("槽状态表：没有获取到数据！");				
+				//transceiver.start();
+			} else {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						tv_SysV.setText((potStatus.getSysV()) / 10.0 + "");
+						tv_SysI.setText((potStatus.getSysI()) / 100.0 + "");
+						tv_RoomV.setText((potStatus.getRoomV()) / 100.0 + "");
+						listBean = new ArrayList<PotStatus>(potStatus.getPotData());
+						if (listBean != null) {
+							if (listBean.size() > 0) {
+								// listBean.clear(); // 清除LISTVIEW 以前的内容
+								PotStatus_Adapter.onDateChange(listBean);
+							}
 						}
 					}
-				}
-			});
-			
+				});
+			}
 		}
 
 	};
@@ -148,7 +154,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potstatus);
-		GetDataFromIntent();		
+		MyApplication.getInstance().addActivity(this);
+		GetDataFromIntent();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -165,42 +172,24 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		connect();
 		timer = new Timer();
 		SendActionToServer();
-		if (!MyConst.GetDataFromSharePre(mContext,"PotStatus_Show")){
-			MyConst.GuideDialog_show(mContext,"PotStatus_Show");  //第一次显示
-		}		
-		
+		if (!MyConst.GetDataFromSharePre(mContext, "PotStatus_Show")) {
+			MyConst.GuideDialog_show(mContext, "PotStatus_Show"); // 第一次显示
+		}
+
 	}
-	
+
 	private void GetDataFromIntent() {
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);	
-	}	
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
+	}
 
 	private void init_listview() {
 		lv_PotStatus = (ListView) findViewById(R.id.lv_PotStatus);
 		lv_PotStatus.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_PotStatus.setCacheColorHint(0);
 		lv_PotStatus.setOnScrollListener(this);
-		/*lv_PotStatus.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PotNo = String.valueOf(listBean.get(position).getPotNo());
-				// Toast.makeText(getApplicationContext(), PotNo, 1).show();
-				Intent potv_intent = new Intent(PotStatusActivity.this, ShowPotVLineActivity.class);
-				Bundle potv_bundle = new Bundle();
-				potv_bundle.putString("PotNo", PotNo);
-				potv_bundle.putString("Begin_Date", BeginDate);
-				potv_bundle.putString("End_Date", EndDate);
-				potv_bundle.putSerializable("JXList", (Serializable) JXList);
-				potv_bundle.putString("ip", ip);
-				potv_bundle.putInt("port", port);
-				potv_intent.putExtras(potv_bundle);
-				startActivity(potv_intent); // 槽压曲线图
-
-			}				
-		});*/
 		lv_PotStatus.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -226,7 +215,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
 		mHead.setFocusable(true);
-		mHead.setClickable(true);		
+		mHead.setClickable(true);
 		mHead.setBackgroundColor(Color.parseColor("#fffff7"));
 		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
@@ -238,9 +227,9 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		tv_title.setText("槽状态表");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		tv_SysV=(TextView) findViewById(R.id.tv_sysV);
-		tv_SysI=(TextView) findViewById(R.id.tv_sysI);
-		tv_RoomV=(TextView) findViewById(R.id.tv_RoomV);
+		tv_SysV = (TextView) findViewById(R.id.tv_sysV);
+		tv_SysI = (TextView) findViewById(R.id.tv_sysI);
+		tv_RoomV = (TextView) findViewById(R.id.tv_RoomV);
 		// isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		// showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		// isShowingBtn.setOnClickListener(this);
@@ -385,5 +374,5 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			e.printStackTrace();
 		}
 	}
-	
+
 }

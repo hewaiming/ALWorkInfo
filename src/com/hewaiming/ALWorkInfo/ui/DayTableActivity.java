@@ -9,6 +9,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -77,6 +78,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
+		MyApplication.getInstance().addActivity(this);
 		mContext=this;
 		GetDataFromIntent();	
 		init_area();

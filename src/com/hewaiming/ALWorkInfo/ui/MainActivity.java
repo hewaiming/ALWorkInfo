@@ -14,6 +14,7 @@ import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 import com.hewaiming.ALWorkInfo.Popup.ActionItem;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpGetData_JXRecord;
@@ -21,6 +22,7 @@ import com.hewaiming.ALWorkInfo.net.HttpGetData_date;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -41,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +69,7 @@ public class MainActivity extends Activity
 	private Context mContext;
 	private TitlePopup titlePopup;
 	private TextView tv_title;
+	private ImageView iv_wifi;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +78,20 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		setContentView(R.layout.activity_main);
+		MyApplication.getInstance().addActivity(this);
 		init();
+		NetDetector netDetector = new NetDetector(mContext);
+		if (netDetector.isConnectingToInternet() == 1) {
+			iv_wifi.setVisibility(View.GONE);
+		}else{
+		  	
+		}
 		if (NetStatus() != 0) {
-			if (!initdate(mContext)) { // 取远程服务器地址和端口
-				startActivity(new Intent(MainActivity.this, SettingActivity.class));// 没有设置远程服务器ip和端口
+			if (!initdate(mContext)) { // 取远程服务器地址和端口	
+				Intent intent = new Intent(MainActivity.this, SettingActivity.class);  
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 				
+				startActivity(intent);// 没有设置远程服务器ip和端口
+				
 			} else {
 				get_dateTable_url = "http://" + ip + get_dateTable_url;
 				get_JXName_url = "http://" + ip + get_JXName_url;
@@ -96,9 +110,9 @@ public class MainActivity extends Activity
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {		
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			dialog_exit();
+			dialog_exit();			
 			return true;
 		}
 		return true;
@@ -112,9 +126,10 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				// AccoutList.this.finish();
-				// System.exit(1);
-				android.os.Process.killProcess(android.os.Process.myPid());
+				MyApplication.getInstance().exit();
+				//finish();
+				//android.os.Process.killProcess(android.os.Process.myPid());				
+				
 			}
 		});
 		builder.setNegativeButton("取消", new android.content.DialogInterface.OnClickListener() {
@@ -150,12 +165,13 @@ public class MainActivity extends Activity
 		btnMore.setVisibility(View.VISIBLE);
 		btnMore.setOnClickListener(this);
 		tv_title = (TextView) findViewById(R.id.tv_title);
+		iv_wifi=(ImageView) findViewById(R.id.iv_NoWiFi);
 
 	}
 
 	private void Popup_initData() {
 		// 给标题栏弹窗添加子类
-		titlePopup.addAction(new ActionItem(this, "设置远程服务器", R.drawable.mm_title_btn_compose_normal));
+		titlePopup.addAction(new ActionItem(this, "设置远程服务器", R.drawable.settings));
 		titlePopup.addAction(new ActionItem(this, "关于", R.drawable.mm_title_btn_keyboard_normal));
 		titlePopup.addAction(new ActionItem(this, "扫一扫", R.drawable.mm_title_btn_qrcode_normal));
 	}

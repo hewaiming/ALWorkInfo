@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 
 import bean.PotStatus;
@@ -25,6 +26,7 @@ public abstract class SocketTransceiver implements Runnable {
 	protected DataOutputStream out;
 	protected ObjectInputStream objectInputStream;
 	private boolean runFlag;
+	private int GetNoData=0;
 
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
@@ -78,7 +80,7 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
 			out = new DataOutputStream(this.socket.getOutputStream());
-			objectInputStream = new ObjectInputStream(this.socket.getInputStream());
+			objectInputStream = new ObjectInputStream(this.socket.getInputStream());			
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
@@ -97,7 +99,13 @@ public abstract class SocketTransceiver implements Runnable {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				//GetNoData++;
+				if(GetNoData>6){
+					 runFlag=false;       //连续6次没有获取到服务器传送过来的数据
+					// socket.connect(addr);
+				}else{
+					GetNoData++;
+				}
+				
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

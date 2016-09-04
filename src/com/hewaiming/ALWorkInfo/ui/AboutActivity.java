@@ -1,6 +1,7 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +29,7 @@ public class AboutActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_about);
+		MyApplication.getInstance().addActivity(this);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("¹ØÓÚ");
 		btnCheck = (Button) findViewById(R.id.btn_check_ver);		

@@ -9,6 +9,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -71,7 +72,7 @@ public class RealRecActivity extends Activity implements HttpGetListener, OnScro
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_real_record);
-		
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init_area();
 		init_potNo();

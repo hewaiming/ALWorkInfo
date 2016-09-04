@@ -8,6 +8,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_MeasueTableAdapter;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
@@ -66,6 +67,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measue_table);
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();	
 		init_area();
 		init_potNo();

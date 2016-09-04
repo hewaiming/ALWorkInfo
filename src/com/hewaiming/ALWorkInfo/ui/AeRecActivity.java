@@ -10,11 +10,13 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -66,6 +68,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private String ip;
 	private int port;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ae_record);
+		MyApplication.getInstance().addActivity(this);
+		mContext=this;
 		GetDataFromIntent();		
 		init_area();
 		init_potNo();
@@ -85,6 +90,9 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 			include_selector.setVisibility(View.GONE);
 			GetDataFromNet();
 		}
+		if (!MyConst.GetDataFromSharePre(mContext,"AeRec_Show")){
+			MyConst.GuideDialog_show(mContext,"AeRec_Show");  //第一次显示
+		}	
 		
 	}
 

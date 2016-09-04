@@ -2,6 +2,7 @@ package com.hewaiming.ALWorkInfo.ui;
 
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ public class DialogActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dialog);
-
+		MyApplication.getInstance().addActivity(this);
 		initView();
 	}
 

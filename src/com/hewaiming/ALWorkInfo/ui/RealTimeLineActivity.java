@@ -25,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.DemoBase;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.socket.SocketTransceiver;
@@ -182,6 +183,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_realtime_linechart);
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init_title();
 		init_area();

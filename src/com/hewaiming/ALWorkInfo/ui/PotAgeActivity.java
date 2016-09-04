@@ -7,6 +7,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.PotAge_Adapter;
 import com.hewaiming.ALWorkInfo.bean.PotAge;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
@@ -46,6 +47,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potage);
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init();
 		init_title();

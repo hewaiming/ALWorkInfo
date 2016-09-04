@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -30,13 +31,16 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.banner.JazzyViewPager.TransitionEffect;
 import com.hewaiming.ALWorkInfo.config.ImageLoadOptions;
 import com.hewaiming.ALWorkInfo.config.MyConst;
+import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
@@ -133,12 +137,16 @@ public class SlideShowView extends FrameLayout {
 		imageUrls = new ArrayList<String>();
 		imageViewsList = new ArrayList<ImageView>();
 		dotViewsList = new ArrayList<View>();
-		// TODO 异步任务获取图片，这里可以改写为通过网络获取图片地址
-		if (initdate(context)) {
-			new GetListTask().execute(ip);
+		// wifi状态下获取图片，否则不
+		NetDetector netDetector = new NetDetector(context);
+		if (netDetector.isConnectingToInternet() == 1) {
+			if (initdate(context)) {
+				new GetListTask().execute(ip);// TODO 异步任务获取图片，这里可以改写为通过网络获取图片地址
+			}
+		} else{
+			                              //显示无WIFI
 		}
-
-	}
+	}	
 
 	public boolean initdate(Context ctx) {
 		sp = ctx.getSharedPreferences("SP", ctx.MODE_PRIVATE);
@@ -178,6 +186,7 @@ public class SlideShowView extends FrameLayout {
 			firstRun[i] = true;
 		}
 		// 热点个数与图片特殊相等
+
 		for (int i = 0; i < imageUrls.size(); i++) {
 
 			ImageView view = new ImageView(context);
@@ -280,12 +289,13 @@ public class SlideShowView extends FrameLayout {
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
 
-			ImageView imageView = imageViewsList.get(position);
-			if (firstRun[position]) {
-				imageLoader.displayImage(imageView.getTag() + "", imageView); // 节省流量
-																				// ，第一次运行才从网络去图片
-				firstRun[position] = false;
-			}
+			ImageView imageView = imageViewsList.get(position);	
+			
+				if (firstRun[position]) {
+					imageLoader.displayImage(imageView.getTag() + "", imageView); // 节省流量
+																					// ，第一次运行才从网络去图片
+					firstRun[position] = false;
+				}					
 
 			// imageLoader.displayImage(imageView.getTag() + "", imageView);
 
@@ -388,20 +398,23 @@ public class SlideShowView extends FrameLayout {
 		// or you can create default configuration by
 		// ImageLoaderConfiguration.createDefault(this);
 		// method.
-		options = new ImageLoadOptions().getOptions();
+		// options = new ImageLoadOptions().getOptions();
+
+		DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
+				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).bitmapConfig(Bitmap.Config.RGB_565)// 防止内存溢出的，图片太多就这这个。还有其他设置
+				// 如Bitmap.Config.ARGB_8888
+				.showImageForEmptyUri(R.drawable.no_wifi) // url爲空會显示该图片，自己放在drawable里面的
+				.showImageOnFail(R.drawable.no_wifi)// 加载失败显示的图片
+				.displayer(new RoundedBitmapDisplayer(5)) // 圆角，不需要请删除
+				.build();
+
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 				.memoryCacheExtraOptions(480, 800) // maxwidth, max
 													// height，即保存的每个缓存文件的最大长宽
 				.threadPoolSize(3)// 线程池内加载的数量
 				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
-				.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024)) // You
-																				// can
-																				// pass
-																				// your
-																				// own
-																				// memory
-																				// cache
+				.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024))
 
 				// implementation/你可以通过自己的内存缓存实现
 				.memoryCacheSize(2 * 1024 * 1024).discCacheSize(50 * 1024 * 1024)
@@ -411,11 +424,8 @@ public class SlideShowView extends FrameLayout {
 				// .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
 				.defaultDisplayImageOptions(options)
 				.imageDownloader(new BaseImageDownloader(context, 5 * 1000, 30 * 1000)) // connectTimeout
-																						// (5
-																						// s),
-																						// readTimeout
-																						// (30
-																						// s)超时时间
+
+				// s)超时时间
 				.writeDebugLogs() // Remove for releaseapp
 				.build();// 开始构建
 

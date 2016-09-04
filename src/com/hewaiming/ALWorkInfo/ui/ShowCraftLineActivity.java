@@ -17,6 +17,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_craft_line);
+		MyApplication.getInstance().addActivity(this);
 		PotNo = getIntent().getStringExtra("PotNo");
 		SelDate = getIntent().getStringExtra("Begin_End_Date");
 		selector = getIntent().getStringExtra("SELITEMS");	

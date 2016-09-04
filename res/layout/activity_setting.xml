@@ -40,7 +40,8 @@
             android:layout_marginLeft="10dp"
             android:background="#d2d2d2" />
 
-        <EditText
+        <!--
+             <EditText
             android:id="@+id/et_IP"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,6 +52,23 @@
             android:text="125.64.59.11"
             android:textColor="#444444"
             android:textSize="16sp" />
+        -->
+
+        <AutoCompleteTextView
+            android:id="@+id/et_IP"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:layout_marginLeft="10dp"          
+            android:completionThreshold="1"
+            android:dropDownHorizontalOffset="20dp"
+            android:ems="16"
+            android:text="125.64.59.11"
+            android:textColor="#444444" >
+
+            <requestFocus />
+        </AutoCompleteTextView>
     </LinearLayout>
 
     <LinearLayout

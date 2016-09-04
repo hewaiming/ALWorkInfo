@@ -25,6 +25,7 @@ import com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.floatButton.ALWorkInfoApplication;
 import com.hewaiming.ALWorkInfo.floatButton.FloatView;
@@ -98,6 +99,7 @@ public class ShowPotVLineActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potv_line);
+		MyApplication.getInstance().addActivity(this);
 		mContext = this;
 		GetDataFromIntent();
 //		BeginDate=getIntent().getStringExtra("Begin_Date");
@@ -110,7 +112,7 @@ public class ShowPotVLineActivity extends Activity
 		init_GetRemoteData();
 		show_RealRec_btn = (FloatingActionButton) findViewById(R.id.floatBtn_show_realRec); // 创建浮动按钮
 		show_RealRec_btn.setOnClickListener(this);
-		sbv = (SlideBottomPanel) findViewById(R.id.sbv);
+		sbv = (SlideBottomPanel) findViewById(R.id.sbv);// 创建浮动按钮
 		// createView(); // 创建浮动按钮
 	}
 

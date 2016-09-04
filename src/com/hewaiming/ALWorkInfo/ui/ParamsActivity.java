@@ -8,6 +8,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.Params_Adapter;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
+import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
 import com.hewaiming.ALWorkInfo.net.HttpPost_area;
@@ -47,6 +48,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_params);
+		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init();
 		init_title();
