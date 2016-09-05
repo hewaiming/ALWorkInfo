@@ -1,5 +1,6 @@
 package com.hewaiming.ALWorkInfo.ui;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -173,6 +174,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		public void onReceive(SocketTransceiver transceiver, PotStatusDATA potStatus) {
 
 		}
+
+		@Override
+		public void onReconnect(InetAddress addr) {
+		
+			
+		}		
 
 	};
 

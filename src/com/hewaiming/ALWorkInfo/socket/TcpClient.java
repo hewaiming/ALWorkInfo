@@ -57,7 +57,11 @@ public abstract class TcpClient implements Runnable {
 						TcpClient.this.onReceive(this, potStatus);  //import
 					}	*/				
 				}
-				
+
+				@Override
+				public void onReconnect(InetAddress addr) {				
+						TcpClient.this.onReconnect(addr);					
+				}			
 				
 			};
 			transceiver.start();
@@ -125,4 +129,5 @@ public abstract class TcpClient implements Runnable {
 	 *            SocketTransceiver∂‘œÛ
 	 */
 	public abstract void onDisconnect(SocketTransceiver transceiver);
+	public abstract void onReconnect(InetAddress addr);
 }

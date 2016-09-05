@@ -83,8 +83,6 @@ public class MainActivity extends Activity
 		NetDetector netDetector = new NetDetector(mContext);
 		if (netDetector.isConnectingToInternet() == 1) {
 			iv_wifi.setVisibility(View.GONE);
-		}else{
-		  	
 		}
 		if (NetStatus() != 0) {
 			if (!initdate(mContext)) { // 取远程服务器地址和端口	
@@ -173,7 +171,7 @@ public class MainActivity extends Activity
 		// 给标题栏弹窗添加子类
 		titlePopup.addAction(new ActionItem(this, "设置远程服务器", R.drawable.settings));
 		titlePopup.addAction(new ActionItem(this, "关于", R.drawable.mm_title_btn_keyboard_normal));
-		titlePopup.addAction(new ActionItem(this, "扫一扫", R.drawable.mm_title_btn_qrcode_normal));
+		//titlePopup.addAction(new ActionItem(this, "扫一扫", R.drawable.mm_title_btn_qrcode_normal));
 	}
 
 	private List<Map<String, Object>> getData() {
@@ -388,11 +386,11 @@ public class MainActivity extends Activity
 				if (sp.getString("port", String.valueOf(port)) != null) {
 					port = Integer.parseInt(sp.getString("port", String.valueOf(port)));
 				} else {
-					Toast.makeText(ctx, "请设置远程服务器端口", 1).show();
+					Toast.makeText(ctx, "请设置远程服务器端口", 0).show();
 					return false;
 				}
 			} else {
-				Toast.makeText(ctx, "请设置远程服务器IP", 1).show();
+				Toast.makeText(ctx, "请设置远程服务器IP", 0).show();
 				return false;
 			}
 			return true;
@@ -436,9 +434,7 @@ public class MainActivity extends Activity
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_more:
-			// startActivity(new
-			// Intent(MainActivity.this,DialogActivity.class));
+		case R.id.btn_more:		
 			titlePopup.show(v);
 			break;
 		}

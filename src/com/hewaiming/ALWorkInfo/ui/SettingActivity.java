@@ -77,11 +77,9 @@ public class SettingActivity extends Activity {
 				editor.putString("ipstr", ip);
 				editor.putString("port", port);
 				if (editor.commit()) {
-					Toast.makeText(getApplicationContext(), "远程服务器设置成功,将重启程序！", 1).show();
-					
+				//	Toast.makeText(getApplicationContext(), "远程服务器设置成功,将重启程序！", 0).show();					
 					Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//					i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 					startActivity(i);    //第一种重启程序
 					finish();
 					/*ActivityManager am = (ActivityManager) SettingActivity.this.getSystemService(ACTIVITY_SERVICE);

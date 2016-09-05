@@ -16,7 +16,7 @@ import bean.RequestAction;
 
 /**
  * Socket鏀跺彂鍣? 閫氳繃Socket鍙戦?佹暟鎹紝骞朵娇鐢ㄦ柊绾跨▼鐩戝惉Socket鎺ユ敹鍒扮殑鏁版嵁
-
+ * 
  */
 public abstract class SocketTransceiver implements Runnable {
 
@@ -26,7 +26,7 @@ public abstract class SocketTransceiver implements Runnable {
 	protected DataOutputStream out;
 	protected ObjectInputStream objectInputStream;
 	private boolean runFlag;
-	private int GetNoData=0;
+	private int GetNoData = 0;
 
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
@@ -36,17 +36,12 @@ public abstract class SocketTransceiver implements Runnable {
 	public InetAddress getInetAddress() {
 		return addr;
 	}
-	
+
 	public void start() {
 		runFlag = true;
 		new Thread(this).start();
 	}
-
-	/**
-	 * 鏂紑杩炴帴(涓诲姩)
-	 * <p>
-	 * 杩炴帴鏂紑鍚庯紝浼氬洖璋儃@code onDisconnect()}
-	 */
+	
 	public void stop() {
 		runFlag = false;
 		try {
@@ -80,7 +75,8 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
 			out = new DataOutputStream(this.socket.getOutputStream());
-			objectInputStream = new ObjectInputStream(this.socket.getInputStream());			
+			objectInputStream = new ObjectInputStream(this.socket.getInputStream());
+			GetNoData=0;
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
@@ -91,21 +87,27 @@ public abstract class SocketTransceiver implements Runnable {
 					int actionId = objectInputStream.readInt();
 					if (actionId == 1) {
 						final RealTime rTime = (RealTime) objectInputStream.readObject();
-						if (rTime!=null) { this.onReceive(addr, rTime); }
+						if (rTime != null) {
+							GetNoData = 0;
+							this.onReceive(addr, rTime);
+						}
 					} else if (actionId == 2) {
 						final PotStatusDATA pList = (PotStatusDATA) objectInputStream.readObject();
-						if (pList!=null) {this.onReceive(addr, pList);}
+						if (pList != null) {
+							GetNoData = 0;
+							this.onReceive(addr, pList);
+						}
 					}
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
-				if(GetNoData>6){
-					 runFlag=false;       //连续6次没有获取到服务器传送过来的数据
-					// socket.connect(addr);
-				}else{
+				e.printStackTrace();				
+				if (GetNoData > 200) {
+					this.onReconnect(addr);
+					// runFlag=false; //连续多次没有获取到服务器传送过来的数据				
+				} else {
 					GetNoData++;
 				}
-				
+
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -124,18 +126,17 @@ public abstract class SocketTransceiver implements Runnable {
 		}
 		this.onDisconnect(addr);
 	}
-	
 
 	/**
-	 * 鎺ユ敹鍒版暟鎹?
-	 * 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨?
-	 *            杩炴帴鍒扮殑Socket鍦板潃	
+	 * 鎺ユ敹鍒版暟鎹? 娉ㄦ剰锛氭鍥炶皟鏄湪鏂扮嚎绋嬩腑鎵ц鐨? 杩炴帴鍒扮殑Socket鍦板潃
 	 */
 	// 鎺ュ彈鏈嶅姟绔彂閫佽繃鏉ョ殑瀹炴椂鏇茬嚎鏁版嵁
 	public abstract void onReceive(InetAddress addr, RealTime rTime);
 
 	// 鎺ュ彈鏈嶅姟绔彂閫佽繃鏉ョ殑妲界姸鎬佹暟鎹?
 	public abstract void onReceive(InetAddress addr, PotStatusDATA potStatus);
-	
+
 	public abstract void onDisconnect(InetAddress addr);
+
+	public abstract void onReconnect(InetAddress addr);
 }
