@@ -11,29 +11,27 @@
     tools:context="com.hewaiming.ALWorkInfo.ui.MainActivity" >
 
     <include layout="@layout/head_main_include" />
-<FrameLayout
-     android:layout_width="match_parent"
-     android:layout_height="136dp" >    
-     <com.hewaiming.ALWorkInfo.banner.SlideShowView
-        android:id="@+id/bannerwView"
-        android:layout_width="fill_parent"
-        android:visibility="visible"
-        android:layout_height="136dp" >       
 
-    </com.hewaiming.ALWorkInfo.banner.SlideShowView>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="136dp" >
 
-     <ImageView
-         android:id="@+id/iv_NoWiFi"
-         android:layout_width="match_parent"
-         android:layout_height="136dp"
-         android:scaleType="fitXY"
-         android:src="@drawable/no_wifi"
-         android:visibility="visible" />
-    
-</FrameLayout>
-   
+        <com.hewaiming.ALWorkInfo.banner.SlideShowView
+            android:id="@+id/bannerwView"
+            android:layout_width="fill_parent"
+            android:layout_height="136dp"
+            android:visibility="visible" >
+        </com.hewaiming.ALWorkInfo.banner.SlideShowView>
 
-    <include      
-        layout="@layout/main_action" />
+        <ImageView
+            android:id="@+id/iv_NoWiFi"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_wifi"
+            android:visibility="visible" />
+    </FrameLayout>
+
+    <include layout="@layout/main_action" />
 
 </LinearLayout>

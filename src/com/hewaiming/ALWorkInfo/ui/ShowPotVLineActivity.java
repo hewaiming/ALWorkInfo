@@ -99,7 +99,7 @@ public class ShowPotVLineActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potv_line);
-		MyApplication.getInstance().addActivity(this);
+	//	MyApplication.getInstance().addActivity(this);
 		mContext = this;
 		GetDataFromIntent();
 //		BeginDate=getIntent().getStringExtra("Begin_Date");

@@ -398,15 +398,15 @@ public class SlideShowView extends FrameLayout {
 		// or you can create default configuration by
 		// ImageLoaderConfiguration.createDefault(this);
 		// method.
-		// options = new ImageLoadOptions().getOptions();
+		 options = new ImageLoadOptions().getOptions();
 
-		DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
+		/*DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).bitmapConfig(Bitmap.Config.RGB_565)// 防止内存溢出的，图片太多就这这个。还有其他设置
 				// 如Bitmap.Config.ARGB_8888
 				.showImageForEmptyUri(R.drawable.no_wifi) // url爲空會显示该图片，自己放在drawable里面的
 				.showImageOnFail(R.drawable.no_wifi)// 加载失败显示的图片
 				.displayer(new RoundedBitmapDisplayer(5)) // 圆角，不需要请删除
-				.build();
+				.build();*/
 
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
