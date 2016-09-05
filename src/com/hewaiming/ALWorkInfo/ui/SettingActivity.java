@@ -81,13 +81,7 @@ public class SettingActivity extends Activity {
 					Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(i);    //第一种重启程序
-					finish();
-					/*ActivityManager am = (ActivityManager) SettingActivity.this.getSystemService(ACTIVITY_SERVICE);
-					if( android.os.Build.VERSION.SDK_INT < 8){
-					    am.restartPackage(getBaseContext().getPackageName());
-					}else{
-					    am.killBackgroundProcesses(getBaseContext().getPackageName()); //第二种重启程序
-					}	*/				
+					finish();								
 				} else {
 					Toast.makeText(getApplicationContext(), "远程服务器设置失败", 1).show();
 				}

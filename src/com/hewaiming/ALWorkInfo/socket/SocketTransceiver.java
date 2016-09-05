@@ -25,8 +25,7 @@ public abstract class SocketTransceiver implements Runnable {
 	protected DataInputStream in;
 	protected DataOutputStream out;
 	protected ObjectInputStream objectInputStream;
-	private boolean runFlag;
-	private int GetNoData = 0;
+	private boolean runFlag;	
 
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
@@ -75,8 +74,7 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
 			out = new DataOutputStream(this.socket.getOutputStream());
-			objectInputStream = new ObjectInputStream(this.socket.getInputStream());
-			GetNoData=0;
+			objectInputStream = new ObjectInputStream(this.socket.getInputStream());			
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
@@ -87,26 +85,18 @@ public abstract class SocketTransceiver implements Runnable {
 					int actionId = objectInputStream.readInt();
 					if (actionId == 1) {
 						final RealTime rTime = (RealTime) objectInputStream.readObject();
-						if (rTime != null) {
-							GetNoData = 0;
+						if (rTime != null) {							
 							this.onReceive(addr, rTime);
 						}
 					} else if (actionId == 2) {
 						final PotStatusDATA pList = (PotStatusDATA) objectInputStream.readObject();
-						if (pList != null) {
-							GetNoData = 0;
+						if (pList != null) {							
 							this.onReceive(addr, pList);
 						}
 					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();				
-				if (GetNoData > 200) {
-					this.onReconnect(addr);
-					// runFlag=false; //连续多次没有获取到服务器传送过来的数据				
-				} else {
-					GetNoData++;
-				}
 
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -137,6 +127,5 @@ public abstract class SocketTransceiver implements Runnable {
 	public abstract void onReceive(InetAddress addr, PotStatusDATA potStatus);
 
 	public abstract void onDisconnect(InetAddress addr);
-
-	public abstract void onReconnect(InetAddress addr);
+	
 }

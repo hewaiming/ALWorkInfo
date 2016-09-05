@@ -85,18 +85,12 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private Timer timer = null;
 	private TimerTask timerTask = null;
 
-	private Handler handler = new Handler(Looper.getMainLooper());	
+	private Handler handler = new Handler(Looper.getMainLooper());
 
 	private TcpClient client = new TcpClient() {
 
 		@Override
-		public void onConnect(SocketTransceiver transceiver) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					tv_title.setText("槽状态表：连接远程服务器成功！");
-				}
-			});
+		public void onConnect(SocketTransceiver transceiver) {			
 
 		}
 
@@ -105,9 +99,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					tv_title.setText("槽状态表：连接远程服务器失败！");
-					Toast.makeText(PotStatusActivity.this, "连接SOCKET失败，请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT)
-							.show();
+					tv_title.setText("连接失败！检查服务器IP或网络正常？");
+					
 				}
 			});
 
@@ -120,30 +113,25 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					tv_title.setText("已断开远程服务器！");
-				}
-			});
+			
 		}
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, final PotStatusDATA potStatus) {
-			if (potStatus == null) {	
+			if (potStatus == null) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_title.setText("这次没有获取到槽状态数据！");						
+						tv_title.setText("槽状态表：没有获取到槽状态数据！");
 					}
-				});			
-				
+				});
+
 			} else {
-				//有数据情况				
+				// 有数据情况
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_title.setText("获取到上位机槽状态数据");	
+						tv_title.setText("槽状态表");
 						tv_SysV.setText((potStatus.getSysV()) / 10.0 + "");
 						tv_SysI.setText((potStatus.getSysI()) / 100.0 + "");
 						tv_RoomV.setText((potStatus.getRoomV()) / 100.0 + "");
@@ -157,53 +145,6 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 					}
 				});
 			}
-		}
-
-		@Override
-		public void onReconnect(InetAddress addr) {
-			NetDetector netDetector ;
-			for(int i=0;i<100;i++){
-				 netDetector = new NetDetector(mContext);
-				if (netDetector.isConnectingToInternet()==0){
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							tv_title.setText("没有可用的网络！,请退出【槽状态界面】");
-						}
-					});
-					return;
-				}else{
-					i=100;					
-				}
-				delay();
-			}
-			
-			if (client.isConnected()) {
-				client.disconnect();// 断开连接
-			}
-			try {
-				client.connect(ip, port);
-				if (client.isConnected()) {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							tv_title.setText("再次连接远程服务器socket成功！");
-						}
-					});
-					SendActionToServer();
-				} else {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							tv_title.setText("再次连接SOCKET失败，请设置远程服务器IP，或者检查网络是否正常！");
-						}
-					});
-
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-
 		}
 
 	};
@@ -435,12 +376,5 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			e.printStackTrace();
 		}
 	}
-
-	static void delay() {
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+	
 }

@@ -29,6 +29,7 @@ import com.hewaiming.ALWorkInfo.config.DemoBase;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.hewaiming.ALWorkInfo.socket.SocketTransceiver;
 import com.hewaiming.ALWorkInfo.socket.TcpClient;
 
@@ -86,18 +87,13 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	protected boolean DoRun = true;
 	private Timer timer = null;
 	private TimerTask timerTask = null;
+	private Context mContext;
 
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private TcpClient client = new TcpClient() {
+	private TcpClient client = new TcpClient() {		
 
 		@Override
-		public void onConnect(SocketTransceiver transceiver) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					tv_title.setText(PotNo + "实时曲线" + "        连接远程服务器成功！");
-				}
-			});
+		public void onConnect(SocketTransceiver transceiver) {			
 
 		}
 
@@ -105,10 +101,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		public void onConnectFailed() {
 			handler.post(new Runnable() {
 				@Override
-				public void run() {
-					Toast.makeText(RealTimeLineActivity.this, "连接SOCKET失败。请设置远程服务器IP，或者检查网络是否正常！", Toast.LENGTH_SHORT)
-							.show();
-					tv_title.setText(PotNo + "实时曲线" + "        连接远程服务器失败！");
+				public void run() {					
+					tv_title.setText(PotNo + "实时曲线：连接远程服务器失败！");
 				}
 			});
 
@@ -167,19 +161,13 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
-
+			
 		}
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, PotStatusDATA potStatus) {
 
-		}
-
-		@Override
-		public void onReconnect(InetAddress addr) {
-		
-			
-		}		
+		}			
 
 	};
 

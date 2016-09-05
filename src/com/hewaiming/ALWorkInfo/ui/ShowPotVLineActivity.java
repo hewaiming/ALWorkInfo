@@ -159,11 +159,7 @@ public class ShowPotVLineActivity extends Activity
 		lv_realrec.setCacheColorHint(0);
 		lv_realrec.setOnScrollListener(this);
 
-	}
-
-	
-
-	
+	}		
 
 	private void init_title() {
 		mLineChart = (LineChart) findViewById(R.id.chart_PotV);

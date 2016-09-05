@@ -81,7 +81,7 @@ public class MainActivity extends Activity
 		MyApplication.getInstance().addActivity(this);
 		init();
 		NetDetector netDetector = new NetDetector(mContext);
-		if (netDetector.isConnectingToInternet() == 1) {
+		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			iv_wifi.setVisibility(View.GONE);
 		}
 		if (NetStatus() != 0) {
@@ -124,9 +124,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				MyApplication.getInstance().exit();
-				//finish();
-				//android.os.Process.killProcess(android.os.Process.myPid());				
+				MyApplication.getInstance().exit();							
 				
 			}
 		});
@@ -404,7 +402,7 @@ public class MainActivity extends Activity
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[日期]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
 			tv_title.setTextSize(14);
-			tv_title.setText("铝电解工作站:" + "请检查远程服务器IP和端口是否正确！");
+			tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
 		} else {
 			date_table = new ArrayList<String>();
 			date_table = JsonToBean_Area_Date.JsonArrayToDate(data);
@@ -422,7 +420,7 @@ public class MainActivity extends Activity
 	public void GetJXRecordUrl(String data) {
 		if (data.equals("")) {
 			tv_title.setTextSize(14);
-			tv_title.setText("铝电解工作站:" + "请检查远程服务器IP和端口是否正确！");
+			tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
 			Toast.makeText(getApplicationContext(), "没有获取到[解析号]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
 		} else {
 			JXList = new ArrayList<Map<String, Object>>();

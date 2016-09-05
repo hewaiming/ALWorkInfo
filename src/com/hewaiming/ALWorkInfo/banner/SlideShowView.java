@@ -139,7 +139,7 @@ public class SlideShowView extends FrameLayout {
 		dotViewsList = new ArrayList<View>();
 		// wifi状态下获取图片，否则不
 		NetDetector netDetector = new NetDetector(context);
-		if (netDetector.isConnectingToInternet() == 1) {
+		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			if (initdate(context)) {
 				new GetListTask().execute(ip);// TODO 异步任务获取图片，这里可以改写为通过网络获取图片地址
 			}

@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,12 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends Activity {
-	private Button btnCheck,btnFinish;	
+	private Button btnCheck, btnFinish;
 
-	private String TAG="=Setting=";
-	private TextView tv_title;
+	private String TAG = "=Setting=";
+	private TextView tv_title, tv_ID;
 	private Context ctx;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -32,6 +34,15 @@ public class AboutActivity extends Activity {
 		MyApplication.getInstance().addActivity(this);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("关于");
+		tv_ID=(TextView) findViewById(R.id.tv_id);
+		String myId;
+		try {
+			myId = getVersionName();
+			tv_ID.setText("版本号："+myId);
+		} catch (Exception e) {			
+			e.printStackTrace();
+			tv_ID.setText("版本号：未知");
+		}		
 		btnCheck = (Button) findViewById(R.id.btn_check_ver);		
 		btnFinish=(Button) findViewById(R.id.btn_back);
 		btnFinish.setOnClickListener(new OnClickListener() {
@@ -51,4 +62,14 @@ public class AboutActivity extends Activity {
 		});
 	}
 	
+	private String getVersionName() throws Exception  
+	{  
+	        // 获取packagemanager的实例  
+	        PackageManager packageManager = getPackageManager();  
+	        // getPackageName()是你当前类的包名，0代表是获取版本信息  
+	        PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(),0);  
+	        String version = packInfo.versionName;  
+	        return version;  
+	}  
+
 }
