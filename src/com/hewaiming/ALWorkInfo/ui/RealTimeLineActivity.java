@@ -76,11 +76,10 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private LinearLayout showArea;
 	private String PotNo;
 	private boolean hideAction;
-	private Spinner spinner_area, spinner_begindate, spinner_enddate;
+	private Spinner spinner_area, spinner_begindate, spinner_enddate,spinner_potno;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
-	private List<String> PotNoList = null;
-	private AbsSpinner spinner_potno;
+	private List<String> PotNoList = null;	
 	private ArrayAdapter<String> PotNo_adapter;
 	private Button findBtn;
 	private View include_selector;
@@ -109,8 +108,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		}
 
 		@Override
-		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {
-			// System.out.println(realTime.toString());
+		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {			
 			if (realTime.getPotNo() != Integer.valueOf(PotNo)) {
 				return;
 			}
@@ -230,8 +228,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		// Typeface tf = Typeface.createFromAsset(getAssets(),
 		// "OpenSans-Regular.ttf");
-
-		// get the legend (only possible after setting data)
+		
 		Legend l = mChart.getLegend();
 		l.setPosition(LegendPosition.BELOW_CHART_CENTER);
 		// modify the legend ...
@@ -514,11 +511,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			if (timerTask != null) {
 				timerTask.cancel();
 			}
+			connect();
 			tv_title.setText(PotNo + "ÊµÊ±ÇúÏß");
 			if (mChart != null) {
 				mChart.clearValues();
 				// mChart.notifyDataSetChanged();
-			}
+			}			
 			LineData linedata = new LineData();
 			showRealTimeLine(linedata);
 			SendActionToServer();
