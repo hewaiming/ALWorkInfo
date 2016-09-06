@@ -27,7 +27,7 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<dayTable>();
-			System.out.println("jsonarray.DayTable length()---" + jsonarray.length());
+			//System.out.println("jsonarray.DayTable length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				dayTable mday = new dayTable();
@@ -90,7 +90,7 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<PotV>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				PotV mPotV = new PotV();
@@ -113,7 +113,7 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<String>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				String mdata = jsonobj.getString("Ddate");
@@ -170,7 +170,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<FaultRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.FaultRecord---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.FaultRecord---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -181,7 +181,7 @@ public class JsonToBean_Area_Date {
 				int recNo = jsonobj.getInt("RecordNo");
 				recNo = recNo - 1;
 				Map<String, Object> mMap = JXList.get(recNo);
-				System.out.println("jx_name" + mMap.get("jx_name").toString());
+				//System.out.println("jx_name" + mMap.get("jx_name").toString());
 				mFault.setRecordNo(mMap.get("jx_name").toString());
 				listBean.add(mFault);
 			}
@@ -200,7 +200,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<RealRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.RealRecord :length()---" + jsonarray.length());
+			//System.out.println("jsonarray.RealRecord :length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -211,7 +211,7 @@ public class JsonToBean_Area_Date {
 				int recNo = jsonobj.getInt("RecordNo");
 				recNo = recNo - 1;
 				Map<String, Object> mMap = JXList.get(recNo);
-				System.out.println("jx_name:" + mMap.get("jx_name").toString());
+				//System.out.println("jx_name:" + mMap.get("jx_name").toString());
 				
 				String name2_tmp=mMap.get("jx_name2").toString(); //记录名 参数2
 				String name3_tmp=mMap.get("jx_name3").toString();
@@ -246,7 +246,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<OperateRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -282,7 +282,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -349,7 +349,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<dayTable>();
 			listBean.clear();
-			System.out.println("jsonarray. DayTable---length()---" + jsonarray.length());
+			//System.out.println("jsonarray. DayTable---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -455,7 +455,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.AeCnt---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.AeCnt---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -490,7 +490,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -552,12 +552,11 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<MeasueTable>();
 			listBean.clear();
-			System.out.println("jsonarray. MeasueTable---length()---" + jsonarray.length());
+			//System.out.println("jsonarray. MeasueTable---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				MeasueTable mBean = new MeasueTable();
-
 				// PotNo, Ddate,ALCnt, LSP,
 				// DJZSP;DJWD;FZB;FeCnt;SiCnt;ALOCnt;CaFCnt;MgCnt;MLSP;LDYJ;JHCL;
 
@@ -661,7 +660,7 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<FaultMost>();
 			listBean.clear();
-			System.out.println("jsonarray.FaultMost---length()---" + jsonarray.length());
+			//System.out.println("jsonarray.FaultMost---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);

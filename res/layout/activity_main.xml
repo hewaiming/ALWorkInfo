@@ -20,7 +20,7 @@
             android:id="@+id/bannerwView"
             android:layout_width="fill_parent"
             android:layout_height="136dp"
-            android:visibility="visible" >
+            android:visibility="gone" >
         </com.hewaiming.ALWorkInfo.banner.SlideShowView>
 
         <ImageView
@@ -29,7 +29,7 @@
             android:layout_height="136dp"
             android:scaleType="fitXY"
             android:src="@drawable/no_wifi"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </FrameLayout>
 
     <include layout="@layout/main_action" />

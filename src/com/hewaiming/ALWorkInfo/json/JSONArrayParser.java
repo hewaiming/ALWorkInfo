@@ -82,13 +82,13 @@ public class JSONArrayParser {
 			is.close();
 			json="";
 			json = sb.toString();	
-			System.out.println("json before---" + json);
+			//System.out.println("json before---" + json);
 			if (json.equals("")){
 				return jObj;  //无数据，直接返回空
 			}else{
 				json = json.substring(0, json.length() - 1);
 				json = '[' + json + ']';
-				System.out.println("json after---" + json);
+				//System.out.println("json after---" + json);
 			}
 			
 

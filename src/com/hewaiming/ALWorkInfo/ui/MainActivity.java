@@ -14,6 +14,7 @@ import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 import com.hewaiming.ALWorkInfo.Popup.ActionItem;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
+import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
@@ -70,10 +71,10 @@ public class MainActivity extends Activity
 	private TitlePopup titlePopup;
 	private TextView tv_title;
 	private ImageView iv_wifi;
+	private SlideShowView bannerView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	protected void onCreate(Bundle savedInstanceState) {		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		mContext = this;
@@ -83,11 +84,15 @@ public class MainActivity extends Activity
 		NetDetector netDetector = new NetDetector(mContext);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			iv_wifi.setVisibility(View.GONE);
+			bannerView.setVisibility(View.VISIBLE);
+		}else{
+			iv_wifi.setVisibility(View.VISIBLE);
+			bannerView.setVisibility(View.GONE);			
 		}
 		if (NetStatus() != 0) {
 			if (!initdate(mContext)) { // 取远程服务器地址和端口	
 				Intent intent = new Intent(MainActivity.this, SettingActivity.class);  
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 				
+				//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 				
 				startActivity(intent);// 没有设置远程服务器ip和端口
 				
 			} else {
@@ -162,6 +167,7 @@ public class MainActivity extends Activity
 		btnMore.setOnClickListener(this);
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		iv_wifi=(ImageView) findViewById(R.id.iv_NoWiFi);
+		bannerView=(com.hewaiming.ALWorkInfo.banner.SlideShowView)findViewById(R.id.bannerwView);
 
 	}
 
@@ -183,18 +189,7 @@ public class MainActivity extends Activity
 		Log.i("Main", "size=" + dataList.size());
 		return dataList;
 	}
-
-	/*
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
-	 * menu; this adds items to the action bar if it is present.
-	 * getMenuInflater().inflate(R.menu.main, menu); return true; }
-	 */
-	/*
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) {
-	 * 
-	 * int id = item.getItemId(); if (id == R.id.action_settings) { return true;
-	 * } return super.onOptionsItemSelected(item); }
-	 */
+	
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

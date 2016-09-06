@@ -75,7 +75,7 @@ public class HttpPost_BeginDate_EndDate extends AsyncTask<String, Void, String> 
         
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
 		if (json != null) {
-			Log.d("json_area_potno", json.toString());// 从服务器返回有数据
+			//Log.d("json_area_potno", json.toString());// 从服务器返回有数据
 			return json.toString();
 		} else {
 			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");

@@ -70,7 +70,7 @@ public class SettingActivity extends Activity {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "ï¿½ï¿½Ê¼ï¿½Þ¸ï¿½");
+				//Log.i(TAG, "ï¿½ï¿½Ê¼ï¿½Þ¸ï¿½");
 				String ip = edtip.getText().toString();//
 				String port = edtport.getText().toString();//
 				Editor editor = sp.edit();
@@ -85,7 +85,7 @@ public class SettingActivity extends Activity {
 				} else {
 					Toast.makeText(getApplicationContext(), "Ô¶³Ì·þÎñÆ÷ÉèÖÃÊ§°Ü", 1).show();
 				}
-				Log.i(TAG, "ï¿½ï¿½ï¿½ï¿½É¹ï¿?" + sp.getString("ipstr", "") + ";" + sp.getString("port", ""));
+				//Log.i(TAG, "ï¿½ï¿½ï¿½ï¿½É¹ï¿?" + sp.getString("ipstr", "") + ";" + sp.getString("port", ""));
 
 			}
 		});

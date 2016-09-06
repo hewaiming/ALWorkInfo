@@ -30,7 +30,7 @@ public class NetDetector {
 					}
 					if ((info[i].getState() == NetworkInfo.State.CONNECTED)
 							&& (info[i].getType() == ConnectivityManager.TYPE_MOBILE)) {
-						Toast.makeText(context, "当前网络:3G网络或4G网络，请注意运行程序会可能会产生较大流量！", Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "当前网络:3G网络或4G网络，运行程序可能会产生较多流量！", Toast.LENGTH_LONG).show();
 						IsNet = 2;
 						break;
 					}

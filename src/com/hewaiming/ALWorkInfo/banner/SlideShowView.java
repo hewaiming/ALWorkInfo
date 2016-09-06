@@ -393,20 +393,8 @@ public class SlideShowView extends FrameLayout {
 	 * @param context
 	 */
 	public static void initImageLoader(Context context) {
-		// This configuration tuning is custom. You can tune every option, you
-		// may tune some of them,
-		// or you can create default configuration by
-		// ImageLoaderConfiguration.createDefault(this);
-		// method.
-		 options = new ImageLoadOptions().getOptions();
-
-		/*DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
-				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).bitmapConfig(Bitmap.Config.RGB_565)// 防止内存溢出的，图片太多就这这个。还有其他设置
-				// 如Bitmap.Config.ARGB_8888
-				.showImageForEmptyUri(R.drawable.no_wifi) // url爲空會显示该图片，自己放在drawable里面的
-				.showImageOnFail(R.drawable.no_wifi)// 加载失败显示的图片
-				.displayer(new RoundedBitmapDisplayer(5)) // 圆角，不需要请删除
-				.build();*/
+		new ImageLoadOptions();	
+	 options = ImageLoadOptions.getOptions();		
 
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
@@ -429,17 +417,6 @@ public class SlideShowView extends FrameLayout {
 				.writeDebugLogs() // Remove for releaseapp
 				.build();// 开始构建
 
-		/*
-		 * ImageLoaderConfiguration config = new
-		 * ImageLoaderConfiguration.Builder(context)
-		 * .threadPriority(Thread.NORM_PRIORITY - 2)
-		 * .denyCacheImageMultipleSizesInMemory()
-		 * 
-		 * .discCacheFileNameGenerator(new Md5FileNameGenerator())
-		 * .tasksProcessingOrder(QueueProcessingType.LIFO).writeDebugLogs()
-		 * .build();
-		 */
-		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
 	}
 }

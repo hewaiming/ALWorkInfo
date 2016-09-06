@@ -22,7 +22,7 @@ public class JsonToMultiList {
 
 			listBean = new ArrayList<dayTable>();
 			listBean.clear();
-			System.out.println("jsonarray. DayTable---length()---" + jsonarray.length());
+			//System.out.println("jsonarray. DayTable---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -117,7 +117,7 @@ public class JsonToMultiList {
 			list3 = new ArrayList<AeRecord>();
 			list4 = new ArrayList<AeRecord>();
 			list5 = new ArrayList<AeRecord>();
-			System.out.println("jsonarray. AE5day_Table---length()---" + jsonarray.length());
+			//System.out.println("jsonarray. AE5day_Table---length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);

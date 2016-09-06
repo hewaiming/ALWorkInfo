@@ -22,7 +22,7 @@ public class JsonToBeanMap {
 			JSONArray jsonarray = new JSONArray(data);
 
 			lists = new ArrayList<JSONObject>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				lists.add(jsonobj);
@@ -41,7 +41,7 @@ public class JsonToBeanMap {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<dayTable>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				dayTable mday = new dayTable();
@@ -77,7 +77,7 @@ public class JsonToBeanMap {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<String>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				String mdata = jsonobj.getString("Ddate");
@@ -97,7 +97,7 @@ public class JsonToBeanMap {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<PotV>();
-			System.out.println("jsonarray.length()---" + jsonarray.length());
+			//System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				PotV mPotV = new PotV();
@@ -120,7 +120,7 @@ public class JsonToBeanMap {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<Map<String,SetParams>>();
-			System.out.println("jsonarray SetParams.length()---" + jsonarray.length());
+			//System.out.println("jsonarray SetParams.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				SetParams mSetParams = new SetParams();

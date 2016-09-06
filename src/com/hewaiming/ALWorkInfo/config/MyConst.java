@@ -75,7 +75,7 @@ public class MyConst {
 				}
 			}
 		});
-		dialog.show();
+		dialog.show();	
 	}
 	
 	public static boolean GetDataFromSharePre(Context mContext,String showName) {		
