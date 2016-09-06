@@ -113,7 +113,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
-			
+			transceiver.stop();
 		}
 
 		@Override
@@ -288,21 +288,18 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_back:
+		case R.id.btn_back:				
 			if (timer != null) {
 				timer.cancel();
 			}
-			client.disconnect();
-			finish();
+			if(client!=null){
+				client.disconnect();
+			}
+			if(lv_PotStatus!=null){
+				lv_PotStatus.destroyDrawingCache();
+			}			
+			finish();	
 			break;
-		/*
-		 * case R.id.btn_isSHOW: if (showArea.getVisibility() == View.GONE) {
-		 * showArea.setVisibility(View.VISIBLE);
-		 * isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.
-		 * btn_up)); } else { showArea.setVisibility(View.GONE);
-		 * isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.
-		 * btn_down)); } break;
-		 */
 		}
 	}
 

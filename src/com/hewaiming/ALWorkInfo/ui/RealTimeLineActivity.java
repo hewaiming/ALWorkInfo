@@ -73,13 +73,13 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private TextView tv_title;
 	private Button backBtn;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea;
-	private String PotNo;
+	private LinearLayout showArea,layoutOK;
+	private String PotNo = "1101";
 	private boolean hideAction;
-	private Spinner spinner_area, spinner_begindate, spinner_enddate,spinner_potno;
+	private Spinner spinner_area, spinner_begindate, spinner_enddate, spinner_potno;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
-	private List<String> PotNoList = null;	
+	private List<String> PotNoList = null;
 	private ArrayAdapter<String> PotNo_adapter;
 	private Button findBtn;
 	private View include_selector;
@@ -89,10 +89,10 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private Context mContext;
 
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private TcpClient client = new TcpClient() {		
+	private TcpClient client = new TcpClient() {
 
 		@Override
-		public void onConnect(SocketTransceiver transceiver) {			
+		public void onConnect(SocketTransceiver transceiver) {
 
 		}
 
@@ -100,7 +100,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		public void onConnectFailed() {
 			handler.post(new Runnable() {
 				@Override
-				public void run() {					
+				public void run() {
 					tv_title.setText(PotNo + "实时曲线：连接远程服务器失败！");
 				}
 			});
@@ -108,7 +108,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		}
 
 		@Override
-		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {			
+		public void onReceive(SocketTransceiver transceiver, final RealTime realTime) {
 			if (realTime.getPotNo() != Integer.valueOf(PotNo)) {
 				return;
 			}
@@ -159,20 +159,19 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
-			
+			transceiver.stop();
 		}
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, PotStatusDATA potStatus) {
 
-		}			
+		}
 
 	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_realtime_linechart);
@@ -183,7 +182,6 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		init_potNo();
 		connect();
 		timer = new Timer();
-
 		if (hideAction) {
 			include_selector = findViewById(R.id.include_select_all);
 			include_selector.setVisibility(View.GONE);
@@ -194,7 +192,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		mChart.setOnChartValueSelectedListener(this);
 		LineData linedata = new LineData();
 		showRealTimeLine(linedata);
-
+		GetDataFromJKJ_CMD();
 	}
 
 	private void GetDataFromNet() {
@@ -228,7 +226,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 		// Typeface tf = Typeface.createFromAsset(getAssets(),
 		// "OpenSans-Regular.ttf");
-		
+
 		Legend l = mChart.getLegend();
 		l.setPosition(LegendPosition.BELOW_CHART_CENTER);
 		// modify the legend ...
@@ -286,9 +284,9 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		spinner_begindate.setVisibility(View.GONE);
 		spinner_enddate = (Spinner) findViewById(R.id.spinner_Enddate);
 		spinner_enddate.setVisibility(View.GONE);
-
-		findBtn = (Button) findViewById(R.id.btn_ok);
-		findBtn.setOnClickListener(this);
+		
+		layoutOK=(LinearLayout)findViewById(R.id.Layout_OK);
+		layoutOK.setVisibility(View.GONE);
 
 	}
 
@@ -400,6 +398,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = PotNoList.get(position).toString();
+				tv_title.setText(PotNo + "实时曲线");
+				GetDataFromJKJ_CMD();
 			}
 
 			@Override
@@ -495,7 +495,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			if (timer != null) {
 				timer.cancel();
 			}
-			client.disconnect();
+			if (client != null) {
+				client.disconnect();
+			}
+			if (mChart != null) {
+				mChart.destroyDrawingCache();
+			}
 			finish();
 			break;
 		case R.id.btn_isSHOW: // 显示或隐藏
@@ -506,20 +511,6 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;
-		case R.id.btn_ok:
-			if (timerTask != null) {
-				timerTask.cancel();
-			}
-			connect();
-			tv_title.setText(PotNo + "实时曲线");
-			if (mChart != null) {
-				mChart.clearValues();
-				// mChart.notifyDataSetChanged();
-			}			
-			LineData linedata = new LineData();
-			showRealTimeLine(linedata);
-			SendActionToServer();
 			break;
 		}
 
@@ -551,6 +542,20 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void GetDataFromJKJ_CMD() {
+		if (timerTask != null) {
+			timerTask.cancel();
+		}
+		tv_title.setText(PotNo + "实时曲线");
+		if (mChart != null) {
+			mChart.clearValues();
+			// mChart.notifyDataSetChanged();
+		}
+		LineData linedata = new LineData();
+		showRealTimeLine(linedata);
+		SendActionToServer();
 	}
 
 }

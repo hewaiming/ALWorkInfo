@@ -294,6 +294,9 @@ public class ShowPotVLineActivity extends Activity
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_back:
+			if(mLineChart!=null){
+				mLineChart.destroyDrawingCache();
+			}
 			finish();
 			break;
 		
