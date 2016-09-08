@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import com.hewaiming.ALWorkInfo.R;
 
 import android.app.AlertDialog;
@@ -23,6 +25,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -33,6 +36,10 @@ public class UpdateManager {
 	private static final int DOWNLOAD = 1;
 	/* 涓嬭浇缁撴潫 */
 	private static final int DOWNLOAD_FINISH = 2;
+	
+	private static final int NO_UPDATE = 3;
+	private static final int GET_UNDATAINFO_ERROR=4;
+	private static final int CAN_UPDATE=5;
 	/* 淇濆瓨瑙ｆ瀽鐨刋ML淇℃伅 */
 	HashMap<String, String> mHashMap;
 	/* 涓嬭浇淇濆瓨璺緞 */
@@ -46,19 +53,25 @@ public class UpdateManager {
 	/* 鏇存柊杩涘害鏉� */
 	private ProgressBar mProgress;
 	private Dialog mDownloadDialog;
-
+	UpdataInfo info=null;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			// 姝ｅ湪涓嬭浇
+			case CAN_UPDATE:
+				showNoticeDialog();
+				break;
 			case DOWNLOAD:
-				// 璁剧疆杩涘害鏉′綅缃�
 				mProgress.setProgress(progress);
 				break;
 			case DOWNLOAD_FINISH:
-				// 瀹夎鏂囦欢
 				installApk();
 				break;
+			case NO_UPDATE:
+				Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
+				break;
+			case GET_UNDATAINFO_ERROR:
+				Toast.makeText(mContext, "获取最新版本信息失败！", Toast.LENGTH_LONG).show();
+				break;	
 			default:
 				break;
 			}
@@ -73,41 +86,68 @@ public class UpdateManager {
 	 * 妫�娴嬭蒋浠舵洿鏂�
 	 */
 	public void checkUpdate() {
-		if (isUpdate()) {
-			// 鏄剧ず鎻愮ず瀵硅瘽妗�
-			showNoticeDialog();
-		} else {
-			Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
-		}
+//		if (checkVersion()) {
+//			// 鏄剧ず鎻愮ず瀵硅瘽妗�
+//			showNoticeDialog();
+//		} else {
+//			Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
+//		}
+		new CheckVersionTask().start();;
 	}
 
 	private boolean isUpdate() {
 
 		int versionCode = getVersionCode(mContext);
 
-		String path = mContext.getResources().getString(R.string.serverUrl);		
-
-		// InputStream inStream =
-		// ParseXmlService.class.getClassLoader().getResourceAsStream("version.xml");
+		String path = mContext.getResources().getString(R.string.serverUrl);
+		// 包装成url的对象
 
 		try {
-			URL url = new URL(path);  // 包装成url的对象
+			URL url = new URL(path);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(5000);
-			InputStream inStream = conn.getInputStream();
-			ParseXmlService service = new ParseXmlService();
-			mHashMap = service.parseXml(inStream);
+			InputStream is = conn.getInputStream();
+			UpdataInfo info = getUpdataInfo(is);
+			if (info != null) {
+				if (Integer.valueOf(info.getVersion()) > versionCode) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
-		if (null != mHashMap) {
-			int serviceCode = Integer.valueOf(mHashMap.get("version"));
-			// 鐗堟湰鍒ゆ柇
-			if (serviceCode > versionCode) {
-				return true;
-			}
-		}
-		return false;
+
+		// String path = mContext.getResources().getString(R.string.serverUrl);
+
+		// InputStream inStream =
+		// ParseXmlService.class.getClassLoader().getResourceAsStream(path);
+
+		// try {
+		// URL url = new URL(path); // 包装成url的对象
+		// HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		// conn.setConnectTimeout(5000);
+		// conn.connect();
+		// InputStream inStream = conn.getInputStream();
+		// ParseXmlService service = new ParseXmlService();
+		// mHashMap = service.parseXml(inStream);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		//
+		// if (null != mHashMap) {
+		// int serviceCode = Integer.valueOf(mHashMap.get("version"));
+		// // 鐗堟湰鍒ゆ柇
+		// if (serviceCode > versionCode) {
+		// return true;
+		// }
+		// }
+		// return false;
 	}
 
 	/**
@@ -186,7 +226,7 @@ public class UpdateManager {
 	 * 涓嬭浇apk鏂囦欢
 	 */
 	private void downloadApk() {
-		// 鍚姩鏂扮嚎绋嬩笅杞借蒋浠�
+
 		new downloadApkThread().start();
 	}
 
@@ -199,7 +239,8 @@ public class UpdateManager {
 					// 鑾峰緱瀛樺偍鍗＄殑璺緞
 					String sdpath = Environment.getExternalStorageDirectory() + "/";
 					mSavePath = sdpath + "download";
-					URL url = new URL(mHashMap.get("url"));
+					//URL url = new URL(mHashMap.get("url"));
+					URL url = new URL(info.getUrl());
 					// 鍒涘缓杩炴帴
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.connect();
@@ -213,7 +254,7 @@ public class UpdateManager {
 					if (!file.exists()) {
 						file.mkdir();
 					}
-					File apkFile = new File(mSavePath, mHashMap.get("name"));
+					File apkFile = new File(mSavePath, info.getFilename());
 					FileOutputStream fos = new FileOutputStream(apkFile);
 					int count = 0;
 					// 缂撳瓨
@@ -247,15 +288,14 @@ public class UpdateManager {
 		}
 	};
 
-	/**
-	 * 瀹夎APK鏂囦欢
-	 */
+	// 安装APK
 	private void installApk() {
-		File apkfile = new File(mSavePath, mHashMap.get("name"));
+		//File apkfile = new File(mSavePath, mHashMap.get("name"));
+		File apkfile = new File(mSavePath, info.getFilename());
 		if (!apkfile.exists()) {
 			return;
 		}
-		// 閫氳繃Intent瀹夎APK鏂囦欢
+
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
@@ -263,4 +303,67 @@ public class UpdateManager {
 		mContext.startActivity(i);
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
+
+	/*
+	 * 用pull解析器解析服务器返回的xml文件 (xml封装了版本号)
+	 */
+	public static UpdataInfo getUpdataInfo(InputStream is) throws Exception {
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(is, "utf-8");// 设置解析的数据源
+		int type = parser.getEventType();
+		UpdataInfo info = new UpdataInfo();// 实体
+		while (type != XmlPullParser.END_DOCUMENT) {
+			switch (type) {
+			case XmlPullParser.START_TAG:
+				if ("version".equals(parser.getName())) {
+					info.setVersion(parser.nextText()); // 获取版本号
+				} else if ("url".equals(parser.getName())) {
+					info.setUrl(parser.nextText()); // 获取要升级的APK文件
+				} else if ("name".equals(parser.getName())) {
+					info.setName(parser.nextText()); // 获取该文件的信息
+				}else if ("filename".equals(parser.getName())) {
+					info.setFilename(parser.nextText()); // 获取该文件的信息
+				}
+				break;
+			}
+			type = parser.next();
+		}
+		return info;
+	}
+
+	public class CheckVersionTask extends Thread {
+		@Override
+		public void run() {
+			try {
+				// 从资源文件获取服务器 地址
+				int versionCode = getVersionCode(mContext);
+				String path = mContext.getResources().getString(R.string.serverUrl);
+				// 包装成url的对象
+				URL url = new URL(path);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setConnectTimeout(5000);
+				InputStream is = conn.getInputStream();
+				info = getUpdataInfo(is);
+				if (Integer.valueOf(info.getVersion()) > versionCode) {
+					
+					Message msg = new Message();
+					 msg.what = CAN_UPDATE;
+					 mHandler.sendMessage(msg);
+					//showNoticeDialog();
+				} else {				
+					 Message msg = new Message();
+					 msg.what = NO_UPDATE;
+					 mHandler.sendMessage(msg);
+					
+				}
+			} catch (Exception e) {
+				// 待处理
+				Message msg = new Message();
+				msg.what = GET_UNDATAINFO_ERROR;
+				mHandler.sendMessage(msg);
+				e.printStackTrace();
+			}
+		}
+	}
+
 }
