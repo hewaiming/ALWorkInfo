@@ -388,18 +388,15 @@ public class SlideShowView extends FrameLayout {
 	}
 
 	/**
-	 * ImageLoader 图片组件初始化
-	 * 
-	 * @param context
+	 * ImageLoader 图片组件初始化	
 	 */
 	public static void initImageLoader(Context context) {
 		new ImageLoadOptions();	
 	 options = ImageLoadOptions.getOptions();		
 
-		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "imageloader/Cache");
+		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "ALWorkInfo/Cache");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.memoryCacheExtraOptions(480, 800) // maxwidth, max
-													// height，即保存的每个缓存文件的最大长宽
+				.memoryCacheExtraOptions(480, 800) // maxwidth, max												
 				.threadPoolSize(3)// 线程池内加载的数量
 				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
 				.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024))

@@ -53,8 +53,9 @@ public class WelcomeActivity extends Activity {
 		okBtn = (Button) findViewById(R.id.btn_ok);
 		mImage = (ImageView) findViewById(R.id.welcome);
 		ImageConfig config = new ImageConfig(this);
-		config.initImageLoader();
-		options = new ImageLoadOptions().getOptions();
+		config.initImageLoader(ctx);
+		new ImageLoadOptions();
+		options = ImageLoadOptions.getOptions();
 		NetDetector netDetector=new NetDetector(getApplicationContext()); //判断是否有WIFI
 		if (netDetector.isConnectingToInternet()==1){
 //			Toast.makeText(getApplicationContext(), "当前网络:WIFI", Toast.LENGTH_LONG).show();

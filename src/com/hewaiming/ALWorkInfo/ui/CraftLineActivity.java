@@ -57,7 +57,7 @@ public class CraftLineActivity extends Activity
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private ArrayAdapter<String> PotNo_adapter;
 	private String potno_url = ":8000/scgy/android/odbcPhP/dayTable_Craft.php";
-	private String measue_potno_url = ":8000/scgy/android/odbcPhP/MeasueTable_potno_date.php";
+	private String measue_potno_url = ":8000/scgy/android/odbcPhP/MeasueTable_Craft.php";
 	private String PotNo, BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
@@ -65,8 +65,7 @@ public class CraftLineActivity extends Activity
 	private List<CheckBox> list_cb = new ArrayList<CheckBox>();
 	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
 	private String selitems = "";
-	private List<MeasueTable> listBean_measuetable = null;
-	
+	private List<MeasueTable> listBean_measuetable = null;	
 	private ProgressDialog m_ProgressDialog=null;
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea=null;

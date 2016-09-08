@@ -6,21 +6,21 @@ import com.hewaiming.ALWorkInfo.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class ImageLoadOptions {
 
 	public static DisplayImageOptions getOptions() {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
 				// // 设置图片在下载期间显示的图片
-				.showStubImage(R.drawable.banner_fail)
-//				 .showImageOnLoading(R.drwable.loading)
+				.showStubImage(R.drawable.loading)
 				// // 设置图片Uri为空或是错误的时候显示的图片
 				 .showImageForEmptyUri(R.drawable.banner_empty)
 				// // 设置图片加载/解码过程中错误时候显示的图片
-				 .showImageOnFail(R.drawable.face)
+				 .showImageOnFail(R.drawable.error)
 				.cacheInMemory(true)
 				// 设置下载的图片是否缓存在内存中
-				.cacheOnDisc(true)
+				.cacheOnDisc(false)
 				// 设置下载的图片是否缓存在SD卡中
 				
 				.imageScaleType(ImageScaleType.EXACTLY)// 设置图片以如何的编码方式显示
@@ -34,7 +34,7 @@ public class ImageLoadOptions {
 				// 设置图片加入缓存前，对bitmap进行设置
 				// 。preProcessor(BitmapProcessor preProcessor)
 				.resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
-				// .displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
+				//.displayer(new RoundedBitmapDisplayer(20))//是否设置为圆角，弧度为多少
 				.displayer(new FadeInBitmapDisplayer(100))// 淡入
 				.build();
 		

@@ -28,97 +28,97 @@
                 android:id="@+id/chart_SetV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_WorkV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_AvgV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_Noise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_DYBTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_ALF"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_AeCnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_YhlCnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_ALCntZSL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_ALCnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_FeCnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_SiCnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_FZB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_DJWD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_LSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_DJZSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
         </LinearLayout>
     </ScrollView>
 

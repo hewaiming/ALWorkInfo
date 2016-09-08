@@ -208,7 +208,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // ²ÛÑ¹ÇúÏßÍ¼
-				return false;
+				return true;
 			}
 		});
 

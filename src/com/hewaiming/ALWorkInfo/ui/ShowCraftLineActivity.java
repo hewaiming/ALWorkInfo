@@ -160,31 +160,10 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		// get the legend (only possible after setting data)
 		Legend mLegend = lineChart.getLegend(); // 设置比例图标示，就是那个一组y的value的
 		mLegend.setPosition(LegendPosition.BELOW_CHART_CENTER);
-		mLegend.setForm(LegendForm.CIRCLE);// 样式
-		mLegend.setFormSize(5f);// 字体
-		mLegend.setTextColor(Color.DKGRAY);// 颜色
-		// mLegend.setTypeface(mTf);// 字体
-
-		// // 左边Y轴 槽压
-		// YAxis yAxis_potv = lineChart.getAxisLeft();
-		// yAxis_potv.setEnabled(true);
-		// yAxis_potv.setDrawAxisLine(true);
-		// yAxis_potv.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-		// yAxis_potv.setTextSize(4f);
-		// yAxis_potv.setTextColor(Color.BLUE);
-		// yAxis_potv.setAxisMaxValue(6000);
-		// yAxis_potv.setAxisMinValue(0);
-		// yAxis.setLabelRotationAngle(90f);;
-
-		// // 右边Y轴 系列电流
-		// YAxis yAxis_cur = lineChart.getAxisRight();
-		// yAxis_cur.setEnabled(true);
-		// yAxis_cur.setDrawAxisLine(true);
-		// yAxis_cur.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-		// yAxis_cur.setTextSize(4f);
-		// yAxis_cur.setAxisMaxValue(2300);
-		// yAxis_cur.setAxisMinValue(0);
-		// yAxis_cur.setTextColor(Color.RED);
+		mLegend.setForm(LegendForm.SQUARE);// 样式
+		mLegend.setFormSize(8f);// 字体
+		mLegend.setTextColor(Color.BLACK);// 颜色
+		// mLegend.setTypeface(mTf);// 字体		
 
 		lineChart.setData(mLineData); // 设置数据 一定要放在CHART设定参数之后
 		lineChart.animateX(200); // 立即执行的动画,x轴

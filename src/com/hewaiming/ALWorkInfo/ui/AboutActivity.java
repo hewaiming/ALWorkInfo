@@ -1,6 +1,7 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.Update.UpdateManager;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 
 import android.app.Activity;
@@ -23,7 +24,7 @@ public class AboutActivity extends Activity {
 	private Button btnCheck, btnFinish;
 
 	private String TAG = "=Setting=";
-	private TextView tv_title, tv_ID;
+	private TextView tv_title, tv_ID,tv_date;
 	private Context ctx;
 
 	@Override
@@ -35,6 +36,8 @@ public class AboutActivity extends Activity {
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("¹ØÓÚ");
 		tv_ID=(TextView) findViewById(R.id.tv_id);
+		tv_date=(TextView) findViewById(R.id.tv_datetime);
+		
 		String myId;
 		try {
 			myId = getVersionName();
@@ -58,6 +61,8 @@ public class AboutActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
+				UpdateManager manager = new UpdateManager(AboutActivity.this);				
+				manager.checkUpdate();
 			}
 		});
 	}
