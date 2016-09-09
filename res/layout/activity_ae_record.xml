@@ -13,14 +13,14 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        layout="@layout/include_back" />
+        layout="@layout/include_back_red" />
 
     <include
         android:id="@+id/include_select_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"        
         android:layout_margin="6dp"
-        layout="@layout/include_select_all" />
+        layout="@layout/include_select_all_red" />
 
     <LinearLayout
         android:id="@+id/Layout_AeRecord"

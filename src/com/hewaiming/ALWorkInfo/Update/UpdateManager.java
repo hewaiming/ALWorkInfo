@@ -86,76 +86,10 @@ public class UpdateManager {
 	 * 妫�娴嬭蒋浠舵洿鏂�
 	 */
 	public void checkUpdate() {
-//		if (checkVersion()) {
-//			// 鏄剧ず鎻愮ず瀵硅瘽妗�
-//			showNoticeDialog();
-//		} else {
-//			Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
-//		}
+
 		new CheckVersionTask().start();;
 	}
 
-	private boolean isUpdate() {
-
-		int versionCode = getVersionCode(mContext);
-
-		String path = mContext.getResources().getString(R.string.serverUrl);
-		// 包装成url的对象
-
-		try {
-			URL url = new URL(path);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setConnectTimeout(5000);
-			InputStream is = conn.getInputStream();
-			UpdataInfo info = getUpdataInfo(is);
-			if (info != null) {
-				if (Integer.valueOf(info.getVersion()) > versionCode) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		// String path = mContext.getResources().getString(R.string.serverUrl);
-
-		// InputStream inStream =
-		// ParseXmlService.class.getClassLoader().getResourceAsStream(path);
-
-		// try {
-		// URL url = new URL(path); // 包装成url的对象
-		// HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		// conn.setConnectTimeout(5000);
-		// conn.connect();
-		// InputStream inStream = conn.getInputStream();
-		// ParseXmlService service = new ParseXmlService();
-		// mHashMap = service.parseXml(inStream);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		//
-		// if (null != mHashMap) {
-		// int serviceCode = Integer.valueOf(mHashMap.get("version"));
-		// // 鐗堟湰鍒ゆ柇
-		// if (serviceCode > versionCode) {
-		// return true;
-		// }
-		// }
-		// return false;
-	}
-
-	/**
-	 * 鑾峰彇杞欢鐗堟湰鍙�
-	 * 
-	 * @param context
-	 * @return
-	 */
 	private int getVersionCode(Context context) {
 		int versionCode = 0;
 		try {
@@ -223,7 +157,7 @@ public class UpdateManager {
 	}
 
 	/**
-	 * 涓嬭浇apk鏂囦欢
+	 *下载文件
 	 */
 	private void downloadApk() {
 
@@ -289,8 +223,7 @@ public class UpdateManager {
 	};
 
 	// 安装APK
-	private void installApk() {
-		//File apkfile = new File(mSavePath, mHashMap.get("name"));
+	private void installApk() {		
 		File apkfile = new File(mSavePath, info.getFilename());
 		if (!apkfile.exists()) {
 			return;
@@ -348,13 +281,11 @@ public class UpdateManager {
 					
 					Message msg = new Message();
 					 msg.what = CAN_UPDATE;
-					 mHandler.sendMessage(msg);
-					//showNoticeDialog();
+					 mHandler.sendMessage(msg);					
 				} else {				
 					 Message msg = new Message();
 					 msg.what = NO_UPDATE;
-					 mHandler.sendMessage(msg);
-					
+					 mHandler.sendMessage(msg);					
 				}
 			} catch (Exception e) {
 				// 待处理

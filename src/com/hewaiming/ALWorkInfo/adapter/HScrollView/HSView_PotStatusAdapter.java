@@ -33,7 +33,7 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 	 * layout ID
 	 */
 	private int id_row_layout;
-	private LayoutInflater mInflater;   
+	private LayoutInflater mInflater;
 	int[] colors = { Color.rgb(224, 241, 242), Color.rgb(179, 213, 252) };
 	// int[] colors = { Color.BLACK, Color.BLACK };
 
@@ -63,7 +63,7 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * 向List中添加数据	
+	 * 向List中添加数据
 	 */
 	public void addItem(List<PotStatus> items) {
 		for (PotStatus item : items) {
@@ -90,116 +90,125 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvPotNo = (TextView) convertView.findViewById(R.id.tv_PotNo);
 			holder.tvPotSt = (TextView) convertView.findViewById(R.id.tv_PotSt);
 			holder.tvAutoRun = (TextView) convertView.findViewById(R.id.tv_AutoRun);
-			holder.tvOperation = (TextView) convertView.findViewById(R.id.tv_Operation);//槽作业
+			holder.tvOperation = (TextView) convertView.findViewById(R.id.tv_Operation);// 槽作业
 			holder.tvFaultNo = (TextView) convertView.findViewById(R.id.tv_FaultNo);
 			holder.tvSetV = (TextView) convertView.findViewById(R.id.tv_SetV);
-			holder.tvWorkV = (TextView) convertView.findViewById(R.id.tv_WorkV);					
-			
+			holder.tvWorkV = (TextView) convertView.findViewById(R.id.tv_WorkV);
+
 			holder.tvSetNb = (TextView) convertView.findViewById(R.id.tv_SetNb);
 			holder.tvWorkNb = (TextView) convertView.findViewById(R.id.tv_WorkNb);
-			holder.tvNbPlus = (TextView) convertView.findViewById(R.id.tv_NbPlus); //过欠
-			
+			holder.tvNbPlus = (TextView) convertView.findViewById(R.id.tv_NbPlus); // 过欠
+
 			holder.tvNbTime = (TextView) convertView.findViewById(R.id.tv_NBTime);
-			holder.tvAeSpan = (TextView) convertView.findViewById(R.id.tv_AeSpan);	//AE间隔
-			holder.tvAeTime = (TextView) convertView.findViewById(R.id.tv_AeTime); //Ae时刻
+			holder.tvAeSpan = (TextView) convertView.findViewById(R.id.tv_AeSpan); // AE间隔
+			holder.tvAeTime = (TextView) convertView.findViewById(R.id.tv_AeTime); // Ae时刻
 			holder.tvAeV = (TextView) convertView.findViewById(R.id.tv_AeV);
-			holder.tvAeContinues = (TextView) convertView.findViewById(R.id.tv_AeContinues); //Ae时间
+			holder.tvAeContinues = (TextView) convertView.findViewById(R.id.tv_AeContinues); // Ae时间
 			holder.tvAeStatus = (TextView) convertView.findViewById(R.id.tv_AeStatus);
-			holder.tvAeCnt = (TextView) convertView.findViewById(R.id.tv_AeCnt); //AE次数
-			
-			holder.tvOStatus = (TextView) convertView.findViewById(R.id.tv_OStatus); //加料态
-			
-			holder.tvYJWZ = (TextView) convertView.findViewById(R.id.tv_YJWZ);	//阳极位置		
+			holder.tvAeCnt = (TextView) convertView.findViewById(R.id.tv_AeCnt); // AE次数
+
+			holder.tvOStatus = (TextView) convertView.findViewById(R.id.tv_OStatus); // 加料态
+
+			holder.tvYJWZ = (TextView) convertView.findViewById(R.id.tv_YJWZ); // 阳极位置
 			holder.tvNoise = (TextView) convertView.findViewById(R.id.tv_Noise);
-			
+
 			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
 			headSrcrollView.AddOnScrollChangedListener(new OnScrollChangedListenerImp(scrollView1));
 
 			convertView.setTag(holder);
 			// 隔行变色
-			//convertView.setBackgroundColor(colors[position % 2]);
+			// convertView.setBackgroundColor(colors[position % 2]);
 			// mHolderList.add(holder);
 		} else {
 			// 隔行变色
-			//convertView.setBackgroundColor(colors[position % 2]);
+			// convertView.setBackgroundColor(colors[position % 2]);
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		holder.tvPotNo.setText(entity.getPotNo()+"");
-		if(entity.getStatus().equals("NORM")){
-			holder.tvPotSt.setText("");  //正常槽
-		}else{
+
+		holder.tvPotNo.setText(entity.getPotNo() + "");
+		if (entity.getStatus().equals("NORM")) {
+			holder.tvPotSt.setText(""); // 正常槽
+		} else {
 			holder.tvPotSt.setTextColor(Color.RED);
 			holder.tvPotSt.setText(entity.getStatus());
 		}
-		
-		if(entity.isAutoRun()){
+
+		if (entity.isAutoRun()) {
 			holder.tvAutoRun.setText("");
-		}else{
+		} else {
 			holder.tvAutoRun.setTextColor(Color.RED);
 			holder.tvAutoRun.setText("手动");
-		}		
+		}
 		holder.tvOperation.setTextColor(Color.BLUE);
 		holder.tvOperation.setText(entity.getOperation());
-		if (entity.getFaultNo()==0){
+		if (entity.getFaultNo() == 0) {
 			holder.tvFaultNo.setText("");
-		}else{
+		} else {
 			holder.tvFaultNo.setTextColor(Color.RED);
-			holder.tvFaultNo.setText(entity.getFaultNo()+""); //故障号
+			holder.tvFaultNo.setText(entity.getFaultNo() + ""); // 故障号
 		}
-		int SetV=Integer.valueOf(entity.getSetV());
+		int SetV = Integer.valueOf(entity.getSetV());
 		holder.tvSetV.setTextColor(Color.DKGRAY);
-		holder.tvSetV.setText(String.format("%.3f",SetV/1000.0));
+		holder.tvSetV.setText(String.format("%.3f", SetV / 1000.0));
 		
-		int WorkV=Integer.valueOf(entity.getWorkV());
-		holder.tvWorkV.setTextColor(Color.BLACK);
-		holder.tvWorkV.setText(String.format("%.3f",WorkV/1000.0));
-		
+		// 工作电压
+		int WorkV = Integer.valueOf(entity.getWorkV());
+		if (entity.isAeFlag()) {
+			holder.tvWorkV.setTextColor(Color.RED);
+		} else if ((entity.getAbnormal_Flag() & 0x40) != 0) {
+			holder.tvWorkV.setTextColor(Color.GREEN);
+		} else if ((entity.getAbnormal_Flag() & 0x20) != 0) {
+			holder.tvWorkV.setTextColor(Color.YELLOW);
+		} else {
+			holder.tvWorkV.setTextColor(Color.BLACK);
+		}	
+		holder.tvWorkV.setText(String.format("%.3f", WorkV / 1000.0));
+
 		holder.tvSetNb.setTextColor(Color.DKGRAY);
-		holder.tvSetNb.setText(entity.getSetNb()+"");
+		holder.tvSetNb.setText(entity.getSetNb() + "");
 		holder.tvWorkNb.setTextColor(Color.BLACK);
-		holder.tvWorkNb.setText(entity.getWorkNb()+"");
+		holder.tvWorkNb.setText(entity.getWorkNb() + "");
 		holder.tvNbPlus.setTextColor(Color.DKGRAY);
-		holder.tvNbPlus.setText(entity.getNbPlus()+""); //过欠
-		
-		if(entity.getNbTime()==null){
+		holder.tvNbPlus.setText(entity.getNbPlus() + ""); // 过欠
+
+		if (entity.getNbTime() == null) {
 			holder.tvNbTime.setText("");
-		}else{
+		} else {
 			holder.tvNbTime.setTextColor(Color.BLACK);
 			holder.tvNbTime.setText(entity.getNbTime().toString());
 		}
 		holder.tvAeSpan.setTextColor(Color.DKGRAY);
-		holder.tvAeSpan.setText((entity.getAeSpan())/60+"");
+		holder.tvAeSpan.setText((entity.getAeSpan()) / 60 + "");
 		holder.tvAeTime.setTextColor(Color.BLACK);
 		holder.tvAeTime.setText(entity.getAeDateTime());
-		
-		int AeV=Integer.valueOf(entity.getAeV());
+
+		int AeV = Integer.valueOf(entity.getAeV());
 		holder.tvAeV.setTextColor(Color.DKGRAY);
-		holder.tvAeV.setText(String.format("%.2f",AeV/1000.0));
-		
+		holder.tvAeV.setText(String.format("%.2f", AeV / 1000.0));
+
 		holder.tvAeContinues.setTextColor(Color.BLACK);
-		holder.tvAeContinues.setText(entity.getAeContinue()+"");
+		holder.tvAeContinues.setText(entity.getAeContinue() + "");
 		holder.tvAeStatus.setTextColor(Color.DKGRAY);
 		holder.tvAeStatus.setText(entity.getAeStatus());
 		holder.tvAeCnt.setTextColor(Color.BLACK);
-		holder.tvAeCnt.setText(entity.getAeCnt()+"");
-		
+		holder.tvAeCnt.setText(entity.getAeCnt() + "");
+
 		holder.tvOStatus.setTextColor(Color.DKGRAY);
 		holder.tvOStatus.setText(entity.getOStatus());
-		
+
 		holder.tvYJWZ.setTextColor(Color.BLACK);
-		holder.tvYJWZ.setText(entity.getYJWJ()+"");	
-		
+		holder.tvYJWZ.setText(entity.getYJWJ() + "");
+
 		holder.tvNoise.setTextColor(Color.DKGRAY);
-		holder.tvNoise.setText(entity.getNoise()+"");
-		if (!(entity.getStatus().equals("停槽")) && ((entity.getComerr()+35)!=0)){	
-//		处理非停槽，通讯故障
-			//holder.tvPotSt.setText("");  
+		holder.tvNoise.setText(entity.getNoise() + "");
+		if (!(entity.getStatus().equals("停槽")) && ((entity.getComerr() + 35) != 0)) {
+			// 处理非停槽，通讯故障
+			// holder.tvPotSt.setText("");
 			holder.tvAutoRun.setText("");
 			holder.tvOperation.setText("");
 			holder.tvFaultNo.setTextColor(Color.RED);
-			holder.tvFaultNo.setText(entity.getComerr()+"");
-			holder.tvSetV.setText("");	
+			holder.tvFaultNo.setText(entity.getComerr() + "");
+			holder.tvSetV.setText("");
 			holder.tvWorkV.setText("");
 			holder.tvSetNb.setText("");
 			holder.tvWorkNb.setText("");
@@ -210,20 +219,20 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvAeV.setText("");
 			holder.tvAeContinues.setText("");
 			holder.tvAeStatus.setText("");
-			holder.tvAeCnt.setText("");			
+			holder.tvAeCnt.setText("");
 			holder.tvOStatus.setText("");
-			holder.tvYJWZ.setText("");		
-			holder.tvNoise.setText("");			
-		}		
-		if (entity.getStatus().equals("停槽")){
-			
-			holder.tvPotSt.setText("停槽");  
+			holder.tvYJWZ.setText("");
+			holder.tvNoise.setText("");
+		}
+		if (entity.getStatus().equals("停槽")) {
+
+			holder.tvPotSt.setText("停槽");
 			holder.tvAutoRun.setText("");
 			holder.tvOperation.setText("");
-			//holder.tvFaultNo.setTextColor(Color.RED);
+			// holder.tvFaultNo.setTextColor(Color.RED);
 			holder.tvFaultNo.setText("");
-			holder.tvSetV.setText("");	
-			//holder.tvWorkV.setText("");
+			holder.tvSetV.setText("");
+			// holder.tvWorkV.setText("");
 			holder.tvSetNb.setText("");
 			holder.tvWorkNb.setText("");
 			holder.tvNbPlus.setText("");
@@ -233,11 +242,11 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvAeV.setText("");
 			holder.tvAeContinues.setText("");
 			holder.tvAeStatus.setText("");
-			holder.tvAeCnt.setText("");			
+			holder.tvAeCnt.setText("");
 			holder.tvOStatus.setText("");
-			holder.tvYJWZ.setText("");		
-			holder.tvNoise.setText("");	
-			
+			holder.tvYJWZ.setText("");
+			holder.tvNoise.setText("");
+
 		}
 		return convertView;
 	}
@@ -259,23 +268,23 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		TextView tvPotSt;
 		TextView tvAutoRun;
 		TextView tvOperation;
-		TextView tvFaultNo;  //故障
-		TextView tvSetV;	
+		TextView tvFaultNo; // 故障
+		TextView tvSetV;
 		TextView tvWorkV;
 		TextView tvSetNb;
 		TextView tvWorkNb;
-		TextView tvNbPlus; //过欠
-		TextView tvNbTime;  //NB时刻
-		TextView tvAeSpan;  //AE间隔
-		TextView tvAeTime;  //AE时刻
+		TextView tvNbPlus; // 过欠
+		TextView tvNbTime; // NB时刻
+		TextView tvAeSpan; // AE间隔
+		TextView tvAeTime; // AE时刻
 		TextView tvAeV;
-		TextView tvAeContinues; //AE时间
-		TextView tvAeStatus;  //AE状态
+		TextView tvAeContinues; // AE时间
+		TextView tvAeStatus; // AE状态
 		TextView tvAeCnt;
-		TextView tvOStatus;  //加料态		
-		TextView tvYJWZ;  //阳极位置
-		TextView tvNoise; //噪音
-	
+		TextView tvOStatus; // 加料态
+		TextView tvYJWZ; // 阳极位置
+		TextView tvNoise; // 噪音
+
 		HorizontalScrollView scrollView;
 	}
 

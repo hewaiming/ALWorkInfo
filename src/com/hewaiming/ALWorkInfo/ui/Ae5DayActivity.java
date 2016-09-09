@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +40,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +66,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private String ip;
 	private int port;
-	private Context ctx;
+	private Context ctx;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -194,8 +196,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("效应情报表");
 		backBtn = (Button) findViewById(R.id.btn_back);
-		backBtn.setOnClickListener(this);
-
+		backBtn.setOnClickListener(this);		
 	}
 
 	private void init_area() {
