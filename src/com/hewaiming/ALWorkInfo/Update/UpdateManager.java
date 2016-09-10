@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Environment;
@@ -99,6 +101,18 @@ public class UpdateManager {
 			e.printStackTrace();
 		}
 		return versionCode;
+	}
+	
+	private String getVersionName(Context context) {	
+		
+		String versionName ="0" ;
+		try {
+			// 鑾峰彇杞欢鐗堟湰鍙凤紝瀵瑰簲AndroidManifest.xml涓媋ndroid:versionCode
+			versionName = context.getPackageManager().getPackageInfo("com.hewaiming.ALWorkInfo", 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return versionName;
 	}
 
 	/**
@@ -269,7 +283,8 @@ public class UpdateManager {
 		public void run() {
 			try {
 				// 从资源文件获取服务器 地址
-				int versionCode = getVersionCode(mContext);
+				//int versionCode = getVersionCode(mContext);
+				String versionName=getVersionName(mContext);
 				String path = mContext.getResources().getString(R.string.serverUrl);
 				// 包装成url的对象
 				URL url = new URL(path);
@@ -277,8 +292,7 @@ public class UpdateManager {
 				conn.setConnectTimeout(5000);
 				InputStream is = conn.getInputStream();
 				info = getUpdataInfo(is);
-				if (Integer.valueOf(info.getVersion()) > versionCode) {
-					
+				if ((Float.valueOf(info.getVersion())- Float.valueOf(versionName))>0.0) {					
 					Message msg = new Message();
 					 msg.what = CAN_UPDATE;
 					 mHandler.sendMessage(msg);					

@@ -158,7 +158,7 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		} else if ((entity.getAbnormal_Flag() & 0x40) != 0) {
 			holder.tvWorkV.setTextColor(Color.GREEN);
 		} else if ((entity.getAbnormal_Flag() & 0x20) != 0) {
-			holder.tvWorkV.setTextColor(Color.rgb(210,105,30));	//巧克力色
+			holder.tvWorkV.setTextColor(Color.rgb(220,203,24));	//绿黄色
 		} else {
 			holder.tvWorkV.setTextColor(Color.BLACK);
 		}	
