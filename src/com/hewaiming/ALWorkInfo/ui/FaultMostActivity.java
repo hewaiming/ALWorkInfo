@@ -13,6 +13,7 @@ import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
+import com.hewaiming.ALWorkInfo.view.FooterListView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -40,10 +41,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FaultMostActivity extends Activity implements HttpGetListener, OnClickListener,OnScrollListener {
+public class FaultMostActivity extends Activity implements HttpGetListener, OnClickListener, OnScrollListener {
 	private Spinner spinner_area, spinner_PotNo, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
-	private TextView tv_title;
+	private TextView tv_title, tv_Total;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
 	private HttpPost_BeginDate_EndDate http_post;
@@ -54,7 +55,7 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private List<FaultMost> listBean = null;
 	private HSView_FaultMostAdapter FaultMost_Adapter = null;
 
-	private LinearLayout showArea=null;
+	private LinearLayout showArea = null;
 	private View layout_faultmost;
 	private ImageButton isShowingBtn;
 	private RelativeLayout mHead;
@@ -63,33 +64,43 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private String ip;
 	private int port;
 	private Context mContext;
+	private FooterListView footView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fault_most);
 		MyApplication.getInstance().addActivity(this);
-		layout_faultmost=findViewById(R.id.Layout_FaultMost);
+		layout_faultmost = findViewById(R.id.Layout_FaultMost);
 		GetDataFromIntent();
-		mContext=this;
+		mContext = this;
 		init_area();
 		init_date();
 		init_HSView();
+		init_footer();
 		init_title();
-		if (!MyConst.GetDataFromSharePre(mContext,"FaultMost_Show")){
-			MyConst.GuideDialog_show(mContext,"FaultMost_Show");  //第一次显示
-		}	
+		if (!MyConst.GetDataFromSharePre(mContext, "FaultMost_Show")) {
+			MyConst.GuideDialog_show(mContext, "FaultMost_Show"); // 第一次显示
+		}
 	}
+
+	private void init_footer() {
+		footView = new FooterListView(getApplicationContext());// 添加表end
+		lv_FaultMost.addFooterView(footView);
+		tv_Total = (TextView) findViewById(R.id.tv_footTotal);
+	}
+
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_record");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);
-		fault_url="http://"+ip+fault_url;
-		
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
+		fault_url = "http://" + ip + fault_url;
+
 	}
+
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head);
 		mHead.setFocusable(true);
@@ -101,22 +112,25 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		lv_FaultMost.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_FaultMost.setCacheColorHint(0);
 		lv_FaultMost.setOnScrollListener(this);
-		lv_FaultMost.setOnItemClickListener(new OnItemClickListener() {		
+		lv_FaultMost.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent faultRec_intent = new Intent(FaultMostActivity.this, FaultRecActivity.class);
-				Bundle bundle_faultRec = new Bundle();
-				bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) dateBean);
-				bundle_faultRec.putBoolean("Hide_Action", true);
-				bundle_faultRec.putString("PotNo",String.valueOf(listBean.get(position).getPotNo()));
-				bundle_faultRec.putString("Begin_Date", BeginDate);				
-				bundle_faultRec.putString("End_Date", EndDate);
-				bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
-				bundle_faultRec.putString("ip", ip);
-				bundle_faultRec.putInt("port", port);
-				faultRec_intent.putExtras(bundle_faultRec);			
-				startActivity(faultRec_intent); // 故障记录				
+				if (position != listBean.size()) {
+					Intent faultRec_intent = new Intent(FaultMostActivity.this, FaultRecActivity.class);
+					Bundle bundle_faultRec = new Bundle();
+					bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) dateBean);
+					bundle_faultRec.putBoolean("Hide_Action", true);
+					bundle_faultRec.putString("PotNo", String.valueOf(listBean.get(position).getPotNo()));
+					bundle_faultRec.putString("Begin_Date", BeginDate);
+					bundle_faultRec.putString("End_Date", EndDate);
+					bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
+					bundle_faultRec.putString("ip", ip);
+					bundle_faultRec.putInt("port", port);
+					faultRec_intent.putExtras(bundle_faultRec);
+					startActivity(faultRec_intent); // 故障记录
+				}
+
 			}
 		});
 	}
@@ -171,15 +185,15 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		tv_title.setText("故障最多");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
 
 	private void init_area() {
-		spinner_area = (Spinner) findViewById(R.id.spinner_area);       
+		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas_ALL);
 		// 设置下拉列表的风格
 		Area_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -236,22 +250,22 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_isSHOW:    //显示或隐藏
-			if (showArea.getVisibility()==View.GONE){
+		case R.id.btn_isSHOW: // 显示或隐藏
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;	
+			break;
 		case R.id.btn_ok:
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
 				http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(fault_url, 1,
 						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
-				
+
 				layout_faultmost.setVisibility(View.VISIBLE);
 			}
 			break;
@@ -262,6 +276,7 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	public void GetDataUrl(String data) {
 		if (data.equals("")) {
 			Toast.makeText(getApplicationContext(), "没有获取到[故障率最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
+			tv_Total.setText("0次");
 			if (listBean != null) {
 				if (listBean.size() > 0) {
 					listBean.clear(); // 清除LISTVIEW 以前的内容
@@ -269,33 +284,38 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 				}
 			}
 		} else {
-
 			listBean = new ArrayList<FaultMost>();
 			listBean.clear();
 			listBean = JsonToBean_Area_Date.JsonArrayToFaultCntBean(data);
-
+			int total = 0;
+			for (FaultMost tmp : listBean) {
+				total = total + tmp.getFaultCnt(); // 统计总数
+			}
 			FaultMost_Adapter = new HSView_FaultMostAdapter(this, R.layout.item_hsview_faultmost, listBean, mHead);
-
 			lv_FaultMost.setAdapter(FaultMost_Adapter);
+			tv_Total.setText(total + "次");
 		}
-	
+
 	}
+
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub		
-	}	
+		// TODO Auto-generated method stub
+	}
+
 	class ListViewAndHeadViewTouchLinstener implements View.OnTouchListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView_FaultMost);			
-			headSrcrollView.onTouchEvent(arg1);			
+					.findViewById(R.id.horizontalScrollView_FaultMost);
+			headSrcrollView.onTouchEvent(arg1);
 			return false;
 		}
 	}
