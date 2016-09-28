@@ -2,11 +2,18 @@ package com.hewaiming.ALWorkInfo.ui;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
+import com.hewaiming.ALWorkInfo.SortDayTable.PotNoComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.PotNoComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.PotStComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.PotStComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.RunTimeComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.RunTimeComparatorDESC_DayTable;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
@@ -27,11 +34,13 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -70,35 +79,89 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private String ip;
 	private int port;
-	protected Context mContext;	
+	protected Context mContext;
+	private TextView PotNo_h, PotSt_h, RunTime_h, Setv_h, RealSetv_h, Workv_h, Avgv_h, Aev_h, AeTime_h, AeCnt_h, DYB_h,
+			FHL_h, AL_h, Date_h;
+	private boolean[] SortFlag = { false, false, false, false, false, false, false, false, false, false, false, false,
+			false, false };
+	private ImageView PotNo_iv, PotSt_iv, RunTime_iv, Setv_iv, RealSetv_iv, Workv_iv, Avgv_iv, Aev_iv, AeTime_iv,
+			AeCnt_iv, DYB_iv, FHL_iv, AL_iv, Date_iv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_daytable);
 		MyApplication.getInstance().addActivity(this);
-		mContext=this;
-		GetDataFromIntent();	
+		mContext = this;
+		GetDataFromIntent();
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_HSView();
+		init_sort();
 		init_listview();
-		if (!MyConst.GetDataFromSharePre(mContext,"DayTable_Show")){
-			MyConst.GuideDialog_show(mContext,"DayTable_Show");  //第一次显示
-		}		
+		if (!MyConst.GetDataFromSharePre(mContext, "DayTable_Show")) {
+			MyConst.GuideDialog_show(mContext, "DayTable_Show"); // 第一次显示
+		}
+	}
+
+	private void init_sort() {
+		PotNo_h = (TextView) findViewById(R.id.tv_PotNo_head);
+		PotNo_h.setOnClickListener(this);
+		PotSt_h = (TextView) findViewById(R.id.tv_PotSt_head);
+		PotSt_h.setOnClickListener(this);
+		RunTime_h = (TextView) findViewById(R.id.tv_RunTime_head);
+		RunTime_h.setOnClickListener(this);
+		Setv_h = (TextView) findViewById(R.id.tv_SetV_head);
+		Setv_h.setOnClickListener(this);
+		RealSetv_h = (TextView) findViewById(R.id.tv_RealSetV_head);
+		RealSetv_h.setOnClickListener(this);
+		Workv_h = (TextView) findViewById(R.id.tv_WorkV_head);
+		Workv_h.setOnClickListener(this);
+		Avgv_h = (TextView) findViewById(R.id.tv_AverageV_head);
+		Avgv_h.setOnClickListener(this);
+		Aev_h = (TextView) findViewById(R.id.tv_AeV_head);
+		Aev_h.setOnClickListener(this);
+		AeTime_h = (TextView) findViewById(R.id.tv_AeTime_head);
+		AeTime_h.setOnClickListener(this);
+		AeCnt_h = (TextView) findViewById(R.id.tv_AeCnt_head);
+		AeCnt_h.setOnClickListener(this);
+		DYB_h = (TextView) findViewById(R.id.tv_DybTime_head);
+		DYB_h.setOnClickListener(this);
+		FHL_h = (TextView) findViewById(R.id.tv_ALFCnt_head);
+		FHL_h.setOnClickListener(this);
+		AL_h = (TextView) findViewById(R.id.tv_ALCntZSL_head);
+		AL_h.setOnClickListener(this);
+		Date_h = (TextView) findViewById(R.id.tv_Ddate_head);
+		Date_h.setOnClickListener(this);
+
+		PotNo_iv = (ImageView) findViewById(R.id.iv_PotNo);
+		PotSt_iv = (ImageView) findViewById(R.id.iv_PotSt);
+		RunTime_iv = (ImageView) findViewById(R.id.iv_RunTime);
+		Setv_iv = (ImageView) findViewById(R.id.iv_SetV);
+		RealSetv_iv = (ImageView) findViewById(R.id.iv_RealSetV);
+		Workv_iv = (ImageView) findViewById(R.id.iv_WorkV);
+		Avgv_iv = (ImageView) findViewById(R.id.iv_AverageV);
+
+		Aev_iv = (ImageView) findViewById(R.id.iv_AeV);
+		AeTime_iv = (ImageView) findViewById(R.id.iv_AeTime);
+		AeCnt_iv = (ImageView) findViewById(R.id.iv_AeCnt);
+		DYB_iv = (ImageView) findViewById(R.id.iv_DybTime);
+		FHL_iv = (ImageView) findViewById(R.id.iv_ALFCnt);
+		AL_iv = (ImageView) findViewById(R.id.iv_ALCntZSL);
+		Date_iv = (ImageView) findViewById(R.id.iv_Ddate);
 	}
 
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_table");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);
-		potno_url="http://"+ip+potno_url;
-		area_url="http://"+ip+area_url;
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
+		potno_url = "http://" + ip + potno_url;
+		area_url = "http://" + ip + area_url;
 	}
 
 	private void init_listview() {
@@ -106,12 +169,31 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		lv_daytable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_daytable.setCacheColorHint(0);
 		lv_daytable.setOnScrollListener(this);
-		lv_daytable.setOnItemClickListener(new OnItemClickListener() {
+		/*
+		 * lv_daytable.setOnItemClickListener(new OnItemClickListener() {
+		 * 
+		 * @Override public void onItemClick(AdapterView<?> parent, View view,
+		 * int position, long id) { PotNo =
+		 * String.valueOf(listBean.get(position).getPotNo()); //
+		 * Toast.makeText(getApplicationContext(), PotNo, 1).show(); Intent
+		 * potv_intent = new Intent(DayTableActivity.this,
+		 * ShowPotVLineActivity.class); Bundle potv_bundle = new Bundle();
+		 * potv_bundle.putString("PotNo", PotNo);
+		 * potv_bundle.putString("Begin_Date", BeginDate);
+		 * potv_bundle.putString("End_Date", EndDate);
+		 * potv_bundle.putSerializable("JXList", (Serializable) JXList);
+		 * potv_bundle.putString("ip", ip); potv_bundle.putInt("port", port);
+		 * potv_intent.putExtras(potv_bundle); startActivity(potv_intent); //
+		 * 槽压曲线图
+		 * 
+		 * } });
+		 */
+		lv_daytable.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = String.valueOf(listBean.get(position).getPotNo());
-//				Toast.makeText(getApplicationContext(), PotNo, 1).show();
+				// Toast.makeText(getApplicationContext(), PotNo, 1).show();
 				Intent potv_intent = new Intent(DayTableActivity.this, ShowPotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", PotNo);
@@ -122,7 +204,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
 				startActivity(potv_intent); // 槽压曲线图
-
+				return true;
 			}
 		});
 
@@ -131,8 +213,8 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 	private void init_HSView() {
 		mHead = (RelativeLayout) findViewById(R.id.head); // 表头处理
 		mHead.setFocusable(true);
-		mHead.setClickable(true);
-		mHead.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHead.setClickable(true);	
+		mHead.setBackgroundColor(Color.parseColor("#fffff7"));
 		mHead.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
 	}
@@ -353,6 +435,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
+				Reset_SortImage();
 				if (PotNo == "全部槽号") {
 					http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(area_url, 1,
 							Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
@@ -364,7 +447,73 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			layout_daytable.setVisibility(View.VISIBLE);
 			break;
+		case R.id.tv_PotNo_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[0]) {
+					SortFlag[0] = false;					
+					Collections.sort(listBean,new PotNoComparatorDESC_DayTable());
+					PotNo_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[0] = true;
+					Collections.sort(listBean, new PotNoComparatorASC_DayTable());
+					PotNo_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
+				lv_daytable.setAdapter(daytable_Adapter);
+			}
+			break;
+		case R.id.tv_PotSt_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[1]) {
+					SortFlag[1] = false;					
+					Collections.sort(listBean,new PotStComparatorDESC_DayTable());
+					PotSt_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[1] = true;
+					Collections.sort(listBean, new PotStComparatorASC_DayTable());
+					PotSt_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
+				lv_daytable.setAdapter(daytable_Adapter);
+			}
+			break;
+		case R.id.tv_RunTime_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[2]) {
+					SortFlag[2] = false;					
+					Collections.sort(listBean,new RunTimeComparatorDESC_DayTable());
+					RunTime_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[2] = true;
+					Collections.sort(listBean, new RunTimeComparatorASC_DayTable());
+					RunTime_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
+				lv_daytable.setAdapter(daytable_Adapter);
+			}
+			break;
 		}
+	}
+
+	private void Reset_SortImage() {
+		PotNo_iv.setBackgroundResource(R.drawable.sort);
+		PotSt_iv.setBackgroundResource(R.drawable.sort);
+		RunTime_iv.setBackgroundResource(R.drawable.sort);
+		Setv_iv.setBackgroundResource(R.drawable.sort);
+		RealSetv_iv.setBackgroundResource(R.drawable.sort);
+		Workv_iv.setBackgroundResource(R.drawable.sort);
+		Avgv_iv.setBackgroundResource(R.drawable.sort);
+
+		Aev_iv.setBackgroundResource(R.drawable.sort);
+		AeTime_iv.setBackgroundResource(R.drawable.sort);
+		AeCnt_iv.setBackgroundResource(R.drawable.sort);
+		DYB_iv.setBackgroundResource(R.drawable.sort);
+		FHL_iv.setBackgroundResource(R.drawable.sort);
+		AL_iv.setBackgroundResource(R.drawable.sort);
+		Date_iv.setBackgroundResource(R.drawable.sort);
 	}
 
 	@Override
@@ -382,7 +531,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
 			HorizontalScrollView headSrcrollView = (HorizontalScrollView) mHead
-					.findViewById(R.id.horizontalScrollView1);
+					.findViewById(R.id.horizontalScrollView1_head);
 			headSrcrollView.onTouchEvent(arg1);
 			return false;
 		}

@@ -105,7 +105,7 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 			
 			
 
-			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
+			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1_head);
 			headSrcrollView.AddOnScrollChangedListener(new OnScrollChangedListenerImp(scrollView1));
 
 			convertView.setTag(holder);
