@@ -25,9 +25,9 @@
 
         <ImageView
             android:id="@+id/iv_PotNo"
-            android:layout_width="4dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"          
+            android:layout_width="@dimen/sort_image_width"
+            android:layout_height="@dimen/sort_image_hight"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/sort" />
     </RelativeLayout>
@@ -67,8 +67,8 @@
 
                 <ImageView
                     android:id="@+id/iv_PotSt"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -85,8 +85,8 @@
 
                 <ImageView
                     android:id="@+id/iv_RunTime"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -103,8 +103,8 @@
 
                 <ImageView
                     android:id="@+id/iv_SetV"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -121,8 +121,8 @@
 
                 <ImageView
                     android:id="@+id/iv_RealSetV"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -139,8 +139,8 @@
 
                 <ImageView
                     android:id="@+id/iv_WorkV"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -157,8 +157,8 @@
 
                 <ImageView
                     android:id="@+id/iv_AverageV"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -175,8 +175,8 @@
 
                 <ImageView
                     android:id="@+id/iv_AeV"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -193,8 +193,8 @@
 
                 <ImageView
                     android:id="@+id/iv_AeTime"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -211,8 +211,8 @@
 
                 <ImageView
                     android:id="@+id/iv_AeCnt"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -229,8 +229,8 @@
 
                 <ImageView
                     android:id="@+id/iv_DybTime"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -247,8 +247,8 @@
 
                 <ImageView
                     android:id="@+id/iv_ALFCnt"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -265,8 +265,8 @@
 
                 <ImageView
                     android:id="@+id/iv_ALCntZSL"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
@@ -283,8 +283,8 @@
 
                 <ImageView
                     android:id="@+id/iv_Ddate"
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
             </LinearLayout>

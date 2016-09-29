@@ -8,12 +8,34 @@ import java.util.Map;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
+import com.hewaiming.ALWorkInfo.SortDayTable.ALCntComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.ALCntComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeCntComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeCntComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeTimeComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeTimeComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeVComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AeVComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AvgVComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.AvgVComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.DYBComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.DYBComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.DateComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.DateComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.FHLCntComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.FHLCntComparatorDESC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.PotNoComparatorASC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.PotNoComparatorDESC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.PotStComparatorASC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.PotStComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.RealSetVComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.RealSetVComparatorDESC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.RunTimeComparatorASC_DayTable;
 import com.hewaiming.ALWorkInfo.SortDayTable.RunTimeComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.SetVComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.SetVComparatorDESC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.WorkVComparatorASC_DayTable;
+import com.hewaiming.ALWorkInfo.SortDayTable.WorkVComparatorDESC_DayTable;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
@@ -459,8 +481,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 					Collections.sort(listBean, new PotNoComparatorASC_DayTable());
 					PotNo_iv.setBackgroundResource(R.drawable.asc);
 				}
-				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
-				lv_daytable.setAdapter(daytable_Adapter);
+				daytable_Adapter.onDateChange(listBean);			
 			}
 			break;
 		case R.id.tv_PotSt_head:
@@ -475,8 +496,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 					Collections.sort(listBean, new PotStComparatorASC_DayTable());
 					PotSt_iv.setBackgroundResource(R.drawable.asc);
 				}
-				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
-				lv_daytable.setAdapter(daytable_Adapter);
+				daytable_Adapter.onDateChange(listBean);			
 			}
 			break;
 		case R.id.tv_RunTime_head:
@@ -491,8 +511,174 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 					Collections.sort(listBean, new RunTimeComparatorASC_DayTable());
 					RunTime_iv.setBackgroundResource(R.drawable.asc);
 				}
-				daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
-				lv_daytable.setAdapter(daytable_Adapter);
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_SetV_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[3]) {
+					SortFlag[3] = false;					
+					Collections.sort(listBean,new SetVComparatorDESC_DayTable());
+					Setv_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[3] = true;
+					Collections.sort(listBean, new SetVComparatorASC_DayTable());
+					Setv_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);				
+			}
+			break;
+		case R.id.tv_RealSetV_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[4]) {
+					SortFlag[4] = false;					
+					Collections.sort(listBean,new RealSetVComparatorDESC_DayTable());
+					RealSetv_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[4] = true;
+					Collections.sort(listBean, new  RealSetVComparatorASC_DayTable());
+					RealSetv_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);				
+			}
+			break;
+		case R.id.tv_WorkV_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[5]) {
+					SortFlag[5] = false;					
+					Collections.sort(listBean,new WorkVComparatorDESC_DayTable());
+					Workv_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[5] = true;
+					Collections.sort(listBean, new  WorkVComparatorASC_DayTable());
+					Workv_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_AverageV_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[6]) {
+					SortFlag[6] = false;					
+					Collections.sort(listBean,new AvgVComparatorDESC_DayTable());
+					Avgv_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[6] = true;
+					Collections.sort(listBean, new  AvgVComparatorASC_DayTable());
+					Avgv_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);				
+			}
+			break;
+		case R.id.tv_AeV_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[7]) {
+					SortFlag[7] = false;					
+					Collections.sort(listBean,new AeVComparatorDESC_DayTable());
+					Aev_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[7] = true;
+					Collections.sort(listBean, new AeVComparatorASC_DayTable());
+					Aev_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);				
+			}
+			break;
+		case R.id.tv_AeTime_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[8]) {
+					SortFlag[8] = false;					
+					Collections.sort(listBean,new AeTimeComparatorDESC_DayTable());
+					AeTime_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[8] = true;
+					Collections.sort(listBean, new AeTimeComparatorASC_DayTable());
+					AeTime_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_AeCnt_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[9]) {
+					SortFlag[9] = false;					
+					Collections.sort(listBean,new AeCntComparatorDESC_DayTable());
+					AeCnt_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[9] = true;
+					Collections.sort(listBean, new AeCntComparatorASC_DayTable());
+					AeCnt_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_DybTime_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[10]) {
+					SortFlag[10] = false;					
+					Collections.sort(listBean,new DYBComparatorDESC_DayTable());
+					DYB_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[10] = true;
+					Collections.sort(listBean, new DYBComparatorASC_DayTable());
+					DYB_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_ALFCnt_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[11]) {
+					SortFlag[11] = false;					
+					Collections.sort(listBean,new FHLCntComparatorDESC_DayTable());
+					FHL_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[11] = true;
+					Collections.sort(listBean, new FHLCntComparatorASC_DayTable());
+					FHL_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);			
+			}
+			break;
+		case R.id.tv_ALCntZSL_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[12]) {
+					SortFlag[12] = false;					
+					Collections.sort(listBean,new ALCntComparatorDESC_DayTable());
+					AL_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[12] = true;
+					Collections.sort(listBean, new ALCntComparatorASC_DayTable());
+					AL_iv.setBackgroundResource(R.drawable.asc);
+				}			
+				daytable_Adapter.onDateChange(listBean);
+			}
+			break;
+		case R.id.tv_Ddate_head:
+			if ((listBean != null) || (listBean.size() != 0)) {
+				Reset_SortImage();
+				if (SortFlag[13]) {
+					SortFlag[13] = false;					
+					Collections.sort(listBean,new DateComparatorDESC_DayTable());
+					Date_iv.setBackgroundResource(R.drawable.desc);
+				} else {
+					SortFlag[13] = true;
+					Collections.sort(listBean, new DateComparatorASC_DayTable());
+					Date_iv.setBackgroundResource(R.drawable.asc);
+				}
+				daytable_Adapter.onDateChange(listBean);
+				//daytable_Adapter = new HSView_DayTableAdapter(this, R.layout.item_hsview_daytable, listBean, mHead);
+				//lv_daytable.setAdapter(daytable_Adapter);
 			}
 			break;
 		}
