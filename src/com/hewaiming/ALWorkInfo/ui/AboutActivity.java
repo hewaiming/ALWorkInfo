@@ -52,15 +52,13 @@ public class AboutActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				finish();
-				
+				finish();				
 			}
 		});
 
 		btnCheck.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				
+			public void onClick(View v) {				
 				UpdateManager manager = new UpdateManager(AboutActivity.this);				
 				manager.checkUpdate();
 			}

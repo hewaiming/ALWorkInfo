@@ -55,7 +55,7 @@
             android:id="@+id/tv_datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2016-09-07"
+            android:text="2016-09-29"
             android:textColor="#444444"
             android:textSize="16sp" />
 
@@ -102,7 +102,7 @@
              android:layout_marginTop="12dp"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="扫描二维码下载工作站程序安卓版" />
+             android:text="扫描二维码下载工作站安卓版" />
         
     </LinearLayout>
 
