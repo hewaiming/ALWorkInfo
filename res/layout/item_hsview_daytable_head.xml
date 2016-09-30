@@ -65,7 +65,7 @@
                     android:text="槽状态"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_PotSt"
@@ -84,7 +84,7 @@
                     android:text="运行时间"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_RunTime"
@@ -103,7 +103,7 @@
                     android:text="设定电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_SetV"
@@ -122,7 +122,7 @@
                     android:text="实设电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_RealSetV"
@@ -141,7 +141,7 @@
                     android:text="工作电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_WorkV"
@@ -160,7 +160,7 @@
                     android:text="平均电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_AverageV"
@@ -179,7 +179,7 @@
                     android:text="效应电压"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_AeV"
@@ -198,7 +198,7 @@
                     android:text="效应时长"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_AeTime"
@@ -217,7 +217,7 @@
                     android:text="效应次数"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_AeCnt"
@@ -236,7 +236,7 @@
                     android:text="电压摆时长"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_DybTime"
@@ -255,7 +255,7 @@
                     android:text="氟化铝下料量"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_ALFCnt"
@@ -274,7 +274,7 @@
                     android:text="出铝指示量"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_ALCntZSL"
@@ -293,7 +293,7 @@
                     android:text="日期"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <ImageView
                     android:id="@+id/iv_Ddate"

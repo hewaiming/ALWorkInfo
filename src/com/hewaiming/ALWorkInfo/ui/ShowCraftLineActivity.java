@@ -125,7 +125,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 	private void showChart(LineChart lineChart, LineData mLineData, int color) {
 		lineChart.setDrawBorders(true); // 是否在折线图上添加边框
-		lineChart.setMinimumHeight(300);
+		lineChart.setMinimumHeight(400);
 		lineChart.setDescription("");// 数据描述
 		// 如果没有数据的时候，会显示这个，类似listview的emtpyview
 		lineChart.setNoDataTextDescription("你需要为曲线图提供数据.");
@@ -136,13 +136,14 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		lineChart.setTouchEnabled(true); // 设置是否可以触摸
 		lineChart.setDragEnabled(true);// 是否可以拖拽
 		lineChart.setScaleEnabled(true);// 是否可以缩放
+		
 		xAxis = lineChart.getXAxis();
 		yAxis_left = lineChart.getAxisLeft();
 		yAxis_right = lineChart.getAxisRight();
 		
 		xAxis.setTextColor(Color.DKGRAY);
 		xAxis.setDrawAxisLine(true);
-		xAxis.setTextSize(4f);
+		xAxis.setTextSize(5f);
 
 		yAxis_left.setEnabled(false);
 		yAxis_left.setDrawAxisLine(false);
@@ -161,7 +162,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		Legend mLegend = lineChart.getLegend(); // 设置比例图标示，就是那个一组y的value的
 		mLegend.setPosition(LegendPosition.BELOW_CHART_CENTER);
 		mLegend.setForm(LegendForm.SQUARE);// 样式
-		mLegend.setFormSize(8f);// 字体
+		mLegend.setFormSize(10f);// 字体
 		mLegend.setTextColor(Color.BLACK);// 颜色
 		// mLegend.setTypeface(mTf);// 字体		
 
@@ -223,7 +224,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		// mLineDataSet.setFillColor(Color.RED);
 		// 用y轴的集合来设置参数
 		// lineDataSet_SetV.setAxisDependency(AxisDependency.LEFT);
-		mlineDataSet.setLineWidth(1.5f); // 线宽
+		mlineDataSet.setLineWidth(1.6f); // 线宽
 		mlineDataSet.setCircleSize(1f);// 显示的圆形大小
 		mlineDataSet.setColor(COLORS[id%COLORS.length]);// 显示颜色
 		mlineDataSet.setCircleColor(COLORS[id%COLORS.length] );// 圆形的颜色
@@ -324,7 +325,7 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		// mLineDataSet.setFillColor(Color.RED);
 		// 用y轴的集合来设置参数
 		// lineDataSet_SetV.setAxisDependency(AxisDependency.LEFT);
-		mlineDataSet.setLineWidth(1.5f); // 线宽
+		mlineDataSet.setLineWidth(1.6f); // 线宽
 		mlineDataSet.setCircleSize(1f);// 显示的圆形大小
 		mlineDataSet.setColor(COLORS[id%COLORS.length] );// 显示颜色
 		mlineDataSet.setCircleColor(COLORS[id%COLORS.length] );// 圆形的颜色
