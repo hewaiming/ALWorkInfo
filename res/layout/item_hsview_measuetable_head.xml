@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/tv_PotNo_head"
-            android:layout_width="wrap_content"
+            android:layout_width="38dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="2dp"
@@ -56,247 +56,266 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/tv_PotSt_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="槽状态"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_PotSt"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_RunTime_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="运行时间"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_RunTime"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_SetV_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="设定电压"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_SetV"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_RealSetV_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="实设电压"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_RealSetV"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_WorkV_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="工作电压"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_WorkV"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_AverageV_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="平均电压"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_AverageV"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_AeV_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="效应电压"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_AeV"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_AeTime_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="效应时长"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_AeTime"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_AeCnt_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="效应次数"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_AeCnt"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_DybTime_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="电压摆时长"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_DybTime"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_ALFCnt_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="氟化铝下料量"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_ALFCnt"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
-                    android:id="@+id/tv_ALCntZSL_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="2dp"
-                    android:text="出铝指示量"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/text_black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/iv_ALCntZSL"
-                    android:layout_width="@dimen/sort_image_width"
-                    android:layout_height="@dimen/sort_image_hight"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/sort" />
-
-                <TextView
                     android:id="@+id/tv_Ddate_head"
-                    android:layout_width="64dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="2dp"
-                    android:text="日期"
+                    android:text="    日      期 "
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@+id/iv_Ddate"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_ALCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="出铝量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_ALCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_LSP_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="铝水平"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_LSP"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_DJZSP_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="电解质水平"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_DJZSP"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_DJWD_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="电解温度"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_DJWD"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_FZB_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text=" 分子比"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_FZB"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_FeCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="2dp"
+                    android:text="  铁含量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_FeCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_SiCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="2dp"
+                    android:text="  硅含量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_SiCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_ALOCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="  氧化铝浓度"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_ALOCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_CaFCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="氟化钙含量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_CaFCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_MgCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="镁含量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_MgCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_MLSP_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="侧壁温度"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_MLSP"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_LDYJ_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="阳极压降"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_LDYJ"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+
+                <TextView
+                    android:id="@+id/tv_JHCL_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="计划出铝量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_JHCL"
                     android:layout_width="@dimen/sort_image_width"
                     android:layout_height="@dimen/sort_image_hight"
                     android:layout_gravity="center_vertical"

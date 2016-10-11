@@ -5,21 +5,21 @@ import java.util.Comparator;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 
 @SuppressWarnings("rawtypes")
-public class FZBComparatorDESC_Measue implements Comparator {
+public class CBWDComparatorDESC_Measue implements Comparator {
 	@Override
 	public int compare(Object o1, Object o2) {
-		float fzb1,fzb2;		
+		float cbwd1,cbwd2;		
 		try {
-			fzb1=Float.valueOf(((MeasueTable)o1).getFZB());
+			cbwd1=Float.valueOf(((MeasueTable)o1).getMLSP());
 		} catch (Exception e) {
-			fzb1=0;
+			cbwd1=0;
 		}
 		try {
-			fzb2=Float.valueOf(((MeasueTable)o2).getFZB());
+			cbwd2=Float.valueOf(((MeasueTable)o2).getMLSP());
 		} catch (Exception e) {
-			fzb2=0;
+			cbwd2=0;
 		}				
-		return (fzb1 == fzb2 ? 0 : (fzb2 > fzb1 ? 1 : -1));
+		return (cbwd1 == cbwd2 ? 0 : (cbwd2 > cbwd1 ? 1 : -1));
 	}	
 	
 }

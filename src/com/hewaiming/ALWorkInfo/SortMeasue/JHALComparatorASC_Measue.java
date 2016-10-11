@@ -5,7 +5,7 @@ import java.util.Comparator;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 
 @SuppressWarnings("rawtypes")
-public class JHALComparatorASC_Measue2 implements Comparator {
+public class JHALComparatorASC_Measue implements Comparator {
 	@Override
 	public int compare(Object o1, Object o2) {
 		int AL1,AL2;		

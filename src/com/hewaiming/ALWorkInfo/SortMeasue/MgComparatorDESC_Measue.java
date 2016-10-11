@@ -19,7 +19,7 @@ public class MgComparatorDESC_Measue implements Comparator {
 		} catch (Exception e) {
 			mg2=0;
 		}				
-		return (mg1 == mg2 ? 0 : (mg1 > mg2 ? 1 : -1));
+		return (mg1 == mg2 ? 0 : (mg2 > mg1 ? 1 : -1));
 	}	
 	
 }

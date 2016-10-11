@@ -104,7 +104,7 @@ public class HSView_MeasueTableAdapter extends BaseAdapter {
 			holder.tvLDYJ = (TextView) convertView.findViewById(R.id.tv_LDYJ);
 			holder.tvJHCL = (TextView) convertView.findViewById(R.id.tv_JHCL);			
 
-			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
+			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1_head);
 			headSrcrollView.AddOnScrollChangedListener(new OnScrollChangedListenerImp(scrollView1));
 
 			convertView.setTag(holder);
