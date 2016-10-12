@@ -57,28 +57,28 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 	private List<FaultRecord> listBean = null;
 	private FaultRecord_Adapter faultRec_Adapter = null;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea=null;
+	private LinearLayout showArea = null;
 	private String ip;
 	private int port;
 	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faultrec);
-		MyApplication.getInstance().addActivity(this);	
-		GetDataFromIntent();		
+		MyApplication.getInstance().addActivity(this);
+		GetDataFromIntent();
 		init_area();
 		init_potNo();
 		init_date();
 		init_title();
 		init_ListView();
-		mContext=this;
-		if (!MyConst.GetDataFromSharePre(mContext,"AlarmRec_Show")){
-			MyConst.GuideDialog_show(mContext,"AlarmRec_Show");  //第一次显示
-		}	
+		mContext = this;
+		if (!MyConst.GetDataFromSharePre(mContext, "AlarmRec_Show")) {
+			MyConst.GuideDialog_show(mContext, "AlarmRec_Show"); // 第一次显示
+		}
 	}
 
 	private void init_ListView() {
@@ -87,29 +87,30 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent potv_intent = new Intent( AlarmRecActivity.this, ShowPotVLineActivity.class);
-				Bundle potv_bundle = new Bundle();
-				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position-1).getPotNo()));
-				potv_bundle.putString("Begin_Date", listBean.get(position-1).getRecTime().substring(0, 10));
-				potv_bundle.putString("End_Date", listBean.get(position-1).getRecTime().substring(0, 10));
-				potv_bundle.putSerializable("JXList", (Serializable) JXList);
-				potv_bundle.putString("ip", ip);
-				potv_bundle.putInt("port", port);
-				potv_intent.putExtras(potv_bundle);
-				startActivity(potv_intent); // 槽压曲线图
-				
+				if (position > 0) {
+					Intent potv_intent = new Intent(AlarmRecActivity.this, ShowPotVLineActivity.class);
+					Bundle potv_bundle = new Bundle();
+					potv_bundle.putString("PotNo", String.valueOf(listBean.get(position - 1).getPotNo()));
+					potv_bundle.putString("Begin_Date", listBean.get(position - 1).getRecTime().substring(0, 10));
+					potv_bundle.putString("End_Date", listBean.get(position - 1).getRecTime().substring(0, 10));
+					potv_bundle.putSerializable("JXList", (Serializable) JXList);
+					potv_bundle.putString("ip", ip);
+					potv_bundle.putInt("port", port);
+					potv_intent.putExtras(potv_bundle);
+					startActivity(potv_intent); // 槽压曲线图
+				}
 			}
 		});
-		
+
 	}
 
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_record");
-		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");	
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);
-		potno_url="http://"+ip+potno_url;
-		area_url="http://"+ip+area_url;
+		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
+		potno_url = "http://" + ip + potno_url;
+		area_url = "http://" + ip + area_url;
 	}
 
 	private void init_potNo() {
@@ -188,15 +189,15 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 		tv_title.setText("报警记录");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
 
 	private void init_area() {
-	
+
 		spinner_area = (Spinner) findViewById(R.id.spinner_area);
 
 		Area_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MyConst.Areas);
@@ -282,11 +283,11 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 			break;
 		}
 		PotNoList.add(0, "全部槽号");
-		
+
 		spinner_potno.setSelection(0);
 		PotNo = PotNoList.get(0).toString();
-		PotNo_adapter.notifyDataSetChanged();// 通知数据改变		
-		
+		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+
 	}
 
 	@Override
