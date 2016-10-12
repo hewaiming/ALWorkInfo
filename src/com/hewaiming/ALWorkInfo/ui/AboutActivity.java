@@ -59,7 +59,7 @@ public class AboutActivity extends Activity {
 		btnCheck.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {				
-				UpdateManager manager = new UpdateManager(AboutActivity.this);				
+				UpdateManager manager = new UpdateManager(AboutActivity.this,true);				
 				manager.checkUpdate();
 			}
 		});

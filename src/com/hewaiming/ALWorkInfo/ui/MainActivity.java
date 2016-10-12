@@ -14,6 +14,7 @@ import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 import com.hewaiming.ALWorkInfo.Popup.ActionItem;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
+import com.hewaiming.ALWorkInfo.Update.UpdateManager;
 import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
@@ -99,11 +100,17 @@ public class MainActivity extends Activity
 				get_dateTable_url = "http://" + ip + get_dateTable_url;
 				get_JXName_url = "http://" + ip + get_JXName_url;
 				init_commData();
+				checkUpDate();  //¼ì²â°æ±¾Éý¼¶
 			}
 
 		} else {
 			Toast.makeText(getApplicationContext(), "ÍøÂçÒì³££¡", Toast.LENGTH_LONG).show();
 		}
+	}
+
+	private void checkUpDate() {
+		UpdateManager manager = new UpdateManager(MainActivity.this,false);				
+		manager.checkUpdate();
 	}
 
 	private int NetStatus() {

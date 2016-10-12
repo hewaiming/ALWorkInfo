@@ -52,6 +52,7 @@ public class UpdateManager {
 	private boolean cancelUpdate = false;
 
 	private Context mContext;
+	private boolean IsShow=true;
 	/* 鏇存柊杩涘害鏉� */
 	private ProgressBar mProgress;
 	private Dialog mDownloadDialog;
@@ -69,7 +70,9 @@ public class UpdateManager {
 				installApk();
 				break;
 			case NO_UPDATE:
-				Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
+				if (IsShow){
+					Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
+				}				
 				break;
 			case GET_UNDATAINFO_ERROR:
 				Toast.makeText(mContext, "获取最新版本信息失败！", Toast.LENGTH_LONG).show();
@@ -80,8 +83,9 @@ public class UpdateManager {
 		};
 	};
 
-	public UpdateManager(Context context) {
+	public UpdateManager(Context context,Boolean IsShow) {
 		this.mContext = context;
+		this.IsShow=IsShow;
 	}
 
 	/**
