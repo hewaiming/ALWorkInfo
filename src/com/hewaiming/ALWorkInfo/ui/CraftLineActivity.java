@@ -27,6 +27,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -48,8 +49,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CraftLineActivity extends Activity
-		implements OnClickListener, OnCheckedChangeListener {
+public class CraftLineActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -65,37 +65,55 @@ public class CraftLineActivity extends Activity
 	private List<CheckBox> list_cb = new ArrayList<CheckBox>();
 	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
 	private String selitems = "";
-	private List<MeasueTable> listBean_measuetable = null;	
-	private ProgressDialog m_ProgressDialog=null;
+	private List<MeasueTable> listBean_measuetable = null;
+	private ProgressDialog m_ProgressDialog = null;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea=null;
+	private LinearLayout showArea = null;
 	private String ip;
 	private int port;
+	private int default_PotNo = 1, default_Area = 11;
+	private  Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_craft_line);	
+		setContentView(R.layout.activity_craft_line);
 		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
-		init_area();
-		init_potNo();
-		init_date();
+		mContext = this;
 		init_title();
+		init_potNo();
+		init_area();
+		init_date();	
 		init_items();
+		if (!MyConst.GetDataFromSharePre(mContext, "CraftLine_Show")) {
+			MyConst.GuideDialog_show(mContext, "CraftLine_Show"); // 第一次显示
+		}
 	}
 
 	private void GetDataFromIntent() {
 		dateBean = getIntent().getStringArrayListExtra("date_table");
-//		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
-		ip=getIntent().getStringExtra("ip");
-		port=getIntent().getIntExtra("port", 1234);
-		potno_url="http://"+ip+potno_url;
-		measue_potno_url="http://"+ip+measue_potno_url;
+		PotNo = getIntent().getStringExtra("PotNo_Selected");
+		GetPotNo_Area(PotNo);
+		// JXList = (List<Map<String, Object>>)
+		// getIntent().getSerializableExtra("JXList");
+		ip = getIntent().getStringExtra("ip");
+		port = getIntent().getIntExtra("port", 1234);
+		potno_url = "http://" + ip + potno_url;
+		measue_potno_url = "http://" + ip + measue_potno_url;
 	}
-	
+
+	private void GetPotNo_Area(String potNo) {
+		if (potNo != "" || !(potNo.equals(null))) {
+			int tmpNo = Integer.valueOf(potNo);
+			default_Area = tmpNo / 100;
+			default_PotNo = tmpNo % 100;
+		}
+
+	}
+
 	private void init_items() {
 		cb0 = (CheckBox) findViewById(R.id.chkbox_SetV);
 		cb1 = (CheckBox) findViewById(R.id.chkbox_WorkV);
@@ -131,7 +149,7 @@ public class CraftLineActivity extends Activity
 		list_cb.add(cb15);
 		for (CheckBox cb : list_cb) {
 			cb.setOnCheckedChangeListener(this);
-		}	
+		}
 
 	}
 
@@ -158,6 +176,7 @@ public class CraftLineActivity extends Activity
 			}
 
 		});
+		spinner_potno.setSelection(default_PotNo - 1);
 	}
 
 	private void init_date() {
@@ -209,9 +228,9 @@ public class CraftLineActivity extends Activity
 		tv_title.setText("工艺曲线");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
-		
-		isShowingBtn=(ImageButton) findViewById(R.id.btn_isSHOW);
-		showArea=(LinearLayout) findViewById(R.id.Layout_selection);
+
+		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
+		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
 
 	}
@@ -225,6 +244,27 @@ public class CraftLineActivity extends Activity
 		// 将adapter 添加到spinner中
 		spinner_area.setAdapter(Area_adapter);
 		spinner_area.setVisibility(View.VISIBLE);
+		switch (default_Area) {
+		case 11:
+			spinner_area.setSelection(0);
+			break;
+		case 12:
+			spinner_area.setSelection(1);
+			break;
+		case 13:
+			spinner_area.setSelection(2);
+			break;
+		case 21:
+			spinner_area.setSelection(3);
+			break;
+		case 22:
+			spinner_area.setSelection(4);
+			break;
+		case 23:
+			spinner_area.setSelection(5);
+			break;
+		}
+		PotNoChanged(default_Area);
 		spinner_area.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -265,47 +305,61 @@ public class CraftLineActivity extends Activity
 	protected void PotNoChanged(int areaId2) {
 		switch (areaId2) {
 		case 11:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}			
 			for (int i = 1101; i <= 1136; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 12:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}				
 			for (int i = 1201; i <= 1237; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 13:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}				
 			for (int i = 1301; i <= 1337; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 21:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}			
 			for (int i = 2101; i <= 2136; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 22:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}				
 			for (int i = 2201; i <= 2237; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 23:
-			PotNoList.clear();
+			if(PotNoList!=null || PotNoList.size()!=0){
+				PotNoList.clear();
+			}			
 			for (int i = 2301; i <= 2337; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		}
-		spinner_potno.setSelection(0);
-		PotNo = PotNoList.get(0).toString();
-		PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+		if (default_PotNo == 1) {
+			spinner_potno.setSelection(0);
+			PotNo = PotNoList.get(0).toString();
+			PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+		}
+
 	}
-	
 
 	@Override
 	public void onClick(View v) {
@@ -313,21 +367,20 @@ public class CraftLineActivity extends Activity
 		case R.id.btn_back:
 			finish();
 			break;
-		case R.id.btn_isSHOW:    //显示或隐藏
-			if (showArea.getVisibility()==View.GONE){
+		case R.id.btn_isSHOW: // 显示或隐藏
+			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
-			}else{
+			} else {
 				showArea.setVisibility(View.GONE);
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
 			}
-			break;	
-		case R.id.btn_ok:	
-			m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this,    
-		              "请等待...", "正在获取工艺参数数据 ...", true);
+			break;
+		case R.id.btn_ok:
+			m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this, "请等待...", "正在获取工艺参数数据 ...", true);
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
-			} else {				
+			} else {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				try {
 					Date bdate = df.parse(BeginDate);
@@ -347,21 +400,21 @@ public class CraftLineActivity extends Activity
 						if (selitems.equals("")) {
 							Toast.makeText(getApplicationContext(), "没有选中任何一项工艺参数，请选择工艺参数项！", 1).show();
 							break;
-						} else {	
-							showCraft();	//并发进程方式取数据				
-//							m_ProgressDialog.dismiss();
+						} else {
+							showCraft(); // 并发进程方式取数据
+							// m_ProgressDialog.dismiss();
 						}
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-			}		
+			}
 			break;
 		}
 	}
 
 	private void showCraft() {
-		
+
 		ExecutorService exec = Executors.newCachedThreadPool();
 		final CyclicBarrier barrier = new CyclicBarrier(2, new Runnable() {
 			@Override
@@ -384,7 +437,7 @@ public class CraftLineActivity extends Activity
 			@Override
 			public void run() {
 				System.out.println("测量数据OK，其他哥们呢");
-				
+
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
 				mparams.clear();
 				mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 槽号
@@ -437,13 +490,12 @@ public class CraftLineActivity extends Activity
 				}
 			}
 		});
-		exec.shutdown();	
+		exec.shutdown();
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		Log.i("chkbox", buttonView.getText().toString() + isChecked);
 	}
-	
 
 }

@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MyConst {
@@ -58,6 +59,24 @@ public class MyConst {
 	public static void GuideDialog_show(final Context mContext,final String showName) {
 		final Dialog dialog = new Dialog(mContext, R.style.Dialog_Fullscreen);
 		dialog.setContentView(R.layout.activity_guide_dialog);
+		RelativeLayout mLayout=(RelativeLayout) dialog.findViewById(R.id.Layout_backgroup);
+		mLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				SharedPreferences sp;
+				sp = mContext.getSharedPreferences("GuideDiaLogIsShow", mContext.MODE_PRIVATE);
+				if (sp!=null){
+					Editor editor = sp.edit();
+					editor.putBoolean(showName, true);				
+					if (!editor.commit()){
+						Toast.makeText(mContext.getApplicationContext(), "保存【引导界面显示】参数失败"+showName, 1).show();
+					}
+				}
+				
+			}
+		});
 		ImageView iv = (ImageView) dialog.findViewById(R.id.ivNavigater_click);
 		iv.setOnClickListener(new OnClickListener() {
 			

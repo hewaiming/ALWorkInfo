@@ -343,6 +343,7 @@ public class MainActivity extends Activity
 				Intent craft_intent = new Intent(MainActivity.this, CraftLineActivity.class);
 				Bundle craftBundle = new Bundle();
 				craftBundle.putStringArrayList("date_table", (ArrayList<String>) date_table);
+				craftBundle.putString("PotNo_Selected", "1101");
 				craftBundle.putString("ip", ip);
 				craftBundle.putInt("port", port);
 				craft_intent.putExtras(craftBundle);

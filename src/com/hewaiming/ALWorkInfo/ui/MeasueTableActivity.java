@@ -47,6 +47,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -189,6 +191,22 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		lv_MeasueTable.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 		lv_MeasueTable.setCacheColorHint(0);
 		lv_MeasueTable.setOnScrollListener(this);
+		lv_MeasueTable.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
+				PotNo= String.valueOf(listBean.get(position).getPotNo());
+				Intent craft_intent = new Intent(MeasueTableActivity.this, CraftLineActivity.class);
+				Bundle craftBundle = new Bundle();
+				craftBundle.putStringArrayList("date_table", (ArrayList<String>)dateBean );
+				craftBundle.putString("PotNo_Selected", PotNo);
+				craftBundle.putString("ip", ip);
+				craftBundle.putInt("port", port);
+				craft_intent.putExtras(craftBundle);
+				startActivity(craft_intent); // ¹¤ÒÕÇúÏß
+				return true;
+			}
+		});
 	}
 
 	private void init_potNo() {
