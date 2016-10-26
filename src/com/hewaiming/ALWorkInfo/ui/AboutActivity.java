@@ -37,7 +37,7 @@ public class AboutActivity extends Activity {
 		tv_title.setText("关于");
 		tv_ID=(TextView) findViewById(R.id.tv_id);
 		tv_date=(TextView) findViewById(R.id.tv_datetime);
-		
+		tv_date.setText("2016-10-26");
 		String myId;
 		try {
 			myId = getVersionName();
@@ -71,7 +71,7 @@ public class AboutActivity extends Activity {
 	        PackageManager packageManager = getPackageManager();  
 	        // getPackageName()是你当前类的包名，0代表是获取版本信息  
 	        PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(),0);  
-	        String version = packInfo.versionName;  
+	        String version = packInfo.versionName;  	      
 	        return version;  
 	}  
 
