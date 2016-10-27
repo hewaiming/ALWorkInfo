@@ -71,8 +71,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 	private LinearLayout showArea = null;
 	private String ip;
 	private int port;
-	private int default_PotNo = 1, default_Area = 11;
-	private  Context mContext;
+	private int default_PotNo = 1, default_Area = 11;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +80,12 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_craft_line);
 		MyApplication.getInstance().addActivity(this);
-		GetDataFromIntent();
-		mContext = this;
+		GetDataFromIntent();	
 		init_title();
 		init_potNo();
 		init_area();
 		init_date();	
-		init_items();
-		if (!MyConst.GetDataFromSharePre(mContext, "CraftLine_Show")) {
-			MyConst.GuideDialog_show(mContext, "CraftLine_Show"); // 第一次显示
-		}
+		init_items();	
 	}
 
 	private void GetDataFromIntent() {

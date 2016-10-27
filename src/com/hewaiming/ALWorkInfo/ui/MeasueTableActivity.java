@@ -47,6 +47,7 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -102,6 +103,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			false, false, false };
 	private ImageView PotNo_iv, Ddate_iv, ALCnt_iv, LSP_iv, DJZSP_iv, DJWD_iv, FZB_iv, FeCnt_iv, SiCnt_iv, ALOCnt_iv,
 			CaFCnt_iv, MgCnt_iv, MLSP_iv, LDYJ_iv, JHCL_iv;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measue_table);
 		MyApplication.getInstance().addActivity(this);
+		mContext=this;
 		GetDataFromIntent();
 		init_area();
 		init_potNo();
@@ -117,6 +120,9 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 		init_title();
 		init_HSView();
 		init_sort();
+		if (!MyConst.GetDataFromSharePre(mContext, "MeasueTable_Show")) {
+			MyConst.GuideDialog_show(mContext, "MeasueTable_Show"); // 第一次显示
+		}
 	}
 
 	private void init_sort() {
