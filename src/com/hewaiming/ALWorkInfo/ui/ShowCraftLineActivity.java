@@ -249,8 +249,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 			switch (id) {	
 			case 9:
 				if (list_measuetable.get(i).getALCnt().equals("")) {
-					float value_ALCnt = (float) (0 * range);
-					yValues.add(new Entry(value_ALCnt, i)); // y轴的 计划出铝量 0
+					//float value_ALCnt = (float) (0 * range);
+					//yValues.add(new Entry(value_ALCnt, i)); // y轴的 计划出铝量 0
 				} else {
 					float value_ALCnt = (float) (Integer.parseInt(list_measuetable.get(i).getALCnt()) * range);
 					yValues.add(new Entry(value_ALCnt, i)); // y轴的 计划出铝量
@@ -258,8 +258,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 				break;
 			case 10:
 				if (list_measuetable.get(i).getFeCnt().equals("")) {
-					float value_FeCnt = (float) (0 * range);
-					yValues.add(new Entry(value_FeCnt, i)); // y轴的 铁含量 0
+					//float value_FeCnt = (float) (0 * range);
+					//yValues.add(new Entry(value_FeCnt, i)); // y轴的 铁含量 0
 				} else {
 					float value_FeCnt = (float) (Float.parseFloat(list_measuetable.get(i).getFeCnt()) * range);
 					yValues.add(new Entry(value_FeCnt, i)); // y轴的 铁含量
@@ -268,8 +268,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 				break;
 			case 11:
 				if (list_measuetable.get(i).getSiCnt().equals("")) {
-					float value_SiCnt = (float) (0 * range);
-					yValues.add(new Entry(value_SiCnt, i)); // y轴的 硅含量 0
+					//float value_SiCnt = (float) (0 * range);
+					//yValues.add(new Entry(value_SiCnt, i)); // y轴的 硅含量 0
 				} else {
 					float value_SiCnt = (float) (Float.parseFloat(list_measuetable.get(i).getSiCnt()) * range);
 					yValues.add(new Entry(value_SiCnt, i)); // y轴的 硅含量
@@ -278,8 +278,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 			case 12:
 				if (list_measuetable.get(i).getFZB().equals("")) {
-					float value_FZB = (float) (0 * range);
-					yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
+					//float value_FZB = (float) (0 * range);
+					//yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
 				} else {
 					float value_FZB = (float) (Float.parseFloat(list_measuetable.get(i).getFZB()) * range);
 					yValues.add(new Entry(value_FZB, i)); // y轴的 分子比
@@ -288,8 +288,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 			case 13:
 				if (list_measuetable.get(i).getDJWD().equals("")) {
-					float value_DJWD = (float) (0 * range);
-					yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
+					//float value_DJWD = (float) (0 * range);
+					//yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
 				} else {
 					float value_DJWD = (float) (Integer.parseInt(list_measuetable.get(i).getDJWD()) * range);
 					yValues.add(new Entry(value_DJWD, i)); // y轴的 电解温度
@@ -299,8 +299,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 
 			case 14:
 				if (list_measuetable.get(i).getLSP().equals("")) {
-					float value_LSP = (float) (0 * range);
-					yValues.add(new Entry(value_LSP, i));
+					//float value_LSP = (float) (0 * range);
+					//yValues.add(new Entry(value_LSP, i));
 				} else {
 					float value_LSP = (float) (Integer.parseInt(list_measuetable.get(i).getLSP()) * range);
 					yValues.add(new Entry(value_LSP, i)); // y轴的 铝水平
@@ -308,8 +308,8 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 				break;
 			case 15:
 				if (list_measuetable.get(i).getDJZSP().equals("")) {
-					float value_DJZSP = (float) (0 * range);
-					yValues.add(new Entry(value_DJZSP, i));
+					//float value_DJZSP = (float) (0 * range);
+					//yValues.add(new Entry(value_DJZSP, i));
 				} else {
 					float value_DJZSP = (float) (Integer.parseInt(list_measuetable.get(i).getDJZSP()) * range);
 					yValues.add(new Entry(value_DJZSP, i)); // y轴的 电解质水平

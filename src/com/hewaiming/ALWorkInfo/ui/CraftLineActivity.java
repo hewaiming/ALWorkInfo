@@ -185,7 +185,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		spinner_endDate.setAdapter(Date_adapter);
 		spinner_beginDate.setVisibility(View.VISIBLE);
 		spinner_endDate.setVisibility(View.VISIBLE);
-		spinner_beginDate.setSelection(15);
+		spinner_beginDate.setSelection(25);
 		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
 		EndDate = spinner_endDate.getItemAtPosition(0).toString();
 
