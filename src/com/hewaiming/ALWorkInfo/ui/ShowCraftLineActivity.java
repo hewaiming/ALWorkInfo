@@ -229,6 +229,12 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		mlineDataSet.setColor(COLORS[id%COLORS.length]);// 显示颜色
 		mlineDataSet.setCircleColor(COLORS[id%COLORS.length] );// 圆形的颜色
 		mlineDataSet.setHighLightColor(COLORS[id%COLORS.length]); // 高亮的线的颜色
+		
+		mlineDataSet.setDrawCircles(true);  
+		mlineDataSet.setDrawCircleHole(true);
+		mlineDataSet.setCircleSize(3.6f); //设置线圈的大小（半径）
+		mlineDataSet.setCircleColor(Color.GREEN); //设置线圈的颜色
+		mlineDataSet.setCircleColorHole(Color.RED);//设置线圈的内圆（孔）的颜色
 
 		List<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
 		lineDataSets.add(mlineDataSet); // add 
@@ -330,6 +336,12 @@ public class ShowCraftLineActivity extends Activity implements OnClickListener {
 		mlineDataSet.setColor(COLORS[id%COLORS.length] );// 显示颜色
 		mlineDataSet.setCircleColor(COLORS[id%COLORS.length] );// 圆形的颜色
 		mlineDataSet.setHighLightColor(COLORS[id%COLORS.length]); // 高亮的线的颜色
+		
+		mlineDataSet.setDrawCircles(true);  
+		mlineDataSet.setDrawCircleHole(true);
+		mlineDataSet.setCircleSize(3.8f); //设置线圈的大小（半径）
+		mlineDataSet.setCircleColor(Color.BLUE); //设置线圈的颜色
+		mlineDataSet.setCircleColorHole(Color.RED);//设置线圈的内圆（孔）的颜色
 
 		List<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
 		lineDataSets.add(mlineDataSet); // add 

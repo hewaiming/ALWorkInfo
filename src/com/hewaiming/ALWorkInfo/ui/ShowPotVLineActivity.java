@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
@@ -33,6 +34,7 @@ import com.hewaiming.ALWorkInfo.floatButton.FloatingActionButton;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
+import com.hewaiming.ALWorkInfo.view.MyMarkerView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -78,9 +80,9 @@ public class ShowPotVLineActivity extends Activity
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea = null;
 
-	//private FloatView floatView = null; // 以下是FLOAT BUTTON
-	//private WindowManager windowManager = null;
-	//private WindowManager.LayoutParams windowManagerParams = null;
+	// private FloatView floatView = null; // 以下是FLOAT BUTTON
+	// private WindowManager windowManager = null;
+	// private WindowManager.LayoutParams windowManagerParams = null;
 	private FloatingActionButton show_RealRec_btn;
 	private ListView lv_realrec;
 	private RelativeLayout mHead;
@@ -109,7 +111,7 @@ public class ShowPotVLineActivity extends Activity
 		show_RealRec_btn = (FloatingActionButton) findViewById(R.id.floatBtn_show_realRec); // 创建浮动按钮
 		show_RealRec_btn.setOnClickListener(this);
 		sbv = (SlideBottomPanel) findViewById(R.id.sbv);// 创建浮动按钮
-		
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -165,7 +167,7 @@ public class ShowPotVLineActivity extends Activity
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText(PotNo + "槽压曲线图");
 		backBtn = (Button) findViewById(R.id.btn_back);
-		backBtn.setOnClickListener(this);	
+		backBtn.setOnClickListener(this);
 
 	}
 
@@ -184,18 +186,18 @@ public class ShowPotVLineActivity extends Activity
 			listBean.clear();
 			listBean = JsonToBean_Area_Date.JsonArrayToPotVBean(data);
 			LineData mLineData = getLineData(listBean.size(), 1);
-			showChart(mLineChart, mLineData,Color.WHITE);
+			showChart(mLineChart, mLineData, Color.WHITE);
 			show_RealRec_btn.setVisibility(View.VISIBLE);
 		}
 	}
 
 	private void showChart(LineChart lineChart, LineData mLineData, int color) {
 		lineChart.setDrawBorders(false); // 是否在折线图上添加边框
-		
+
 		lineChart.setDescription("");// 数据描述
 		// 如果没有数据的时候，会显示这个，类似listview的emtpyview
 		lineChart.setNoDataTextDescription("你需要为曲线图提供数据.");
-		
+
 		lineChart.setDrawGridBackground(false); // 是否显示表格颜色
 		lineChart.setGridBackgroundColor(Color.WHITE & 0x70FFFFFF); // 表格的的颜色，在这里是是给颜色设置一个透明度
 
@@ -211,6 +213,9 @@ public class ShowPotVLineActivity extends Activity
 		lineChart.setPinchZoom(false);//
 
 		lineChart.setBackgroundColor(color);// 设置背景
+
+		MarkerView mv = new MyMarkerView(this, R.layout.content_marker_view);
+		lineChart.setMarkerView(mv); // 点击折线图上的点时，会弹出一个View
 
 		// get the legend (only possible after setting data)
 		Legend mLegend = lineChart.getLegend(); // 设置比例图标示，就是那个一组y的value的
@@ -288,19 +293,19 @@ public class ShowPotVLineActivity extends Activity
 		LineData lineData = new LineData(xValues, lineDataSets);
 
 		return lineData;
-	}	
+	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_back:
-			if(mLineChart!=null){
+			if (mLineChart != null) {
 				mLineChart.destroyDrawingCache();
 			}
 			finish();
 			break;
-		
-		case R.id.floatBtn_show_realRec:			
+
+		case R.id.floatBtn_show_realRec:
 			sbv.displayPanel();
 			http_post_getRealRec = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(RealRec_URL,
 					2, PotNo, BeginDate, EndDate, this, this).execute();

@@ -11,6 +11,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
@@ -33,6 +34,7 @@ import com.hewaiming.ALWorkInfo.floatButton.FloatingActionButton;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
+import com.hewaiming.ALWorkInfo.view.MyMarkerView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -364,7 +366,10 @@ public class PotVLineActivity extends Activity
 		lineChart.setPinchZoom(false);//
 
 		lineChart.setBackgroundColor(color);// 设置背景
-
+		
+		 MarkerView mv = new MyMarkerView(this,R.layout.content_marker_view);
+		 lineChart.setMarkerView(mv); //点击折线图上的点时，会弹出一个View
+		 
 		// get the legend (only possible after setting data)
 		Legend mLegend = lineChart.getLegend(); // 设置比例图标示，就是那个一组y的value的
 		mLegend.setPosition(LegendPosition.BELOW_CHART_CENTER);
