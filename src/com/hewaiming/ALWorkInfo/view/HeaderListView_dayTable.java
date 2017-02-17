@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class HeaderListView_dayTable extends LinearLayout {
 	private Context context;
-	private TextView PotNo, PotSt,RunTime,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate;
+	private TextView PotNo, PotSt,RunTime,HylCnt,JLCnt,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate;
 
 	public void setTvPotNo(String tvPotNo) {
 		this.PotNo.setText(tvPotNo);
@@ -22,6 +22,15 @@ public class HeaderListView_dayTable extends LinearLayout {
 		this.PotSt.setText(potst);
 	}
 	
+
+	public void setHylCnt(String tvHylCnt) {
+		this.HylCnt.setText(tvHylCnt);
+	}	
+
+	public void setJLCnt(String tvJLCnt) {
+		this.JLCnt.setText(tvJLCnt);
+	}
+
 	public void setTvRunTime(String runtime) {
 		this.RunTime.setText(runtime);
 	}
@@ -64,7 +73,7 @@ public class HeaderListView_dayTable extends LinearLayout {
 	public HeaderListView_dayTable(Context context) {
 		super(context);
 		this.context = context;		
-//		PotNo, PotSt,RunTime,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate
+//		PotNo, PotSt,RunTime,HylCnt,JLCnt,SetV,RealSetV,WorkV,AverageV,AeV,AeTime,AeCnt,DybTime,Ddate
 		
 		View view = LayoutInflater.from(this.context).inflate(R.layout.header_daytable, null);
 		// 以下两句的顺序不能调换，要先addView，然后才能通过findViewById找到该TextView
@@ -72,6 +81,8 @@ public class HeaderListView_dayTable extends LinearLayout {
 		PotNo=(TextView) view.findViewById(R.id.tv_PotNo_head);
 		PotSt=(TextView) view.findViewById(R.id.tv_PotSt_head);
 		RunTime=(TextView) view.findViewById(R.id.tv_RunTime_head);
+		HylCnt=(TextView) view.findViewById(R.id.tv_HylCnt_head); //氧化铝下料量
+		JLCnt=(TextView) view.findViewById(R.id.tv_JLCnt_head);   //加工次数
 		SetV=(TextView) view.findViewById(R.id.tv_SetV_head);
 		RealSetV=(TextView) view.findViewById(R.id.tv_RealSetV_head);
 		WorkV=(TextView) view.findViewById(R.id.tv_WorkV_head);

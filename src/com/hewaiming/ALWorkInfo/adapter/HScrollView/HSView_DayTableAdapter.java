@@ -2,6 +2,8 @@ package com.hewaiming.ALWorkInfo.adapter.HScrollView;
 
 import java.util.List;
 
+import org.w3c.dom.Text;
+
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView;
 import com.hewaiming.ALWorkInfo.HScrollListView.MyHScrollView.OnScrollChangedListener;
@@ -89,8 +91,10 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 
 			holder.scrollView = scrollView1;
 			holder.tvPotNo = (TextView) convertView.findViewById(R.id.tv_PotNo);
-			holder.tvPotSt = (TextView) convertView.findViewById(R.id.tv_PotSt);
+			holder.tvPotSt = (TextView) convertView.findViewById(R.id.tv_PotSt);			
 			holder.tvRunTime = (TextView) convertView.findViewById(R.id.tv_RunTime);
+			holder.tvYHLCnt=(TextView) convertView.findViewById(R.id.tv_YHLCnt);
+			holder.tvJLCnt=(TextView) convertView.findViewById(R.id.tv_JLCnt);
 			holder.tvSetV = (TextView) convertView.findViewById(R.id.tv_SetV);
 			holder.tvRealSetV = (TextView) convertView.findViewById(R.id.tv_RealSetV);
 			holder.tvWorkV = (TextView) convertView.findViewById(R.id.tv_WorkV);
@@ -120,6 +124,8 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 		holder.tvPotNo.setText(entity.getPotNo()+"");
 		holder.tvPotSt.setText(entity.getPotSt());
 		holder.tvRunTime.setText(entity.getRunTime()+"");
+		holder.tvYHLCnt.setText(entity.getYhlCnt()+"");
+		holder.tvJLCnt.setText(entity.getJLCnt()+"");
 		holder.tvSetV.setText(entity.getSetV()+"");
 		holder.tvRealSetV.setText(entity.getRealSetV()+"");
 		holder.tvWorkV.setText(entity.getWorkV()+"");
@@ -151,6 +157,8 @@ public class HSView_DayTableAdapter extends BaseAdapter {
 		TextView tvPotNo;
 		TextView tvPotSt;
 		TextView tvRunTime;
+		TextView tvYHLCnt; //加料量
+		TextView tvJLCnt; //加料次数
 		TextView tvSetV;
 		TextView tvRealSetV;
 		TextView tvWorkV;

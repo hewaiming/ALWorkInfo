@@ -60,6 +60,26 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black"
                     android:textSize="11sp" />
+                 <TextView
+                    android:id="@+id/tv_YHLCnt"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
+                    android:text="加料量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+                  <TextView
+                    android:id="@+id/tv_JLCnt"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
+                    android:text="加量次数"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_SetV"

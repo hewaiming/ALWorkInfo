@@ -381,6 +381,19 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setRunTime(jsonobj.getInt("RunTime"));
 				}
+				//加料量
+				if (jsonobj.get("YhlCnt").equals(null)) {
+					mBean.setYhlCnt(0);
+				} else {
+					mBean.setYhlCnt(jsonobj.getInt("YhlCnt"));
+				}
+				//加料次数
+				if (jsonobj.get("JlCnt").equals(null)) {
+					mBean.setJLCnt(0);
+				} else {
+					mBean.setJLCnt(jsonobj.getInt("JlCnt"));
+				}
+				
 				if (jsonobj.get("SetV").equals(null)) {
 					mBean.setSetV(0);
 				} else {
@@ -422,11 +435,13 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setDybTime(jsonobj.getInt("DybTime"));
 				}
+				//氟化铝量
 				if (jsonobj.get("FhlCnt").equals(null)) {
 					mBean.setFhlCnt(0);
 				} else {
 					mBean.setFhlCnt(jsonobj.getInt("FhlCnt"));
 				}
+				//出铝指示量
 				if (jsonobj.get("AlCntZSL").equals(null)) {
 					mBean.setAlCntZSL(0);
 				} else {

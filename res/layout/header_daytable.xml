@@ -41,6 +41,30 @@
         android:text="runTime"
         android:textColor="@color/header_text"
         android:textSize="9sp" />
+    
+    <TextView
+        android:id="@+id/tv_HylCnt_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="HylCnt"
+        android:textColor="@color/header_text"
+        android:textSize="9sp" />
+    
+    <TextView
+        android:id="@+id/tv_JLCnt_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="JLCnt"
+        android:textColor="@color/header_text"
+        android:textSize="9sp" />
 
     <TextView
         android:id="@+id/tv_SetV_head"

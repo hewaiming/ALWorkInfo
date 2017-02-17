@@ -7,6 +7,7 @@ public class dayTable implements Serializable {
 	private String PotSt;
 	private int SetNB;
 	private int RunTime;
+	private int JLCnt;//加工次数
 	private double AverageV;	
 	private double RealSetV;
 	private double SetV;
@@ -15,43 +16,22 @@ public class dayTable implements Serializable {
 	private int AeTime;
 	private int AeCnt;
 	private int DybTime;
-	private int YhlCnt;
-	private int FhlCnt;
+	private int YhlCnt;//氧化铝下料量
+	private int FhlCnt;//氟化铝下料量
 	private int AlCntZSL;  //指示出铝量
 	private int ZF;    //噪音
-	private String Ddate;	
+	private String Ddate;		
 
-	public dayTable(int potNo, String potSt, int runTime, double averageV, double realSetV, double setV, double workV,
-			double aeV, int aeTime, int aeCnt, int dybTime, int yhlCnt, int fhlCnt, int alCntZSL, int zF,
-			String ddate) {
-		super();
-		PotNo = potNo;
-		PotSt = potSt;
-		RunTime = runTime;
-		AverageV = averageV;
-		RealSetV = realSetV;
-		SetV = setV;
-		WorkV = workV;
-		AeV = aeV;
-		AeTime = aeTime;
-		AeCnt = aeCnt;
-		DybTime = dybTime;
-		YhlCnt = yhlCnt;
-		FhlCnt = fhlCnt;
-		AlCntZSL = alCntZSL;
-		ZF = zF;
-		Ddate = ddate;
-	}
-	
 
-	public dayTable(int potNo, String potSt, int setNB, int runTime, double averageV, double realSetV, double setV,
-			double workV, double aeV, int aeTime, int aeCnt, int dybTime, int yhlCnt, int fhlCnt, int alCntZSL, int zF,
-			String ddate) {
+	public dayTable(int potNo, String potSt, int setNB, int runTime, int jLCnt, double averageV, double realSetV,
+			double setV, double workV, double aeV, int aeTime, int aeCnt, int dybTime, int yhlCnt, int fhlCnt,
+			int alCntZSL, int zF, String ddate) {
 		super();
 		PotNo = potNo;
 		PotSt = potSt;
 		SetNB = setNB;
 		RunTime = runTime;
+		JLCnt = jLCnt;
 		AverageV = averageV;
 		RealSetV = realSetV;
 		SetV = setV;
@@ -66,7 +46,6 @@ public class dayTable implements Serializable {
 		ZF = zF;
 		Ddate = ddate;
 	}
-
 
 	public int getPotNo() {
 		return PotNo;
@@ -77,6 +56,16 @@ public class dayTable implements Serializable {
 	}
 
 	
+	public int getJLCnt() {
+		return JLCnt;
+	}
+
+
+	public void setJLCnt(int jLCnt) {
+		JLCnt = jLCnt;
+	}
+
+
 	public void setYhlCnt(int yhlCnt) {
 		YhlCnt = yhlCnt;
 	}
@@ -211,15 +200,14 @@ public class dayTable implements Serializable {
 		ZF = zF;
 	}
 
-
 	@Override
 	public String toString() {
 		return "dayTable [PotNo=" + PotNo + ", PotSt=" + PotSt + ", SetNB=" + SetNB + ", RunTime=" + RunTime
-				+ ", AverageV=" + AverageV + ", RealSetV=" + RealSetV + ", SetV=" + SetV + ", WorkV=" + WorkV + ", AeV="
-				+ AeV + ", AeTime=" + AeTime + ", AeCnt=" + AeCnt + ", DybTime=" + DybTime + ", YhlCnt=" + YhlCnt
-				+ ", FhlCnt=" + FhlCnt + ", AlCntZSL=" + AlCntZSL + ", ZF=" + ZF + ", Ddate=" + Ddate + "]";
+				+ ", JLCnt=" + JLCnt + ", AverageV=" + AverageV + ", RealSetV=" + RealSetV + ", SetV=" + SetV
+				+ ", WorkV=" + WorkV + ", AeV=" + AeV + ", AeTime=" + AeTime + ", AeCnt=" + AeCnt + ", DybTime="
+				+ DybTime + ", YhlCnt=" + YhlCnt + ", FhlCnt=" + FhlCnt + ", AlCntZSL=" + AlCntZSL + ", ZF=" + ZF
+				+ ", Ddate=" + Ddate + "]";
 	}
-
 
 
 }

@@ -93,6 +93,43 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/sort" />
 
+                 <TextView
+                    android:id="@+id/tv_YHLCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="加料量"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_YHLCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
+                
+                 <TextView
+                    android:id="@+id/tv_JLCnt_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="2dp"
+                    android:text="加料次数"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/iv_JLCnt"
+                    android:layout_width="@dimen/sort_image_width"
+                    android:layout_height="@dimen/sort_image_hight"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/sort" />
                 <TextView
                     android:id="@+id/tv_SetV_head"
                     android:layout_width="wrap_content"
