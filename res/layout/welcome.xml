@@ -13,14 +13,14 @@
     <Button
         android:id="@+id/btn_ok"
         style="@style/Smile.TextView._Green"
-        android:layout_width="77dp"
-        android:layout_height="36dp"      
+        android:layout_width="45dp"
+        android:layout_height="45dp"      
         android:layout_gravity="right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/button_selector_shape"
-        android:text="点击跳过"
-        android:textColor="@color/text_white"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/button_circle_shape"
+        android:text="跳过"
+        android:textColor="#0c5f07"
         android:textSize="16sp" />
 
 </FrameLayout>

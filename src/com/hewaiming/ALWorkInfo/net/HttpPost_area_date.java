@@ -45,7 +45,7 @@ public class HttpPost_area_date extends AsyncTask<String, Void, String> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("槽日报，正在数据下载中....");
+		pDialog.setMessage("槽日报，玩命加载中...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();

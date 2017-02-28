@@ -50,7 +50,7 @@ public class HttpPost_BeginDate_EndDate_other extends AsyncTask<String, Void, St
 	protected void onPreExecute() {
 		super.onPreExecute();
 		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("数据下载....");
+		pDialog.setMessage("玩命加载中...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();
