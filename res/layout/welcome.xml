@@ -20,7 +20,7 @@
         android:layout_marginRight="15dp"
         android:background="@drawable/button_circle_shape"
         android:text="跳过"
-        android:textColor="#0c5f07"
+        android:textColor="@color/text_white"
         android:textSize="16sp" />
 
 </FrameLayout>

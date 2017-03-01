@@ -51,6 +51,7 @@ public class WelcomeActivity extends Activity {
 		}
 		
 		okBtn = (Button) findViewById(R.id.btn_ok);
+		okBtn.getBackground().setAlpha(100);  //±³¾°Í¸Ã÷
 		mImage = (ImageView) findViewById(R.id.welcome);
 		ImageConfig config = new ImageConfig(this);
 		config.initImageLoader(ctx);
