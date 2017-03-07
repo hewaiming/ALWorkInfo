@@ -15,37 +15,37 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpPost_area_date extends AsyncTask<String, Void, String> {
+public class AsyTask_HttpPost_Area extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
 	private String areaID;
-	private String ddate;
+	
 	// 声明接口
 	private HttpGetListener listener;
 	private JSONArrayParser jsonParser = new JSONArrayParser();
 
-	public HttpPost_area_date() {
+	public AsyTask_HttpPost_Area() {
 
 	}
 
-	public HttpPost_area_date(String url) {
+	public AsyTask_HttpPost_Area(String url) {
 		this.url = url;
 	}
 
-	public HttpPost_area_date(String url, HttpGetListener listener, Context context, String areaId,String ddate) {
+	public AsyTask_HttpPost_Area(String url, HttpGetListener listener, Context context, String areaId) {
 		this.url = url;
 		this.listener = listener;
 		this.mContext = context;
 		this.areaID = areaId;
-		this.ddate=ddate;
+	
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("槽日报，玩命加载中...");
+		pDialog.setMessage("玩命加载中...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();
@@ -56,19 +56,16 @@ public class HttpPost_area_date extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... params) {
 		// Building Parameters
 		List<NameValuePair> mparams = new ArrayList<NameValuePair>();
-		mparams.add(new BasicNameValuePair("areaID", areaID));
-		mparams.add(new BasicNameValuePair("Ddate",ddate)); 
+		mparams.add(new BasicNameValuePair("areaID", areaID));	
 
-		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);
-		// full json response
+		JSONArray json = jsonParser.makeHttpRequest(url, "POST", mparams);		
 		if(json!=null){
-			Log.d("dayTabl-----json.toString()", json.toString());// full json response
+			Log.d("json.toString()", json.toString());// full json response
 			return json.toString();
 		}else{
 			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");
 			return "";
-		}		
-		
+		}			
 	}
 
 	@Override

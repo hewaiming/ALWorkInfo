@@ -14,9 +14,12 @@ import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
+import com.hewaiming.ALWorkInfo.bean.PotCtrl;
 import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
+
+import android.R.integer;
 
 public class JsonToBean_Area_Date {
 
@@ -27,7 +30,8 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<dayTable>();
-			//System.out.println("jsonarray.DayTable length()---" + jsonarray.length());
+			// System.out.println("jsonarray.DayTable length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				dayTable mday = new dayTable();
@@ -90,7 +94,7 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<PotV>();
-			//System.out.println("jsonarray.length()---" + jsonarray.length());
+			// System.out.println("jsonarray.length()---" + jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				PotV mPotV = new PotV();
@@ -106,63 +110,6 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	public static List<String> JsonArrayToDate(String data) {
-
-		ArrayList<String> listBean = null;
-		try {
-			JSONArray jsonarray = new JSONArray(data);
-
-			listBean = new ArrayList<String>();
-			//System.out.println("jsonarray.length()---" + jsonarray.length());
-			for (int i = 0; i < jsonarray.length(); i++) {
-				JSONObject jsonobj = jsonarray.getJSONObject(i);
-				String mdata = jsonobj.getString("Ddate");
-				int location = mdata.indexOf(" ");
-				listBean.add(mdata.substring(0, location));
-			}
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		}
-		return listBean;
-	}
-
-	//解析记录名 LIST
-	public static List<Map<String, Object>> JsonArrayToJXRecord(String data) {
-
-		List<Map<String, Object>> RXList = new ArrayList<Map<String, Object>>();
-		try {
-			JSONArray jsonarray = new JSONArray(data);
-
-			for (int i = 0; i < jsonarray.length(); i++) {
-				JSONObject jsonobj = jsonarray.getJSONObject(i);
-
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", jsonobj.getString("RecordNo"));
-				map.put("jx_name", jsonobj.getString("Name1"));
-				
-				if (jsonobj.get("Name2").equals(null)) {
-					map.put("jx_name2", "");
-				} else {
-					map.put("jx_name2", jsonobj.getString("Name2"));
-				}
-				
-				if (jsonobj.get("Name3").equals(null)) {
-					map.put("jx_name3", "");
-				} else {
-					map.put("jx_name3", jsonobj.getString("Name3"));
-				}
-				
-				RXList.add(map);
-			}
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		}
-
-		return RXList;
-	}
-
 	public static List<FaultRecord> JsonArrayToFaultRecordBean(String data, List<Map<String, Object>> JXList) {
 		List<FaultRecord> listBean = null;
 		try {
@@ -170,7 +117,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<FaultRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.FaultRecord---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.FaultRecord---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -181,7 +129,8 @@ public class JsonToBean_Area_Date {
 				int recNo = jsonobj.getInt("RecordNo");
 				recNo = recNo - 1;
 				Map<String, Object> mMap = JXList.get(recNo);
-				//System.out.println("jx_name" + mMap.get("jx_name").toString());
+				// System.out.println("jx_name" +
+				// mMap.get("jx_name").toString());
 				mFault.setRecordNo(mMap.get("jx_name").toString());
 				listBean.add(mFault);
 			}
@@ -200,7 +149,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<RealRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.RealRecord :length()---" + jsonarray.length());
+			// System.out.println("jsonarray.RealRecord :length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -211,22 +161,23 @@ public class JsonToBean_Area_Date {
 				int recNo = jsonobj.getInt("RecordNo");
 				recNo = recNo - 1;
 				Map<String, Object> mMap = JXList.get(recNo);
-				//System.out.println("jx_name:" + mMap.get("jx_name").toString());
-				
-				String name2_tmp=mMap.get("jx_name2").toString(); //记录名 参数2
-				String name3_tmp=mMap.get("jx_name3").toString();
-				
+				// System.out.println("jx_name:" +
+				// mMap.get("jx_name").toString());
+
+				String name2_tmp = mMap.get("jx_name2").toString(); // 记录名 参数2
+				String name3_tmp = mMap.get("jx_name3").toString();
+
 				mReal.setRecordNo(mMap.get("jx_name").toString());
 
 				if (jsonobj.get("Val2").equals(null)) {
 					mReal.setParam1("");
 				} else {
-					mReal.setParam1(name2_tmp+jsonobj.getInt("Val2"));
+					mReal.setParam1(name2_tmp + jsonobj.getInt("Val2"));
 				}
 				if (jsonobj.get("Val3").equals(null)) {
 					mReal.setParam2("");
 				} else {
-					mReal.setParam2(name3_tmp+jsonobj.getInt("Val3") + "");
+					mReal.setParam2(name3_tmp + jsonobj.getInt("Val3") + "");
 				}
 
 				listBean.add(mReal);
@@ -246,7 +197,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<OperateRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.RealRecord---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.RealRecord---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -282,7 +234,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.AeRecord---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -349,7 +302,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<dayTable>();
 			listBean.clear();
-			//System.out.println("jsonarray. DayTable---length()---" + jsonarray.length());
+			// System.out.println("jsonarray. DayTable---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -381,19 +335,19 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setRunTime(jsonobj.getInt("RunTime"));
 				}
-				//加料量
+				// 加料量
 				if (jsonobj.get("YhlCnt").equals(null)) {
 					mBean.setYhlCnt(0);
 				} else {
 					mBean.setYhlCnt(jsonobj.getInt("YhlCnt"));
 				}
-				//加料次数
+				// 加料次数
 				if (jsonobj.get("JlCnt").equals(null)) {
 					mBean.setJLCnt(0);
 				} else {
 					mBean.setJLCnt(jsonobj.getInt("JlCnt"));
 				}
-				
+
 				if (jsonobj.get("SetV").equals(null)) {
 					mBean.setSetV(0);
 				} else {
@@ -435,13 +389,13 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setDybTime(jsonobj.getInt("DybTime"));
 				}
-				//氟化铝量
+				// 氟化铝量
 				if (jsonobj.get("FhlCnt").equals(null)) {
 					mBean.setFhlCnt(0);
 				} else {
 					mBean.setFhlCnt(jsonobj.getInt("FhlCnt"));
 				}
-				//出铝指示量
+				// 出铝指示量
 				if (jsonobj.get("AlCntZSL").equals(null)) {
 					mBean.setAlCntZSL(0);
 				} else {
@@ -470,7 +424,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.AeCnt---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.AeCnt---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -505,7 +460,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<AeRecord>();
 			listBean.clear();
-			//System.out.println("jsonarray.AeRecord---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.AeRecord---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -567,7 +523,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<MeasueTable>();
 			listBean.clear();
-			//System.out.println("jsonarray. MeasueTable---length()---" + jsonarray.length());
+			// System.out.println("jsonarray. MeasueTable---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -666,7 +623,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	//故障率统计
+	// 故障率统计
 	public static List<FaultMost> JsonArrayToFaultCntBean(String data) {
 
 		List<FaultMost> listBean = null;
@@ -675,7 +632,8 @@ public class JsonToBean_Area_Date {
 
 			listBean = new ArrayList<FaultMost>();
 			listBean.clear();
-			//System.out.println("jsonarray.FaultMost---length()---" + jsonarray.length());
+			// System.out.println("jsonarray.FaultMost---length()---" +
+			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);

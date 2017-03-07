@@ -10,7 +10,7 @@ import com.hewaiming.ALWorkInfo.bean.PotAge;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
-import com.hewaiming.ALWorkInfo.net.HttpPost_area;
+import com.hewaiming.ALWorkInfo.net.AsyTask_HttpPost_Area;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_PotAge;
 
 import android.app.Activity;
@@ -34,7 +34,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	private int areaId = 11;
 	private ListView lv_potage;
 	private ArrayAdapter<String> Area_adapter;
-	private HttpPost_area http_post;
+	private AsyTask_HttpPost_Area http_post;
 	private HeaderListView_PotAge headerView;
 	private String url = ":8000/scgy/android/odbcPhP/PotAgeTable.php";
 	private List<PotAge> listBean=null;
@@ -156,7 +156,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 	}
 
 	private void DoGetDataFromNet() {
-		http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+		http_post = (AsyTask_HttpPost_Area) new AsyTask_HttpPost_Area(url, this, this, Integer.toString(areaId)).execute();
 		
 	}
 

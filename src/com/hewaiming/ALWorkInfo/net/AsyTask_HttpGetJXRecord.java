@@ -2,50 +2,54 @@ package com.hewaiming.ALWorkInfo.net;
 
 import org.json.JSONArray;
 
-import com.hewaiming.ALWorkInfo.InterFace.HttpGetDate_Listener;
+import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpGetData_date extends AsyncTask<String, Void, String> {
+public class AsyTask_HttpGetJXRecord extends AsyncTask<String, Void, String> {
 	private ProgressDialog pDialog;
 	private Context mContext;
 	private String url;
+
 	// 声明接口
-	private HttpGetDate_Listener listener;
+	private HttpGetJXRecord_Listener listener;
 
 	private HttpPost_JsonArray jsonParser = new HttpPost_JsonArray();
 
-	public HttpGetData_date() {
+	public AsyTask_HttpGetJXRecord() {
 
 	}
 
-	public HttpGetData_date(String url, HttpGetDate_Listener listener) {
+	public AsyTask_HttpGetJXRecord(String url, HttpGetJXRecord_Listener listener) {
 		super();
 		this.url = url;
 		this.listener = listener;
 	}
 
-	public HttpGetData_date(String url) {
+	public AsyTask_HttpGetJXRecord(String url) {
 		this.url = url;
 	}	
 
-	public HttpGetData_date(String url, HttpGetDate_Listener listener, Context context) {
+	public AsyTask_HttpGetJXRecord(String url, HttpGetJXRecord_Listener listener, Context context) {
 		this.url = url;
 		this.listener = listener;
-		this.mContext = context;	
+		this.mContext = context;		
+
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
+
 		pDialog = new ProgressDialog(mContext);
-		pDialog.setMessage("初始化日期数据....");
+		pDialog.setMessage("初始化解析记录号名称...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
 		pDialog.show();
+
 	}
 
 	@Override
@@ -54,9 +58,8 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 		// Building Parameters
 		// mparams.add(new BasicNameValuePair("date","" ));
 		JSONArray json = jsonParser.makeHttpRequest(url, "POST");
-		
 		if(json!=null){
-//			Log.d("日期数据：json.toString()", json.toString());// full json response
+//			Log.d("解析记录名json.toString()", json.toString());// full json response
 			return json.toString();
 		}else{
 			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");
@@ -68,7 +71,7 @@ public class HttpGetData_date extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		pDialog.dismiss();
-		listener.GetALLDayUrl(result);
+		listener.GetJXRecordUrl(result);
 		super.onPostExecute(result);
 	}
 

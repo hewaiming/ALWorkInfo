@@ -17,7 +17,7 @@ import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae3;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae4;
 import com.hewaiming.ALWorkInfo.fragment.Fragment_Ae5;
 import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
-import com.hewaiming.ALWorkInfo.net.HttpPost_area;
+import com.hewaiming.ALWorkInfo.net.AsyTask_HttpPost_Area;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -51,7 +51,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter;
-	private HttpPost_area http_post;
+	private AsyTask_HttpPost_Area http_post;
 	private String area_url = ":8000/scgy/android/odbcPhP/AeRecord5Day_area.php";	
 
 	private ArrayList<Fragment> fragments;
@@ -297,7 +297,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	}
 	
 	private void DoGetDataFromNet() {
-		http_post = (HttpPost_area) new HttpPost_area(area_url, this, this, Integer.toString(areaId)).execute();
+		http_post = (AsyTask_HttpPost_Area) new AsyTask_HttpPost_Area(area_url, this, this, Integer.toString(areaId)).execute();
 		
 	}
 

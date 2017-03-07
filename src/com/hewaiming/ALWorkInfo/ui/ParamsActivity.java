@@ -24,7 +24,7 @@ import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JsonToBean;
-import com.hewaiming.ALWorkInfo.net.HttpPost_area;
+import com.hewaiming.ALWorkInfo.net.AsyTask_HttpPost_Area;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 
 import android.app.Activity;
@@ -52,7 +52,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	private int areaId = 11;
 	private ListView lv_params;
 	private ArrayAdapter<String> Area_adapter;
-	private HttpPost_area http_post;
+	private AsyTask_HttpPost_Area http_post;
 	private HeaderListView_Params headerView;
 	private String url = ":8000/scgy/android/odbcPhP/PotSetValueTable.php";
 	private List<SetParams> listBean = null;
@@ -145,7 +145,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 	}
 
 	protected void DoGetDataFromNet() {
-		http_post = (HttpPost_area) new HttpPost_area(url, this, this, Integer.toString(areaId)).execute();
+		http_post = (AsyTask_HttpPost_Area) new AsyTask_HttpPost_Area(url, this, this, Integer.toString(areaId)).execute();
 
 	}
 

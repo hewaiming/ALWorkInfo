@@ -37,7 +37,7 @@ public class AboutActivity extends Activity {
 		tv_title.setText("¹ØÓÚ");
 		tv_ID=(TextView) findViewById(R.id.tv_id);
 		tv_date=(TextView) findViewById(R.id.tv_datetime);
-		tv_date.setText("2016-11-16");
+		tv_date.setText("2017-3-7");
 		String myId;
 		try {
 			myId = getVersionName();

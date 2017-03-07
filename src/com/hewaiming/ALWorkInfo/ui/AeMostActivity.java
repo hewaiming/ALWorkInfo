@@ -249,16 +249,16 @@ public class AeMostActivity extends FragmentActivity
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				switch (position) {
 				case 0:
-					areaId = 66;
+					areaId = 66; //所有厂房
 					break;
 				case 1:
-					areaId = 61;
+					areaId = 61; //一厂房
 					break;
 				case 2:
-					areaId = 62;
+					areaId = 62; //二厂房
 					break;
 				case 3:
-					areaId = 11;
+					areaId = 11;  //一厂房一区
 					break;
 				case 4:
 					areaId = 12;
@@ -273,7 +273,7 @@ public class AeMostActivity extends FragmentActivity
 					areaId = 22;
 					break;
 				case 8:
-					areaId = 23;
+					areaId = 23;  //二厂房三区
 					break;
 				}
 			}
