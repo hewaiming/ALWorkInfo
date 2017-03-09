@@ -62,7 +62,7 @@ public class AsyTask_HttpGetJXRecord extends AsyncTask<String, Void, String> {
 //			Log.d("解析记录名json.toString()", json.toString());// full json response
 			return json.toString();
 		}else{
-			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无数据返回！");
+			Log.i("PHP服务器数据返回情况：---", "从PHP服务器无解析记录名返回！");
 			return "";
 		}			
 		

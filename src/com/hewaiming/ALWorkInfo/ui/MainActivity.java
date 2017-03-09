@@ -127,6 +127,7 @@ public class MainActivity extends Activity
 
 	private BarChart mBarChart;
 	private Handler handler = new Handler(Looper.getMainLooper());
+	private int GetDateCnt = 0, GetJXCnt = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,10 +140,10 @@ public class MainActivity extends Activity
 		NetDetector netDetector = new NetDetector(mContext);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			iv_wifi.setVisibility(View.GONE);
-			bannerView.setVisibility(View.VISIBLE);
+			bannerView.setVisibility(View.VISIBLE);// wifi
 		} else {
 			iv_wifi.setVisibility(View.VISIBLE);
-			bannerView.setVisibility(View.GONE);
+			bannerView.setVisibility(View.GONE); // no wifi
 		}
 		if (NetStatus() != 0) {
 			if (!initdate(mContext)) { // 取远程服务器地址和端口
@@ -156,9 +157,11 @@ public class MainActivity extends Activity
 				get_NormPots1_url = "http://" + ip + get_NormPots1_url;
 				get_NormPots2_url = "http://" + ip + get_NormPots2_url;
 				AeCnt_url = "http://" + ip + AeCnt_url;
-				init_commData();
-				init_EC();// 显示当前各区效应系数
 				checkUpDate(); // 检测版本升级
+				init_GetDate();
+				init_GetJXRecord();
+				// init_GetCommData();
+				init_EC();// 显示当前各区效应系数
 			}
 
 		} else {
@@ -166,8 +169,20 @@ public class MainActivity extends Activity
 		}
 	}
 
+	private void init_GetCommData() {
+		// 执行从远程获得日期数据
+		if (date_table == null) {
+			mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(get_dateTable_url, this, this).execute();
+		}
+		if (JXList == null) {
+			mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(get_JXName_url, this, this)
+					.execute(); // 执行从远程获得解析记录数据
+		}
+	}
+
 	private void init_EC() {
 		ExecutorService exec = Executors.newCachedThreadPool();
+
 		final CyclicBarrier barrier = new CyclicBarrier(3, new Runnable() {
 			@Override
 			public void run() {
@@ -175,7 +190,7 @@ public class MainActivity extends Activity
 				CalcPotsNorm(NormPotsList1);
 				CalcPotsNorm(NormPotsList2);
 				CalcAeCnt(listBean_AeCnt);
-				showEcBar(); // 显示各区效应柱状图
+				ShowECBar();// 显示各区效应柱状图
 			}
 		});
 
@@ -190,11 +205,25 @@ public class MainActivity extends Activity
 					NormPotsList1 = new ArrayList<PotCtrl>();
 					NormPotsList1 = JsonToBean_GetPublicData.JsonArrayToNormPots(json1.toString());
 				} else {
-					Log.i("一厂房：正常槽数量 ---", "从PHP服务器无数据返回！");
-					tv_title.setTextSize(14);
-					tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
-					Toast.makeText(getApplicationContext(), "没有获取到一厂房正常槽数量，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG)
-							.show();
+					// 再次尝试取数据
+					json1 = jsonParser1.makeHttpRequest(get_NormPots1_url, "POST");
+					if (json1 != null) {
+						Log.d("一厂房：正常槽数量", json1.toString());// 从服务器返回有数据
+						NormPotsList1 = new ArrayList<PotCtrl>();
+						NormPotsList1 = JsonToBean_GetPublicData.JsonArrayToNormPots(json1.toString());
+					} else {
+						Log.i("一厂房：正常槽数量 ---", "从PHP服务器无数据返回！");
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								// tv_title.setTextSize(14);
+								// tv_title.setText("工作站:" +
+								// "未获取一厂槽状态，请检查远程服务器IP和端口是否正确！");
+								Toast.makeText(getApplicationContext(), "未获取一厂槽状态，请检查远程服务器IP和端口是否正确！",
+										Toast.LENGTH_LONG).show();
+							}
+						});
+					}
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -216,11 +245,26 @@ public class MainActivity extends Activity
 					NormPotsList2 = new ArrayList<PotCtrl>();
 					NormPotsList2 = JsonToBean_GetPublicData.JsonArrayToNormPots(json2.toString());
 				} else {
-					Log.i("二厂房：正常槽数量 ---", "从PHP服务器无数据返回！");
-					tv_title.setTextSize(14);
-					tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
-					Toast.makeText(getApplicationContext(), "没有获取到二厂房正常槽数量，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG)
-							.show();
+					// 再次尝试取数据
+					json2 = jsonParser2.makeHttpRequest(get_NormPots2_url, "POST");
+					if (json2 != null) {
+						Log.d("二厂房：正常槽数量", json2.toString());// 从服务器返回有数据
+						NormPotsList2 = new ArrayList<PotCtrl>();
+						NormPotsList2 = JsonToBean_GetPublicData.JsonArrayToNormPots(json2.toString());
+					} else {
+						Log.i("二厂房：正常槽数量 ---", "从PHP服务器无数据返回！");
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								// tv_title.setTextSize(14);
+								// tv_title.setText("工作站:" +
+								// "未获取二厂槽状态，请检查远程服务器IP和端口是否正确！");
+								Toast.makeText(getApplicationContext(), "没有获取到二厂房正常槽数量，请检查远程服务器IP和端口是否正确！",
+										Toast.LENGTH_LONG).show();
+							}
+						});
+					}
+
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -251,14 +295,29 @@ public class MainActivity extends Activity
 				if (json != null) {
 					Log.d("厂房：效应次数", json.toString());// 从服务器返回有数据
 					listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
-					// listBean_AeCnt.clear();
 					listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 
 				} else {
-					Log.i("厂房：效应次数 ---", "从PHP服务器无数据返回！");
-					tv_title.setTextSize(14);
-					tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
-					Toast.makeText(getApplicationContext(), "没有获取到厂房效应次数，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
+					// 再次get效应次数数据
+					json = jsonParser.makeHttpRequest(AeCnt_url, "POST", mparams);
+					if (json != null) {
+						Log.d("厂房：效应次数", json.toString());// 从服务器返回有数据
+						listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
+						listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
+					} else {
+						Log.i("厂房：效应次数 ---", "从PHP服务器无数据返回！");
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								// tv_title.setTextSize(14);
+								// tv_title.setText("工作站:" +
+								// "未获取效应次数,请检查远程服务器IP和端口是否正确！");
+								Toast.makeText(getApplicationContext(), "没有获取到厂房效应次数，请检查远程服务器IP和端口是否正确！",
+										Toast.LENGTH_LONG).show();
+
+							}
+						});
+					}
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -274,83 +333,9 @@ public class MainActivity extends Activity
 
 	}
 
-	protected void CalcAeCnt(List<AeRecord> listBean_AeCnt) {
-		/*for(int i=0;i<AeCnt.length;i++){
-			AeCnt[i]=0;
-		}*/
-		for (int i = 0; i < listBean_AeCnt.size(); i++) {
-			AeRecord aeCnt = new AeRecord();
-			aeCnt = listBean_AeCnt.get(i);
-			if (aeCnt != null) {
-				int potno = aeCnt.getPotNo(); // 槽号
-				int aeS = aeCnt.getWaitTime();// 效应次数
-
-				if (potno >= 1101 && potno <= 1136) {
-					AeCnt[0] = AeCnt[0] + aeS; // 一厂房一区效应次数总和
-				} else if (potno >= 1201 && potno <= 1237) {
-					AeCnt[1] = AeCnt[1] + aeS;
-				} else if (potno >= 1301 && potno <= 1337) {
-					AeCnt[2] = AeCnt[2] + aeS;
-				} else if (potno >= 2101 && potno <= 2136) {
-					AeCnt[3] = AeCnt[3] + aeS; // 二厂房一区效应次数总和
-				} else if (potno >= 2201 && potno <= 2237) {
-					AeCnt[4] = AeCnt[4] + aeS;
-				} else if (potno >= 2301 && potno <= 2337) {
-					AeCnt[5] = AeCnt[5] + aeS;
-				}
-
-			} else {
-				System.out.println("第 " + i + " 项 效应次数，为空！");
-			}
-
-		}
-	}
-
-	protected void CalcPotsNorm(List<PotCtrl> normPotsList) {
-		/*for(int i=0;i<NormPotS.length;i++){
-			NormPotS[i]=0;
-		}*/
-		for (int i = 0; i < normPotsList.size(); i++) {
-			PotCtrl mPotCtrl = new PotCtrl();
-			mPotCtrl = normPotsList.get(i);
-			if (mPotCtrl != null) {
-				int potno = mPotCtrl.getPotNo(); // 槽号
-				int mCtrl = mPotCtrl.getCtrls(); // 槽状态字
-				// 最后两位（二进制）00代表 正常，01 代表预热，10代表启动，11代表停槽
-				if ((mCtrl & 0x00) == 0) {
-					if (potno >= 1101 && potno <= 1136) {
-						NormPotS[0]++;
-					} else if (potno >= 1201 && potno <= 1237) {
-						NormPotS[1]++;
-					} else if (potno >= 1301 && potno <= 1337) {
-						NormPotS[2]++;
-					} else if (potno >= 2101 && potno <= 2136) {
-						NormPotS[3]++; // 二厂房一区
-					} else if (potno >= 2201 && potno <= 2237) {
-						NormPotS[4]++;
-					} else if (potno >= 2301 && potno <= 2337) {
-						NormPotS[5]++;
-					}
-				}
-
-			} else {
-				System.out.println("槽状态数据为NULL!");
-			}
-		}
-
-	}
-
-	protected void showEcBar() {
+	protected void ShowECBar() {
 		// 图表数据设置
-		ArrayList<BarEntry> yVals11 = new ArrayList<>();// Y轴方向一厂房一区数组
-		ArrayList<BarEntry> yVals12 = new ArrayList<>();// Y轴方向一厂房二区数组
-		ArrayList<BarEntry> yVals13 = new ArrayList<>();// Y轴方向一厂房三区数组
-		ArrayList<BarEntry> yVals1 = new ArrayList<>();// Y轴方向一厂房
-		ArrayList<BarEntry> yVals21 = new ArrayList<>();// Y轴方向二厂房一区数组
-		ArrayList<BarEntry> yVals22 = new ArrayList<>();// Y轴方向二厂房二区数组
-		ArrayList<BarEntry> yVals23 = new ArrayList<>();// Y轴方向二厂房三区数组
-		ArrayList<BarEntry> yVals2 = new ArrayList<>();// Y轴方向二厂房数组
-		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房
+		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房效应系数
 		ArrayList<String> xVals = new ArrayList<>();// X轴数据
 		int AeTotal1, AeTotal2, AeTotal, PotS1, PotS2, PotS;
 		AeTotal1 = AeCnt[0] + AeCnt[1] + AeCnt[2];// 一厂房效应总数
@@ -359,162 +344,113 @@ public class MainActivity extends Activity
 		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
 		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
 		PotS = PotS1 + PotS2; // 厂房正常槽总数
-		xVals.add("");
 		// 添加数据源
-		yVals11.add(new BarEntry((float) AeCnt[0] / NormPotS[0], 0));
-		yVals12.add(new BarEntry((float) AeCnt[1] / NormPotS[1], 0));
-		yVals13.add(new BarEntry((float) AeCnt[2] / NormPotS[2], 0));
-		yVals21.add(new BarEntry((float) AeCnt[3] / NormPotS[3], 0));
-		yVals22.add(new BarEntry((float) AeCnt[4] / NormPotS[4], 0));
-		yVals23.add(new BarEntry((float) AeCnt[5] / NormPotS[5], 0));
+		xVals.add("一厂1区");
+		yVals.add(new BarEntry((float) AeCnt[0] / NormPotS[0], 0));
+		xVals.add("一厂2区");
+		yVals.add(new BarEntry((float) AeCnt[1] / NormPotS[1], 1));
+		xVals.add("一厂3区");
+		yVals.add(new BarEntry((float) AeCnt[2] / NormPotS[2], 2));
+		xVals.add("一厂");
+		yVals.add(new BarEntry((float) AeTotal1 / PotS1, 3));
+		xVals.add("二厂1区");
+		yVals.add(new BarEntry((float) AeCnt[3] / NormPotS[3], 4));
+		xVals.add("二厂2区");
+		yVals.add(new BarEntry((float) AeCnt[4] / NormPotS[4], 5));
+		xVals.add("二厂3区");
+		yVals.add(new BarEntry((float) AeCnt[5] / NormPotS[5], 6));
+		xVals.add("二厂");
+		yVals.add(new BarEntry((float) AeTotal2 / PotS2, 7));
+		xVals.add("厂房");
+		yVals.add(new BarEntry((float) AeTotal / PotS, 8));
 
-		yVals1.add(new BarEntry((float) AeTotal1 / PotS1, 0)); // 一厂房效应系数
-		yVals2.add(new BarEntry((float) AeTotal2 / PotS2, 0));// 二厂房效应系数
-		yVals.add(new BarEntry((float) AeTotal / PotS, 0));// 厂房效应系数
-		BarDataSet barDataSet11 = new BarDataSet(yVals11, "一厂房1区");
-		barDataSet11.setColor(Color.RED);// 设置第一组数据颜色
-		barDataSet11.setDrawValues(true); // 显示数值
-		barDataSet11.setBarSpacePercent(38f);//
-		barDataSet11.setValueTextSize(7f);		
-		barDataSet11.setValueFormatter(new ValueFormatter() {
+		BarDataSet barDataSet = new BarDataSet(yVals, "各区效应系数");
+		barDataSet.setColor(Color.rgb(190, 0, 47));// 设置数据颜色
+		barDataSet.setDrawValues(true); // 显示数值
+		// barDataSet.setValueTextSize(7f);
+		// barDataSet.setValueTextColor(Color.RED);
+		barDataSet.setValueFormatter(new ValueFormatter() {
+
 			@Override
 			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
 					ViewPortHandler viewPortHandler) {
 				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return "1/1区 " + decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet12 = new BarDataSet(yVals12, "一厂房2区");
-		barDataSet12.setColor(Color.GREEN);// 设置第二组数据颜色
-		barDataSet12.setBarSpacePercent(38f);
-		barDataSet12.setDrawValues(true); // 显示数值
-		barDataSet12.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
 				return decimalFormat.format(value);
 			}
 		});
 
-		BarDataSet barDataSet13 = new BarDataSet(yVals13, "一厂房3区");
-		barDataSet13.setColor(Color.YELLOW);// 设置第三组数据颜色
-		barDataSet13.setBarSpacePercent(38f);
-		barDataSet13.setDrawValues(true); // 显示数值
-		barDataSet13.setValueFormatter(new ValueFormatter() {			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet1 = new BarDataSet(yVals1, "一厂房平均");
-		barDataSet1.setColor(Color.BLUE);// 设置第三组数据颜色
-		barDataSet1.setBarSpacePercent(38f);
-		barDataSet1.setDrawValues(true); // 显示数值
-		barDataSet1.setValueTextSize(7f);
-		barDataSet1.setValueTextColor(Color.RED);
-		barDataSet1.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return "1厂房 " + decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet21 = new BarDataSet(yVals21, "二厂房1区");
-		barDataSet21.setColor(Color.rgb(204, 102, 0));// 设置第一组数据颜色
-		barDataSet21.setDrawValues(true); // 显示数值
-		barDataSet21.setBarSpacePercent(38f);//
-		barDataSet21.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet22 = new BarDataSet(yVals22, "二厂房2区");
-		barDataSet22.setColor(Color.rgb(22, 169, 81));// 设置第二组数据颜色
-		barDataSet22.setBarSpacePercent(38f);
-		barDataSet22.setDrawValues(true); // 显示数值
-		barDataSet22.setValueTextSize(7f);
-		barDataSet22.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return "2/2区 " + decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet23 = new BarDataSet(yVals23, "二厂房3区");
-		barDataSet23.setColor(Color.rgb(204, 204, 0));// 设置第三组数据颜色
-		barDataSet23.setBarSpacePercent(38f);
-		barDataSet23.setDrawValues(true); // 显示数值
-		barDataSet23.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet2 = new BarDataSet(yVals2, "二厂房平均");
-		barDataSet2.setColor(Color.rgb(51, 51, 102));// 设置第三组数据颜色
-		barDataSet2.setBarSpacePercent(38f);
-		barDataSet2.setDrawValues(true); // 显示数值
-		barDataSet2.setValueTextSize(7f);
-		barDataSet2.setValueTextColor(Color.RED);
-		barDataSet2.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return "2厂房 " + decimalFormat.format(value);
-			}
-		});
-
-		BarDataSet barDataSet = new BarDataSet(yVals, "厂房平均");
-		barDataSet.setColor(Color.rgb(153, 0, 51));// 设置第三组数据颜色
-		barDataSet.setBarSpacePercent(38f);
-		barDataSet.setDrawValues(true); // 显示数值
-		barDataSet.setValueTextSize(7f);
-		barDataSet.setValueTextColor(Color.RED);
-		barDataSet.setValueFormatter(new ValueFormatter() {
-			
-			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				return "厂房 " + decimalFormat.format(value);
-			}
-		});
-
-		ArrayList<IBarDataSet> multibardata = new ArrayList<>();// IBarDataSet
-																// 接口很关键，是添加多组数据的关键结构，LineChart也是可以采用对应的接口类，也可以添加多组数据
-		multibardata.add(barDataSet11);
-		multibardata.add(barDataSet12);
-		multibardata.add(barDataSet13);
-		multibardata.add(barDataSet1);
-		multibardata.add(barDataSet21);
-		multibardata.add(barDataSet22);
-		multibardata.add(barDataSet23);
-		multibardata.add(barDataSet2);
-		multibardata.add(barDataSet);
-
-		BarData multi_bardata = new BarData(xVals, multibardata);
-		mBarChart.setData(multi_bardata); // 设置数据
+		BarData bardata = new BarData(xVals, barDataSet);
+		mBarChart.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart.animateXY(1000, 2000);// 设置动画
+				mBarChart.invalidate();
 			}
 		});
+
+	}
+
+	protected void CalcAeCnt(List<AeRecord> listBean_AeCnt) {
+		if (listBean_AeCnt != null && listBean_AeCnt.size() != 0) {
+			for (int i = 0; i < listBean_AeCnt.size(); i++) {
+				AeRecord aeCnt = new AeRecord();
+				aeCnt = listBean_AeCnt.get(i);
+				if (aeCnt != null) {
+					int potno = aeCnt.getPotNo(); // 槽号
+					int aeS = aeCnt.getWaitTime();// 效应次数
+
+					if (potno >= 1101 && potno <= 1136) {
+						AeCnt[0] = AeCnt[0] + aeS; // 一厂房一区效应次数总和
+					} else if (potno >= 1201 && potno <= 1237) {
+						AeCnt[1] = AeCnt[1] + aeS;
+					} else if (potno >= 1301 && potno <= 1337) {
+						AeCnt[2] = AeCnt[2] + aeS;
+					} else if (potno >= 2101 && potno <= 2136) {
+						AeCnt[3] = AeCnt[3] + aeS; // 二厂房一区效应次数总和
+					} else if (potno >= 2201 && potno <= 2237) {
+						AeCnt[4] = AeCnt[4] + aeS;
+					} else if (potno >= 2301 && potno <= 2337) {
+						AeCnt[5] = AeCnt[5] + aeS;
+					}
+
+				} else {
+					System.out.println("第 " + i + " 项 效应次数，为空！");
+				}
+			}
+		}
+	}
+
+	protected void CalcPotsNorm(List<PotCtrl> normPotsList) {
+		if (normPotsList != null && (normPotsList.size() != 0)) {
+			for (int i = 0; i < normPotsList.size(); i++) {
+				PotCtrl mPotCtrl = new PotCtrl();
+				mPotCtrl = normPotsList.get(i);
+				if (mPotCtrl != null) {
+					int potno = mPotCtrl.getPotNo(); // 槽号
+					int mCtrl = mPotCtrl.getCtrls(); // 槽状态字
+					// 最后两位（二进制）00代表 正常，01 代表预热，10代表启动，11代表停槽
+					if ((mCtrl & 0x00) == 0) {
+						if (potno >= 1101 && potno <= 1136) {
+							NormPotS[0]++;
+						} else if (potno >= 1201 && potno <= 1237) {
+							NormPotS[1]++;
+						} else if (potno >= 1301 && potno <= 1337) {
+							NormPotS[2]++;
+						} else if (potno >= 2101 && potno <= 2136) {
+							NormPotS[3]++; // 二厂房一区
+						} else if (potno >= 2201 && potno <= 2237) {
+							NormPotS[4]++;
+						} else if (potno >= 2301 && potno <= 2337) {
+							NormPotS[5]++;
+						}
+					}
+
+				} else {
+					System.out.println("槽状态数据为NULL!");
+				}
+			}
+		}
+
 	}
 
 	private void checkUpDate() {
@@ -558,14 +494,20 @@ public class MainActivity extends Activity
 		builder.create().show();
 	}
 
-	private void init_commData() {
-		if (JXList == null) {
-			mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(get_JXName_url, this, this)
-					.execute(); // 执行从远程获得解析记录数据
-		}
+	private void init_GetDate() {
+		GetDateCnt++;
 		if (date_table == null) {
 			// 执行从远程获得日期数据
 			mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(get_dateTable_url, this, this).execute();
+		}
+
+	}
+
+	private void init_GetJXRecord() {
+		GetJXCnt++;
+		if (JXList == null) {
+			mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(get_JXName_url, this, this)
+					.execute(); // 执行从远程获得解析记录数据
 		}
 
 	}
@@ -598,7 +540,8 @@ public class MainActivity extends Activity
 
 	private void init_BarCHART() {
 		// 图表显示设置
-		mBarChart.setTouchEnabled(true);
+		// mBarChart.setTouchEnabled();
+		mBarChart.getLegend().setEnabled(false);
 		mBarChart.getLegend().setPosition(LegendPosition.BELOW_CHART_LEFT);// 设置注解的位置在左上方
 		mBarChart.getLegend().setForm(LegendForm.SQUARE);// 这是左边显示小图标的形状
 		mBarChart.getLegend().setWordWrapEnabled(true);
@@ -606,6 +549,9 @@ public class MainActivity extends Activity
 
 		mBarChart.getXAxis().setPosition(XAxisPosition.BOTTOM);// 设置X轴的位置
 		mBarChart.getXAxis().setDrawGridLines(false);// 不显示网格
+		mBarChart.getXAxis().setDrawAxisLine(false);
+		mBarChart.getXAxis().setTextSize(7f);
+		mBarChart.getXAxis().setTextColor(Color.rgb(190, 0, 47));
 
 		mBarChart.getAxisRight().setEnabled(false);// 右侧不显示Y轴
 		mBarChart.getAxisLeft().setEnabled(false);
@@ -616,8 +562,9 @@ public class MainActivity extends Activity
 
 		mBarChart.setNoDataTextDescription("没有获取到效应次数数据");
 		mBarChart.setDescription("");
+
 		mBarChart.setOnLongClickListener(new OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View arg0) {
 				Intent aemost_intent = new Intent(MainActivity.this, AeMostActivity.class);
@@ -627,7 +574,8 @@ public class MainActivity extends Activity
 				aemostBundle.putString("ip", ip);
 				aemostBundle.putInt("port", port);
 				aemost_intent.putExtras(aemostBundle);
-				startActivity(aemost_intent); // 效应槽
+				startActivity(aemost_intent);
+				// 效应槽
 				return true;
 			}
 		});
@@ -831,7 +779,30 @@ public class MainActivity extends Activity
 				break;
 			}
 		} else {
-			Toast.makeText(mContext, "请稍后再点击，数据初始化....", 1).show();
+			// Toast.makeText(mContext, "请稍后再点击，数据初始化....", 1).show();
+			// 从此初始化日期和解析记录数据
+
+			if (GetJXCnt > 3) {
+				tv_title.setTextSize(14);
+				tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
+				// Toast.makeText(getApplicationContext(), "第" + GetJXCnt +
+				// "次尝试获取解析记录数据失败，请检查远程服务器IP和端口是否正确！", //
+				// Toast.LENGTH_LONG).show();
+			} else {
+				init_GetJXRecord();
+				Toast.makeText(getApplicationContext(), "第" + GetJXCnt + " 次尝试获取解析记录数据", Toast.LENGTH_SHORT).show();
+			}
+
+			if (GetDateCnt > 3) {
+				// Toast.makeText(getApplicationContext(), "第" + GetDateCnt + "
+				// 次尝试获取日期失败，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
+				tv_title.setTextSize(14);
+				tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
+			} else {
+				Toast.makeText(getApplicationContext(), "第" + GetDateCnt + " 次尝试获取日期数据", Toast.LENGTH_SHORT).show();
+				init_GetDate();
+			}
+
 		}
 	}
 
@@ -859,9 +830,11 @@ public class MainActivity extends Activity
 	public void GetALLDayUrl(String data) {
 		// 得到日期
 		if (data.equals("")) {
-			Toast.makeText(getApplicationContext(), "没有获取到[日期]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
-			tv_title.setTextSize(14);
-			tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
+			// Toast.makeText(getApplicationContext(),
+			// "没有获取到[日期]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
+			// tv_title.setTextSize(14);
+			// tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
+
 		} else {
 			date_table = new ArrayList<String>();
 			date_table = JsonToBean_GetPublicData.JsonArrayToDate(data);
@@ -878,9 +851,11 @@ public class MainActivity extends Activity
 	@Override
 	public void GetJXRecordUrl(String data) {
 		if (data.equals("")) {
-			tv_title.setTextSize(14);
-			tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
-			Toast.makeText(getApplicationContext(), "没有获取到[解析号]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
+			// tv_title.setTextSize(14);
+			// tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
+			// Toast.makeText(getApplicationContext(),
+			// "没有获取到[解析号]初始数据，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
+
 		} else {
 			JXList = new ArrayList<Map<String, Object>>();
 			JXList = JsonToBean_GetPublicData.JsonArrayToJXRecord(data);

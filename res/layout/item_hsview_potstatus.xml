@@ -15,7 +15,8 @@
         android:layout_marginRight="5dp"
         android:text="槽号"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/text_gray2"
+        android:textColor="#689F38"
+        android:textStyle="bold"
         android:textSize="12sp" />
 
     <com.hewaiming.ALWorkInfo.HScrollListView.InterceptScrollContainer

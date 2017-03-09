@@ -30,7 +30,7 @@
     <string name="hello">你好, 铝电解监控系统安卓版!</string>  
     <string name="soft_update_no">已经是最新版本</string>
     <string name="soft_update_title">软件更新</string>
-    <string name="soft_update_info">修改工艺曲线,槽压曲线部分内容。</string>
+    <string name="soft_update_info">修改程序闪退问题,效应系数图表等。</string>
     <string name="soft_update_updatebtn">更新</string>
     <string name="soft_update_later">稍后更新</string>
     <string name="soft_updating">正在更新</string>
