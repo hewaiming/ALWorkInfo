@@ -16,8 +16,8 @@
         android:text="槽号"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#689F38"
-        android:textStyle="bold"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <com.hewaiming.ALWorkInfo.HScrollListView.InterceptScrollContainer
         android:id="@+id/scroollContainter"
@@ -47,7 +47,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="槽状态"
-                    android:textAppearance="?android:attr/textAppearanceMedium"                   
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
 
@@ -83,7 +83,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
-                
+
                 <TextView
                     android:id="@+id/tv_SetV"
                     android:layout_width="32dp"
@@ -106,7 +106,6 @@
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
 
-
                 <TextView
                     android:id="@+id/tv_SetNb"
                     android:layout_width="28dp"
@@ -128,7 +127,8 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
-                 <TextView
+
+                <TextView
                     android:id="@+id/tv_NbPlus"
                     android:layout_width="28dp"
                     android:layout_height="wrap_content"
@@ -138,7 +138,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
-                
 
                 <TextView
                     android:id="@+id/tv_NBTime"
@@ -161,8 +160,8 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
-                
-                 <TextView
+
+                <TextView
                     android:id="@+id/tv_AeTime"
                     android:layout_width="46dp"
                     android:layout_height="wrap_content"
@@ -172,7 +171,8 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
-                  <TextView
+
+                <TextView
                     android:id="@+id/tv_AeV"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
@@ -182,7 +182,8 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
-                   <TextView
+
+                <TextView
                     android:id="@+id/tv_AeContinues"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
@@ -192,7 +193,8 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />
-                   <TextView
+
+                <TextView
                     android:id="@+id/tv_AeStatus"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
@@ -201,8 +203,9 @@
                     android:text="AE状态"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
-                    android:textSize="11sp" /> 
-                    <TextView
+                    android:textSize="11sp" />
+
+                <TextView
                     android:id="@+id/tv_AeCnt"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
@@ -211,8 +214,9 @@
                     android:text="AE次数"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
-                    android:textSize="12sp" /> 
-                    <TextView
+                    android:textSize="12sp" />
+
+                <TextView
                     android:id="@+id/tv_OStatus"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
@@ -221,7 +225,8 @@
                     android:text="加料态"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
-                    android:textSize="11sp" /> 
+                    android:textSize="11sp" />
+
                 <TextView
                     android:id="@+id/tv_YJWZ"
                     android:layout_width="30dp"
@@ -232,13 +237,69 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="12sp" />
-                 <TextView
+
+                <TextView
                     android:id="@+id/tv_Noise"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="噪声"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_NB"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="NB"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_RC"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="RC"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_NC"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="NC"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_ALF"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="ALF"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_gray2"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_NI"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="NI"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_gray2"
                     android:textSize="11sp" />

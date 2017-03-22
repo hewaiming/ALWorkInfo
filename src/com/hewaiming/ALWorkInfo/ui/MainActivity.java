@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -362,28 +363,32 @@ public class MainActivity extends Activity
 		xVals.add("二厂");
 		yVals.add(new BarEntry((float) AeTotal2 / PotS2, 7));
 		xVals.add("厂房");
-		yVals.add(new BarEntry((float) AeTotal / PotS, 8));
-
-		BarDataSet barDataSet = new BarDataSet(yVals, "各区效应系数");
-		barDataSet.setColor(Color.rgb(190, 0, 47));// 设置数据颜色
+		yVals.add(new BarEntry((float) AeTotal / PotS, 8));		
+        
+		
+		BarDataSet barDataSet = new BarDataSet(yVals, "各区日效应系数");		
+		barDataSet.setColor(Color.rgb(190, 0, 47));// 设置数据颜色		
 		barDataSet.setDrawValues(true); // 显示数值
-		// barDataSet.setValueTextSize(7f);
+		barDataSet.setValueTextSize(13f);
+		barDataSet.setBarSpacePercent(40f);			
 		// barDataSet.setValueTextColor(Color.RED);
 		barDataSet.setValueFormatter(new ValueFormatter() {
 
 			@Override
 			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
 					ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.				
+				
 				return decimalFormat.format(value);
 			}
 		});
 
 		BarData bardata = new BarData(xVals, barDataSet);
-		mBarChart.setData(bardata); // 设置数据
+		
+		mBarChart.setData(bardata); // 设置数据		
 		handler.post(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {				
 				mBarChart.invalidate();
 			}
 		});
@@ -533,7 +538,7 @@ public class MainActivity extends Activity
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String todayValue = sdf.format(dt);
-		tv_aeTitle.setText("当日效应系数：" + todayValue);
+		tv_aeTitle.setText("工区日效应系数：" + todayValue);
 		init_BarCHART();
 
 	}
@@ -550,8 +555,8 @@ public class MainActivity extends Activity
 		mBarChart.getXAxis().setPosition(XAxisPosition.BOTTOM);// 设置X轴的位置
 		mBarChart.getXAxis().setDrawGridLines(false);// 不显示网格
 		mBarChart.getXAxis().setDrawAxisLine(false);
-		mBarChart.getXAxis().setTextSize(7f);
-		mBarChart.getXAxis().setTextColor(Color.rgb(190, 0, 47));
+		mBarChart.getXAxis().setTextSize(8f);
+		mBarChart.getXAxis().setTextColor(Color.DKGRAY);
 
 		mBarChart.getAxisRight().setEnabled(false);// 右侧不显示Y轴
 		mBarChart.getAxisLeft().setEnabled(false);
@@ -561,7 +566,7 @@ public class MainActivity extends Activity
 		mBarChart.getAxisLeft().setDrawGridLines(true);// 不设置Y轴网格
 
 		mBarChart.setNoDataTextDescription("没有获取到效应次数数据");
-		mBarChart.setDescription("");
+		mBarChart.setDescription("");		
 
 		mBarChart.setOnLongClickListener(new OnLongClickListener() {
 

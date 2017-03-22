@@ -56,6 +56,7 @@ public class UpdateManager {
 	/* 鏇存柊杩涘害鏉� */
 	private ProgressBar mProgress;
 	private Dialog mDownloadDialog;
+	private String update_info="槽状态表增加（功能控制字）数据等";	
 	UpdataInfo info=null;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -70,7 +71,7 @@ public class UpdateManager {
 				installApk();
 				break;
 			case NO_UPDATE:
-				if (IsShow){
+				if (IsShow){					
 					Toast.makeText(mContext, R.string.soft_update_no, Toast.LENGTH_LONG).show();
 				}				
 				break;
@@ -124,8 +125,9 @@ public class UpdateManager {
 	 */
 	private void showNoticeDialog() {
 		// 鏋勯�犲璇濇
-		AlertDialog.Builder builder = new Builder(mContext);
+		AlertDialog.Builder builder = new Builder(mContext);		
 		builder.setTitle(R.string.soft_update_title);
+		
 		builder.setMessage(R.string.soft_update_info);
 		// 鏇存柊
 		builder.setPositiveButton(R.string.soft_update_updatebtn, new OnClickListener() {

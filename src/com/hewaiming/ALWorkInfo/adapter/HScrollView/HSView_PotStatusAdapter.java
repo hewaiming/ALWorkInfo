@@ -111,6 +111,12 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 
 			holder.tvYJWZ = (TextView) convertView.findViewById(R.id.tv_YJWZ); // 阳极位置
 			holder.tvNoise = (TextView) convertView.findViewById(R.id.tv_Noise);
+			// 槽控制字开关
+			holder.tvNB = (TextView) convertView.findViewById(R.id.tv_NB);
+			holder.tvRC = (TextView) convertView.findViewById(R.id.tv_RC);
+			holder.tvNC = (TextView) convertView.findViewById(R.id.tv_NC);
+			holder.tvALF = (TextView) convertView.findViewById(R.id.tv_ALF);
+			holder.tvNI = (TextView) convertView.findViewById(R.id.tv_NI);
 
 			MyHScrollView headSrcrollView = (MyHScrollView) mHead.findViewById(R.id.horizontalScrollView1);
 			headSrcrollView.AddOnScrollChangedListener(new OnScrollChangedListenerImp(scrollView1));
@@ -150,7 +156,7 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		int SetV = Integer.valueOf(entity.getSetV());
 		holder.tvSetV.setTextColor(Color.DKGRAY);
 		holder.tvSetV.setText(String.format("%.3f", SetV / 1000.0));
-		
+
 		// 工作电压
 		int WorkV = Integer.valueOf(entity.getWorkV());
 		if (entity.isAeFlag()) {
@@ -158,10 +164,10 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		} else if ((entity.getAbnormal_Flag() & 0x40) != 0) {
 			holder.tvWorkV.setTextColor(Color.GREEN);
 		} else if ((entity.getAbnormal_Flag() & 0x20) != 0) {
-			holder.tvWorkV.setTextColor(Color.rgb(220,203,24));	//绿黄色
+			holder.tvWorkV.setTextColor(Color.rgb(220, 203, 24)); // 绿黄色
 		} else {
 			holder.tvWorkV.setTextColor(Color.BLACK);
-		}	
+		}
 		holder.tvWorkV.setText(String.format("%.3f", WorkV / 1000.0));
 
 		holder.tvSetNb.setTextColor(Color.DKGRAY);
@@ -201,6 +207,44 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 
 		holder.tvNoise.setTextColor(Color.DKGRAY);
 		holder.tvNoise.setText(entity.getNoise() + "");
+		// 槽控制字开关处理
+		if ((entity.getPotCtrl() & 0x10) == 0x10) {
+			holder.tvNB.setTextColor(Color.BLACK);
+			holder.tvNB.setText("+");
+		} else {
+			holder.tvNB.setTextColor(Color.RED);
+			holder.tvNB.setText("-");
+		}
+		if ((entity.getPotCtrl() & 0x20) == 0x20) {
+			holder.tvRC.setTextColor(Color.BLACK);
+			holder.tvRC.setText("+");
+		} else {
+			holder.tvRC.setTextColor(Color.RED);
+			holder.tvRC.setText("-");
+		}
+		//噪声控制字
+		if ((entity.getPotCtrl() & 0x40) == 0x40) {
+			holder.tvNC.setTextColor(Color.BLACK);
+			holder.tvNC.setText("+"); 
+		} else {
+			holder.tvNC.setTextColor(Color.RED);
+			holder.tvNC.setText("-");
+		}
+		//浓度控制字
+		if ((entity.getPotCtrl() & 0x04) == 0x04) {
+			holder.tvNI.setTextColor(Color.BLACK);
+			holder.tvNI.setText("+");
+		} else {
+			holder.tvNI.setTextColor(Color.RED);
+			holder.tvNI.setText("-");
+		}
+		if ((entity.getPotCtrl() & 0x80) == 0x80) {
+			holder.tvALF.setTextColor(Color.BLACK);
+			holder.tvALF.setText("+");
+		} else {
+			holder.tvALF.setTextColor(Color.RED);
+			holder.tvALF.setText("-");
+		}
 		if (!(entity.getStatus().equals("停槽")) && ((entity.getComerr() + 35) != 0)) {
 			// 处理非停槽，通讯故障
 			// holder.tvPotSt.setText("");
@@ -223,6 +267,11 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvOStatus.setText("");
 			holder.tvYJWZ.setText("");
 			holder.tvNoise.setText("");
+			holder.tvNB.setText("");
+			holder.tvRC.setText("");
+			holder.tvNC.setText("");
+			holder.tvALF.setText("");
+			holder.tvNI.setText("");
 		}
 		if (entity.getStatus().equals("停槽")) {
 
@@ -246,6 +295,11 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 			holder.tvOStatus.setText("");
 			holder.tvYJWZ.setText("");
 			holder.tvNoise.setText("");
+			holder.tvNB.setText("");
+			holder.tvRC.setText("");
+			holder.tvNC.setText("");
+			holder.tvALF.setText("");
+			holder.tvNI.setText("");
 
 		}
 		return convertView;
@@ -284,6 +338,11 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		TextView tvOStatus; // 加料态
 		TextView tvYJWZ; // 阳极位置
 		TextView tvNoise; // 噪音
+		TextView tvNB; // NB开关
+		TextView tvRC; // NB开关
+		TextView tvNC; // NB开关
+		TextView tvALF; // NB开关
+		TextView tvNI; // NB开关
 
 		HorizontalScrollView scrollView;
 	}
