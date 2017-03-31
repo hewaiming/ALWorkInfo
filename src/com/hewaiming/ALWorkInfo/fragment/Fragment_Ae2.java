@@ -9,7 +9,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AeRecAdapter;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
-import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
+import com.hewaiming.ALWorkInfo.ui.PotVLineActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -108,7 +108,7 @@ public class Fragment_Ae2 extends Fragment implements OnScrollListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent potv_intent = new Intent( getActivity(), ShowPotVLineActivity.class);
+				Intent potv_intent = new Intent( getActivity(), PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", String.valueOf(listBean_Ae.get(position).getPotNo()));
 				potv_bundle.putString("Begin_Date", listBean_Ae.get(position).getDdate().substring(0, 10));

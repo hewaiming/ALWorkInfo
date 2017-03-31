@@ -40,6 +40,7 @@ import com.hewaiming.ALWorkInfo.InterFace.HttpGetJXRecord_Listener;
 
 import com.hewaiming.ALWorkInfo.Popup.ActionItem;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
+
 import com.hewaiming.ALWorkInfo.Update.UpdateManager;
 import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
@@ -60,6 +61,7 @@ import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
 
 import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -90,7 +92,10 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
+@SuppressLint("SimpleDateFormat")
 public class MainActivity extends Activity
 		implements OnItemClickListener, OnClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
 
@@ -112,7 +117,7 @@ public class MainActivity extends Activity
 	private Context mContext;
 	private TitlePopup titlePopup;
 	private TextView tv_title, tv_aeTitle;
-	private ImageView iv_wifi;
+	private ImageView iv_wifi, ivShare;
 	private SlideShowView bannerView;
 	private int[] NormPotS = { 0, 0, 0, 0, 0, 0 }; // 各区正常槽数量
 	private int[] AeCnt = { 0, 0, 0, 0, 0, 0 }; // 各区效应次数
@@ -136,7 +141,8 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		setContentView(R.layout.activity_main);
-		MyApplication.getInstance().addActivity(this);
+		MyApplication.getInstance().addActivity(this);		
+		ShareSDK.initSDK(this);	// 初始化ShareSDK	
 		init(); // 初始化各控件
 		NetDetector netDetector = new NetDetector(mContext);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
@@ -363,32 +369,31 @@ public class MainActivity extends Activity
 		xVals.add("二厂");
 		yVals.add(new BarEntry((float) AeTotal2 / PotS2, 7));
 		xVals.add("厂房");
-		yVals.add(new BarEntry((float) AeTotal / PotS, 8));		
-        
-		
-		BarDataSet barDataSet = new BarDataSet(yVals, "各区日效应系数");		
-		barDataSet.setColor(Color.rgb(190, 0, 47));// 设置数据颜色		
+		yVals.add(new BarEntry((float) AeTotal / PotS, 8));
+
+		BarDataSet barDataSet = new BarDataSet(yVals, "各区日效应系数");
+		barDataSet.setColor(Color.rgb(190, 0, 47));// 设置数据颜色
 		barDataSet.setDrawValues(true); // 显示数值
 		barDataSet.setValueTextSize(13f);
-		barDataSet.setBarSpacePercent(40f);			
+		barDataSet.setBarSpacePercent(40f);
 		// barDataSet.setValueTextColor(Color.RED);
 		barDataSet.setValueFormatter(new ValueFormatter() {
 
 			@Override
 			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
 					ViewPortHandler viewPortHandler) {
-				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.				
-				
+				DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+
 				return decimalFormat.format(value);
 			}
 		});
 
 		BarData bardata = new BarData(xVals, barDataSet);
-		
-		mBarChart.setData(bardata); // 设置数据		
+
+		mBarChart.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				mBarChart.invalidate();
 			}
 		});
@@ -518,6 +523,8 @@ public class MainActivity extends Activity
 	}
 
 	private void init() {
+		ivShare = (ImageView) findViewById(R.id.iv_share);
+		ivShare.setOnClickListener(this);
 		gridView = (GridView) findViewById(R.id.gridView);
 		dataList = new ArrayList<Map<String, Object>>();
 		adapter = new SimpleAdapter(this, getData(), R.layout.item_action, new String[] { "pic", "name" },
@@ -566,7 +573,7 @@ public class MainActivity extends Activity
 		mBarChart.getAxisLeft().setDrawGridLines(true);// 不设置Y轴网格
 
 		mBarChart.setNoDataTextDescription("没有获取到效应次数数据");
-		mBarChart.setDescription("");		
+		mBarChart.setDescription("");
 
 		mBarChart.setOnLongClickListener(new OnLongClickListener() {
 
@@ -653,6 +660,9 @@ public class MainActivity extends Activity
 			case 4:
 				Intent potv_intent = new Intent(MainActivity.this, PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
+				potv_bundle.putString("PotNo", "");
+				potv_bundle.putString("Begin_Date", "");
+				potv_bundle.putString("End_Date", "");
 				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_bundle.putString("ip", ip);
@@ -874,8 +884,38 @@ public class MainActivity extends Activity
 		case R.id.btn_more:
 			titlePopup.show(v);
 			break;
+		case R.id.iv_share:		
+			 MyConst.showShare(this);
+			break;
 		}
 
 	}
+
+	/*private void showShare() {
+		OnekeyShare oks = new OnekeyShare();
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
+		// title标题，印象笔记、邮箱、信息、微信、人人网、QQ和QQ空间使用
+		oks.setTitle("铝电解工作站安卓版");
+		// titleUrl是标题的网络链接，仅在Linked-in,QQ和QQ空间使用
+		oks.setTitleUrl("http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
+		// text是分享文本，所有平台都需要这个字段
+		oks.setText("我已使用手机版铝电解工作站有一段时间啦！程序地址：http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
+		// 分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
+		oks.setImageUrl("http://125.64.59.11:8000/scgy/android/banner/share.png");
+		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+		// oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+		// url仅在微信（包括好友和朋友圈）中使用
+		oks.setUrl("http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
+		// comment是我对这条分享的评论，仅在人人网和QQ空间使用
+		oks.setComment("软件很好用！");
+		// site是分享此内容的网站名称，仅在QQ空间使用
+		oks.setSite("http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
+		// siteUrl是分享此内容的网站地址，仅在QQ空间使用
+		oks.setSiteUrl("http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
+
+		// 启动分享GUI
+		oks.show(this);
+	}	*/
 
 }

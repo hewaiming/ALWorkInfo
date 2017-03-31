@@ -226,11 +226,12 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = String.valueOf(listBean.get(position).getPotNo());
 				// Toast.makeText(getApplicationContext(), PotNo, 1).show();
-				Intent potv_intent = new Intent(DayTableActivity.this, ShowPotVLineActivity.class);
+				Intent potv_intent = new Intent(DayTableActivity.this, PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", PotNo);
 				potv_bundle.putString("Begin_Date", BeginDate);
 				potv_bundle.putString("End_Date", EndDate);
+				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_bundle.putString("ip", ip);
 				potv_bundle.putInt("port", port);

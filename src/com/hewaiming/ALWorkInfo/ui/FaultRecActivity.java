@@ -96,7 +96,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if(position>0){
-					Intent potv_intent = new Intent( FaultRecActivity.this, ShowPotVLineActivity.class);
+					Intent potv_intent = new Intent( FaultRecActivity.this, PotVLineActivity.class);
 					Bundle potv_bundle = new Bundle();		
 					//System.out.println("¹ÊÕÏ¼ÇÂ¼postion"+position);
 					potv_bundle.putString("PotNo", String.valueOf(listBean.get(position-1).getPotNo()));

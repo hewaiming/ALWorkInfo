@@ -25,7 +25,6 @@
             android:layout_height="380dp"
             android:background="@color/base_bg_white"
             android:orientation="vertical" >
-
             <ListView
                 android:id="@+id/lv_realrec_potno"
                 android:layout_width="match_parent"

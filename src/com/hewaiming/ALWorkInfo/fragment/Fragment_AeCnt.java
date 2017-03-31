@@ -20,7 +20,7 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
 import com.hewaiming.ALWorkInfo.ui.MainActivity;
-import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
+
 import com.hewaiming.ALWorkInfo.view.FooterListView;
 
 import android.app.Activity;

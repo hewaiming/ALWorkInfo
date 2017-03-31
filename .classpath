@@ -9,5 +9,16 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/mpandroidchartlibrary-2-2-4.jar"/>
+	<classpathentry kind="lib" path="libs/support-annotations-21.0.0-rc1.jar"/>
+	<classpathentry kind="lib" path="libs/MobCommons-2017.0322.0931.jar"/>
+	<classpathentry kind="lib" path="libs/MobTools-2017.0322.0931.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-Core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-QQ-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-QZone-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-SinaWeibo-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-Wechat-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-Wechat-Core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-Wechat-Favorite-2.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/ShareSDK-Wechat-Moments-2.8.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

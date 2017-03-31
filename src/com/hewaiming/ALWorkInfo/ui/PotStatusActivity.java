@@ -198,7 +198,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = String.valueOf(listBean.get(position).getPotNo());
 				// Toast.makeText(getApplicationContext(), PotNo, 1).show();
-				Intent potv_intent = new Intent(PotStatusActivity.this, ShowPotVLineActivity.class);
+				Intent potv_intent = new Intent(PotStatusActivity.this, PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", PotNo);
 				potv_bundle.putString("Begin_Date", BeginDate);

@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -16,7 +16,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    
+
     <style name="Smile">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -68,14 +68,16 @@
     <style name="Smile.TextView._Black">
         <item name="android:textColor">@color/base_color_text_black</item>
     </style>
+
     <style name="Smile.TextView._Blue">
         <item name="android:textColor">@color/base_color_text_blue</item>
     </style>
+
     <style name="Smile.TextView._Green">
         <item name="android:textColor">@color/base_color_text_green</item>
     </style>
-    
-     <style name="Dialog_Fullscreen">
+
+    <style name="Dialog_Fullscreen">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -83,10 +85,26 @@
         <item name="android:windowAnimationStyle">@style/Dialog_Anim</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
-    
-      <style name="Dialog_Anim">
+
+    <style name="Dialog_Anim">
         <item name="android:windowEnterAnimation">@anim/fading_in</item>
         <item name="android:windowExitAnimation">@anim/fading_out</item>
+    </style>
+
+    <style name="shareDialogTheme" parent="android:Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/mystyle</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 背景有灰度 -->
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    
+      <style name="mystyle" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/slide_from_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
 </resources>

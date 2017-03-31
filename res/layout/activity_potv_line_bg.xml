@@ -26,22 +26,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.github.mikephil.charting.charts.LineChart
+      <!--   <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_PotV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" /> -->
+            
+         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/chart_PotV"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
+     <!--     
+          <com.github.mikephil.charting.charts.CandleStickChart
+            android:id="@+id/chart_Action"           
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+ -->
         <com.hewaiming.ALWorkInfo.floatButton.FloatingActionButton
             android:id="@+id/floatBtn_show_realRec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="230dp"
+            android:background="@android:color/transparent"           
             android:visibility="gone"
             fab:fab_colorNormal="@color/green"
             fab:fab_colorPressed="@color/green_pressed"
             fab:fab_icon="@drawable/realrecord_text"
-            fab:fab_size="mini" />
+            fab:fab_size="normal" />
     </FrameLayout>
 
 </LinearLayout>

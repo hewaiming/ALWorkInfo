@@ -10,6 +10,7 @@
     <string name="potno">请选择槽号</string>
     <string name="begindate">请选择 起始日期</string>
     <string name="enddate">请选择 截止日期</string>
+    <string name="publicDate">2017-4-3</string>
 
     <string-array name="jazzy_effects">
         <item>Standard</item>
@@ -30,7 +31,7 @@
     <string name="hello">你好, 铝电解监控系统安卓版!</string>  
     <string name="soft_update_no">已经是最新版本</string>
     <string name="soft_update_title">软件更新</string>
-    <string name="soft_update_info">槽状态表增加功能控制开关等功能。</string>
+    <string name="soft_update_info">槽压曲线图增加新内容等。</string>
     <string name="soft_update_updatebtn">更新</string>
     <string name="soft_update_later">稍后更新</string>
     <string name="soft_updating">正在更新</string>

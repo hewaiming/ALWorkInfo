@@ -16,6 +16,7 @@ import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.OperateRecord;
 import com.hewaiming.ALWorkInfo.bean.PotCtrl;
 import com.hewaiming.ALWorkInfo.bean.PotV;
+import com.hewaiming.ALWorkInfo.bean.PotV_plus;
 import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
@@ -109,7 +110,30 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
+	public static List<PotV_plus> JsonArrayToPotV_plusBean(String data) {
+		ArrayList<PotV_plus> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
 
+			listBean = new ArrayList<PotV_plus>();
+			// System.out.println("jsonarray.length()---" + jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				PotV_plus mPotV = new PotV_plus();
+				mPotV.setDdate(jsonobj.getString("DDate"));
+				mPotV.setCur(jsonobj.getInt("Cur"));
+				mPotV.setAction(jsonobj.getInt("Action"));
+				mPotV.setPotV(jsonobj.getInt("PotNoV"));
+				listBean.add(mPotV);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+	
+	
 	public static List<FaultRecord> JsonArrayToFaultRecordBean(String data, List<Map<String, Object>> JXList) {
 		List<FaultRecord> listBean = null;
 		try {

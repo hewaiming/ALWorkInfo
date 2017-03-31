@@ -1,8 +1,10 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import com.hewaiming.ALWorkInfo.R;
+import com.hewaiming.ALWorkInfo.Share.AndroidShare;
 import com.hewaiming.ALWorkInfo.Update.UpdateManager;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
+import com.hewaiming.ALWorkInfo.config.MyConst;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends Activity {
-	private Button btnCheck, btnFinish;
+	private Button btnCheck, btnFinish,btnShare;
 
 	private String TAG = "=Setting=";
 	private TextView tv_title, tv_ID,tv_date;
@@ -33,11 +35,12 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_about);
 		MyApplication.getInstance().addActivity(this);
+		ctx=this;
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText("关于");
 		tv_ID=(TextView) findViewById(R.id.tv_id);
 		tv_date=(TextView) findViewById(R.id.tv_datetime);
-		tv_date.setText("2017-3-7");
+		tv_date.setText(R.string.publicDate);
 		String myId;
 		try {
 			myId = getVersionName();
@@ -46,8 +49,9 @@ public class AboutActivity extends Activity {
 			e.printStackTrace();
 			tv_ID.setText("版本号：未知");
 		}		
+		btnShare=(Button) findViewById(R.id.btn_share);
 		btnCheck = (Button) findViewById(R.id.btn_check_ver);		
-		btnFinish=(Button) findViewById(R.id.btn_back);
+		btnFinish=(Button) findViewById(R.id.btn_back);		
 		btnFinish.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -61,6 +65,20 @@ public class AboutActivity extends Activity {
 			public void onClick(View v) {				
 				UpdateManager manager = new UpdateManager(AboutActivity.this,true);				
 				manager.checkUpdate();
+			}
+		});
+		//分享按钮
+		btnShare.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				/*AndroidShare as = new AndroidShare(
+						AboutActivity.this,
+						"我们现在通过使用安卓版工作站APP，了解槽信息！",
+						"http://125.64.59.11:8000/scgy/android/ALWorkInfo.apk");
+				as.show();*/
+				 MyConst.showShare(ctx);
+				
 			}
 		});
 	}

@@ -125,8 +125,8 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent potv_intent = new Intent( AeRecActivity.this, ShowPotVLineActivity.class);
-				Bundle potv_bundle = new Bundle();
+				Intent potv_intent = new Intent( AeRecActivity.this, PotVLineActivity.class);
+				Bundle potv_bundle = new Bundle();				
 				potv_bundle.putString("PotNo", String.valueOf(listBean.get(position).getPotNo()));
 				potv_bundle.putString("Begin_Date", listBean.get(position).getDdate().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean.get(position).getDdate().substring(0, 10));

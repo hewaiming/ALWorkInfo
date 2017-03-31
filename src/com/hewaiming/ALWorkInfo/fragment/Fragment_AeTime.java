@@ -11,7 +11,7 @@ import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.DayTableActivity;
-import com.hewaiming.ALWorkInfo.ui.ShowPotVLineActivity;
+import com.hewaiming.ALWorkInfo.ui.PotVLineActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -114,7 +114,7 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				PotNo = String.valueOf(listBean_AeTime.get(position).getPotNo());
 //				Toast.makeText(getApplicationContext(), PotNo, 1).show();
-				Intent potv_intent = new Intent( getActivity(), ShowPotVLineActivity.class);
+				Intent potv_intent = new Intent( getActivity(), PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", PotNo);
 				potv_bundle.putString("Begin_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));

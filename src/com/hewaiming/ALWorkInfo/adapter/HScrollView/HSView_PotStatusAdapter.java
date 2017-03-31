@@ -210,40 +210,40 @@ public class HSView_PotStatusAdapter extends BaseAdapter {
 		// 槽控制字开关处理
 		if ((entity.getPotCtrl() & 0x10) == 0x10) {
 			holder.tvNB.setTextColor(Color.BLACK);
-			holder.tvNB.setText("+");
+			holder.tvNB.setText("＋");
 		} else {
 			holder.tvNB.setTextColor(Color.RED);
-			holder.tvNB.setText("-");
+			holder.tvNB.setText("－");
 		}
 		if ((entity.getPotCtrl() & 0x20) == 0x20) {
 			holder.tvRC.setTextColor(Color.BLACK);
-			holder.tvRC.setText("+");
+			holder.tvRC.setText("＋");
 		} else {
 			holder.tvRC.setTextColor(Color.RED);
-			holder.tvRC.setText("-");
+			holder.tvRC.setText("－");
 		}
 		//噪声控制字
 		if ((entity.getPotCtrl() & 0x40) == 0x40) {
 			holder.tvNC.setTextColor(Color.BLACK);
-			holder.tvNC.setText("+"); 
+			holder.tvNC.setText("＋"); 
 		} else {
 			holder.tvNC.setTextColor(Color.RED);
-			holder.tvNC.setText("-");
+			holder.tvNC.setText("－");
 		}
 		//浓度控制字
 		if ((entity.getPotCtrl() & 0x04) == 0x04) {
 			holder.tvNI.setTextColor(Color.BLACK);
-			holder.tvNI.setText("+");
+			holder.tvNI.setText("＋");
 		} else {
 			holder.tvNI.setTextColor(Color.RED);
-			holder.tvNI.setText("-");
+			holder.tvNI.setText("－");
 		}
 		if ((entity.getPotCtrl() & 0x80) == 0x80) {
 			holder.tvALF.setTextColor(Color.BLACK);
-			holder.tvALF.setText("+");
+			holder.tvALF.setText("＋");
 		} else {
 			holder.tvALF.setTextColor(Color.RED);
-			holder.tvALF.setText("-");
+			holder.tvALF.setText("－");
 		}
 		if (!(entity.getStatus().equals("停槽")) && ((entity.getComerr() + 35) != 0)) {
 			// 处理非停槽，通讯故障

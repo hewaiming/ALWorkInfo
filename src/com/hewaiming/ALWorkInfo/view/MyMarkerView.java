@@ -18,7 +18,12 @@ public class MyMarkerView extends MarkerView {
 
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        mContentTv.setText("" + e.getVal());
+    	if(e.getVal()>2200){
+    		 mContentTv.setText(e.getVal()/1000.0+"V");
+    	}else{
+    		  mContentTv.setText(e.getVal()/10.0+"KA");
+    	}
+      
     }
 
     @Override
