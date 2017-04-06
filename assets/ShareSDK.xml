@@ -56,10 +56,10 @@
         Id="1"
         SortId="1"
         AppKey="154776865"
-        AppSecret="7222f9694a72645bea920a5572408c38"
-        RedirectUrl="http://www.sharesdk.cn"
-        ShareByAppClient="true"
-        Enable="true" />   
+        AppSecret="7222f9694a72645bea920a5572408c38"   
+        RedirectUrl="http://sharesdk.mob.com/"   
+        ShareByAppClient="false"
+        Enable="false" />   
     
     <QZone
         Id="2"

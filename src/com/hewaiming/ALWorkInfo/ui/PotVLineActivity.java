@@ -19,6 +19,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -32,6 +33,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
@@ -89,6 +91,9 @@ import android.widget.Toast;
 
 public class PotVLineActivity extends Activity
 		implements HttpGetListener, HttpGetListener_other, OnClickListener, OnScrollListener {
+	private static final float BaseV = 3935;// X字段值为100
+	private static final float BaseV_LESS = 3820; // X字段值为50
+	private static final float BaseV_MORE = 4045;// X字段值为150
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -123,13 +128,17 @@ public class PotVLineActivity extends Activity
 	private View Layout_select;
 	private View Layout_ok;
 	private List<String> xValues = null;
-	private float MaxValueLeft = 7000;	
-	private float MinValueLeft = 2500;	
+	private float MaxValueLeft = 6000;
+	private float MinValueLeft = 2500;
 	private float barHight = 50;
 	private float barHight_Norm = 300;
-	private float MaxActionLeft = 100;	
+	private float MaxActionLeft = 100;
 	private float MinActionLeft = 0;
 	private CandleStickChart mCandleChart;
+	private int[] colors = { Color.RED, Color.rgb(128, 0, 128), Color.GREEN, Color.YELLOW,
+			Color.BLACK, Color.rgb(0, 128, 128),Color.rgb(128, 0, 0),Color.BLUE,Color.GRAY, Color.rgb(238, 17, 61),Color.YELLOW};
+	private String[] labels = {"AEB", "AC", "TAP", "IRF", "AEPB", "RRK", "AEW", "MAN", "T(TMT)",
+			"NB", "ALF" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,30 +148,31 @@ public class PotVLineActivity extends Activity
 		setContentView(R.layout.activity_potv_line);
 		MyApplication.getInstance().addActivity(this);
 		mContext = this;
-		GetDataFromIntent();		
-		init_title();	
+		GetDataFromIntent();
+		init_title();
 		init_HSView();
-		if (!(PotNo.equals(""))){			
-			hide_Layout();	//如果是从选择槽号进入，则隐藏
+		if (!(PotNo.equals(""))) {
+			hide_Layout(); // 如果是从选择槽号进入，则隐藏
 			init_GetRemoteData();
-		}else{
-			init_area(); //从槽压曲线界面进入
+		} else {
+			init_area(); // 从槽压曲线界面进入
 			init_potNo();
 			init_date();
-		}		
+		}
 		show_RealRec_btn = (FloatingActionButton) findViewById(R.id.floatBtn_show_realRec); // 创建浮动按钮
 		show_RealRec_btn.setOnClickListener(this);
 		show_RealRec_btn.setAlpha(200);
 		sbv = (SlideBottomPanel) findViewById(R.id.sbv);// 创建浮动按钮
 		// createView(); // 创建浮动按钮
 	}
-	
+
 	private void init_GetRemoteData() {
 		mCombinedChart.setVisibility(View.VISIBLE);
 		http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo, BeginDate, EndDate,
 				this, this).execute();
 
 	}
+
 	private void hide_Layout() {
 		Layout_select = findViewById(R.id.Layout_selection);
 		Layout_ok = findViewById(R.id.Layout_OK);
@@ -171,7 +181,7 @@ public class PotVLineActivity extends Activity
 
 	}
 
-	private void GetDataFromIntent() {		
+	private void GetDataFromIntent() {
 		BeginDate = getIntent().getStringExtra("Begin_Date");
 		EndDate = getIntent().getStringExtra("End_Date");
 		PotNo = getIntent().getStringExtra("PotNo");
@@ -280,7 +290,7 @@ public class PotVLineActivity extends Activity
 		mCombinedChart.setVisibility(View.GONE);
 
 		tv_title = (TextView) findViewById(R.id.tv_title);
-		tv_title.setText(PotNo+"槽压曲线图");
+		tv_title.setText(PotNo + "槽压曲线图");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
 		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
@@ -395,9 +405,10 @@ public class PotVLineActivity extends Activity
 			listBean = JsonToBean_Area_Date.JsonArrayToPotV_plusBean(data);
 			CombinedData mCombinedData = getCombinedData(listBean.size(), 1);
 			showChart(mCombinedChart, mCombinedData, Color.rgb(255, 255, 255));
-			//NB,AC,RRK等动作图
-			//CandleData mCandleData=generateCandleData(listBean.size());
-			//showActionChart(mCandleChart,mCandleData,Color.rgb(255, 255, 255));
+			// NB,AC,RRK等动作图
+			// CandleData mCandleData=generateCandleData(listBean.size());
+			// showActionChart(mCandleChart,mCandleData,Color.rgb(255, 255,
+			// 255));
 			show_RealRec_btn.setVisibility(View.VISIBLE);
 		}
 	}
@@ -409,18 +420,32 @@ public class PotVLineActivity extends Activity
 		} else {
 			xValues.clear();
 		}
-		ArrayList<Entry> yValues = new ArrayList<Entry>(); // y轴的数据
+		ArrayList<Entry> yValues = new ArrayList<Entry>(); // y轴的槽压数据数据
+		ArrayList<Entry> yValuesTarget = new ArrayList<Entry>(); // y轴的槽目标压数据
 		ArrayList<Entry> yValuesCur = new ArrayList<Entry>();
+		ArrayList<Entry> yValues_MoreLess = new ArrayList<Entry>();
 		for (int i = 0; i < count; i++) {
 			String mDate = listBean.get(i).getDdate().toString();
 			xValues.add(mDate);// x轴显示的数据，这里默认使用数字下标显示
 			float value = (float) (listBean.get(i).getPotV() * range);
+			float valueTarget = (float) (listBean.get(i).getTargetV() * range);
 			float temp = (float) (listBean.get(i).getCur() * range);
 			yValues.add(new Entry(value, i)); // y轴的槽压数据
+			yValuesTarget.add(new Entry(valueTarget * range, i)); // y轴的槽目标压数据
 			yValuesCur.add(new Entry(temp, i));// y轴的系列电流
+			int More_Less = listBean.get(i).getMoreLess();
+			if (More_Less == 100) {
+				yValues_MoreLess.add(new Entry(BaseV * range, i)); // y轴不过欠
+			} else if (More_Less == 50) {
+				yValues_MoreLess.add(new Entry(BaseV_LESS * range, i)); // y轴欠加工
+			} else if (More_Less == 150) {
+				yValues_MoreLess.add(new Entry(BaseV_MORE * range, i)); // y轴过加工
+			}
 
 		}
 		LineData lineData = generateMultiLineData(generateLineDataSet(yValues, Color.GREEN, PotNo + "槽电压: mV ", "LEFT"),
+				generateLineDataSet(yValuesTarget, Color.RED, "", "LEFT_Target"),
+				generateLineDataSet(yValues_MoreLess, Color.DKGRAY, "", "LEFT_Base"),
 				generateLineDataSet(yValuesCur, Color.RED, "系列电流: 100A", "RIGHT"));
 
 		CombinedData combinedData = new CombinedData(xValues);
@@ -429,8 +454,8 @@ public class PotVLineActivity extends Activity
 		ScatterData scatterData = generateScatterData(count);
 		combinedData.setData(scatterData); // 增加升、降阳极、TMT图
 
-		//CandleData candleData = generateCandleData(count);
-		//combinedData.setData(candleData); // 加工、AC,RKK等
+		// CandleData candleData = generateCandleData(count);
+		// combinedData.setData(candleData); // 加工、AC,RKK等
 		/*
 		 * combinedChart.setData(combinedData);// 当前屏幕会显示所有的数据
 		 * combinedChart.invalidate();
@@ -443,16 +468,19 @@ public class PotVLineActivity extends Activity
 		ArrayList<Entry> UP_yVals = new ArrayList<>();
 		ArrayList<Entry> DOWN_yVals = new ArrayList<>();
 		ArrayList<Entry> TMT_yVals = new ArrayList<>();
-		ArrayList<Entry> AC_yVals=new ArrayList<>();
-		ArrayList<Entry> TAP_yVals=new ArrayList<>();
-		ArrayList<Entry> AEPB_yVals=new ArrayList<>();
-		ArrayList<Entry> RRK_yVals=new ArrayList<>();
-		ArrayList<Entry> MAN_yVals=new ArrayList<>();
-		ArrayList<Entry> NB_yVals=new ArrayList<>();
-		ArrayList<Entry> ALF_yVals=new ArrayList<>();
-		ArrayList<Entry> AEB_yVals=new ArrayList<>();
-		ArrayList<Entry> AEW_yVals=new ArrayList<>();
-		ArrayList<Entry> IRF_yVals=new ArrayList<>();
+		ArrayList<Entry> AC_yVals = new ArrayList<>();
+		ArrayList<Entry> TAP_yVals = new ArrayList<>();
+		ArrayList<Entry> AEPB_yVals = new ArrayList<>();
+		ArrayList<Entry> RRK_yVals = new ArrayList<>();
+		ArrayList<Entry> MAN_yVals = new ArrayList<>();
+		ArrayList<Entry> NB_yVals = new ArrayList<>();
+		ArrayList<Entry> ALF_yVals = new ArrayList<>();
+		ArrayList<Entry> AEB_yVals = new ArrayList<>();
+		ArrayList<Entry> AEW_yVals = new ArrayList<>();
+		ArrayList<Entry> IRF_yVals = new ArrayList<>();
+		ArrayList<Entry> BASE_yVals = new ArrayList<>();
+		ArrayList<Entry> IntervalHight_yVals = new ArrayList<>();
+		ArrayList<Entry> IntervalLow_yVals = new ArrayList<>();
 		int valueBefore;
 		for (int i = 0; i < count; i++) {// 添加数据源
 			if (i > 0) {
@@ -462,9 +490,9 @@ public class PotVLineActivity extends Activity
 			}
 			int value = listBean.get(i).getAction();
 			float postion = listBean.get(i).getPotV();
-			
+
 			if ((value & 0x02) == 0x02) {
-				AEB_yVals.add(new Entry(MinValueLeft +100,i));
+				AEB_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
 
 			if ((value & 0x04) == 0x04) {
@@ -483,40 +511,52 @@ public class PotVLineActivity extends Activity
 				}
 			}
 			if ((value & 0x10) == 0x10) {
-				AC_yVals.add(new Entry(MinValueLeft+100,i));
+				AC_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
 			if ((value & 0x20) == 0x20) {
-				TAP_yVals.add(new Entry(MinValueLeft +100,i));
+				TAP_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
 			if ((value & 0x40) == 0x40) {
-				IRF_yVals.add(new Entry(MinValueLeft +100,i));
+				IRF_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
 			if ((value & 0x100) == 0x100) {
 				if ((valueBefore & 0x100) == 0x100) {
-					AEPB_yVals.add(new Entry(MinValueLeft +100,i));
+					AEPB_yVals.add(new Entry(MinValueLeft + 460, i));
 				}
 			}
-			if ((value & 0x400) == 0x400) {				
-				RRK_yVals.add(new Entry(MinValueLeft+100,i));
+			if ((value & 0x400) == 0x400) {
+				RRK_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
 			if ((value & 0x1000) == 0x1000) {
-				MAN_yVals.add(new Entry(MinValueLeft+60,i));
+				MAN_yVals.add(new Entry(MinValueLeft + 420, i));
 			}
 			if ((value & 0x2000) == 0x2000) {
-				AEW_yVals.add(new Entry(MinValueLeft +100,i));
+				AEW_yVals.add(new Entry(MinValueLeft + 460, i));
 			}
-			
+
 			if ((value & 0x01) == 0x01) {
-				NB_yVals.add(new Entry(MinValueLeft+60,i));
+				NB_yVals.add(new Entry(MinValueLeft + 420, i));
 			}
 			if ((value & 0x80) == 0x80) {
-				ALF_yVals.add(new Entry(MinValueLeft+60,i));
-			}			
-			
+				ALF_yVals.add(new Entry(MinValueLeft + 420, i));
+			}
+
+			if ((i % 26) == 0) {
+				BASE_yVals.add(new Entry(BaseV, i));
+			}
+
+			float targetV = listBean.get(i).getTargetV();
+			if ((i % 30) == 0) {
+				IntervalHight_yVals.add(new Entry(targetV + 50, i));
+			}
+			if ((i % 30) == 0) {
+				IntervalLow_yVals.add(new Entry(targetV - 40, i));
+			}
+
 		}
 
 		ScatterDataSet Set_UP = new ScatterDataSet(UP_yVals, "↑");
-		Set_UP.setColor(Color.rgb(153, 153, 0));		
+		Set_UP.setColor(Color.rgb(153, 153, 0));
 		Set_UP.setScatterShapeSize(2f);
 		Set_UP.setDrawValues(true);
 		Set_UP.setValueTextColor(Color.RED);
@@ -538,7 +578,7 @@ public class PotVLineActivity extends Activity
 		ScatterDataSet Set_DOWN = new ScatterDataSet(DOWN_yVals, "↓");
 		Set_DOWN.setColor(Color.rgb(102, 153, 255));
 		Set_DOWN.setScatterShapeSize(2f);
-		Set_DOWN.setHighlightEnabled(true);		
+		Set_DOWN.setHighlightEnabled(true);
 		Set_DOWN.setDrawValues(true);
 		Set_DOWN.setValueTextColor(Color.BLACK);
 		Set_DOWN.setValueTextSize(14f);
@@ -572,15 +612,15 @@ public class PotVLineActivity extends Activity
 					return "T";
 				} else {
 					return null;
-				}				
+				}
 			}
 		});
-		
+
 		ScatterDataSet Set_AC = new ScatterDataSet(AC_yVals, "AC");
 		Set_AC.setScatterShape(ScatterShape.SQUARE);
 		Set_AC.setColor(Color.rgb(128, 0, 128));
 		Set_AC.setScatterShapeSize(3f);
-		Set_AC.setDrawValues(false);		
+		Set_AC.setDrawValues(false);
 		Set_AC.setValueTextColor(Color.rgb(128, 0, 128));
 		Set_AC.setValueTextSize(6f);
 		Set_AC.setValueFormatter(new ValueFormatter() {
@@ -593,7 +633,7 @@ public class PotVLineActivity extends Activity
 				} else {
 					return null;
 				}
-				
+
 			}
 		});
 
@@ -601,94 +641,117 @@ public class PotVLineActivity extends Activity
 		Set_TAP.setColor(Color.GREEN);
 		Set_TAP.setScatterShape(ScatterShape.SQUARE);
 		Set_TAP.setScatterShapeSize(3f);
-		Set_TAP.setDrawValues(false);		
+		Set_TAP.setDrawValues(false);
 		Set_TAP.setValueTextColor(Color.GREEN);
 		Set_TAP.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_AEPB = new ScatterDataSet(AEPB_yVals, "AEPB");
 		Set_AEPB.setColor(Color.BLACK);
 		Set_AEPB.setScatterShape(ScatterShape.SQUARE);
 		Set_AEPB.setScatterShapeSize(3f);
-		Set_AEPB.setDrawValues(false);		
+		Set_AEPB.setDrawValues(false);
 		Set_AEPB.setValueTextColor(Color.BLACK);
 		Set_AEPB.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_MAN = new ScatterDataSet(MAN_yVals, "MAN");
 		Set_MAN.setColor(Color.BLUE);
 		Set_MAN.setScatterShape(ScatterShape.SQUARE);
 		Set_MAN.setScatterShapeSize(3f);
-		Set_MAN.setDrawValues(false);		
+		Set_MAN.setDrawValues(false);
 		Set_MAN.setValueTextColor(Color.BLUE);
 		Set_MAN.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_RRK = new ScatterDataSet(RRK_yVals, "RRK");
 		Set_RRK.setColor(Color.rgb(0, 128, 128));
 		Set_RRK.setScatterShape(ScatterShape.SQUARE);
 		Set_RRK.setScatterShapeSize(3f);
-		Set_RRK.setDrawValues(false);		
+		Set_RRK.setDrawValues(false);
 		Set_RRK.setValueTextColor(Color.rgb(0, 128, 128));
 		Set_RRK.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_AEB = new ScatterDataSet(AEB_yVals, "AEB");
 		Set_AEB.setScatterShape(ScatterShape.SQUARE);
 		Set_AEB.setColor(Color.RED);
 		Set_AEB.setScatterShapeSize(3f);
-		Set_AEB.setDrawValues(false);		
+		Set_AEB.setDrawValues(false);
 		Set_AEB.setValueTextColor(Color.RED);
 		Set_AEB.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_AEW = new ScatterDataSet(AEW_yVals, "AEW");
 		Set_AEW.setColor(Color.rgb(128, 0, 0));
 		Set_AEW.setScatterShapeSize(3f);
-		Set_AEW.setDrawValues(false);		
+		Set_AEW.setDrawValues(false);
 		Set_AEW.setValueTextColor(Color.rgb(128, 0, 0));
 		Set_AEW.setValueTextSize(6f);
-		
+
 		ScatterDataSet Set_IRF = new ScatterDataSet(IRF_yVals, "IRF");
 		Set_IRF.setColor(Color.YELLOW);
 		Set_IRF.setScatterShapeSize(3f);
-		Set_IRF.setDrawValues(false);		
+		Set_IRF.setDrawValues(false);
 		Set_IRF.setValueTextColor(Color.YELLOW);
 		Set_IRF.setValueTextSize(6f);
-		
-		ScatterDataSet Set_NB = new ScatterDataSet(NB_yVals, "NB");		
-		Set_NB.setScatterShape(ScatterShape.X);	
-		Set_NB.setColor(Color.rgb(238, 17, 61));		
+
+		ScatterDataSet Set_NB = new ScatterDataSet(NB_yVals, "NB");
+		Set_NB.setScatterShape(ScatterShape.X);
+		Set_NB.setColor(Color.rgb(238, 17, 61));
 		Set_NB.setScatterShapeSize(1.2f);
-		Set_NB.setDrawValues(false);		
+		Set_NB.setDrawValues(false);
 		Set_NB.setValueTextColor(Color.rgb(238, 17, 61));
 		Set_NB.setValueTextSize(8f);
 		Set_NB.setValueFormatter(new ValueFormatter() {
-			
+
 			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				if (entry!=null){
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
+				if (entry != null) {
 					return "∣";
-				}else{
+				} else {
 					return null;
-				}				
+				}
 			}
 		});
-		
+
 		ScatterDataSet Set_ALF = new ScatterDataSet(ALF_yVals, "ALF");
 		Set_ALF.setScatterShape(ScatterShape.X);
 		Set_ALF.setColor(Color.YELLOW);
 		Set_ALF.setScatterShapeSize(1.2f);
-		Set_ALF.setDrawValues(false);		
+		Set_ALF.setDrawValues(false);
 		Set_ALF.setValueTextColor(Color.YELLOW);
 		Set_ALF.setValueFormatter(new ValueFormatter() {
-			
+
 			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-				if (entry!=null){
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
+				if (entry != null) {
 					return "∣";
-				}else{
+				} else {
 					return null;
-				}	
+				}
 			}
 		});
-		
-		
+
+		ScatterDataSet Set_BASE = new ScatterDataSet(BASE_yVals, "");
+		Set_BASE.setScatterShape(ScatterShape.X);
+		Set_BASE.setColor(Color.RED);
+		Set_BASE.setScatterShapeSize(0.3f);
+		Set_BASE.setDrawValues(false);
+		Set_BASE.setValueTextColor(Color.RED);
+		// Set_BASE.setValueTextSize(8f);
+
+		ScatterDataSet Set_HIGHT = new ScatterDataSet(IntervalHight_yVals, "");
+		Set_HIGHT.setScatterShape(ScatterShape.X);
+		Set_HIGHT.setColor(Color.DKGRAY);
+		Set_HIGHT.setScatterShapeSize(0.3f);
+		Set_HIGHT.setDrawValues(false);
+		Set_HIGHT.setValueTextColor(Color.DKGRAY);
+
+		ScatterDataSet Set_LOW = new ScatterDataSet(IntervalLow_yVals, "");
+		Set_LOW.setScatterShape(ScatterShape.X);
+		Set_LOW.setColor(Color.DKGRAY);
+		Set_LOW.setScatterShapeSize(0.3f);
+		Set_LOW.setDrawValues(false);
+		Set_LOW.setValueTextColor(Color.DKGRAY);
+
 		ArrayList<IScatterDataSet> mScatterData = new ArrayList<IScatterDataSet>();// IScatterData
 		// 接口很关键，是添加多组数据的关键结构，LineChart也是可以采用对应的接口类，也可以添加多组数据
 		mScatterData.add(Set_DOWN);
@@ -704,10 +767,12 @@ public class PotVLineActivity extends Activity
 		mScatterData.add(Set_AEB);
 		mScatterData.add(Set_AEW);
 		mScatterData.add(Set_IRF);
-		
+		mScatterData.add(Set_BASE);
+		mScatterData.add(Set_HIGHT);
+		mScatterData.add(Set_LOW);
 		ScatterData multi_scatterData = new ScatterData(xValues, mScatterData);
 		multi_scatterData.setHighlightEnabled(true);
-		
+
 		return multi_scatterData;
 	}
 
@@ -723,7 +788,7 @@ public class PotVLineActivity extends Activity
 		ArrayList<CandleEntry> AEPB_yVals = new ArrayList<CandleEntry>();
 		ArrayList<CandleEntry> RRK_yVals = new ArrayList<CandleEntry>();
 		ArrayList<CandleEntry> AEW_yVals = new ArrayList<CandleEntry>();
-		ArrayList<CandleEntry> No_yVals=new ArrayList<CandleEntry>();
+		ArrayList<CandleEntry> No_yVals = new ArrayList<CandleEntry>();
 		int valueBefore;
 		for (int i = 0; i < count; i++) {// 添加数据源
 			String mDate = listBean.get(i).getDdate().toString();
@@ -737,42 +802,50 @@ public class PotVLineActivity extends Activity
 			// float postion = listBean.get(i).getPotV();
 			if ((value & 0x01) == 0x01) {
 				NB_yVals.add(
-						new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x80) == 0x80) {
 				ALF_yVals.add(
-						new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x02) == 0x02) {
-				AEB_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				AEB_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x10) == 0x10) {
-				AC_yVals.add(new CandleEntry(i,10,10, 10,50));
+				AC_yVals.add(new CandleEntry(i, 10, 10, 10, 50));
 			}
 			if ((value & 0x20) == 0x20) {
-				TAP_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				TAP_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x40) == 0x40) {
-				IRF_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				IRF_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x100) == 0x100) {
 				if ((valueBefore & 0x100) == 0x100) {
-					AEPB_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+					AEPB_yVals.add(new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft,
+							MinActionLeft + 50));
 				}
 			}
 			if ((value & 0x400) == 0x400) {
-				RRK_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				RRK_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x2000) == 0x2000) {
-				AEW_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				AEW_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
 			if ((value & 0x1000) == 0x1000) {
-				MAN_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+				MAN_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
-			if (value ==0) {
-				No_yVals.add(new CandleEntry(i, MinActionLeft+50, MinActionLeft +0, MinActionLeft, MinActionLeft +50));
+			if (value == 0) {
+				No_yVals.add(
+						new CandleEntry(i, MinActionLeft + 50, MinActionLeft + 0, MinActionLeft, MinActionLeft + 50));
 			}
-			
+
 		}
 
 		CandleDataSet Set_NB = new CandleDataSet(NB_yVals, "NB");
@@ -789,7 +862,7 @@ public class PotVLineActivity extends Activity
 
 		CandleDataSet Set_AEB = new CandleDataSet(AEB_yVals, "AEB");
 		Set_AEB.setAxisDependency(AxisDependency.LEFT);
-		
+
 		Set_AEB.setColor(Color.RED);// 设置第二组数据颜色
 		Set_AEB.setShadowWidth(2f);
 		Set_AEB.setDrawValues(false); // 不显示数值
@@ -814,9 +887,9 @@ public class PotVLineActivity extends Activity
 
 		CandleDataSet Set_AC = new CandleDataSet(AC_yVals, "AC");
 		Set_AC.setAxisDependency(AxisDependency.LEFT);
-		//Set_AC.setColor(Color.rgb(128, 0, 128));// 设置第二组数据颜色
+		// Set_AC.setColor(Color.rgb(128, 0, 128));// 设置第二组数据颜色
 		Set_AC.setColor(Color.BLUE);// 设置第二组数据颜色
-		//Set_AC.setDrawValues(true); // 不显示数值
+		// Set_AC.setDrawValues(true); // 不显示数值
 		Set_AC.setShadowWidth(50f);
 
 		CandleDataSet Set_TAP = new CandleDataSet(TAP_yVals, "TAP");
@@ -836,7 +909,7 @@ public class PotVLineActivity extends Activity
 		Set_IRF.setColor(Color.YELLOW);// 设置第二组数据颜色
 		Set_IRF.setShadowWidth(2f);
 		Set_IRF.setDrawValues(false); // 不显示数值
-		
+
 		CandleDataSet Set_NO = new CandleDataSet(No_yVals, "NO");
 		Set_NO.setAxisDependency(AxisDependency.LEFT);
 		Set_NO.setColor(Color.WHITE);// 设置第二组数据颜色
@@ -865,7 +938,7 @@ public class PotVLineActivity extends Activity
 		for (int i = 0; i < lineDataSets.length; i++) {
 			dataSets.add(lineDataSets[i]);
 		}
-		LineData data = new LineData(xValues, dataSets);		
+		LineData data = new LineData(xValues, dataSets);
 		return data;
 	}
 
@@ -881,8 +954,9 @@ public class PotVLineActivity extends Activity
 			set.setCircleColor(Color.BLUE);// 圆形的颜色
 			set.setHighLightColor(Color.BLUE); // 高亮的线的颜色
 			set.setDrawValues(true);
+			set.setLabel("电压(mV)");
 			set.setAxisDependency(YAxis.AxisDependency.LEFT);
-			
+
 		} else if (LEFT_RIGHT.equals("RIGHT")) {
 			// 系列电流曲线
 			set.setLineWidth(0.7f); // 线宽
@@ -892,6 +966,28 @@ public class PotVLineActivity extends Activity
 			set.setCircleColor(Color.RED);// 圆形的颜色
 			set.setHighLightColor(Color.RED); // 高亮的线的颜色
 			set.setAxisDependency(YAxis.AxisDependency.RIGHT);
+			set.setLabel("电流(100A)");
+		} else if (LEFT_RIGHT.equals("LEFT_Target")) {
+			// 槽目标电压曲线
+			set.setAxisDependency(AxisDependency.LEFT);
+			// set.setDrawCubic(true);// 圆滑曲线
+			set.setLineWidth(0.4f); // 线宽
+			set.setCircleSize(0.3f);// 显示的圆形大小
+			set.setColor(Color.RED);// 显示颜色
+			set.setCircleColor(Color.RED);// 圆形的颜色
+			set.setHighLightColor(Color.RED); // 高亮的线的颜色
+			set.setDrawValues(false);
+			set.setAxisDependency(YAxis.AxisDependency.LEFT);
+		} else if (LEFT_RIGHT.equals("LEFT_Base")) {
+			// 槽过欠加工线
+			set.setAxisDependency(AxisDependency.LEFT);
+			set.setDrawCubic(true);// 圆滑曲线
+			set.setLineWidth(0.4f); // 线宽
+			set.setCircleSize(0.2f);// 显示的圆形大小
+			set.setColor(Color.DKGRAY);// 显示颜色
+			set.setCircleColor(Color.DKGRAY);// 圆形的颜色
+			set.setDrawValues(false);
+			set.setAxisDependency(YAxis.AxisDependency.LEFT);
 		}
 
 		return set;
@@ -899,7 +995,7 @@ public class PotVLineActivity extends Activity
 
 	private void showChart(CombinedChart mChart, CombinedData mData, int color) {
 		mChart.setDrawBorders(false); // 是否在折线图上添加边框
-		mChart.fitScreen();
+		mChart.fitScreen();		
 		mChart.setDescription("");// 数据描述
 		// 如果没有数据的时候，会显示这个，类似listview的emtpyview
 		mChart.setNoDataTextDescription("你需要为曲线图提供数据.");
@@ -931,34 +1027,46 @@ public class PotVLineActivity extends Activity
 		mLegend.setForm(LegendForm.SQUARE);// 样式
 		mLegend.setFormSize(10f);// 字体
 		mLegend.setTextColor(Color.BLACK);// 颜色
+		mLegend.setCustom(colors, labels);
 		// mLegend.setTypeface(mTf);// 字体
 
 		// 左边Y轴 槽压
 		YAxis yAxis_potv = mChart.getAxisLeft();
+		yAxis_potv.setDrawLabels(true);	
+		yAxis_potv.setDrawGridLines(false);
 		yAxis_potv.setEnabled(true);
 		yAxis_potv.setDrawAxisLine(true);
 		yAxis_potv.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);		
-		yAxis_potv.setTextSize(4f);
+		yAxis_potv.setTextSize(3f);
 		yAxis_potv.setTextColor(Color.BLUE);
 		yAxis_potv.setAxisMaxValue(MaxValueLeft);
-		yAxis_potv.setAxisMinValue(MinValueLeft);
+		yAxis_potv.setAxisMinValue(MinValueLeft);	
+		yAxis_potv.setValueFormatter(new YAxisValueFormatter() {
+			
+			@Override
+			public String getFormattedValue(float value, YAxis yAxis) {				
+				return value/1000+"V";
+			}
+		});
 
 		// yAxis.setLabelRotationAngle(90f);;
 
 		// 右边Y轴 系列电流
 		YAxis yAxis_cur = mChart.getAxisRight();
+		yAxis_cur.setDrawLabels(true);
 		yAxis_cur.setEnabled(true);
 		yAxis_cur.setDrawAxisLine(true);
+		yAxis_cur.setDrawGridLines(false);
 		yAxis_cur.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-		yAxis_cur.setTextSize(4f);
+		yAxis_cur.setTextSize(5f);
 		yAxis_cur.setAxisMaxValue(2300);
 		yAxis_cur.setAxisMinValue(0);
-		yAxis_cur.setTextColor(Color.RED);
+		yAxis_cur.setTextColor(Color.RED);			
 
 		mChart.setData(mData); // 设置数据 一定要放在CHART设定参数之后
 		mChart.invalidate();
 		// mChart.animateX(5); // 立即执行的动画,x轴
-	}	
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -989,7 +1097,7 @@ public class PotVLineActivity extends Activity
 						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>2,请重新选择日期", 1).show();
 					} else {
 						mCombinedChart.setVisibility(View.VISIBLE);
-						//mCandleChart.setVisibility(View.VISIBLE);
+						// mCandleChart.setVisibility(View.VISIBLE);
 						http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
 								BeginDate, EndDate, this, this).execute();
 					}

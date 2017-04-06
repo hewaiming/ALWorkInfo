@@ -124,6 +124,9 @@ public class JsonToBean_Area_Date {
 				mPotV.setCur(jsonobj.getInt("Cur"));
 				mPotV.setAction(jsonobj.getInt("Action"));
 				mPotV.setPotV(jsonobj.getInt("PotNoV"));
+				mPotV.setTargetV(jsonobj.getInt("TargetV"));
+				mPotV.setMoreLess(jsonobj.getInt("MoreLess"));
+				mPotV.setInterval(jsonobj.getInt("Target_Add"));
 				listBean.add(mPotV);
 			}
 		} catch (JSONException e) {

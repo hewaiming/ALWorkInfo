@@ -2,6 +2,9 @@ package com.hewaiming.ALWorkInfo.bean;
 
 public class PotV_plus {
 	private int PotV;
+	private int TargetV;
+	private int MoreLess;
+	private int Interval;
 	private int Cur;
 	private int Action;
 	private String Ddate;	
@@ -9,13 +12,46 @@ public class PotV_plus {
 	public PotV_plus() {
 		super();
 	}
+	
 
-	public PotV_plus(int potV, int cur, int action, String ddate) {
+	public PotV_plus(int potV, int targetV, int moreLess, int interval, int cur, int action, String ddate) {
 		super();
 		PotV = potV;
+		TargetV = targetV;
+		MoreLess = moreLess;
+		Interval = interval;
 		Cur = cur;
 		Action = action;
 		Ddate = ddate;
+	}
+
+
+	public int getInterval() {
+		return Interval;
+	}
+
+	public void setInterval(int interval) {
+		Interval = interval;
+	}
+
+	public int getMoreLess() {
+		return MoreLess;
+	}
+
+
+
+	public void setMoreLess(int moreLess) {
+		MoreLess = moreLess;
+	}
+
+
+
+	public int getTargetV() {
+		return TargetV;
+	}
+
+	public void setTargetV(int targetV) {
+		TargetV = targetV;
 	}
 
 	public int getAction() {
@@ -54,10 +90,12 @@ public class PotV_plus {
 		}
 	}
 
+
 	@Override
 	public String toString() {
-		return "PotV_plus [PotV=" + PotV + ", Cur=" + Cur + ", Action=" + Action + ", Ddate=" + Ddate + "]";
-	}
+		return "PotV_plus [PotV=" + PotV + ", TargetV=" + TargetV + ", MoreLess=" + MoreLess + ", Interval=" + Interval
+				+ ", Cur=" + Cur + ", Action=" + Action + ", Ddate=" + Ddate + "]";
+	}	
 	
 
 }
