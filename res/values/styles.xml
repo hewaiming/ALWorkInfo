@@ -76,6 +76,15 @@
     <style name="Smile.TextView._Green">
         <item name="android:textColor">@color/base_color_text_green</item>
     </style>
+     <style name="Smile.TextView._DarkGreen">
+        <item name="android:textColor">@color/base_color_text_darkgreen</item>
+    </style>
+    <style name="Smile.TextView._DarkYellow">
+        <item name="android:textColor">@color/base_color_text_darkyellow</item>
+    </style>
+     <style name="Smile.TextView._DarkRed">
+        <item name="android:textColor">@color/base_color_text_darkred</item>
+    </style>
 
     <style name="Dialog_Fullscreen">
         <item name="android:windowBackground">@android:color/transparent</item>

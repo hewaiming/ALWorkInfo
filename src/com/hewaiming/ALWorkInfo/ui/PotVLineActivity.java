@@ -962,7 +962,7 @@ public class PotVLineActivity extends Activity
 			set.setLineWidth(0.7f); // 线宽
 			set.setCircleSize(0.5f);// 显示的圆形大小
 			set.setColor(Color.RED);// 显示颜色
-			set.setDrawValues(true);
+			set.setDrawValues(false);
 			set.setCircleColor(Color.RED);// 圆形的颜色
 			set.setHighLightColor(Color.RED); // 高亮的线的颜色
 			set.setAxisDependency(YAxis.AxisDependency.RIGHT);
@@ -981,7 +981,7 @@ public class PotVLineActivity extends Activity
 		} else if (LEFT_RIGHT.equals("LEFT_Base")) {
 			// 槽过欠加工线
 			set.setAxisDependency(AxisDependency.LEFT);
-			set.setDrawCubic(true);// 圆滑曲线
+			set.setDrawCubic(false);// 圆滑曲线
 			set.setLineWidth(0.4f); // 线宽
 			set.setCircleSize(0.2f);// 显示的圆形大小
 			set.setColor(Color.DKGRAY);// 显示颜色

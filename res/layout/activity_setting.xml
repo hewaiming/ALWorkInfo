@@ -124,8 +124,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_login_selector"
-            android:text="保存"
+            android:background="@drawable/btn_login_selector_green"
+            android:text="保    存"
             android:textSize="12sp"
             android:visibility="visible" >
         </Button>

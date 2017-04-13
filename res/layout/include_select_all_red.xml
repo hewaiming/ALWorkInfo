@@ -74,17 +74,17 @@
 
         <Button
             android:id="@+id/btn_ok"
-            style="@style/Smile.TextView._White"
+            style="@style/Smile.TextView._DarkRed"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="6dp"
             android:layout_marginTop="6dp"
-            android:layout_weight="3"
-            android:background="@drawable/btn_login_selector_red"
-            android:text="确  定"
+            android:layout_weight="4"
+            android:background="@drawable/btn_login_selector_normal_red"
+            android:text="确      定"
             android:textSize="14sp" />
 
         <ImageButton

@@ -93,7 +93,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 @SuppressLint("SimpleDateFormat")
 public class MainActivity extends Activity
@@ -490,6 +489,7 @@ public class MainActivity extends Activity
 		builder.setPositiveButton("确认", new android.content.DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				ShareSDK.stopSDK();	                //关闭一键分享
 				dialog.dismiss();
 				MyApplication.getInstance().exit();
 

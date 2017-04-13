@@ -118,9 +118,12 @@ public class MyConst {
 		oks.setText("我已使用手机版铝电解工作站有一段时间啦！程序地址：http://125.64.59.11:8000/scgy/android/alworkinfo.apk");
 		// 分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
 		oks.setImageUrl("http://125.64.59.11:8000/scgy/android/banner/share.png");
+		oks.setFilePath("http://125.64.59.11:8000/scgy/android/ALWorkInfo.apk");
+		
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
 		// oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
 		// url仅在微信（包括好友和朋友圈）中使用
+	
 		oks.setUrl("http://125.64.59.11:8000/scgy/android/ALWorkInfo.apk");
 		// comment是我对这条分享的评论，仅在人人网和QQ空间使用
 		oks.setComment("软件很好用！");
