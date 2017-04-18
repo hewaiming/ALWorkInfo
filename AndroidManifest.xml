@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hewaiming.ALWorkInfo"
     android:versionCode="4"
-    android:versionName="4.6" >
+    android:versionName="4.8" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -121,7 +121,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
-                <data android:scheme="tencent100371282" />
+                <data android:scheme="tencent1106029515" />
 
                 <action android:name="android.intent.action.VIEW" />
 
