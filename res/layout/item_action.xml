@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/pic"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:layout_gravity="center"
         android:src="@drawable/error" />
 

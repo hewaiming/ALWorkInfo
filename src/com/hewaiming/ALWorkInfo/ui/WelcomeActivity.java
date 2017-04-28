@@ -7,6 +7,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.ImageConfig;
 import com.hewaiming.ALWorkInfo.config.ImageLoadOptions;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
+import com.hewaiming.ALWorkInfo.fragment.HomeFragment;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

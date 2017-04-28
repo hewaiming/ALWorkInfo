@@ -10,7 +10,9 @@
     <string name="potno">请选择槽号</string>
     <string name="begindate">请选择 起始日期</string>
     <string name="enddate">请选择 截止日期</string>
-    <string name="publicDate">2017-4-18</string>
+    <string name="publicDate">2017-5-8</string>
+    <string name="txt_home">首页</string>
+    <string name="txt_dj">电解槽</string>
 
     <string-array name="jazzy_effects">
         <item>Standard</item>
@@ -27,14 +29,15 @@
         <item>Accordion</item>
     </string-array>
 
-    <string name="title_activity_params">工作站</string>   
-    <string name="hello">你好, 铝电解监控系统安卓版!</string>  
+    <string name="title_activity_params">工作站</string>
+    <string name="hello">你好, 铝电解监控系统安卓版!</string>
     <string name="soft_update_no">已经是最新版本</string>
     <string name="soft_update_title">软件更新</string>
-    <string name="soft_update_info">补全槽压曲线图，增加分享等。</string>
+    <string name="soft_update_info">全新改版，增加更多工艺指标数据等。</string>
     <string name="soft_update_updatebtn">更新</string>
     <string name="soft_update_later">稍后更新</string>
     <string name="soft_updating">正在更新</string>
     <string name="soft_update_cancel">取消</string>
-    <string name="serverUrl">http://125.64.59.11:8000/scgy/android/version.xml</string>                                             
+    <string name="serverUrl">http://125.64.59.11:8000/scgy/android/version.xml</string>
+
 </resources>

@@ -44,11 +44,11 @@ public class AsyTask_HttpGetJXRecord extends AsyncTask<String, Void, String> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-		pDialog = new ProgressDialog(mContext);
+		/*pDialog = new ProgressDialog(mContext);
 		pDialog.setMessage("初始化解析记录号名称...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
-		pDialog.show();
+		pDialog.show();*/
 
 	}
 
@@ -70,7 +70,7 @@ public class AsyTask_HttpGetJXRecord extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		pDialog.dismiss();
+		//pDialog.dismiss();
 		listener.GetJXRecordUrl(result);
 		super.onPostExecute(result);
 	}

@@ -13,6 +13,7 @@ import java.util.TimerTask;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
+import com.hewaiming.ALWorkInfo.Popup.MyProgressDialog;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_DayTableAdapter;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_PotStatusAdapter;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
@@ -35,6 +36,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -86,6 +88,15 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private TimerTask timerTask = null;
 
 	private Handler handler = new Handler(Looper.getMainLooper());
+	
+	protected MyProgressDialog dialog;
+
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			dialog.dismiss();
+		};
+	};
 
 	private TcpClient client = new TcpClient() {
 
@@ -232,6 +243,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		tv_SysV = (TextView) findViewById(R.id.tv_sysV);
 		tv_SysI = (TextView) findViewById(R.id.tv_sysI);
 		tv_RoomV = (TextView) findViewById(R.id.tv_RoomV);
+		dialog = MyProgressDialog.createDialog(mContext);
 		// isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		// showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		// isShowingBtn.setOnClickListener(this);
@@ -272,6 +284,12 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				case 5:
 					areaId = 23;
 					break;
+				}
+				 //显示进程提示对话框
+				dialog.setMessage("玩命加载槽状态数据...");
+				if (!dialog.isShowing()) {
+					dialog.show();
+					mHandler.sendEmptyMessageDelayed(0, 1500);
 				}
 				SendActionToServer();//
 			}

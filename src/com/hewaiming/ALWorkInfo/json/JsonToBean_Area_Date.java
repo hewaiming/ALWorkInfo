@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.bean.AvgV;
+import com.hewaiming.ALWorkInfo.bean.DJWD;
 import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
@@ -677,6 +679,113 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setFaultCnt(jsonobj.getInt("FaultCnt"));
 				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+	
+	public static List<AvgV> JsonArrayToAvgVDayTableBean(String data) {
+
+		List<AvgV> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<AvgV>();
+			listBean.clear();		
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				AvgV mBean = new AvgV();
+
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo(0);
+				} else {
+					mBean.setPotNo(jsonobj.getInt("PotNo"));
+				}
+				String Pot_status = jsonobj.getString("PotST").toUpperCase();
+				switch (Pot_status) {
+				case "NORM":
+					mBean.setPotST("正常");
+					break;
+				case "STOP":
+					mBean.setPotST("停槽");
+					break;
+				case "PREHEAT":
+					mBean.setPotST("预热");
+					break;
+				case "START":
+					mBean.setPotST("启动");
+					break;
+				}	
+				
+				if (jsonobj.get("AverageV").equals(null)) {
+					mBean.setAverageV(0);
+				} else {
+					mBean.setAverageV(jsonobj.getDouble("AverageV"));
+				}
+				
+				if (jsonobj.get("Ddate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("Ddate"));
+				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+
+	public static List<DJWD> JsonArrayToDJWDBean(String data) {
+		List<DJWD> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<DJWD>();
+			listBean.clear();
+			// System.out.println("jsonarray. MeasueTable---length()---" +
+			// jsonarray.length());
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				DJWD mBean = new DJWD();
+				// PotNo, Ddate,ALCnt, LSP,
+				// DJZSP;DJWD;FZB;FeCnt;SiCnt;ALOCnt;CaFCnt;MgCnt;MLSP;LDYJ;JHCL;
+
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo("");
+				} else {
+					mBean.setPotNo(String.valueOf(jsonobj.getInt("PotNo")));
+				}
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}				
+				
+
+				if (jsonobj.get("Djwd").equals(null)) {
+					mBean.setDJWD("");
+				} else {
+					mBean.setDJWD(String.valueOf(jsonobj.getInt("Djwd")));
+				}
+				/*if (jsonobj.get("Fzb").equals(null)) {
+					mBean.setFZB("");
+				} else {
+					mBean.setFZB(String.valueOf(jsonobj.getDouble("Fzb")));
+				}*/						
+
+				/*if (jsonobj.get("AlOCnt").equals(null)) {
+					mBean.setALOCnt("");
+				} else {
+					mBean.setALOCnt(String.valueOf(jsonobj.getDouble("AlOCnt")));
+				}		*/							
+				
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {

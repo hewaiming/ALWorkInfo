@@ -30,6 +30,9 @@
     <color name="LV_bg">#FFFFFF</color>
     <color name="LV_foot_bg">#F0FFFF</color>
     <color name="button_bg">#ffffff</color>
+    <color name="theme_green">#388E3C</color>
+    <color name="theme_gray">#9fa0a0</color>
+    
     <!-- zxing -->
     <color name="color_half_transparent">#b0000000</color>
     <color name="color_transparent_bg">#80000000</color>

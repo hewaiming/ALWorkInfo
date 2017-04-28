@@ -41,11 +41,11 @@ public class AsyTask_HttpGetDate extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		pDialog = new ProgressDialog(mContext);
+	/*	pDialog = new ProgressDialog(mContext);
 		pDialog.setMessage("初始化日期数据...");
 		pDialog.setIndeterminate(false);
 		pDialog.setCancelable(true);
-		pDialog.show();
+		pDialog.show();*/
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class AsyTask_HttpGetDate extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		pDialog.dismiss();
+	//	pDialog.dismiss();
 		listener.GetALLDayUrl(result);
 		super.onPostExecute(result);
 	}

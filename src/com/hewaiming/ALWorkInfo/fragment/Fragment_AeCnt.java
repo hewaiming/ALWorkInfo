@@ -19,8 +19,6 @@ import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.net.HttpPost_BeginDate_EndDate_other;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
-import com.hewaiming.ALWorkInfo.ui.MainActivity;
-
 import com.hewaiming.ALWorkInfo.view.FooterListView;
 
 import android.app.Activity;

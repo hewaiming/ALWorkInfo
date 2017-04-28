@@ -3,6 +3,7 @@ package com.hewaiming.ALWorkInfo.net;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 public class NetDetector {
@@ -12,7 +13,7 @@ public class NetDetector {
 
 	public NetDetector(Context context) {
 		this.context = context;
-	}
+	}	
 
 	public int isConnectingToInternet() {
 
@@ -30,7 +31,7 @@ public class NetDetector {
 					}
 					if ((info[i].getState() == NetworkInfo.State.CONNECTED)
 							&& (info[i].getType() == ConnectivityManager.TYPE_MOBILE)) {
-						Toast.makeText(context, "当前网络:3G网络或4G网络！", Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "当前网络:3G网络或4G网络！", Toast.LENGTH_SHORT).show();
 						IsNet = 2;
 						break;
 					}
