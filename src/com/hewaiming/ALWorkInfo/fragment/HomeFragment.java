@@ -17,6 +17,8 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -49,6 +51,7 @@ import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
+import com.hewaiming.ALWorkInfo.bean.HY_item;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.PotCtrl;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
@@ -114,6 +117,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
@@ -126,6 +130,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	private String ip;
 	private int port;
+	private static final String YHLND_VALUE="1.5~3.2",DJWD_VALUE="930~940",FZB_VALUE="2.4~2.55",AVGV_VALUE="≤4.02",AE_VALUE="≤0.25";
+	private static final String YHLND_TITLE="氧化铝浓度(%) ",DJWD_TITLE="电解温度(°C) ",FZB_TITLE="分子比(%) ",AVGV_TITLE="平均电压(V) ",AE_TITLE="效应系数 ";
 	private SharedPreferences sp;
 	// private GridView gridView;
 	private Button btnMore;
@@ -137,8 +143,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	private String get_dateTable_url = ":8000/scgy/android/odbcPhP/getDate.php";
 	private String get_JXName_url = ":8000/scgy/android/odbcPhP/getJXRecordName.php";
-	// private AsyTask_HttpGetDate mhttpgetdata_date;
-	// private AsyTask_HttpGetJXRecord mHttpGetData_JXRecord;
+
 	private Context mContext;
 	private TitlePopup titlePopup;
 	private TextView tv_title, tv_aeTitle, tv_avgVTitle, tv_DJWDTitle, tv_FZBTitle, tv_YHLNDTitle;
@@ -154,9 +159,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private String AeCnt_url = ":8000/scgy/android/odbcPhP/AeCnt_area_date.php"; // 效应次数
 	protected String AvgVArea_url = ":8000/scgy/android/odbcPhP/GetAvgV_dayTable.php";
 	protected String DJWD_url = ":8000/scgy/android/odbcPhP/GetDJWD_MeasueTable.php";
+	protected String FZB_url = ":8000/scgy/android/odbcPhP/GetFZB_MeasueTable.php"; // 获取分子比数据地址
+	protected String YHLND_url = ":8000/scgy/android/odbcPhP/GetYHLND_MeasueTable.php"; // 获取氧化铝浓度数据地址
 	private List<AeRecord> listBean_AeCnt = null; // 效应次数列表
 	private List<AvgV> listBean_AvgV = null; // 日报数据列表
 	private List<DJWD> listBean_DJWD = null; // 电解温度列表
+	private List<HY_item> listBean_FZB = null; // 分子比数据列表
+	private List<HY_item> listBean_YHLND = null; // 氧化铝浓度数据列表
 
 	private String get_NormPots1_url = ":8000/scgy/android/odbcPhP/GetNormPots1.php";
 	private String get_NormPots2_url = ":8000/scgy/android/odbcPhP/GetNormPots2.php";
@@ -173,12 +182,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private TextView tvPotTotal, tvPot1, tvPot11, tvPot12, tvPot13, tvPot2, tvPot21, tvPot22, tvPot23;
 
 	private ImageView iv_Fresh_Pots, iv_Fresh_Ae, iv_Fresh_AvgV, iv_Fresh_DJWD, iv_Fresh_FZB, iv_Fresh_YHLND;
-	protected MyProgressDialog dialog;
+	private ImageButton imgbtn_show_DJWD, imgbtn_show_FZB, imgbtn_show_YHLND;
+	protected MyProgressDialog Homedialog;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			dialog.dismiss();
+			Homedialog.dismiss();
 		};
 	};
 
@@ -194,7 +204,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		super.onActivityCreated(savedInstanceState);
 		mContext = getActivity();
 		init(); // 初始化各控件
-		NetDetector netDetector = new NetDetector(mContext);
+		NetDetector netDetector = new NetDetector(mContext, false);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			iv_wifi.setVisibility(View.GONE);
 			bannerView.setVisibility(View.VISIBLE);// wifi
@@ -215,12 +225,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				get_NormPots2_url = "http://" + ip + get_NormPots2_url;
 				AeCnt_url = "http://" + ip + AeCnt_url;
 				AvgVArea_url = "http://" + ip + AvgVArea_url;
-				DJWD_url= "http://" + ip + DJWD_url;
-				checkUpDate(); // 检测版本升级
-				init_GetDate(); // 获取日期
-				init_GetJXRecord(); // 获取解析记录
+				DJWD_url = "http://" + ip + DJWD_url;
+				FZB_url = "http://" + ip + FZB_url;
+				YHLND_url = "http://" + ip + YHLND_url;
 				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
-
+				checkUpDate(); // 检测版本升级
+				//init_GetDate(); // 获取日期
+				//init_GetJXRecord(); // 获取解析记录
 			}
 
 		} else {
@@ -229,11 +240,432 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	}
 
+	// 获取各区氧化铝浓度数据，再显示图表
 	private void initDATA_YHLND() {
+		ExecutorService exec_YHLND = Executors.newCachedThreadPool();
+		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
+				YHLNDSum_Clear();
+				// CalcYHLNDSUM(listBean_YHLND);
+				ShowBar_YHLND(CalcYHLNDSUM(listBean_YHLND));// 显示各区氧化铝浓度柱状图
+			}
+		});
+
+		// 获取氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				// SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd
+				// mm:ss");
+				final String EndDateValue = sdf.format(dt);
+				// final String today = sdfLong.format(dt);
+
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -10);
+				final String BeginDateValue = sdf.format(cal.getTime());
+
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						tv_YHLNDTitle.setText(YHLND_TITLE + "  参考值:"+YHLND_VALUE);
+					}
+				});
+				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+				mparams.clear();
+				// mparams.add(new BasicNameValuePair("areaID", "66")); // 全部槽号
+				mparams.add(new BasicNameValuePair("BeginDate", BeginDateValue));
+				mparams.add(new BasicNameValuePair("EndDate", EndDateValue));
+				JSONArrayParser jsonParser = new JSONArrayParser();
+				JSONArray json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
+				if (json != null) {
+					// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
+					System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
+					listBean_YHLND = new ArrayList<HY_item>(); // 初始化氧化铝浓度适配器
+					listBean_YHLND = JsonToBean_Area_Date.JsonArrayToYHLNDBean(json.toString());
+
+				} else {
+					// 再次get氧化铝浓度数据
+					json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
+					if (json != null) {
+						// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
+						listBean_YHLND = new ArrayList<HY_item>(); // 初始化氧化铝浓度适配器
+						listBean_YHLND = JsonToBean_Area_Date.JsonArrayToYHLNDBean(json.toString());
+					} else {
+						Log.i("厂房：氧化铝浓度", "从PHP服务器无数据返回！");
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								// "未获取氧化铝浓度,请检查远程服务器IP和端口是否正确！");
+								Toast.makeText(mContext, "未获取到氧化铝浓度信息，可能还没有输入！", Toast.LENGTH_SHORT).show();
+
+							}
+						});
+					}
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		exec_YHLND.shutdown();
+	}
+
+	protected void ShowBar_YHLND(String[] mDate) {
+		// 图表数据设置
+		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房氧化铝浓度数据
+		ArrayList<String> xVals = new ArrayList<>();// X轴数据
+		double YHLNDTotal1, YHLNDTotal2, YHLNDTotal; // 一厂房，二厂房，厂房氧化铝浓度总和
+		int PotS1, PotS2, PotS;
+		YHLNDTotal1 = YHLNDSum[0] + YHLNDSum[1] + YHLNDSum[2];// 一厂房氧化铝浓度总和
+		YHLNDTotal2 = YHLNDSum[3] + YHLNDSum[4] + YHLNDSum[5];// 二厂房氧化铝浓度总和
+		YHLNDTotal = YHLNDTotal1 + YHLNDTotal2;// 厂房氧化铝浓度总和
+		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
+		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
+		PotS = PotS1 + PotS2; // 厂房正常槽总数
+		// 添加数据源
+		if (NormPotS[0] != 0) {
+			xVals.add("一厂1区" + mDate[0]);
+			yVals.add(new BarEntry((float) YHLNDSum[0] / NormPotS[0], 0));
+		}
+		if (NormPotS[1] != 0) {
+			xVals.add("一厂2区" + mDate[1]);
+			yVals.add(new BarEntry((float) YHLNDSum[1] / NormPotS[1], 1));
+		}
+		if (NormPotS[2] != 0) {
+			xVals.add("一厂3区" + mDate[2]);
+			yVals.add(new BarEntry((float) YHLNDSum[2] / NormPotS[2], 2));
+		}
+		if (PotS1 != 0) {
+			xVals.add("一厂");
+			yVals.add(new BarEntry((float) YHLNDTotal1 / PotS1, 3));
+		}
+		if (NormPotS[3] != 0) {
+			xVals.add("二厂1区" + mDate[3]);
+			yVals.add(new BarEntry((float) YHLNDSum[3] / NormPotS[3], 4));
+		}
+		if (NormPotS[4] != 0) {
+			xVals.add("二厂2区" + mDate[4]);
+			yVals.add(new BarEntry((float) YHLNDSum[4] / NormPotS[4], 5));
+		}
+		if (NormPotS[5] != 0) {
+			xVals.add("二厂3区" + mDate[5]);
+			yVals.add(new BarEntry((float) YHLNDSum[5] / NormPotS[5], 6));
+		}
+		if (PotS2 != 0) {
+			xVals.add("二厂");
+			yVals.add(new BarEntry((float) YHLNDTotal2 / PotS2, 7));
+		}
+		if (PotS != 0) {
+			xVals.add("厂房");
+			yVals.add(new BarEntry((float) YHLNDTotal / PotS, 8));
+		}
+
+		BarDataSet barDataSet = new BarDataSet(yVals, "区氧化铝浓度");
+		barDataSet.setColor(Color.rgb(56, 161, 219));// 设置数据露草色颜色
+		barDataSet.setDrawValues(true); // 显示数值
+		barDataSet.setValueTextSize(11f);
+		barDataSet.setBarSpacePercent(60f);
+		// barDataSet.setValueTextColor(Color.RED);
+		barDataSet.setValueFormatter(new ValueFormatter() {
+
+			@Override
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
+				DecimalFormat decimalFormat = new DecimalFormat("##0.000");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+
+				return decimalFormat.format(value);
+			}
+		});
+
+		BarData bardata = new BarData(xVals, barDataSet);
+		bardata.setHighlightEnabled(true);
+
+		mBarChart_YHLND.setData(bardata); // 设置数据
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mBarChart_YHLND.invalidate();
+			}
+		});
 
 	}
 
+	protected String[] CalcYHLNDSUM(List<HY_item> listBean) {
+		String[] YHLNDDate = { "", "", "", "", "", "" };
+		if (listBean != null && listBean.size() != 0) {
+			HY_item mTable_yhlnd = new HY_item();
+			for (int i = 0; i < listBean.size(); i++) {
+				mTable_yhlnd = listBean.get(i);
+				if (mTable_yhlnd != null) {
+					String mPot = mTable_yhlnd.getPotNo();
+					String mYHLND = mTable_yhlnd.getFZB();
+					int potno = 0;
+					double YHLND = 0;
+					if (!(mPot == null || mPot.length() <= 0)) {
+						potno = Integer.parseInt(mTable_yhlnd.getPotNo()); // 槽号
+					}
+					if (!(mYHLND == null || mYHLND.length() <= 0)) {
+						YHLND = Double.parseDouble(mYHLND); // 氧化铝浓度
+					}
+					if (potno >= 1101 && potno <= 1136) {
+						YHLNDSum[0] = YHLNDSum[0] + YHLND; // 一厂房一区氧化铝浓度总和
+						YHLNDDate[0] = mTable_yhlnd.getDdate().substring(5, 10);
+					} else if (potno >= 1201 && potno <= 1237) {
+						YHLNDSum[1] = YHLNDSum[1] + YHLND;
+						YHLNDDate[1] = mTable_yhlnd.getDdate().substring(5, 10);
+					} else if (potno >= 1301 && potno <= 1337) {
+						YHLNDSum[2] = YHLNDSum[2] + YHLND;
+						YHLNDDate[2] = mTable_yhlnd.getDdate().substring(5, 10);
+					} else if (potno >= 2101 && potno <= 2136) {
+						YHLNDSum[3] = YHLNDSum[3] + YHLND; // 二厂房一区氧化铝浓度总和
+						YHLNDDate[3] = mTable_yhlnd.getDdate().substring(5, 10);
+					} else if (potno >= 2201 && potno <= 2237) {
+						YHLNDSum[4] = YHLNDSum[4] + YHLND;
+						YHLNDDate[4] = mTable_yhlnd.getDdate().substring(5, 10);
+					} else if (potno >= 2301 && potno <= 2337) {
+						YHLNDSum[5] = YHLNDSum[5] + YHLND;
+						YHLNDDate[5] = mTable_yhlnd.getDdate().substring(5, 10);
+					}
+
+				} else {
+					System.out.println("第 " + i + " 氧化铝浓度项 ，为空！");
+				}
+			}
+			// return FzbDate;
+		}
+		return YHLNDDate;
+
+	}
+
+	protected void YHLNDSum_Clear() {
+		for (int i = 0; i < YHLNDSum.length; i++) {
+			YHLNDSum[i] = 0;
+		}
+
+	}
+
+	// 获取分子比数据，再显示图表
 	private void initDATA_FZB() {
+		ExecutorService exec_FZB = Executors.newCachedThreadPool();
+		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("获取各区分子比数据OK，开始显示柱形图表啦，happy去");
+				FZBSum_Clear();
+				// CalcFZBSUM(listBean_FZB);
+				ShowBar_FZB(CalcFZBSUM(listBean_FZB));// 显示各区分子比柱状图
+			}
+		});
+
+		// 获取分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				// SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd
+				// mm:ss");
+				final String EndDateValue = sdf.format(dt);
+				// final String today = sdfLong.format(dt);
+
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -10);
+				final String BeginDateValue = sdf.format(cal.getTime());
+
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						tv_FZBTitle.setText(FZB_TITLE +"  参考值:"+FZB_VALUE);
+					}
+				});
+				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+				mparams.clear();
+				// mparams.add(new BasicNameValuePair("areaID", "66")); // 全部槽号
+				mparams.add(new BasicNameValuePair("BeginDate", BeginDateValue));
+				mparams.add(new BasicNameValuePair("EndDate", EndDateValue));
+				JSONArrayParser jsonParser = new JSONArrayParser();
+				JSONArray json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
+				if (json != null) {
+					// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
+					System.out.println("获取厂房分子比OK，其他数据呢");
+					listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
+					listBean_FZB = JsonToBean_Area_Date.JsonArrayToFZBBean(json.toString());
+
+				} else {
+					// 再次get分子比数据
+					json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
+					if (json != null) {
+						// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
+						listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
+						listBean_FZB = JsonToBean_Area_Date.JsonArrayToFZBBean(json.toString());
+					} else {
+						Log.i("厂房：分子比", "从PHP服务器无数据返回！");
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								// "未获取分子比,请检查远程服务器IP和端口是否正确！");
+								Toast.makeText(mContext, "未获取到分子比信息，可能还没有输入！", Toast.LENGTH_SHORT).show();
+
+							}
+						});
+					}
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		exec_FZB.shutdown();
+
+	}
+
+	protected void ShowBar_FZB(String[] mDate) {
+		// 图表数据设置
+		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房分子比
+		ArrayList<String> xVals = new ArrayList<>();// X轴数据
+		double FZBTotal1, FZBTotal2, FZBTotal; // 一厂房，二厂房，厂房分子比总和
+		int PotS1, PotS2, PotS;
+		FZBTotal1 = FZBSum[0] + FZBSum[1] + FZBSum[2];// 一厂房分子比总和
+		FZBTotal2 = FZBSum[3] + FZBSum[4] + FZBSum[5];// 二厂房分子比总和
+		FZBTotal = FZBTotal1 + FZBTotal2;// 厂房分子比总和
+		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
+		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
+		PotS = PotS1 + PotS2; // 厂房正常槽总数
+		// 添加数据源
+		if (NormPotS[0] != 0) {
+			xVals.add("一厂1区" + mDate[0]);
+			yVals.add(new BarEntry((float) FZBSum[0] / NormPotS[0], 0));
+		}
+		if (NormPotS[1] != 0) {
+			xVals.add("一厂2区" + mDate[1]);
+			yVals.add(new BarEntry((float) FZBSum[1] / NormPotS[1], 1));
+		}
+		if (NormPotS[2] != 0) {
+			xVals.add("一厂3区" + mDate[2]);
+			yVals.add(new BarEntry((float) FZBSum[2] / NormPotS[2], 2));
+		}
+		if (PotS1 != 0) {
+			xVals.add("一厂");
+			yVals.add(new BarEntry((float) FZBTotal1 / PotS1, 3));
+		}
+		if (NormPotS[3] != 0) {
+			xVals.add("二厂1区" + mDate[3]);
+			yVals.add(new BarEntry((float) FZBSum[3] / NormPotS[3], 4));
+		}
+		if (NormPotS[4] != 0) {
+			xVals.add("二厂2区" + mDate[4]);
+			yVals.add(new BarEntry((float) FZBSum[4] / NormPotS[4], 5));
+		}
+		if (NormPotS[5] != 0) {
+			xVals.add("二厂3区" + mDate[5]);
+			yVals.add(new BarEntry((float) FZBSum[5] / NormPotS[5], 6));
+		}
+		if (PotS2 != 0) {
+			xVals.add("二厂");
+			yVals.add(new BarEntry((float) FZBTotal2 / PotS2, 7));
+		}
+		if (PotS != 0) {
+			xVals.add("厂房");
+			yVals.add(new BarEntry((float) FZBTotal / PotS, 8));
+		}
+
+		BarDataSet barDataSet = new BarDataSet(yVals, "区分子比");
+		barDataSet.setColor(Color.rgb(66, 80, 102));// 设置数据戴兰颜色
+		barDataSet.setDrawValues(true); // 显示数值
+		barDataSet.setValueTextSize(11f);
+		barDataSet.setBarSpacePercent(60f);
+		// barDataSet.setValueTextColor(Color.RED);
+		barDataSet.setValueFormatter(new ValueFormatter() {
+
+			@Override
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
+				DecimalFormat decimalFormat = new DecimalFormat("##0.000");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+
+				return decimalFormat.format(value);
+			}
+		});
+
+		BarData bardata = new BarData(xVals, barDataSet);
+		bardata.setHighlightEnabled(true);
+
+		mBarChart_FZB.setData(bardata); // 设置数据
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mBarChart_FZB.invalidate();
+			}
+		});
+
+	}
+
+	protected String[] CalcFZBSUM(List<HY_item> listBean) {
+		String[] FzbDate = { "", "", "", "", "", "" };
+		if (listBean != null && listBean.size() != 0) {
+			HY_item mTable = new HY_item();
+			for (int i = 0; i < listBean.size(); i++) {
+				mTable = listBean.get(i);
+				if (mTable != null) {
+					String mPot = mTable.getPotNo();
+					String mFzb = mTable.getFZB();
+					int potno = 0;
+					double Fzb = 0;
+					if (!(mPot == null || mPot.length() <= 0)) {
+						potno = Integer.parseInt(mTable.getPotNo()); // 槽号
+					}
+					if (!(mFzb == null || mFzb.length() <= 0)) {
+						Fzb = Double.parseDouble(mFzb); // 分子比
+					}
+					if (potno >= 1101 && potno <= 1136) {
+						FZBSum[0] = FZBSum[0] + Fzb; // 一厂房一区分子比总和
+						FzbDate[0] = mTable.getDdate().substring(5, 10);
+					} else if (potno >= 1201 && potno <= 1237) {
+						FZBSum[1] = FZBSum[1] + Fzb;
+						FzbDate[1] = mTable.getDdate().substring(5, 10);
+					} else if (potno >= 1301 && potno <= 1337) {
+						FZBSum[2] = FZBSum[2] + Fzb;
+						FzbDate[2] = mTable.getDdate().substring(5, 10);
+					} else if (potno >= 2101 && potno <= 2136) {
+						FZBSum[3] = FZBSum[3] + Fzb; // 二厂房一区分子比总和
+						FzbDate[3] = mTable.getDdate().substring(5, 10);
+					} else if (potno >= 2201 && potno <= 2237) {
+						FZBSum[4] = FZBSum[4] + Fzb;
+						FzbDate[4] = mTable.getDdate().substring(5, 10);
+					} else if (potno >= 2301 && potno <= 2337) {
+						FZBSum[5] = FZBSum[5] + Fzb;
+						FzbDate[5] = mTable.getDdate().substring(5, 10);
+					}
+
+				} else {
+					System.out.println("第 " + i + " 分子比项 ，为空！");
+				}
+			}
+			// return FzbDate;
+		}
+		return FzbDate;
+
+	}
+
+	protected void FZBSum_Clear() {
+		for (int i = 0; i < FZBSum.length; i++) {
+			FZBSum[i] = 0;
+		}
 
 	}
 
@@ -258,7 +690,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd mm:ss");
 				final String todayValue = sdf.format(dt);
-				final String today=sdfLong.format(dt);
+				final String today = sdfLong.format(dt);
 				/*
 				 * TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 				 * Calendar cal = Calendar.getInstance(); cal.add(Calendar.DATE,
@@ -269,7 +701,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_DJWDTitle.setText("电解温度：" + today);
+						tv_DJWDTitle.setText(DJWD_TITLE+todayValue+" 参考值:"+DJWD_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -369,7 +801,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		}
 
 		BarDataSet barDataSet = new BarDataSet(yVals, "电解温度");
-		barDataSet.setColor(Color.rgb(255,215, 0));// 设置浅黄红色颜色
+		barDataSet.setColor(Color.rgb(255, 215, 0));// 设置浅黄红色颜色
 		barDataSet.setDrawValues(true); // 显示数值
 		barDataSet.setValueTextSize(10f);
 		barDataSet.setBarSpacePercent(60f);
@@ -467,7 +899,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_avgVTitle.setText("平均电压：" + yesterdayValue);
+						tv_avgVTitle.setText(AVGV_TITLE + yesterdayValue+"  参考值:"+AVGV_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -671,7 +1103,15 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd mm:ss ");
 				String todayValue = sdf.format(dt);
+				final String mToday=sdfLong.format(dt);
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						tv_aeTitle.setText(AE_TITLE + mToday+" 参考值："+AE_VALUE);
+					}
+				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
 				mparams.clear();
 				mparams.add(new BasicNameValuePair("areaID", "66")); // 全部槽号
@@ -918,7 +1358,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	private int NetStatus() {
-		NetDetector netDetector = new NetDetector(mContext);
+		NetDetector netDetector = new NetDetector(mContext, false);
 		return netDetector.isConnectingToInternet();
 
 	}
@@ -943,7 +1383,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	private void init() {
-		dialog = MyProgressDialog.createDialog(mContext);
+		Homedialog = MyProgressDialog.createDialog(mContext);
 		init_normalPot(); // 初始化正常槽数量控件
 		init_button();// 初始化按钮控件
 		ivShare = (ImageView) mView.findViewById(R.id.iv_share);
@@ -972,7 +1412,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String todayValue = sdf.format(dt);
-		tv_aeTitle.setText("效应系数：" + todayValue);
+		tv_aeTitle.setText(AE_TITLE+todayValue+" 参考值："+AE_VALUE);
 		init_BarCHART(mBarChart_AE, 0);
 		init_BarCHART(mBarChart_V, 1);
 		init_BarCHART(mBarChart_DJWD, 2);
@@ -994,6 +1434,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		iv_Fresh_FZB.setOnClickListener(this);
 		iv_Fresh_YHLND = (ImageView) mView.findViewById(R.id.iv_refresh_yhlnd);
 		iv_Fresh_YHLND.setOnClickListener(this);
+		imgbtn_show_DJWD = (ImageButton) mView.findViewById(R.id.imgbtn_show_DJWDChart);
+		imgbtn_show_DJWD.setOnClickListener(this);
+		imgbtn_show_FZB = (ImageButton) mView.findViewById(R.id.imgbtn_show_FZBChart);
+		imgbtn_show_FZB.setOnClickListener(this);
+		imgbtn_show_YHLND = (ImageButton) mView.findViewById(R.id.imgbtn_show_YHLNDChart);
+		imgbtn_show_YHLND.setOnClickListener(this);
 
 	}
 
@@ -1068,9 +1514,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			if (All_Charts) {
 				initDATA_AE();// 显示当前各区效应系数
 				initDATA_AvgV();// 显示当前各区平均电压
-				initDATA_DJWD();// 显示当前各区电解温度
-				initDATA_FZB();// 显示当前各区分子比
-				initDATA_YHLND();// 显示当前各区氧化铝浓度
+				// initDATA_DJWD();// 显示当前各区电解温度
+				// initDATA_FZB();// 显示当前各区分子比
+				// initDATA_YHLND();// 显示当前各区氧化铝浓度
 			}
 
 		} catch (InterruptedException e) {
@@ -1106,7 +1552,14 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mChart.getXAxis().setPosition(XAxisPosition.BOTTOM);// 设置X轴的位置
 		mChart.getXAxis().setDrawGridLines(false);// 不显示网格
 		mChart.getXAxis().setDrawAxisLine(false);
-		mChart.getXAxis().setTextSize(8f);
+		if (TYPE == 3 || TYPE == 4 ) {
+			mChart.getXAxis().setTextSize(5f);
+			mChart.getXAxis().setLabelRotationAngle(6f);
+			mChart.getXAxis().setLabelsToSkip(0);
+			mChart.getXAxis().setSpaceBetweenLabels(20);
+		} else {
+			mChart.getXAxis().setTextSize(8f);
+		}
 		// mChart.getXAxis().setLabelRotationAngle(90f);
 		mChart.getXAxis().setTextColor(Color.DKGRAY);
 
@@ -1254,38 +1707,107 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			MyConst.showShare(mContext); // 一键分享
 			break;
 		case R.id.iv_refresh_pots:
-			dialog.setMessage("玩命计算各区运行槽数量...");
-			if (!dialog.isShowing()) {
-				dialog.show();
+			Homedialog.setMessage("玩命加载...");
+			if (!Homedialog.isShowing()) {
+				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
 			GetAllData_ShowChart(false);
 			break;
 		case R.id.iv_refresh_ae:
-			dialog.setMessage("玩命计算各区效应系数...");
-			if (!dialog.isShowing()) {
-				dialog.show();
+			if (!Homedialog.isShowing()) {
+				Homedialog.setMessage("玩命加载...");
+				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
 
 			initDATA_AE();// 显示当前各区效应系数
 			break;
 		case R.id.iv_refresh_avgv:
-			dialog.setMessage("玩命计算各区平均电压...");
-			if (!dialog.isShowing()) {
-				dialog.show();
+			if (!Homedialog.isShowing()) {
+				Homedialog.setMessage("玩命加载...");
+				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
 			initDATA_AvgV();// 显示当前各区平均电压
 			break;
 		case R.id.iv_refresh_djwd:
-			dialog.setMessage("玩命计算各区电解温度...");
-			if (!dialog.isShowing()) {
-				dialog.show();
+			if (!Homedialog.isShowing()) {
+				Homedialog.setMessage("玩命加载...");
+				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
 			initDATA_DJWD();// 显示当前各区电解温度
-			break;	
+			break;
+		case R.id.imgbtn_show_DJWDChart:
+			if (mBarChart_DJWD.getVisibility() == View.GONE) {
+				mBarChart_DJWD.setVisibility(View.VISIBLE);
+				iv_Fresh_DJWD.setVisibility(View.VISIBLE);
+				imgbtn_show_DJWD.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+				if (!Homedialog.isShowing()) {
+					Homedialog.setMessage("玩命加载...");
+					Homedialog.show();
+					mHandler.sendEmptyMessageDelayed(0, 1500);
+				}
+				initDATA_DJWD();// 显示当前各区电解温度
+			} else {
+				mBarChart_DJWD.setVisibility(View.GONE);
+				iv_Fresh_DJWD.setVisibility(View.INVISIBLE);
+				imgbtn_show_DJWD.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+			}
+			break;
+		case R.id.iv_refresh_fzb:
+			if (!Homedialog.isShowing()) {
+				Homedialog.setMessage("玩命加载...");
+				Homedialog.show();
+				mHandler.sendEmptyMessageDelayed(0, 1500);
+			}
+			initDATA_FZB();// 显示当前各区分子比
+			break;
+		case R.id.imgbtn_show_FZBChart:
+			if (mBarChart_FZB.getVisibility() == View.GONE) {
+				mBarChart_FZB.setVisibility(View.VISIBLE);
+				iv_Fresh_FZB.setVisibility(View.VISIBLE);
+				imgbtn_show_FZB.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+				if (!Homedialog.isShowing()) {
+					Homedialog.setMessage("玩命加载...");
+					Homedialog.show();
+					mHandler.sendEmptyMessageDelayed(0, 1500);
+				}
+				initDATA_FZB();// 显示当前各区分子比
+			} else {
+				mBarChart_FZB.setVisibility(View.GONE);
+				iv_Fresh_FZB.setVisibility(View.INVISIBLE);
+				imgbtn_show_FZB.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+			}
+			break;
+		case R.id.iv_refresh_yhlnd:
+			// 刷新氧化铝浓度
+			if (!Homedialog.isShowing()) {
+				Homedialog.setMessage("玩命加载...");
+				Homedialog.show();
+				mHandler.sendEmptyMessageDelayed(0, 1500);
+			}
+			initDATA_YHLND();// 显示当前各区氧化铝浓度
+			break;
+		case R.id.imgbtn_show_YHLNDChart:
+			// 显示氧化铝浓度
+			if (mBarChart_YHLND.getVisibility() == View.GONE) {
+				mBarChart_YHLND.setVisibility(View.VISIBLE);
+				iv_Fresh_YHLND.setVisibility(View.VISIBLE);
+				imgbtn_show_YHLND.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+				if (!Homedialog.isShowing()) {
+					Homedialog.setMessage("玩命加载...");
+					Homedialog.show();
+					mHandler.sendEmptyMessageDelayed(0, 1500);
+				}
+				initDATA_YHLND();// 显示当前各区氧化铝浓度
+			} else {
+				mBarChart_YHLND.setVisibility(View.GONE);
+				iv_Fresh_YHLND.setVisibility(View.INVISIBLE);
+				imgbtn_show_YHLND.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+			}
+			break;
 		}
 	}
 

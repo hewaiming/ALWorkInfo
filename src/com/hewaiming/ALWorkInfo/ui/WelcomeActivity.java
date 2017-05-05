@@ -58,7 +58,7 @@ public class WelcomeActivity extends Activity {
 		config.initImageLoader(ctx);
 		new ImageLoadOptions();
 		options = ImageLoadOptions.getOptions();
-		NetDetector netDetector=new NetDetector(getApplicationContext()); //判断是否有WIFI
+		NetDetector netDetector=new NetDetector(getApplicationContext(),true); //判断是否有WIFI
 		if (netDetector.isConnectingToInternet()==1){
 //			Toast.makeText(getApplicationContext(), "当前网络:WIFI", Toast.LENGTH_LONG).show();
 			ImageLoader.getInstance().displayImage(image_url, mImage, options); 

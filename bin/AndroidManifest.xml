@@ -43,7 +43,8 @@
             android:name="com.hewaiming.ALWorkInfo.ui.ParamsActivity"
             android:label="@string/title_activity_params" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.MainActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.MainActivity" 
+             android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.PotAgeActivity" >
         </activity>
@@ -67,9 +68,11 @@
             android:name="com.hewaiming.ALWorkInfo.ui.AeMostActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.CraftLineActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.CraftLineActivity" 
+             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.ShowCraftLineActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.ShowCraftLineActivity" 
+             android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.MeasueTableActivity" >
         </activity>
@@ -91,9 +94,11 @@
         </activity>
         <activity android:name="com.hewaiming.ALWorkInfo.ui.DialogActivity" >
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.SettingActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.SettingActivity" 
+             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.hewaiming.ALWorkInfo.ui.AboutActivity" >
+        <activity android:name="com.hewaiming.ALWorkInfo.ui.AboutActivity" 
+             android:screenOrientation="portrait">
         </activity>
         <!-- 这是进行授权页面的注册 -->
         <activity

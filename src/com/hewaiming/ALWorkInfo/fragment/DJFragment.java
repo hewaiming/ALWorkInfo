@@ -173,7 +173,7 @@ public class DJFragment extends Fragment
 
 	
 	private int NetStatus() {
-		NetDetector netDetector = new NetDetector(getActivity());
+		NetDetector netDetector = new NetDetector(getActivity(),false);
 		return netDetector.isConnectingToInternet();
 
 	}
@@ -424,7 +424,7 @@ public class DJFragment extends Fragment
 			// 从此初始化日期和解析记录数据
 
 			if (GetJXCnt > 3) {
-				tv_title.setTextSize(14);
+				tv_title.setTextSize(12);
 				tv_title.setText("工作站:" + "网络不给力或请检查远程服务器IP和端口是否正确！");
 				// Toast.makeText(getApplicationContext(), "第" + GetJXCnt +
 				// "次尝试获取解析记录数据失败，请检查远程服务器IP和端口是否正确！", //

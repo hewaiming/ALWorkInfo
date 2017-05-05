@@ -1097,6 +1097,7 @@ public class PotVLineActivity extends Activity
 						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>2,请重新选择日期", 1).show();
 					} else {
 						mCombinedChart.setVisibility(View.VISIBLE);
+						tv_title.setText(PotNo + "槽压曲线图");
 						// mCandleChart.setVisibility(View.VISIBLE);
 						http_post = (HttpPost_BeginDate_EndDate) new HttpPost_BeginDate_EndDate(potno_url, 2, PotNo,
 								BeginDate, EndDate, this, this).execute();

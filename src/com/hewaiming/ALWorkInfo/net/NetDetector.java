@@ -10,9 +10,11 @@ public class NetDetector {
 
 	private Context context;
 	int IsNet = 0;
+	private boolean ShowToast;
 
-	public NetDetector(Context context) {
+	public NetDetector(Context context,boolean isShow) {
 		this.context = context;
+		this.ShowToast = isShow;
 	}	
 
 	public int isConnectingToInternet() {
@@ -25,7 +27,9 @@ public class NetDetector {
 				for (int i = 0; i < info.length; i++) {
 					if ((info[i].getState() == NetworkInfo.State.CONNECTED)
 							&& (info[i].getType() == ConnectivityManager.TYPE_WIFI)) {
-						Toast.makeText(context, "当前网络:WIFI", Toast.LENGTH_LONG).show();
+						if(ShowToast){
+							Toast.makeText(context, "当前网络:WIFI", Toast.LENGTH_LONG).show();
+						}						
 						IsNet = 1;
 						break;
 					}

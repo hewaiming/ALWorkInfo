@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
+import com.hewaiming.ALWorkInfo.bean.HY_item;
 import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.bean.FaultRecord;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
@@ -112,6 +113,7 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
+
 	public static List<PotV_plus> JsonArrayToPotV_plusBean(String data) {
 		ArrayList<PotV_plus> listBean = null;
 		try {
@@ -137,8 +139,7 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-	
-	
+
 	public static List<FaultRecord> JsonArrayToFaultRecordBean(String data, List<Map<String, Object>> JXList) {
 		List<FaultRecord> listBean = null;
 		try {
@@ -687,14 +688,15 @@ public class JsonToBean_Area_Date {
 		}
 		return listBean;
 	}
-	
+
+	//JSON转换成LIST数据  （平均电压）
 	public static List<AvgV> JsonArrayToAvgVDayTableBean(String data) {
 
 		List<AvgV> listBean = null;
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 			listBean = new ArrayList<AvgV>();
-			listBean.clear();		
+			listBean.clear();
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -719,14 +721,14 @@ public class JsonToBean_Area_Date {
 				case "START":
 					mBean.setPotST("启动");
 					break;
-				}	
-				
+				}
+
 				if (jsonobj.get("AverageV").equals(null)) {
 					mBean.setAverageV(0);
 				} else {
 					mBean.setAverageV(jsonobj.getDouble("AverageV"));
 				}
-				
+
 				if (jsonobj.get("Ddate").equals(null)) {
 					mBean.setDdate("");
 				} else {
@@ -741,6 +743,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
+	//JSON转换成LIST数据  （电解温度）
 	public static List<DJWD> JsonArrayToDJWDBean(String data) {
 		List<DJWD> listBean = null;
 		try {
@@ -766,32 +769,159 @@ public class JsonToBean_Area_Date {
 					mBean.setDdate("");
 				} else {
 					mBean.setDdate(jsonobj.getString("DDate"));
-				}				
-				
+				}
 
 				if (jsonobj.get("Djwd").equals(null)) {
 					mBean.setDJWD("");
 				} else {
 					mBean.setDJWD(String.valueOf(jsonobj.getInt("Djwd")));
 				}
-				/*if (jsonobj.get("Fzb").equals(null)) {
-					mBean.setFZB("");
-				} else {
-					mBean.setFZB(String.valueOf(jsonobj.getDouble("Fzb")));
-				}*/						
+				/*
+				 * if (jsonobj.get("Fzb").equals(null)) { mBean.setFZB(""); }
+				 * else {
+				 * mBean.setFZB(String.valueOf(jsonobj.getDouble("Fzb"))); }
+				 */
 
-				/*if (jsonobj.get("AlOCnt").equals(null)) {
-					mBean.setALOCnt("");
-				} else {
-					mBean.setALOCnt(String.valueOf(jsonobj.getDouble("AlOCnt")));
-				}		*/							
-				
+				/*
+				 * if (jsonobj.get("AlOCnt").equals(null)) {
+				 * mBean.setALOCnt(""); } else {
+				 * mBean.setALOCnt(String.valueOf(jsonobj.getDouble("AlOCnt")));
+				 * }
+				 */
+
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
 
 			e.printStackTrace();
 		}
+		return listBean;
+	}
+
+	//JSON转换成LIST数据  （分子比）
+	public static List<HY_item> JsonArrayToFZBBean(String data) {
+		List<HY_item> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<HY_item>();
+			listBean.clear();
+			// System.out.println("jsonarray. MeasueTable---length()---"
+			// +jsonarray.length());
+			JSONObject prior_jsonobj = jsonarray.getJSONObject(0);
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				if (i > 0) {
+					prior_jsonobj = jsonarray.getJSONObject(i - 1);
+				}
+				// 前一个数据
+				String priorPot = prior_jsonobj.get("PotNo").toString();
+				String priorDdate = prior_jsonobj.get("DDate").toString();
+				HY_item mBean = new HY_item();
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo("");
+				} else {
+					mBean.setPotNo(String.valueOf(jsonobj.getInt("PotNo")));
+				}
+				String presentPot = mBean.getPotNo();
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				String presentDdate = mBean.getDdate();
+				if (jsonobj.get("Fzb").equals(null)) {
+					mBean.setFZB("0");
+				} else {
+					mBean.setFZB(String.valueOf(jsonobj.getDouble("Fzb")));
+				}
+
+				/*
+				 * if (jsonobj.get("AlOCnt").equals(null)) {
+				 * mBean.setALOCnt(""); } else {
+				 * mBean.setALOCnt(String.valueOf(jsonobj.getDouble("AlOCnt")));
+				 * }
+				 */
+				if (i == 0) {
+					listBean.add(mBean);
+					presentPot=mBean.getPotNo();
+					priorDdate = mBean.getDdate();
+				}
+				if (priorPot.equals(presentPot)) {
+
+				} else {
+					if (priorDdate.equals(presentDdate)) {
+						
+					}else{
+						listBean.add(mBean);						
+					}
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	//	System.out.println(listBean.toString());
+		return listBean;
+	}
+
+	//JSON转换成LIST数据  （氧化铝浓度）
+	public static List<HY_item> JsonArrayToYHLNDBean(String data) {
+		List<HY_item> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<HY_item>();
+			listBean.clear();
+			// System.out.println("jsonarray. MeasueTable---length()---+jsonarray.length());
+			
+			JSONObject prior_jsonobj = jsonarray.getJSONObject(0);
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				if (i > 0) {
+					prior_jsonobj = jsonarray.getJSONObject(i - 1);
+				}
+				// 前一个数据
+				String priorPot = prior_jsonobj.get("PotNo").toString();
+				String priorDdate = prior_jsonobj.get("DDate").toString();
+				HY_item mBean = new HY_item();
+				if (jsonobj.get("PotNo").equals(null)) {
+					mBean.setPotNo("");
+				} else {
+					mBean.setPotNo(String.valueOf(jsonobj.getInt("PotNo")));
+				}
+				String presentPot = mBean.getPotNo();
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				String presentDdate = mBean.getDdate();
+				if (jsonobj.get("AlOCnt").equals(null)) {
+					mBean.setFZB("0");
+				} else {
+					mBean.setFZB(String.valueOf(jsonobj.getDouble("AlOCnt")));
+				}				
+				if (i == 0) {
+					listBean.add(mBean);
+					presentPot=mBean.getPotNo();
+					priorDdate = mBean.getDdate();
+				}
+				if (priorPot.equals(presentPot)) {
+
+				} else {
+					if (priorDdate.equals(presentDdate)) {
+						
+					}else{
+						listBean.add(mBean);						
+					}
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	//	System.out.println(listBean.toString());
 		return listBean;
 	}
 

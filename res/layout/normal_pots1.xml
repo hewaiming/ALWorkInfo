@@ -24,7 +24,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@+id/tv_Room11"
-        android:text="36"
+        android:text="未获取"
         android:textColor="@color/theme_green"
         android:textSize="12sp" />
 
@@ -50,7 +50,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@+id/tv_Room12"
-        android:text="37"
+        android:text="未获取"
         android:textColor="@color/theme_green"
         android:textSize="12sp" />
 
@@ -76,7 +76,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@+id/tv_Room13"
-        android:text="37"
+        android:text="未获取"
         android:textColor="@color/theme_green"
         android:textSize="12sp" />
 
@@ -102,7 +102,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@+id/tv_Room1"
-        android:text="110"
+        android:text="未获取"
         android:textColor="@color/theme_green"
         android:textSize="12sp" />
 
