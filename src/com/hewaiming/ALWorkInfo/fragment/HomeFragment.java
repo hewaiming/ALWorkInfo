@@ -261,7 +261,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				// SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd
-				// mm:ss");
+				// HH:mm");
 				final String EndDateValue = sdf.format(dt);
 				// final String today = sdfLong.format(dt);
 
@@ -688,7 +688,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd mm:ss");
+				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				final String todayValue = sdf.format(dt);
 				final String today = sdfLong.format(dt);
 				/*
@@ -1103,7 +1103,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd mm:ss ");
+				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
 				String todayValue = sdf.format(dt);
 				final String mToday=sdfLong.format(dt);
 				handler.post(new Runnable() {
