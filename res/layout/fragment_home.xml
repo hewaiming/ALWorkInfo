@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/base_bg_gray"
@@ -15,13 +16,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="136dp" >
-
-        <com.hewaiming.ALWorkInfo.banner.SlideShowView
-            android:id="@+id/bannerwView"
+        <io.github.ylbfdev.slideshowview.SlideShowView
+            android:id="@+id/MySlideShowView"
             android:layout_width="fill_parent"
             android:layout_height="136dp"
-            android:visibility="invisible" >
-        </com.hewaiming.ALWorkInfo.banner.SlideShowView>
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            app:slide_onloading="@drawable/loading_slideshowview" >
+        </io.github.ylbfdev.slideshowview.SlideShowView>
 
         <ImageView
             android:id="@+id/iv_NoWiFi"
@@ -91,8 +94,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/refresh" />
             </RelativeLayout>
             <!-- 直线 -->
@@ -150,15 +153,16 @@
                     android:text="效应系数"
                     android:textColor="@drawable/tab_textcolor"
                     android:textSize="12sp" />
-                 <ImageView
+
+                <ImageView
                     android:id="@+id/iv_refresh_ae"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/refresh" />
             </RelativeLayout>
             <!-- 直线 -->
@@ -173,8 +177,8 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/Ae_chart"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                android:layout_height="100dp" />
+                android:layout_height="100dp"
+                android:visibility="visible" />
             <!-- 空行 -->
 
             <View
@@ -208,15 +212,16 @@
                     android:text="平均电压(V)"
                     android:textColor="@drawable/tab_textcolor"
                     android:textSize="12sp" />
-                 <ImageView
+
+                <ImageView
                     android:id="@+id/iv_refresh_avgv"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/refresh" />
             </RelativeLayout>
             <!-- 直线 -->
@@ -231,8 +236,8 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/AvgV_chart"
                 android:layout_width="match_parent"
-                android:visibility="visible"
-                android:layout_height="100dp" />
+                android:layout_height="100dp"
+                android:visibility="visible" />
             <!-- 空行 -->
 
             <View
@@ -266,28 +271,29 @@
                     android:text="电解温度(°C)"
                     android:textColor="@drawable/tab_textcolor"
                     android:textSize="11sp" />
-                  <ImageButton
+
+                <ImageButton
                     android:id="@+id/imgbtn_show_DJWDChart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/iv_refresh_djwd"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toLeftOf="@+id/iv_refresh_djwd"
                     android:background="@android:color/transparent"
                     android:src="@drawable/down_gray" />
-                 <ImageView
+
+                <ImageView
                     android:id="@+id/iv_refresh_djwd"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
-                    android:visibility="invisible"
-                    android:background="@drawable/refresh" />
-                
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/refresh"
+                    android:visibility="invisible" />
             </RelativeLayout>
             <!-- 直线 -->
 
@@ -301,16 +307,17 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/DJWD_chart"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="100dp" />
+                android:layout_height="100dp"
+                android:visibility="gone" />
             <!-- 空行 -->
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="15px"
                 android:background="@color/base_bg_gray" />
-            
+
             <!-- 分子比部分 -->
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp" >
@@ -336,30 +343,33 @@
                     android:text="分子比(%)"
                     android:textColor="@drawable/tab_textcolor"
                     android:textSize="12sp" />
-                 <ImageButton
+
+                <ImageButton
                     android:id="@+id/imgbtn_show_FZBChart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/iv_refresh_fzb"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toLeftOf="@+id/iv_refresh_fzb"
                     android:background="@android:color/transparent"
                     android:src="@drawable/down_gray" />
-                 <ImageView
+
+                <ImageView
                     android:id="@+id/iv_refresh_fzb"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
-                    android:visibility="invisible"
-                    android:background="@drawable/refresh" />
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/refresh"
+                    android:visibility="invisible" />
             </RelativeLayout>
-            
+
             <!-- 直线 -->
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -370,8 +380,8 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/FZB_chart"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="130dp" />
+                android:layout_height="130dp"
+                android:visibility="gone" />
             <!-- 空行 -->
 
             <View
@@ -405,29 +415,32 @@
                     android:text="氧化铝浓度(%)"
                     android:textColor="@drawable/tab_textcolor"
                     android:textSize="12sp" />
-                 <ImageButton
+
+                <ImageButton
                     android:id="@+id/imgbtn_show_YHLNDChart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/iv_refresh_yhlnd"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toLeftOf="@+id/iv_refresh_yhlnd"
                     android:background="@android:color/transparent"
                     android:src="@drawable/down_gray" />
-                 <ImageView
+
+                <ImageView
                     android:id="@+id/iv_refresh_yhlnd"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="6dp"
-                    android:visibility="invisible"
-                    android:background="@drawable/refresh" />
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/refresh"
+                    android:visibility="invisible" />
             </RelativeLayout>
             <!-- 直线 -->
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -438,14 +451,14 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/YHLND_chart"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="130dp" />
+                android:layout_height="130dp"
+                android:visibility="gone" />
             <!-- 空行 -->
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="15px"
-                android:background="@color/base_bg_gray" />    
-          
+                android:background="@color/base_bg_gray" />
         </LinearLayout>
     </ScrollView>
 

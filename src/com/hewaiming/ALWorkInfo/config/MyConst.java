@@ -39,7 +39,7 @@ public class MyConst {
 	
 	public static final String[] Areas = { "一厂房一区", "一厂房二区", "一厂房三区", "二厂房一区", "二厂房二区", "二厂房三区" };
 	
-	public static final String[] pic_address = { ":8000/scgy/android/banner/1.jpg",
+	public static final String[] PIC_ADDRESS = { ":8000/scgy/android/banner/1.jpg",
 			":8000/scgy/android/banner/2.jpg",
 			":8000/scgy/android/banner/3.jpg", 
 			":8000/scgy/android/banner/4.jpg",

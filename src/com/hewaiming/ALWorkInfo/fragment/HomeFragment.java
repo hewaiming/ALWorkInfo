@@ -47,7 +47,7 @@ import com.hewaiming.ALWorkInfo.Popup.MyProgressDialog;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
 
 import com.hewaiming.ALWorkInfo.Update.UpdateManager;
-import com.hewaiming.ALWorkInfo.banner.SlideShowView;
+//import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
@@ -124,6 +124,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
+import io.github.ylbfdev.slideshowview.SlideShowView;
 
 @SuppressLint("SimpleDateFormat")
 public class HomeFragment extends Fragment implements OnClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
@@ -148,7 +149,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private TitlePopup titlePopup;
 	private TextView tv_title, tv_aeTitle, tv_avgVTitle, tv_DJWDTitle, tv_FZBTitle, tv_YHLNDTitle;
 	private ImageView iv_wifi, ivShare;
-	private SlideShowView bannerView;
+	//private SlideShowView bannerView;
+	private io.github.ylbfdev.slideshowview.SlideShowView mSlideShowView;
 	private int[] NormPotS = { 0, 0, 0, 0, 0, 0 }; // 各区正常槽数量
 	private int[] AeCnt = { 0, 0, 0, 0, 0, 0 }; // 各区效应次数
 	private double[] AvgVSum = { 0, 0, 0, 0, 0, 0 }; // 各区平均电压总和
@@ -190,7 +192,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			super.handleMessage(msg);
 			Homedialog.dismiss();
 		};
-	};
+	};	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -207,10 +209,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		NetDetector netDetector = new NetDetector(mContext, false);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
 			iv_wifi.setVisibility(View.GONE);
-			bannerView.setVisibility(View.VISIBLE);// wifi
+			//bannerView.setVisibility(View.VISIBLE);// wifi
+			mSlideShowView.setVisibility(View.VISIBLE);// wifi
 		} else {
 			iv_wifi.setVisibility(View.VISIBLE);
-			bannerView.setVisibility(View.GONE); // no wifi
+			//bannerView.setVisibility(View.GONE); // no wifi
+			mSlideShowView.setVisibility(View.GONE);// no wifi
 		}
 		if (NetStatus() != 0) {
 			if (!initdate(mContext)) { // 取远程服务器地址和端口
@@ -232,6 +236,20 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				checkUpDate(); // 检测版本升级
 				//init_GetDate(); // 获取日期
 				//init_GetJXRecord(); // 获取解析记录
+				//bannerView.setVisibility(View.VISIBLE);// wifi
+				List<String> imageUris = new ArrayList<>();		
+				String IP= "http://" + ip;
+				imageUris.add(IP+MyConst.PIC_ADDRESS[0]);
+				imageUris.add(IP+MyConst.PIC_ADDRESS[1]);
+				imageUris.add(IP+MyConst.PIC_ADDRESS[2]);
+				imageUris.add(IP+MyConst.PIC_ADDRESS[3]);
+				imageUris.add(IP+MyConst.PIC_ADDRESS[4]);				
+				//mSlideShowView.setVisibility(View.VISIBLE);// wifi
+				/*为控件设置图片 */
+				mSlideShowView.setImageUris(imageUris);
+				 /*开始播放 默认4秒切换*/
+				mSlideShowView.startPlay();
+		       
 			}
 
 		} else {
@@ -1395,7 +1413,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		btnMore.setOnClickListener(this);
 		tv_title = (TextView) mView.findViewById(R.id.tv_title);
 		iv_wifi = (ImageView) mView.findViewById(R.id.iv_NoWiFi);
-		bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView) mView.findViewById(R.id.bannerwView);
+		//bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView) mView.findViewById(R.id.bannerwView);
+		mSlideShowView=(io.github.ylbfdev.slideshowview.SlideShowView)mView.findViewById(R.id.MySlideShowView);
 		// 5个图表初始化
 		mBarChart_AE = (BarChart) mView.findViewById(R.id.Ae_chart);
 		mBarChart_V = (BarChart) mView.findViewById(R.id.AvgV_chart);

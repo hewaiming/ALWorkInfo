@@ -42,7 +42,6 @@ import com.hewaiming.ALWorkInfo.Popup.ActionItem;
 import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
 
 import com.hewaiming.ALWorkInfo.Update.UpdateManager;
-import com.hewaiming.ALWorkInfo.banner.SlideShowView;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.PotCtrl;

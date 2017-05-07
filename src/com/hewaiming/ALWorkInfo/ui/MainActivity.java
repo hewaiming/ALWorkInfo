@@ -12,7 +12,6 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.fragment.DJFragment;
 import com.hewaiming.ALWorkInfo.fragment.HomeFragment;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
