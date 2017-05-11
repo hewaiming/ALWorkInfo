@@ -66,9 +66,10 @@ import bean.RequestAction;
 public class PotStatusActivity extends DemoBase implements OnScrollListener, OnClickListener {
 	private String ip;
 	private int port;
+	private List<String> dateBean = new ArrayList<String>();
 	// private SharedPreferences sp;
 	private Spinner spinner_area;
-	private Button backBtn;
+	private Button backBtn, refreshBtn;
 	// private ImageButton isShowingBtn;
 	private TextView tv_title, tv_SysV, tv_SysI, tv_RoomV;
 	private int areaId = 11;
@@ -84,11 +85,11 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private Context mContext;
 	protected HSView_PotStatusAdapter PotStatus_Adapter = null;
-	private Timer timer = null;
-	private TimerTask timerTask = null;
+	private Timer timerPotStatus = null;
+	private TimerTask timerTaskPotStatus = null;
 
 	private Handler handler = new Handler(Looper.getMainLooper());
-	
+
 	protected MyProgressDialog dialog;
 
 	private Handler mHandler = new Handler() {
@@ -101,7 +102,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	private TcpClient client = new TcpClient() {
 
 		@Override
-		public void onConnect(SocketTransceiver transceiver) {			
+		public void onConnect(SocketTransceiver transceiver) {
 
 		}
 
@@ -111,7 +112,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				@Override
 				public void run() {
 					tv_title.setText("连接失败！检查服务器IP或网络正常？");
-					
+
 				}
 			});
 
@@ -182,8 +183,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		init_listview();
 		PotStatus_Adapter = new HSView_PotStatusAdapter(mContext, R.layout.item_hsview_potstatus, listBean, mHead);
 		lv_PotStatus.setAdapter(PotStatus_Adapter);
+		timerPotStatus = new Timer();
 		connect();
-		timer = new Timer();
 		SendActionToServer();
 		if (!MyConst.GetDataFromSharePre(mContext, "PotStatus_Show")) {
 			MyConst.GuideDialog_show(mContext, "PotStatus_Show"); // 第一次显示
@@ -192,6 +193,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	}
 
 	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		ip = getIntent().getStringExtra("ip");
 		port = getIntent().getIntExtra("port", 1234);
@@ -215,6 +217,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 				potv_bundle.putString("Begin_Date", BeginDate);
 				potv_bundle.putString("End_Date", EndDate);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 				potv_bundle.putString("ip", ip);
 				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);
@@ -244,6 +247,10 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		tv_SysI = (TextView) findViewById(R.id.tv_sysI);
 		tv_RoomV = (TextView) findViewById(R.id.tv_RoomV);
 		dialog = MyProgressDialog.createDialog(mContext);
+		refreshBtn = (Button) findViewById(R.id.btn_more);
+		refreshBtn.setBackgroundResource(R.drawable.refresh_white);
+		refreshBtn.setVisibility(View.VISIBLE);
+		refreshBtn.setOnClickListener(this);
 		// isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		// showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		// isShowingBtn.setOnClickListener(this);
@@ -262,8 +269,8 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		spinner_area.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (timerTask != null) {
-					timerTask.cancel();
+				if (timerTaskPotStatus != null) {
+					timerTaskPotStatus.cancel();
 				}
 				switch (position) {
 				case 0:
@@ -285,12 +292,13 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 					areaId = 23;
 					break;
 				}
-				 //显示进程提示对话框
+				// 显示进程提示对话框
 				dialog.setMessage("玩命加载槽状态数据...");
 				if (!dialog.isShowing()) {
 					dialog.show();
 					mHandler.sendEmptyMessageDelayed(0, 1500);
 				}
+				ResetListView();
 				SendActionToServer();//
 			}
 
@@ -306,18 +314,37 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_back:				
-			if (timer != null) {
-				timer.cancel();
+		case R.id.btn_back:
+			if (timerPotStatus != null) {
+				timerPotStatus.cancel();
 			}
-			if(client!=null){
+			if (client != null) {
 				client.disconnect();
 			}
-			if(lv_PotStatus!=null){
+			if (lv_PotStatus != null) {
 				lv_PotStatus.destroyDrawingCache();
-			}			
-			finish();	
+			}
+			finish();
 			break;
+		case R.id.btn_more:
+			// 刷新槽状态表数据
+			ResetListView();
+			// 显示进程提示对话框
+			dialog.setMessage("玩命加载槽状态数据...");
+			if (!dialog.isShowing()) {
+				dialog.show();
+				mHandler.sendEmptyMessageDelayed(0, 1500);
+			}
+			connect();
+			SendActionToServer();
+			break;
+		}
+	}
+
+	private void ResetListView() {
+		if (PotStatus_Adapter != null) {
+			listBean.clear();
+			PotStatus_Adapter.onDateChange(listBean);
 		}
 	}
 
@@ -346,24 +373,30 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		if (client.isConnected()) {
 			// 断开连接
 			client.disconnect();
-		} else {
+		} /*else {
 			try {
 				client.connect(ip, port);
 			} catch (NumberFormatException e) {
 				Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			}
+		}*/
+		try {
+			client.connect(ip, port);
+		} catch (NumberFormatException e) {
+			Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
 		}
 	}
 
 	private void SendActionToServer() {
-		if (timer == null) {
-			timer = new Timer();
+		if (timerPotStatus == null) {
+			timerPotStatus = new Timer();
 		}
-		if (timerTask != null) {
-			timerTask.cancel();
+		if (timerTaskPotStatus != null) {
+			timerTaskPotStatus.cancel();
 		}
-		timerTask = new TimerTask() {
+		timerTaskPotStatus = new TimerTask() {
 
 			@Override
 			public void run() {
@@ -377,7 +410,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 
 			}
 		};
-		timer.schedule(timerTask, 0, 2000);
+		timerPotStatus.schedule(timerTaskPotStatus, 0, 2000);
 
 	}
 
@@ -391,5 +424,5 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			e.printStackTrace();
 		}
 	}
-	
+
 }

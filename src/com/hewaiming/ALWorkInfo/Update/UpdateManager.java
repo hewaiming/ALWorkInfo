@@ -56,7 +56,7 @@ public class UpdateManager {
 	/* 鏇存柊杩涘害鏉� */
 	private ProgressBar mProgress;
 	private Dialog mDownloadDialog;
-	private String update_info="槽状态表增加（功能控制字）数据等";	
+	//private String update_info="槽状态表增加（功能控制字）数据等";	
 	UpdataInfo info=null;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {

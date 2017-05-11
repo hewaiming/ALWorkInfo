@@ -84,8 +84,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private Button findBtn;
 	private View include_selector;
 	protected boolean DoRun = true;
-	private Timer timer = null;
-	private TimerTask timerTask = null;
+	private Timer timerRealTime = null;
+	private TimerTask timerTaskRealTime = null;
 	private Context mContext;
 
 	private Handler handler = new Handler(Looper.getMainLooper());
@@ -181,9 +181,9 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		init_area();
 		init_potNo();
 		connect();
-		timer = new Timer();
+		timerRealTime = new Timer();
 		if (hideAction) {
-			include_selector = findViewById(R.id.include_select_all);
+			include_selector = findViewById(R.id.select_layout);
 			include_selector.setVisibility(View.GONE);
 			GetDataFromNet();
 		}
@@ -448,13 +448,13 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	}
 
 	private void SendActionToServer() {
-		if (timer == null) {
-			timer = new Timer();
+		if (timerRealTime == null) {
+			timerRealTime = new Timer();
 		}
-		if (timerTask != null) {
-			timerTask.cancel();
+		if (timerTaskRealTime != null) {
+			timerTaskRealTime.cancel();
 		}
-		timerTask = new TimerTask() {
+		timerTaskRealTime = new TimerTask() {
 
 			@Override
 			public void run() {
@@ -468,7 +468,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 			}
 		};
-		timer.schedule(timerTask, 0, 1000);
+		timerRealTime.schedule(timerTaskRealTime, 0, 1000);
 
 	}
 
@@ -492,8 +492,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_back:
-			if (timer != null) {
-				timer.cancel();
+			if (timerRealTime != null) {
+				timerRealTime.cancel();
 			}
 			if (client != null) {
 				client.disconnect();
@@ -545,8 +545,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	}
 
 	private void GetDataFromJKJ_CMD() {
-		if (timerTask != null) {
-			timerTask.cancel();
+		if (timerTaskRealTime != null) {
+			timerTaskRealTime.cancel();
 		}
 		tv_title.setText(PotNo + "ÊµÊ±ÇúÏß");
 		if (mChart != null) {

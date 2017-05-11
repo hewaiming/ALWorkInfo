@@ -67,6 +67,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	private String ip;
 	private int port;
 	private Context ctx;	
+	private List<String> dateBean = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 	}
 
 	private void GetDataFromIntent() {
+		dateBean = getIntent().getStringArrayListExtra("date_record");
 		JXList = (List<Map<String, Object>>) getIntent().getSerializableExtra("JXList");
 		ip=getIntent().getStringExtra("ip");
 		port=getIntent().getIntExtra("port", 1234);
@@ -97,11 +99,11 @@ public class Ae5DayActivity extends FragmentActivity implements HttpGetListener,
 
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragment_Ae1(JXList,ip,port));
-		fragments.add(new Fragment_Ae2(JXList,ip,port));
-		fragments.add(new Fragment_Ae3(JXList,ip,port));
-		fragments.add(new Fragment_Ae4(JXList,ip,port));
-		fragments.add(new Fragment_Ae5(JXList,ip,port));		
+		fragments.add(new Fragment_Ae1(JXList,dateBean,ip,port));
+		fragments.add(new Fragment_Ae2(JXList,dateBean,ip,port));
+		fragments.add(new Fragment_Ae3(JXList,dateBean,ip,port));
+		fragments.add(new Fragment_Ae4(JXList,dateBean,ip,port));
+		fragments.add(new Fragment_Ae5(JXList,dateBean,ip,port));		
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);

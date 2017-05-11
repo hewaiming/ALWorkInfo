@@ -131,6 +131,7 @@ public class AeRecActivity extends Activity implements HttpGetListener, OnScroll
 				potv_bundle.putString("Begin_Date", listBean.get(position).getDdate().substring(0, 10));
 				potv_bundle.putString("End_Date", listBean.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
+				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 				potv_bundle.putString("ip", ip);
 				potv_bundle.putInt("port", port);
 				potv_intent.putExtras(potv_bundle);

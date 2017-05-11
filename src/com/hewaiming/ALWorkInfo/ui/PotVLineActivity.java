@@ -3,10 +3,12 @@ package com.hewaiming.ALWorkInfo.ui;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 import com.github.mikephil.charting.charts.CandleStickChart;
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -43,6 +45,9 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener_other;
+import com.hewaiming.ALWorkInfo.Popup.ActionItem;
+import com.hewaiming.ALWorkInfo.Popup.TitlePopup;
+import com.hewaiming.ALWorkInfo.Popup.TitlePopup_More;
 import com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_RealRecordAdapter;
 import com.hewaiming.ALWorkInfo.bean.PotV;
@@ -95,7 +100,7 @@ public class PotVLineActivity extends Activity
 	private static final float BaseV_LESS = 3820; // X字段值为50
 	private static final float BaseV_MORE = 4045;// X字段值为150
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
-	private Button findBtn, backBtn;
+	private Button findBtn, backBtn, moreBtn;
 	private TextView tv_title;
 	private int areaId = 11;
 	private ArrayAdapter<String> Area_adapter, Date_adapter;
@@ -103,7 +108,7 @@ public class PotVLineActivity extends Activity
 	private HttpPost_BeginDate_EndDate http_post;
 	private String potno_url = ":8000/scgy/android/odbcPhP/PotVoltage_plus.php";
 	private String RealRec_URL = ":8000/scgy/android/odbcPhP/RealRecordTable_potno_date.php";
-	private String PotNo, BeginDate, EndDate;
+	private String PotNo="1101", BeginDate, EndDate;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList = null;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
@@ -123,10 +128,11 @@ public class PotVLineActivity extends Activity
 	private List<RealRecord> listBean_RealRec = null;
 	private HSView_RealRecordAdapter realRec_Adapter;
 	private com.hewaiming.ALWorkInfo.SlideBottomPanel.SlideBottomPanel sbv;
-	private String ip;
-	private int port;
+	private String ip="125.64.59.11";
+	private int port=1234;
 	private View Layout_select;
 	private View Layout_ok;
+	private TitlePopup_More titlePopupMore;
 	private List<String> xValues = null;
 	private float MaxValueLeft = 6000;
 	private float MinValueLeft = 2500;
@@ -135,11 +141,13 @@ public class PotVLineActivity extends Activity
 	private float MaxActionLeft = 100;
 	private float MinActionLeft = 0;
 	private CandleStickChart mCandleChart;
-	private int[] colors = { Color.RED, Color.rgb(128, 0, 128), Color.GREEN, Color.YELLOW,
-			Color.BLACK, Color.rgb(0, 128, 128),Color.rgb(128, 0, 0),Color.BLUE,Color.GRAY, Color.rgb(238, 17, 61),Color.YELLOW};
-	private String[] labels = {"AEB", "AC", "TAP", "IRF", "AEPB", "RRK", "AEW", "MAN", "T(TMT)",
-			"NB", "ALF" };
-
+	private int[] colors = { Color.RED, Color.rgb(128, 0, 128), Color.GREEN, Color.YELLOW, Color.BLACK,
+			Color.rgb(0, 128, 128), Color.rgb(128, 0, 0), Color.BLUE, Color.GRAY, Color.rgb(238, 17, 61),
+			Color.YELLOW };
+	private String[] labels = { "AEB", "AC", "TAP", "IRF", "AEPB", "RRK", "AEW", "MAN", "T(TMT)", "NB", "ALF" };
+    private boolean IsHide=false;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -150,21 +158,31 @@ public class PotVLineActivity extends Activity
 		mContext = this;
 		GetDataFromIntent();
 		init_title();
-		init_HSView();
+		init_HSView();	
 		if (!(PotNo.equals(""))) {
 			hide_Layout(); // 如果是从选择槽号进入，则隐藏
-			init_GetRemoteData();
+			IsHide=true;
+			init_GetRemoteData();			
+			moreBtn.setVisibility(View.VISIBLE);
+
 		} else {
 			init_area(); // 从槽压曲线界面进入
 			init_potNo();
 			init_date();
+			moreBtn.setVisibility(View.GONE);
+			PotNo=PotNoList.get(0).toString();
 		}
+		// 初始化更多弹出窗口
+		titlePopupMore = new TitlePopup_More(mContext, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, PotNo, ip,
+				port, dateBean,IsHide);
+		Popup_initData();
 		show_RealRec_btn = (FloatingActionButton) findViewById(R.id.floatBtn_show_realRec); // 创建浮动按钮
 		show_RealRec_btn.setOnClickListener(this);
 		show_RealRec_btn.setAlpha(200);
 		sbv = (SlideBottomPanel) findViewById(R.id.sbv);// 创建浮动按钮
 		// createView(); // 创建浮动按钮
 	}
+	
 
 	private void init_GetRemoteData() {
 		mCombinedChart.setVisibility(View.VISIBLE);
@@ -287,12 +305,15 @@ public class PotVLineActivity extends Activity
 	private void init_title() {
 
 		mCombinedChart = (CombinedChart) findViewById(R.id.chart_PotV);
-		mCombinedChart.setVisibility(View.GONE);
-
+		mCombinedChart.setVisibility(View.GONE);	
+		
 		tv_title = (TextView) findViewById(R.id.tv_title);
 		tv_title.setText(PotNo + "槽压曲线图");
 		backBtn = (Button) findViewById(R.id.btn_back);
 		backBtn.setOnClickListener(this);
+		moreBtn = (Button) findViewById(R.id.btn_more);
+		//moreBtn.setVisibility(View.GONE);
+		moreBtn.setOnClickListener(this);
 		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
@@ -995,7 +1016,7 @@ public class PotVLineActivity extends Activity
 
 	private void showChart(CombinedChart mChart, CombinedData mData, int color) {
 		mChart.setDrawBorders(false); // 是否在折线图上添加边框
-		mChart.fitScreen();		
+		mChart.fitScreen();
 		mChart.setDescription("");// 数据描述
 		// 如果没有数据的时候，会显示这个，类似listview的emtpyview
 		mChart.setNoDataTextDescription("你需要为曲线图提供数据.");
@@ -1032,20 +1053,20 @@ public class PotVLineActivity extends Activity
 
 		// 左边Y轴 槽压
 		YAxis yAxis_potv = mChart.getAxisLeft();
-		yAxis_potv.setDrawLabels(true);	
+		yAxis_potv.setDrawLabels(true);
 		yAxis_potv.setDrawGridLines(false);
 		yAxis_potv.setEnabled(true);
 		yAxis_potv.setDrawAxisLine(true);
-		yAxis_potv.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);		
+		yAxis_potv.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
 		yAxis_potv.setTextSize(3f);
 		yAxis_potv.setTextColor(Color.BLUE);
 		yAxis_potv.setAxisMaxValue(MaxValueLeft);
-		yAxis_potv.setAxisMinValue(MinValueLeft);	
+		yAxis_potv.setAxisMinValue(MinValueLeft);
 		yAxis_potv.setValueFormatter(new YAxisValueFormatter() {
-			
+
 			@Override
-			public String getFormattedValue(float value, YAxis yAxis) {				
-				return value/1000+"V";
+			public String getFormattedValue(float value, YAxis yAxis) {
+				return value / 1000 + "V";
 			}
 		});
 
@@ -1061,7 +1082,7 @@ public class PotVLineActivity extends Activity
 		yAxis_cur.setTextSize(5f);
 		yAxis_cur.setAxisMaxValue(2300);
 		yAxis_cur.setAxisMinValue(0);
-		yAxis_cur.setTextColor(Color.RED);			
+		yAxis_cur.setTextColor(Color.RED);
 
 		mChart.setData(mData); // 设置数据 一定要放在CHART设定参数之后
 		mChart.invalidate();
@@ -1096,6 +1117,7 @@ public class PotVLineActivity extends Activity
 					if (days >= 3) {
 						Toast.makeText(getApplicationContext(), "数据量太大：截止日期-开始日期>2,请重新选择日期", 1).show();
 					} else {
+						moreBtn.setVisibility(View.VISIBLE);
 						mCombinedChart.setVisibility(View.VISIBLE);
 						tv_title.setText(PotNo + "槽压曲线图");
 						// mCandleChart.setVisibility(View.VISIBLE);
@@ -1113,7 +1135,16 @@ public class PotVLineActivity extends Activity
 			http_post_getRealRec = (HttpPost_BeginDate_EndDate_other) new HttpPost_BeginDate_EndDate_other(RealRec_URL,
 					2, PotNo, BeginDate, EndDate, this, this).execute();
 			break;
+		case R.id.btn_more:
+			titlePopupMore.show(v);
+			break;
 		}
+	}
+
+	private void Popup_initData() {
+		// 给标题栏弹窗添加子类
+		titlePopupMore.addAction(new ActionItem(mContext, "工艺曲线", R.drawable.gongyi_info));
+		titlePopupMore.addAction(new ActionItem(mContext, "实时曲线", R.drawable.realtime_info));
 	}
 
 	@Override

@@ -50,9 +50,9 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 	private String area_url = ":8000/scgy/android/odbcPhP/AlarmRecordTable_area_date.php";
 
 	private String PotNo, BeginDate, EndDate;
-
-	private List<String> dateBean = new ArrayList<String>();
+	
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private List<String> dateBean = new ArrayList<String>();
 	private List<String> PotNoList;
 	private List<FaultRecord> listBean = null;
 	private FaultRecord_Adapter faultRec_Adapter = null;
@@ -94,6 +94,7 @@ public class AlarmRecActivity extends Activity implements HttpGetListener, OnCli
 					potv_bundle.putString("Begin_Date", listBean.get(position - 1).getRecTime().substring(0, 10));
 					potv_bundle.putString("End_Date", listBean.get(position - 1).getRecTime().substring(0, 10));
 					potv_bundle.putSerializable("JXList", (Serializable) JXList);
+					potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 					potv_bundle.putString("ip", ip);
 					potv_bundle.putInt("port", port);
 					potv_intent.putExtras(potv_bundle);

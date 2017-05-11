@@ -103,6 +103,7 @@ public class FaultRecActivity extends Activity implements HttpGetListener, OnCli
 					potv_bundle.putString("Begin_Date", listBean.get(position-1).getRecTime().substring(0, 10));
 					potv_bundle.putString("End_Date", listBean.get(position-1).getRecTime().substring(0, 10));
 					potv_bundle.putSerializable("JXList", (Serializable) JXList);
+					potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 					potv_bundle.putString("ip", ip);
 					potv_bundle.putInt("port", port);
 					potv_intent.putExtras(potv_bundle);

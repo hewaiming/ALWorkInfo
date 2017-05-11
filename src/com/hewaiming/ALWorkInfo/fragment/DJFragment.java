@@ -268,6 +268,7 @@ public class DJFragment extends Fragment
 			case 2:
 				Intent Ae5day_intent = new Intent(getActivity(), Ae5DayActivity.class);
 				Bundle bundle_Ae5 = new Bundle();
+				bundle_Ae5.putStringArrayList("date_record", (ArrayList<String>) date_record);
 				bundle_Ae5.putSerializable("JXList", (Serializable) JXList);
 				bundle_Ae5.putString("ip", ip);
 				bundle_Ae5.putInt("port", port);
@@ -330,9 +331,8 @@ public class DJFragment extends Fragment
 				break;
 			case 0:
 				Intent PotStatus_intent = new Intent(getActivity(), PotStatusActivity.class);
-				Bundle PotStatusBundle = new Bundle();
-				// PotStatusBundle.putStringArrayList("date_record",
-				// (ArrayList<String>) date_record);
+				Bundle PotStatusBundle = new Bundle();				
+				PotStatusBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
 				PotStatusBundle.putSerializable("JXList", (Serializable) JXList);
 				PotStatusBundle.putString("ip", ip);
 				PotStatusBundle.putInt("port", port);

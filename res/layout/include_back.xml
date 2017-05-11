@@ -26,10 +26,11 @@
         android:textSize="15dp" />
 
     <Button
-        android:id="@+id/btn_true"
+        android:id="@+id/btn_more"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="gone"
+        android:background="@drawable/more"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"      

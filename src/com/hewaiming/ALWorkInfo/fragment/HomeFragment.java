@@ -1478,7 +1478,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 						break;
 					}
 					i++;
-				} while (i < 3);
+				} while (i < 2);//取正常槽数据失败，2次重试机会
 				if (!FoundData1) {
 					handler.post(new Runnable() {
 						@Override
@@ -1502,7 +1502,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 						break;
 					}
 					j++;
-				} while (j < 3);
+				} while (j < 2); //取正常槽数据失败，2次重试机会
 				if (!FoundData2) {
 					handler.post(new Runnable() {
 						@Override

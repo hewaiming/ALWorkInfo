@@ -58,7 +58,6 @@ public class AeMostActivity extends FragmentActivity
 	private String AeTime_url = ":8000/scgy/android/odbcPhP/AeTime_area_date.php";
 
 	private String BeginDate, EndDate;
-	private List<String> dateBean = new ArrayList<String>();
 
 	private ArrayList<Fragment> fragments;
 
@@ -76,6 +75,7 @@ public class AeMostActivity extends FragmentActivity
 	private ImageButton isShowingBtn;
 	private LinearLayout showArea = null;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
+	private List<String> dateBean = new ArrayList<String>();
 	private Context mContext;
 
 	private BackHandledFragment selectedFragment;
@@ -112,7 +112,7 @@ public class AeMostActivity extends FragmentActivity
 	private void init_Tab() {
 		fragments = new ArrayList<Fragment>();
 		fragments.add(new Fragment_AeCnt(mContext,dateBean,JXList,ip,port));
-		fragments.add(new Fragment_AeTime(JXList,ip,port));
+		fragments.add(new Fragment_AeTime(JXList,dateBean,ip,port));
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new MyPageAdapter(getSupportFragmentManager(), fragments);
