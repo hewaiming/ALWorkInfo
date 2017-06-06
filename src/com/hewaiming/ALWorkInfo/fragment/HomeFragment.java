@@ -84,6 +84,7 @@ import com.hewaiming.ALWorkInfo.ui.RealRecActivity;
 import com.hewaiming.ALWorkInfo.ui.RealTimeLineActivity;
 import com.hewaiming.ALWorkInfo.ui.SettingActivity;
 import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import android.R.integer;
 import android.annotation.SuppressLint;
@@ -96,6 +97,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -125,14 +127,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.sharesdk.framework.ShareSDK;
 import io.github.ylbfdev.slideshowview.SlideShowView;
+import io.github.ylbfdev.slideshowview.utils.FileCache;
 
 @SuppressLint("SimpleDateFormat")
 public class HomeFragment extends Fragment implements OnClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
 
 	private String ip;
 	private int port;
-	private static final String YHLND_VALUE="1.5~3.2",DJWD_VALUE="930~940",FZB_VALUE="2.4~2.55",AVGV_VALUE="≤4.02",AE_VALUE="≤0.25";
-	private static final String YHLND_TITLE="氧化铝浓度(%) ",DJWD_TITLE="电解温度(°C) ",FZB_TITLE="分子比(%) ",AVGV_TITLE="平均电压(V) ",AE_TITLE="效应系数 ";
+	private static final String YHLND_VALUE = "1.5~3.2", DJWD_VALUE = "930~940", FZB_VALUE = "2.4~2.55",
+			AVGV_VALUE = "≤4.02", AE_VALUE = "≤0.25";
+	private static final String YHLND_TITLE = "氧化铝浓度(%) ", DJWD_TITLE = "电解温度(°C) ", FZB_TITLE = "分子比(%) ",
+			AVGV_TITLE = "平均电压(V) ", AE_TITLE = "效应系数 ";
 	private SharedPreferences sp;
 	// private GridView gridView;
 	private Button btnMore;
@@ -149,24 +154,24 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private TitlePopup titlePopup;
 	private TextView tv_title, tv_aeTitle, tv_avgVTitle, tv_DJWDTitle, tv_FZBTitle, tv_YHLNDTitle;
 	private ImageView iv_wifi, ivShare;
-	//private SlideShowView bannerView;
+	// private SlideShowView bannerView;
 	private io.github.ylbfdev.slideshowview.SlideShowView mSlideShowView;
 	private int[] NormPotS = { 0, 0, 0, 0, 0, 0 }; // 各区正常槽数量
 	private int[] AeCnt = { 0, 0, 0, 0, 0, 0 }; // 各区效应次数
 	private double[] AvgVSum = { 0, 0, 0, 0, 0, 0 }; // 各区平均电压总和
 	private int[] DJWDSum = { 0, 0, 0, 0, 0, 0 }; // 各区电解温度总和
-	private double[] FZBSum = { 0, 0, 0, 0, 0, 0 }; // 各区分子比总和
-	private double[] YHLNDSum = { 0, 0, 0, 0, 0, 0 }; // 各区氧化铝浓度总和
+	private double[] FZBAvg = { 0, 0, 0, 0, 0, 0 }; // 各区分子比平均值
+	private double[] YHLNDAvg = { 0, 0, 0, 0, 0, 0 }; // 各区氧化铝浓度平均值
 
 	private String AeCnt_url = ":8000/scgy/android/odbcPhP/AeCnt_area_date.php"; // 效应次数
 	protected String AvgVArea_url = ":8000/scgy/android/odbcPhP/GetAvgV_dayTable.php";
 	protected String DJWD_url = ":8000/scgy/android/odbcPhP/GetDJWD_MeasueTable.php";
-	protected String FZB_url = ":8000/scgy/android/odbcPhP/GetFZB_MeasueTable.php"; // 获取分子比数据地址
-	protected String YHLND_url = ":8000/scgy/android/odbcPhP/GetYHLND_MeasueTable.php"; // 获取氧化铝浓度数据地址
+	protected String FZB_url = ":8000/scgy/android/odbcPhP/GetFZB_MeasueTable_plus.php"; // 获取分子比数据地址
+	protected String YHLND_url = ":8000/scgy/android/odbcPhP/GetYHLND_MeasueTable_plus.php"; // 获取氧化铝浓度数据地址
 	private List<AeRecord> listBean_AeCnt = null; // 效应次数列表
 	private List<AvgV> listBean_AvgV = null; // 日报数据列表
 	private List<DJWD> listBean_DJWD = null; // 电解温度列表
-	private List<HY_item> listBean_FZB = null; // 分子比数据列表
+	private List<HY_item> listBean_FZB = null; // 初始化分子比数据列表
 	private List<HY_item> listBean_YHLND = null; // 氧化铝浓度数据列表
 
 	private String get_NormPots1_url = ":8000/scgy/android/odbcPhP/GetNormPots1.php";
@@ -192,7 +197,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			super.handleMessage(msg);
 			Homedialog.dismiss();
 		};
-	};	
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -208,12 +213,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		init(); // 初始化各控件
 		NetDetector netDetector = new NetDetector(mContext, false);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
-			iv_wifi.setVisibility(View.GONE);
-			//bannerView.setVisibility(View.VISIBLE);// wifi
+			iv_wifi.setVisibility(View.GONE);		
 			mSlideShowView.setVisibility(View.VISIBLE);// wifi
 		} else {
-			iv_wifi.setVisibility(View.VISIBLE);
-			//bannerView.setVisibility(View.GONE); // no wifi
+			iv_wifi.setVisibility(View.VISIBLE);		
 			mSlideShowView.setVisibility(View.GONE);// no wifi
 		}
 		if (NetStatus() != 0) {
@@ -231,25 +234,25 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				AvgVArea_url = "http://" + ip + AvgVArea_url;
 				DJWD_url = "http://" + ip + DJWD_url;
 				FZB_url = "http://" + ip + FZB_url;
-				YHLND_url = "http://" + ip + YHLND_url;
-				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
-				checkUpDate(); // 检测版本升级
-				//init_GetDate(); // 获取日期
-				//init_GetJXRecord(); // 获取解析记录
-				//bannerView.setVisibility(View.VISIBLE);// wifi
-				List<String> imageUris = new ArrayList<>();		
-				String IP= "http://" + ip;
-				imageUris.add(IP+MyConst.PIC_ADDRESS[0]);
-				imageUris.add(IP+MyConst.PIC_ADDRESS[1]);
-				imageUris.add(IP+MyConst.PIC_ADDRESS[2]);
-				imageUris.add(IP+MyConst.PIC_ADDRESS[3]);
-				imageUris.add(IP+MyConst.PIC_ADDRESS[4]);				
-				//mSlideShowView.setVisibility(View.VISIBLE);// wifi
-				/*为控件设置图片 */
-				mSlideShowView.setImageUris(imageUris);
-				 /*开始播放 默认4秒切换*/
+				YHLND_url = "http://" + ip + YHLND_url;				
+				// init_GetDate(); // 获取日期
+				// init_GetJXRecord(); // 获取解析记录			
+				List<String> imageUris = new ArrayList<>();
+				String IP = "http://" + ip;
+				imageUris.add(IP + MyConst.PIC_ADDRESS[0]);
+				imageUris.add(IP + MyConst.PIC_ADDRESS[1]);
+				imageUris.add(IP + MyConst.PIC_ADDRESS[2]);
+				imageUris.add(IP + MyConst.PIC_ADDRESS[3]);
+				imageUris.add(IP + MyConst.PIC_ADDRESS[4]);
+				// mSlideShowView.setVisibility(View.VISIBLE);// wifi
+				/* 为控件设置图片 */				
+				mSlideShowView.setImageUris(imageUris);				
+				/* 开始播放 默认4秒切换 */
 				mSlideShowView.startPlay();
-		       
+				
+				checkUpDate(); // 检测版本升级
+				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
+
 			}
 
 		} else {
@@ -260,70 +263,38 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	// 获取各区氧化铝浓度数据，再显示图表
 	private void initDATA_YHLND() {
+		listBean_YHLND = new ArrayList<HY_item>(); // 初始化分子比适配器
 		ExecutorService exec_YHLND = Executors.newCachedThreadPool();
-		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
+		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
 				YHLNDSum_Clear();
-				// CalcYHLNDSUM(listBean_YHLND);
 				ShowBar_YHLND(CalcYHLNDSUM(listBean_YHLND));// 显示各区氧化铝浓度柱状图
 			}
 		});
 
-		// 获取氧化铝浓度数据
+		// 获取一厂房一区氧化铝浓度数据
 		exec_YHLND.execute(new Runnable() {
 			@Override
 			public void run() {
 				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				// SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd
-				// HH:mm");
 				final String EndDateValue = sdf.format(dt);
-				// final String today = sdfLong.format(dt);
-
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DATE, -10);
+				cal.add(Calendar.DATE, -14);
 				final String BeginDateValue = sdf.format(cal.getTime());
-
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_YHLNDTitle.setText(YHLND_TITLE + "  参考值:"+YHLND_VALUE);
+						tv_YHLNDTitle.setText(YHLND_TITLE + "  参考值:" + YHLND_VALUE);
 					}
 				});
-				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
-				mparams.clear();
-				// mparams.add(new BasicNameValuePair("areaID", "66")); // 全部槽号
-				mparams.add(new BasicNameValuePair("BeginDate", BeginDateValue));
-				mparams.add(new BasicNameValuePair("EndDate", EndDateValue));
-				JSONArrayParser jsonParser = new JSONArrayParser();
-				JSONArray json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
-				if (json != null) {
-					// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
-					System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
-					listBean_YHLND = new ArrayList<HY_item>(); // 初始化氧化铝浓度适配器
-					listBean_YHLND = JsonToBean_Area_Date.JsonArrayToYHLNDBean(json.toString());
 
-				} else {
-					// 再次get氧化铝浓度数据
-					json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
-					if (json != null) {
-						// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
-						listBean_YHLND = new ArrayList<HY_item>(); // 初始化氧化铝浓度适配器
-						listBean_YHLND = JsonToBean_Area_Date.JsonArrayToYHLNDBean(json.toString());
-					} else {
-						Log.i("厂房：氧化铝浓度", "从PHP服务器无数据返回！");
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								// "未获取氧化铝浓度,请检查远程服务器IP和端口是否正确！");
-								Toast.makeText(mContext, "未获取到氧化铝浓度信息，可能还没有输入！", Toast.LENGTH_SHORT).show();
-
-							}
-						});
-					}
+				HY_item room11 = GetRoomAvgYHLND("11", BeginDateValue, EndDateValue);
+				if (room11 != null) {
+					listBean_YHLND.add(room11);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -335,6 +306,128 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			}
 		});
 
+		// 获取一厂房二区氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+
+				HY_item room12 = GetRoomAvgYHLND("12", BeginDateValue, EndDateValue);
+				if (room12 != null) {
+					listBean_YHLND.add(room12);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		// 获取一厂房三区氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room13 = GetRoomAvgYHLND("13", BeginDateValue, EndDateValue);
+				if (room13 != null) {
+					listBean_YHLND.add(room13);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房一区氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room21 = GetRoomAvgYHLND("21", BeginDateValue, EndDateValue);
+				if (room21 != null) {
+					listBean_YHLND.add(room21);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房二区氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room22 = GetRoomAvgYHLND("22", BeginDateValue, EndDateValue);
+				if (room22 != null) {
+					listBean_YHLND.add(room22);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房三区氧化铝浓度数据
+		exec_YHLND.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room23 = GetRoomAvgYHLND("23", BeginDateValue, EndDateValue);
+				if (room23 != null) {
+					listBean_YHLND.add(room23);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		exec_YHLND.shutdown();
 	}
 
@@ -342,50 +435,77 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		// 图表数据设置
 		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房氧化铝浓度数据
 		ArrayList<String> xVals = new ArrayList<>();// X轴数据
-		double YHLNDTotal1, YHLNDTotal2, YHLNDTotal; // 一厂房，二厂房，厂房氧化铝浓度总和
+		double YHLNDTotal1=0, YHLNDTotal2=0, YHLNDTotal=0; // 一厂房，二厂房，厂房氧化铝浓度总和
 		int PotS1, PotS2, PotS;
-		YHLNDTotal1 = YHLNDSum[0] + YHLNDSum[1] + YHLNDSum[2];// 一厂房氧化铝浓度总和
-		YHLNDTotal2 = YHLNDSum[3] + YHLNDSum[4] + YHLNDSum[5];// 二厂房氧化铝浓度总和
-		YHLNDTotal = YHLNDTotal1 + YHLNDTotal2;// 厂房氧化铝浓度总和
+		int Cnt1 = 0, Cnt2 = 0, TotalCnt = 0;
+		for (int i = 0; i < 3; i++) {
+			if (YHLNDAvg[i] > 0.1 && YHLNDAvg[i] < 5.0) {
+				YHLNDTotal1 = YHLNDTotal1 + YHLNDAvg[i];// 一厂房氧化铝浓度
+				Cnt1++;
+			}
+		}
+		for (int j = 3; j < 6; j++) {
+			if (YHLNDAvg[j] > 0.1 && YHLNDAvg[j] < 5.0) {
+				YHLNDTotal2 = YHLNDTotal2 + YHLNDAvg[j];// 二厂房氧化铝浓度
+				Cnt2++;
+			}
+		}
+		if (YHLNDTotal1 != 0) {
+			YHLNDTotal = YHLNDTotal + YHLNDTotal1;
+			TotalCnt = TotalCnt + Cnt1;
+		}
+		if (YHLNDTotal2 != 0) {
+			YHLNDTotal = YHLNDTotal + YHLNDTotal2;// 厂房氧化铝浓度总和
+			TotalCnt = TotalCnt + Cnt2;
+		}	
 		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
 		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
 		PotS = PotS1 + PotS2; // 厂房正常槽总数
 		// 添加数据源
 		if (NormPotS[0] != 0) {
 			xVals.add("一厂1区" + mDate[0]);
-			yVals.add(new BarEntry((float) YHLNDSum[0] / NormPotS[0], 0));
+			yVals.add(new BarEntry((float) YHLNDAvg[0], 0));
 		}
 		if (NormPotS[1] != 0) {
 			xVals.add("一厂2区" + mDate[1]);
-			yVals.add(new BarEntry((float) YHLNDSum[1] / NormPotS[1], 1));
+			yVals.add(new BarEntry((float) YHLNDAvg[1], 1));
 		}
 		if (NormPotS[2] != 0) {
 			xVals.add("一厂3区" + mDate[2]);
-			yVals.add(new BarEntry((float) YHLNDSum[2] / NormPotS[2], 2));
+			yVals.add(new BarEntry((float) YHLNDAvg[2], 2));
 		}
-		if (PotS1 != 0) {
+		if (PotS1 != 0 && Cnt1!=0) {
 			xVals.add("一厂");
-			yVals.add(new BarEntry((float) YHLNDTotal1 / PotS1, 3));
+			yVals.add(new BarEntry((float) YHLNDTotal1 / Cnt1, 3));
+		}else if(Cnt1==0){
+			xVals.add("一厂");
+			yVals.add(new BarEntry((float) 0, 3));
 		}
 		if (NormPotS[3] != 0) {
 			xVals.add("二厂1区" + mDate[3]);
-			yVals.add(new BarEntry((float) YHLNDSum[3] / NormPotS[3], 4));
+			yVals.add(new BarEntry((float) YHLNDAvg[3], 4));
 		}
 		if (NormPotS[4] != 0) {
 			xVals.add("二厂2区" + mDate[4]);
-			yVals.add(new BarEntry((float) YHLNDSum[4] / NormPotS[4], 5));
+			yVals.add(new BarEntry((float) YHLNDAvg[4], 5));
 		}
 		if (NormPotS[5] != 0) {
 			xVals.add("二厂3区" + mDate[5]);
-			yVals.add(new BarEntry((float) YHLNDSum[5] / NormPotS[5], 6));
+			yVals.add(new BarEntry((float) YHLNDAvg[5], 6));
 		}
-		if (PotS2 != 0) {
+		if (PotS2 != 0 && Cnt2!=0) {
 			xVals.add("二厂");
-			yVals.add(new BarEntry((float) YHLNDTotal2 / PotS2, 7));
+			yVals.add(new BarEntry((float) YHLNDTotal2 / Cnt2, 7));
+		}else if(Cnt2==0){
+			xVals.add("二厂");
+			yVals.add(new BarEntry((float) 0, 7));
 		}
-		if (PotS != 0) {
+		if (PotS != 0 && TotalCnt!=0) {
 			xVals.add("厂房");
-			yVals.add(new BarEntry((float) YHLNDTotal / PotS, 8));
+			yVals.add(new BarEntry((float) YHLNDTotal / TotalCnt, 8));
+		}else if(TotalCnt==0){
+			xVals.add("厂房");
+			yVals.add(new BarEntry((float) 0, 8));
 		}
 
 		BarDataSet barDataSet = new BarDataSet(yVals, "区氧化铝浓度");
@@ -435,23 +555,28 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					if (!(mYHLND == null || mYHLND.length() <= 0)) {
 						YHLND = Double.parseDouble(mYHLND); // 氧化铝浓度
 					}
-					if (potno >= 1101 && potno <= 1136) {
-						YHLNDSum[0] = YHLNDSum[0] + YHLND; // 一厂房一区氧化铝浓度总和
+					if (potno == 11) {
+						YHLNDAvg[0] = YHLND; // 一厂房一区氧化铝浓度平均值
 						YHLNDDate[0] = mTable_yhlnd.getDdate().substring(5, 10);
-					} else if (potno >= 1201 && potno <= 1237) {
-						YHLNDSum[1] = YHLNDSum[1] + YHLND;
+					}
+					if (potno == 12) {
+						YHLNDAvg[1] = YHLND; // 一厂房二区氧化铝浓度平均值
 						YHLNDDate[1] = mTable_yhlnd.getDdate().substring(5, 10);
-					} else if (potno >= 1301 && potno <= 1337) {
-						YHLNDSum[2] = YHLNDSum[2] + YHLND;
+					}
+					if (potno == 13) {
+						YHLNDAvg[2] = YHLND; // 一厂房三区氧化铝浓度平均值
 						YHLNDDate[2] = mTable_yhlnd.getDdate().substring(5, 10);
-					} else if (potno >= 2101 && potno <= 2136) {
-						YHLNDSum[3] = YHLNDSum[3] + YHLND; // 二厂房一区氧化铝浓度总和
+					}
+					if (potno == 21) {
+						YHLNDAvg[3] = YHLND; // 二厂房一区氧化铝浓度平均值
 						YHLNDDate[3] = mTable_yhlnd.getDdate().substring(5, 10);
-					} else if (potno >= 2201 && potno <= 2237) {
-						YHLNDSum[4] = YHLNDSum[4] + YHLND;
+					}
+					if (potno == 22) {
+						YHLNDAvg[4] = YHLND; // 二厂房二区氧化铝浓度平均值
 						YHLNDDate[4] = mTable_yhlnd.getDdate().substring(5, 10);
-					} else if (potno >= 2301 && potno <= 2337) {
-						YHLNDSum[5] = YHLNDSum[5] + YHLND;
+					}
+					if (potno == 23) {
+						YHLNDAvg[5] = YHLND; // 二厂房三区氧化铝浓度平均值
 						YHLNDDate[5] = mTable_yhlnd.getDdate().substring(5, 10);
 					}
 
@@ -459,33 +584,31 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					System.out.println("第 " + i + " 氧化铝浓度项 ，为空！");
 				}
 			}
-			// return FzbDate;
 		}
 		return YHLNDDate;
-
 	}
 
 	protected void YHLNDSum_Clear() {
-		for (int i = 0; i < YHLNDSum.length; i++) {
-			YHLNDSum[i] = 0;
+		for (int i = 0; i < YHLNDAvg.length; i++) {
+			YHLNDAvg[i] = 0;
 		}
 
 	}
 
 	// 获取分子比数据，再显示图表
 	private void initDATA_FZB() {
+		listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
 		ExecutorService exec_FZB = Executors.newCachedThreadPool();
-		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
+		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("获取各区分子比数据OK，开始显示柱形图表啦，happy去");
 				FZBSum_Clear();
-				// CalcFZBSUM(listBean_FZB);
 				ShowBar_FZB(CalcFZBSUM(listBean_FZB));// 显示各区分子比柱状图
 			}
 		});
 
-		// 获取分子比数据
+		// 获取一厂房一区分子比数据
 		exec_FZB.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -493,51 +616,48 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				Date dt = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				// SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd
-				// mm:ss");
+				// hh:mm");
 				final String EndDateValue = sdf.format(dt);
-				// final String today = sdfLong.format(dt);
 
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DATE, -10);
+				cal.add(Calendar.DATE, -14);
 				final String BeginDateValue = sdf.format(cal.getTime());
-
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_FZBTitle.setText(FZB_TITLE +"  参考值:"+FZB_VALUE);
+						tv_FZBTitle.setText(FZB_TITLE + "  参考值:" + FZB_VALUE);
 					}
 				});
-				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
-				mparams.clear();
-				// mparams.add(new BasicNameValuePair("areaID", "66")); // 全部槽号
-				mparams.add(new BasicNameValuePair("BeginDate", BeginDateValue));
-				mparams.add(new BasicNameValuePair("EndDate", EndDateValue));
-				JSONArrayParser jsonParser = new JSONArrayParser();
-				JSONArray json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
-				if (json != null) {
-					// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
-					System.out.println("获取厂房分子比OK，其他数据呢");
-					listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
-					listBean_FZB = JsonToBean_Area_Date.JsonArrayToFZBBean(json.toString());
+				// listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
+				HY_item room11 = GetRoomAvgFzb("11", BeginDateValue, EndDateValue);
+				if (room11 != null) {
+					listBean_FZB.add(room11);
+				}
 
-				} else {
-					// 再次get分子比数据
-					json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
-					if (json != null) {
-						// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
-						listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
-						listBean_FZB = JsonToBean_Area_Date.JsonArrayToFZBBean(json.toString());
-					} else {
-						Log.i("厂房：分子比", "从PHP服务器无数据返回！");
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								// "未获取分子比,请检查远程服务器IP和端口是否正确！");
-								Toast.makeText(mContext, "未获取到分子比信息，可能还没有输入！", Toast.LENGTH_SHORT).show();
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取一厂房二区分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
 
-							}
-						});
-					}
+				HY_item room12 = GetRoomAvgFzb("12", BeginDateValue, EndDateValue);
+				if (room12 != null) {
+					listBean_FZB.add(room12);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -549,58 +669,226 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			}
 		});
 
+		// 获取一厂房三区分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room13 = GetRoomAvgFzb("13", BeginDateValue, EndDateValue);
+				if (room13 != null) {
+					listBean_FZB.add(room13);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房一区分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room21 = GetRoomAvgFzb("21", BeginDateValue, EndDateValue);
+				if (room21 != null) {
+					listBean_FZB.add(room21);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房二区分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room22 = GetRoomAvgFzb("22", BeginDateValue, EndDateValue);
+				if (room22 != null) {
+					listBean_FZB.add(room22);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// 获取二厂房三区分子比数据
+		exec_FZB.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
+				Date dt = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				final String EndDateValue = sdf.format(dt);
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, -14);
+				final String BeginDateValue = sdf.format(cal.getTime());
+				HY_item room23 = GetRoomAvgFzb("23", BeginDateValue, EndDateValue);
+				if (room23 != null) {
+					listBean_FZB.add(room23);
+				}
+				try {
+					barrier.await();// 等待其他哥们
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		exec_FZB.shutdown();
 
+	}
+
+	protected HY_item GetRoomAvgFzb(final String areaID, String beginDateValue, String endDateValue) {
+		List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+		mparams.clear();
+		mparams.add(new BasicNameValuePair("BeginDate", beginDateValue));
+		mparams.add(new BasicNameValuePair("EndDate", endDateValue));
+		mparams.add(new BasicNameValuePair("areaID", areaID));
+		JSONArrayParser jsonParser = new JSONArrayParser();
+		JSONArray json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
+		if (json != null) {
+			// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
+			System.out.println("获取厂房分子比OK，其他数据呢");
+			return JsonToBean_Area_Date.JsonArrayToFZBItem(areaID, json.toString());
+		} else {
+			Log.i("厂房：分子比" + areaID, "从PHP服务器无数据返回！");
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					// "未获取分子比,请检查远程服务器IP和端口是否正确！");
+					Toast.makeText(mContext, "未获取到分子比信息，可能还没有输入！区号：" + areaID, Toast.LENGTH_SHORT).show();
+				}
+			});
+			return null;
+		}
+	}
+
+	protected HY_item GetRoomAvgYHLND(final String areaID, String beginDateValue, String endDateValue) {
+		List<NameValuePair> mparams = new ArrayList<NameValuePair>();
+		mparams.clear();
+		mparams.add(new BasicNameValuePair("BeginDate", beginDateValue));
+		mparams.add(new BasicNameValuePair("EndDate", endDateValue));
+		mparams.add(new BasicNameValuePair("areaID", areaID));
+		JSONArrayParser jsonParser = new JSONArrayParser();
+		JSONArray json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
+		if (json != null) {
+			// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
+			System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
+			return JsonToBean_Area_Date.JsonArrayToYHLNDItem(areaID, json.toString());
+		} else {
+			Log.i("厂房：氧化铝浓度" + areaID, "从PHP服务器无数据返回！");
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					// "未获取氧化铝浓度,请检查远程服务器IP和端口是否正确！");
+					Toast.makeText(mContext, "未获取到氧化铝浓度信息，可能还没有输入！区号：" + areaID, Toast.LENGTH_SHORT).show();
+				}
+			});
+			return null;
+		}
 	}
 
 	protected void ShowBar_FZB(String[] mDate) {
 		// 图表数据设置
 		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房分子比
 		ArrayList<String> xVals = new ArrayList<>();// X轴数据
-		double FZBTotal1, FZBTotal2, FZBTotal; // 一厂房，二厂房，厂房分子比总和
+		double FZBTotal1 = 0, FZBTotal2 = 0, FZBTotal = 0; // 一厂房，二厂房，厂房分子比总和
 		int PotS1, PotS2, PotS;
-		FZBTotal1 = FZBSum[0] + FZBSum[1] + FZBSum[2];// 一厂房分子比总和
-		FZBTotal2 = FZBSum[3] + FZBSum[4] + FZBSum[5];// 二厂房分子比总和
-		FZBTotal = FZBTotal1 + FZBTotal2;// 厂房分子比总和
+		int Cnt1 = 0, Cnt2 = 0, TotalCnt = 0;
+		for (int i = 0; i < 3; i++) {
+			if (FZBAvg[i] > 2.0 && FZBAvg[i] < 4.0) {
+				FZBTotal1 = FZBTotal1 + FZBAvg[i];// 一厂房分子比平均值
+				Cnt1++;
+			}
+		}
+		for (int j = 3; j < 6; j++) {
+			if (FZBAvg[j] > 2.0 && FZBAvg[j] < 4.0) {
+				FZBTotal2 = FZBTotal2 + FZBAvg[j];// 二厂房分子比平均值
+				Cnt2++;
+			}
+		}
+		if (FZBTotal1 != 0) {
+			FZBTotal = FZBTotal + FZBTotal1;
+			TotalCnt = TotalCnt + Cnt1;
+		}
+		if (FZBTotal2 != 0) {
+			FZBTotal = FZBTotal + FZBTotal2;// 厂房分子比总和
+			TotalCnt = TotalCnt + Cnt2;
+		}
 		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
 		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
 		PotS = PotS1 + PotS2; // 厂房正常槽总数
 		// 添加数据源
-		if (NormPotS[0] != 0) {
-			xVals.add("一厂1区" + mDate[0]);
-			yVals.add(new BarEntry((float) FZBSum[0] / NormPotS[0], 0));
-		}
-		if (NormPotS[1] != 0) {
-			xVals.add("一厂2区" + mDate[1]);
-			yVals.add(new BarEntry((float) FZBSum[1] / NormPotS[1], 1));
-		}
-		if (NormPotS[2] != 0) {
-			xVals.add("一厂3区" + mDate[2]);
-			yVals.add(new BarEntry((float) FZBSum[2] / NormPotS[2], 2));
-		}
-		if (PotS1 != 0) {
+
+		xVals.add("一厂1区" + mDate[0]);
+		yVals.add(new BarEntry((float) FZBAvg[0], 0));
+
+		xVals.add("一厂2区" + mDate[1]);
+		yVals.add(new BarEntry((float) FZBAvg[1], 1));
+
+		xVals.add("一厂3区" + mDate[2]);
+		yVals.add(new BarEntry((float) FZBAvg[2], 2));
+
+		if (PotS1 != 0 && Cnt1 != 0) {
 			xVals.add("一厂");
-			yVals.add(new BarEntry((float) FZBTotal1 / PotS1, 3));
+			yVals.add(new BarEntry((float) FZBTotal1 / Cnt1, 3));
+		} else if (Cnt1 == 0) {
+			xVals.add("一厂");
+			yVals.add(new BarEntry((float) 0, 3));
 		}
-		if (NormPotS[3] != 0) {
-			xVals.add("二厂1区" + mDate[3]);
-			yVals.add(new BarEntry((float) FZBSum[3] / NormPotS[3], 4));
-		}
-		if (NormPotS[4] != 0) {
-			xVals.add("二厂2区" + mDate[4]);
-			yVals.add(new BarEntry((float) FZBSum[4] / NormPotS[4], 5));
-		}
-		if (NormPotS[5] != 0) {
-			xVals.add("二厂3区" + mDate[5]);
-			yVals.add(new BarEntry((float) FZBSum[5] / NormPotS[5], 6));
-		}
-		if (PotS2 != 0) {
+		xVals.add("二厂1区" + mDate[3]);
+		yVals.add(new BarEntry((float) FZBAvg[3], 4));
+
+		xVals.add("二厂2区" + mDate[4]);
+		yVals.add(new BarEntry((float) FZBAvg[4], 5));
+
+		xVals.add("二厂3区" + mDate[5]);
+		yVals.add(new BarEntry((float) FZBAvg[5], 6));
+
+		if (PotS2 != 0 && Cnt2 != 0) {
 			xVals.add("二厂");
-			yVals.add(new BarEntry((float) FZBTotal2 / PotS2, 7));
+			yVals.add(new BarEntry((float) FZBTotal2 / Cnt2, 7));
+		} else if (Cnt2 == 0) {
+			xVals.add("二厂");
+			yVals.add(new BarEntry((float) 0, 7));
 		}
-		if (PotS != 0) {
+		if (PotS != 0 && TotalCnt != 0) {
 			xVals.add("厂房");
-			yVals.add(new BarEntry((float) FZBTotal / PotS, 8));
+			yVals.add(new BarEntry((float) FZBTotal / TotalCnt, 8));
+		} else if (TotalCnt == 0) {
+			xVals.add("厂房");
+			yVals.add(new BarEntry((float) 0, 8));
 		}
 
 		BarDataSet barDataSet = new BarDataSet(yVals, "区分子比");
@@ -646,43 +934,49 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					double Fzb = 0;
 					if (!(mPot == null || mPot.length() <= 0)) {
 						potno = Integer.parseInt(mTable.getPotNo()); // 槽号
+
 					}
 					if (!(mFzb == null || mFzb.length() <= 0)) {
 						Fzb = Double.parseDouble(mFzb); // 分子比
+
 					}
-					if (potno >= 1101 && potno <= 1136) {
-						FZBSum[0] = FZBSum[0] + Fzb; // 一厂房一区分子比总和
+					if (potno == 11) {
+						FZBAvg[0] = Fzb; // 一厂房一区分子比平均值
 						FzbDate[0] = mTable.getDdate().substring(5, 10);
-					} else if (potno >= 1201 && potno <= 1237) {
-						FZBSum[1] = FZBSum[1] + Fzb;
+					}
+					if (potno == 12) {
+						FZBAvg[1] = Fzb; // 一厂房二区分子比平均值
 						FzbDate[1] = mTable.getDdate().substring(5, 10);
-					} else if (potno >= 1301 && potno <= 1337) {
-						FZBSum[2] = FZBSum[2] + Fzb;
+					}
+					if (potno == 13) {
+						FZBAvg[2] = Fzb; // 一厂房三区分子比平均值
 						FzbDate[2] = mTable.getDdate().substring(5, 10);
-					} else if (potno >= 2101 && potno <= 2136) {
-						FZBSum[3] = FZBSum[3] + Fzb; // 二厂房一区分子比总和
+					}
+					if (potno == 21) {
+						FZBAvg[3] = Fzb; // 二厂房一区分子比平均值
 						FzbDate[3] = mTable.getDdate().substring(5, 10);
-					} else if (potno >= 2201 && potno <= 2237) {
-						FZBSum[4] = FZBSum[4] + Fzb;
+					}
+					if (potno == 22) {
+						FZBAvg[4] = Fzb; // 二厂房二区分子比平均值
 						FzbDate[4] = mTable.getDdate().substring(5, 10);
-					} else if (potno >= 2301 && potno <= 2337) {
-						FZBSum[5] = FZBSum[5] + Fzb;
+					}
+					if (potno == 23) {
+						FZBAvg[5] = Fzb; // 二厂房三区分子比平均值
 						FzbDate[5] = mTable.getDdate().substring(5, 10);
 					}
 
 				} else {
-					System.out.println("第 " + i + " 分子比项 ，为空！");
+					System.out.println("第 " + i + " 分子比平均值项 ，为空！");
 				}
 			}
-			// return FzbDate;
 		}
 		return FzbDate;
 
 	}
 
 	protected void FZBSum_Clear() {
-		for (int i = 0; i < FZBSum.length; i++) {
-			FZBSum[i] = 0;
+		for (int i = 0; i < FZBAvg.length; i++) {
+			FZBAvg[i] = 0;
 		}
 
 	}
@@ -719,7 +1013,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_DJWDTitle.setText(DJWD_TITLE+todayValue+" 参考值:"+DJWD_VALUE);
+						tv_DJWDTitle.setText(DJWD_TITLE + todayValue + " 参考值:" + DJWD_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -917,7 +1211,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_avgVTitle.setText(AVGV_TITLE + yesterdayValue+"  参考值:"+AVGV_VALUE);
+						tv_avgVTitle.setText(AVGV_TITLE + yesterdayValue + "  参考值:" + AVGV_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -1123,11 +1417,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				SimpleDateFormat sdfLong = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
 				String todayValue = sdf.format(dt);
-				final String mToday=sdfLong.format(dt);
+				final String mToday = sdfLong.format(dt);
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_aeTitle.setText(AE_TITLE + mToday+" 参考值："+AE_VALUE);
+						tv_aeTitle.setText(AE_TITLE + mToday + " 参考值：" + AE_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -1413,8 +1707,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		btnMore.setOnClickListener(this);
 		tv_title = (TextView) mView.findViewById(R.id.tv_title);
 		iv_wifi = (ImageView) mView.findViewById(R.id.iv_NoWiFi);
-		//bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView) mView.findViewById(R.id.bannerwView);
-		mSlideShowView=(io.github.ylbfdev.slideshowview.SlideShowView)mView.findViewById(R.id.MySlideShowView);
+		// bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView)
+		// mView.findViewById(R.id.bannerwView);
+		mSlideShowView = (io.github.ylbfdev.slideshowview.SlideShowView) mView.findViewById(R.id.MySlideShowView);
 		// 5个图表初始化
 		mBarChart_AE = (BarChart) mView.findViewById(R.id.Ae_chart);
 		mBarChart_V = (BarChart) mView.findViewById(R.id.AvgV_chart);
@@ -1431,7 +1726,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String todayValue = sdf.format(dt);
-		tv_aeTitle.setText(AE_TITLE+todayValue+" 参考值："+AE_VALUE);
+		tv_aeTitle.setText(AE_TITLE + todayValue + " 参考值：" + AE_VALUE);
 		init_BarCHART(mBarChart_AE, 0);
 		init_BarCHART(mBarChart_V, 1);
 		init_BarCHART(mBarChart_DJWD, 2);
@@ -1478,7 +1773,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 						break;
 					}
 					i++;
-				} while (i < 2);//取正常槽数据失败，2次重试机会
+				} while (i < 2);// 取正常槽数据失败，2次重试机会
 				if (!FoundData1) {
 					handler.post(new Runnable() {
 						@Override
@@ -1502,7 +1797,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 						break;
 					}
 					j++;
-				} while (j < 2); //取正常槽数据失败，2次重试机会
+				} while (j < 2); // 取正常槽数据失败，2次重试机会
 				if (!FoundData2) {
 					handler.post(new Runnable() {
 						@Override
@@ -1571,7 +1866,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mChart.getXAxis().setPosition(XAxisPosition.BOTTOM);// 设置X轴的位置
 		mChart.getXAxis().setDrawGridLines(false);// 不显示网格
 		mChart.getXAxis().setDrawAxisLine(false);
-		if (TYPE == 3 || TYPE == 4 ) {
+		if (TYPE == 3 || TYPE == 4) {
 			mChart.getXAxis().setTextSize(5f);
 			mChart.getXAxis().setLabelRotationAngle(6f);
 			mChart.getXAxis().setLabelsToSkip(0);

@@ -4,6 +4,8 @@ public class UpdataInfo {
     private String url;  
     private String name;  
     private String filename;
+    private String info;
+    
     public String getVersion() {  
         return version;  
     }  
@@ -27,6 +29,12 @@ public class UpdataInfo {
 	}
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
 	}  
     
    

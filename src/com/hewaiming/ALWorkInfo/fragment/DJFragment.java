@@ -57,6 +57,7 @@ import com.hewaiming.ALWorkInfo.net.AsyTask_HttpGetDate;
 import com.hewaiming.ALWorkInfo.net.AsyTask_HttpPost_Area;
 import com.hewaiming.ALWorkInfo.net.HttpPost_JsonArray;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
+import com.hewaiming.ALWorkInfo.ui.AbNormalMostActivity;
 import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
@@ -402,6 +403,16 @@ public class DJFragment extends Fragment
 				bundle_alarm.putInt("port", port);
 				alarmRec_intent.putExtras(bundle_alarm);
 				startActivity(alarmRec_intent); // 报警记录
+				break;
+			case 16:
+				Intent abnormalmost_intent = new Intent(getActivity(), AbNormalMostActivity.class);
+				Bundle bundle_abnormalmost = new Bundle();
+				bundle_abnormalmost.putSerializable("JXList", (Serializable) JXList);
+				bundle_abnormalmost.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_abnormalmost.putString("ip", ip);
+				bundle_abnormalmost.putInt("port", port);
+				abnormalmost_intent.putExtras(bundle_abnormalmost);
+				startActivity(abnormalmost_intent); // 下料异常频繁排序
 				break;
 			case 1:
 				Intent realtime_intent = new Intent(getActivity(), RealTimeLineActivity.class);

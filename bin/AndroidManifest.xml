@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hewaiming.ALWorkInfo"
     android:versionCode="5"
-    android:versionName="5.1" >
+    android:versionName="5.2" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -82,6 +82,10 @@
         </activity>
         <activity
             android:name="com.hewaiming.ALWorkInfo.ui.FaultMostActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.hewaiming.ALWorkInfo.ui.AbNormalMostActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

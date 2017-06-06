@@ -94,7 +94,7 @@ public class UpdateManager {
 	 */
 	public void checkUpdate() {
 
-		new CheckVersionTask().start();;
+		new CheckVersionTask().start();
 	}
 
 	private int getVersionCode(Context context) {
@@ -128,7 +128,7 @@ public class UpdateManager {
 		AlertDialog.Builder builder = new Builder(mContext);		
 		builder.setTitle(R.string.soft_update_title);
 		
-		builder.setMessage(R.string.soft_update_info);
+		builder.setMessage(info.getInfo());
 		// 鏇存柊
 		builder.setPositiveButton(R.string.soft_update_updatebtn, new OnClickListener() {
 			@Override
@@ -276,6 +276,8 @@ public class UpdateManager {
 					info.setName(parser.nextText()); // 获取该文件的信息
 				}else if ("filename".equals(parser.getName())) {
 					info.setFilename(parser.nextText()); // 获取该文件的信息
+				}else if("info".equals(parser.getName())){
+					info.setInfo(parser.nextText());// 获取该升级提示的信息
 				}
 				break;
 			}

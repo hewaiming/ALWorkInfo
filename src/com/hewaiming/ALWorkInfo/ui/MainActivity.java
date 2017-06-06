@@ -34,6 +34,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import cn.sharesdk.framework.ShareSDK;
+import io.github.ylbfdev.slideshowview.utils.FileCache;
 
 
 public class MainActivity extends FragmentActivity  {
@@ -55,7 +56,9 @@ public class MainActivity extends FragmentActivity  {
 		setContentView(R.layout.activity_main);		
 		MyApplication.getInstance().addActivity(this);
 		mContext=this;
-		ShareSDK.initSDK(this);	// 初始化ShareSDK		
+		FileCache mFileCache=new FileCache(mContext);
+		mFileCache.clear(); //清除本地SDCARD图片缓存
+		ShareSDK.initSDK(this);	// 初始化ShareSDK(一键分享)		
 		initView();
 		initTab();	
 	} 

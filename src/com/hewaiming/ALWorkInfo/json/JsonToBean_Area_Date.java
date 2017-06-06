@@ -689,7 +689,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	//JSON转换成LIST数据  （平均电压）
+	// JSON转换成LIST数据 （平均电压）
 	public static List<AvgV> JsonArrayToAvgVDayTableBean(String data) {
 
 		List<AvgV> listBean = null;
@@ -743,7 +743,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	//JSON转换成LIST数据  （电解温度）
+	// JSON转换成LIST数据 （电解温度）
 	public static List<DJWD> JsonArrayToDJWDBean(String data) {
 		List<DJWD> listBean = null;
 		try {
@@ -798,7 +798,7 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	//JSON转换成LIST数据  （分子比）
+	// JSON转换成LIST数据 （分子比）
 	public static List<HY_item> JsonArrayToFZBBean(String data) {
 		List<HY_item> listBean = null;
 		try {
@@ -845,35 +845,36 @@ public class JsonToBean_Area_Date {
 				 */
 				if (i == 0) {
 					listBean.add(mBean);
-					presentPot=mBean.getPotNo();
+					presentPot = mBean.getPotNo();
 					priorDdate = mBean.getDdate();
 				}
 				if (priorPot.equals(presentPot)) {
 
 				} else {
 					if (priorDdate.equals(presentDdate)) {
-						
-					}else{
-						listBean.add(mBean);						
+
+					} else {
+						listBean.add(mBean);
 					}
 				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	//	System.out.println(listBean.toString());
+		// System.out.println(listBean.toString());
 		return listBean;
 	}
 
-	//JSON转换成LIST数据  （氧化铝浓度）
+	// JSON转换成LIST数据 （氧化铝浓度）
 	public static List<HY_item> JsonArrayToYHLNDBean(String data) {
 		List<HY_item> listBean = null;
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 			listBean = new ArrayList<HY_item>();
 			listBean.clear();
-			// System.out.println("jsonarray. MeasueTable---length()---+jsonarray.length());
-			
+			// System.out.println("jsonarray.
+			// MeasueTable---length()---+jsonarray.length());
+
 			JSONObject prior_jsonobj = jsonarray.getJSONObject(0);
 			for (int i = 0; i < jsonarray.length(); i++) {
 
@@ -897,32 +898,80 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setDdate(jsonobj.getString("DDate"));
 				}
+
 				String presentDdate = mBean.getDdate();
 				if (jsonobj.get("AlOCnt").equals(null)) {
 					mBean.setFZB("0");
 				} else {
 					mBean.setFZB(String.valueOf(jsonobj.getDouble("AlOCnt")));
-				}				
+				}
 				if (i == 0) {
 					listBean.add(mBean);
-					presentPot=mBean.getPotNo();
+					presentPot = mBean.getPotNo();
 					priorDdate = mBean.getDdate();
 				}
 				if (priorPot.equals(presentPot)) {
 
 				} else {
 					if (priorDdate.equals(presentDdate)) {
-						
-					}else{
-						listBean.add(mBean);						
+
+					} else {
+						listBean.add(mBean);
 					}
 				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	//	System.out.println(listBean.toString());
+		// System.out.println(listBean.toString());
 		return listBean;
+	}
+
+	public static HY_item JsonArrayToFZBItem(String id, String data) {
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			JSONObject jsonobj = jsonarray.getJSONObject(0);
+			HY_item mItem = new HY_item();
+			mItem.setPotNo(id);
+			if (jsonobj.get("DDate").equals(null)) {
+				mItem.setDdate("");
+			} else {
+				mItem.setDdate(jsonobj.getString("DDate"));
+			}
+			if (jsonobj.get("AvgFzb").equals(null)) {
+				mItem.setFZB("0");
+			} else {
+				mItem.setFZB(String.valueOf(jsonobj.getDouble("AvgFzb")));
+			}
+			return mItem;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static HY_item JsonArrayToYHLNDItem(String id, String data) {
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			JSONObject jsonobj = jsonarray.getJSONObject(0);
+			HY_item mItem = new HY_item();
+			mItem.setPotNo(id);
+			if (jsonobj.get("DDate").equals(null)) {
+				mItem.setDdate("");
+			} else {
+				mItem.setDdate(jsonobj.getString("DDate"));
+			}
+			if (jsonobj.get("AvgYHLND").equals(null)) {
+				mItem.setFZB("0");
+			} else {
+				mItem.setFZB(String.valueOf(jsonobj.getDouble("AvgYHLND")));
+			}
+			return mItem;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

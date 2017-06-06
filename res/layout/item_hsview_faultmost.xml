@@ -46,7 +46,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:textSize="10sp"
-                    android:text="故障次数"
+                    android:text="次数"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_black" />            
 
