@@ -62,6 +62,7 @@ import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
 import com.hewaiming.ALWorkInfo.ui.AlarmRecActivity;
+import com.hewaiming.ALWorkInfo.ui.AreaAvgVActivity;
 import com.hewaiming.ALWorkInfo.ui.CraftLineActivity;
 import com.hewaiming.ALWorkInfo.ui.DayTableActivity;
 import com.hewaiming.ALWorkInfo.ui.FaultMostActivity;
@@ -413,6 +414,16 @@ public class DJFragment extends Fragment
 				bundle_abnormalmost.putInt("port", port);
 				abnormalmost_intent.putExtras(bundle_abnormalmost);
 				startActivity(abnormalmost_intent); // 下料异常频繁排序
+				break;
+			case 17:
+				Intent areaAvgV_intent = new Intent(getActivity(), AreaAvgVActivity.class);
+				Bundle bundle_areaAvgV = new Bundle();
+				bundle_areaAvgV.putSerializable("JXList", (Serializable) JXList);
+				bundle_areaAvgV.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_areaAvgV.putString("ip", ip);
+				bundle_areaAvgV.putInt("port", port);
+				areaAvgV_intent.putExtras(bundle_areaAvgV);
+				startActivity(areaAvgV_intent); // 区平均电压
 				break;
 			case 1:
 				Intent realtime_intent = new Intent(getActivity(), RealTimeLineActivity.class);

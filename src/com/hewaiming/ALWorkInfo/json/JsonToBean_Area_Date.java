@@ -1,5 +1,6 @@
 package com.hewaiming.ALWorkInfo.json;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
+import com.hewaiming.ALWorkInfo.bean.AvgV_Area;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
 import com.hewaiming.ALWorkInfo.bean.HY_item;
 import com.hewaiming.ALWorkInfo.bean.FaultMost;
@@ -974,4 +976,37 @@ public class JsonToBean_Area_Date {
 
 	}
 
+	// JSON转换成LIST数据 （区平均电压）
+	public static List<AvgV_Area> JsonArrayToAreaAvgVBean(String data) {
+
+		List<AvgV_Area> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<AvgV_Area>();
+			listBean.clear();
+			DecimalFormat decimalFormat = new DecimalFormat("##0.000");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				AvgV_Area mBean = new AvgV_Area();
+
+				if (jsonobj.get("AvgV").equals(null)) {
+					mBean.setAverageV(0);
+				} else {					
+					mBean.setAverageV(Double.parseDouble(decimalFormat.format(jsonobj.getDouble("AvgV"))));
+				}
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
 }
