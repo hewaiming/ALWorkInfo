@@ -70,6 +70,7 @@ import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
 import com.hewaiming.ALWorkInfo.ui.AlarmRecActivity;
+import com.hewaiming.ALWorkInfo.ui.AreaAvgVActivity;
 import com.hewaiming.ALWorkInfo.ui.CraftLineActivity;
 import com.hewaiming.ALWorkInfo.ui.DayTableActivity;
 import com.hewaiming.ALWorkInfo.ui.FaultMostActivity;
@@ -1913,8 +1914,33 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 			});
 		}
+		//区平均电压，长点击
 		if (TYPE == 1) {
-
+			mChart.setOnLongClickListener(new OnLongClickListener() {
+				
+				@Override
+				public boolean onLongClick(View arg0) {
+					
+					if (checkGlobalData()) {
+						Intent avgV_intent=new Intent(getActivity(),AreaAvgVActivity.class);
+						Bundle avgVBundle = new Bundle();
+						if (date_record != null) {
+							avgVBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+						}
+						if (JXList != null) {
+							avgVBundle.putSerializable("JXList", (Serializable) JXList);
+						}
+						if (date_record != null && JXList != null) {
+							avgVBundle.putString("ip", ip);
+							avgVBundle.putInt("port", port);
+							avgV_intent.putExtras(avgVBundle);
+							startActivity(avgV_intent);
+							
+						}
+					}
+					return true;
+				}
+			});
 		}
 		if (TYPE == 2) {
 

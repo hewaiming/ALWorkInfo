@@ -12,7 +12,7 @@
 
     <include
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="36dp"
         layout="@layout/include_back_red" />
 
     <include
@@ -20,6 +20,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         layout="@layout/include_select_all_red" />
+    <!-- 各区效应次数饼图 -->
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/AreaAeCnt_chart"
+        android:layout_width="match_parent"
+        android:layout_height="146dp"
+        android:visibility="gone" />   
 
     <include
         android:id="@+id/AeMost"

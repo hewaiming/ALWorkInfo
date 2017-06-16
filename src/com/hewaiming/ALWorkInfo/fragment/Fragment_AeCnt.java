@@ -224,6 +224,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 					mHead_AeCnt);
 			lv_AeCnt.setAdapter(AeCnt_Adapter);			
 			tv_Total.setText(total + "´Î");
+			
 		}
 
 	}

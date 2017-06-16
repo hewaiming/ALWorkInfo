@@ -458,10 +458,10 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 		case R.id.btn_isSHOW:
 			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.up_green));
 			} else {
 				showArea.setVisibility(View.GONE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.down_green));
 			}
 			break;
 		case R.id.btn_ok:

@@ -23,6 +23,7 @@ import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_AreaAvgVAdapter;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_FaultMostAdapter;
+import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.AvgV_Area;
 import com.hewaiming.ALWorkInfo.bean.FaultMost;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
@@ -35,6 +36,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -77,7 +79,7 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 	private RelativeLayout mHead;
 	private ListView lv_areaAvgV;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
-	private String ip,mChartTitle;
+	private String ip,mChartTitle="";
 	private int port;
 	private Context mContext;
 	private FooterListView footView;
@@ -95,9 +97,9 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		mContext = this;
 		init_area();
 		init_date();
-		init_HSView();
-		init_footer();
 		init_title();
+		init_HSView();
+		init_footer();		
 		if (!MyConst.GetDataFromSharePre(mContext, "AreaAvgV_Show")) {
 			MyConst.GuideDialog_show(mContext, "AreaAvgV_Show"); // 第一次显示
 		}
@@ -206,7 +208,7 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
-		mCharts[0] = (LineChart) findViewById(R.id.chart_Area_AvgV);
+		mCharts[0] = (LineChart) findViewById(R.id.chart_AreaAvgV);
 	}
 
 	private void init_area() {
@@ -279,10 +281,10 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		case R.id.btn_isSHOW: // 显示或隐藏
 			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.up_green));
 			} else {
 				showArea.setVisibility(View.GONE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.down_green));
 			}
 			break;
 		case R.id.btn_ok:
@@ -293,6 +295,7 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
 
 				layout_areaAvgV.setVisibility(View.VISIBLE);
+				tv_title.setText(mChartTitle+"平均电压");
 			}
 			break;
 		}
@@ -314,6 +317,7 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 			listBean.clear();
 			listBean = JsonToBean_Area_Date.JsonArrayToAreaAvgVBean(data);
 			Double total = 0.0;
+			float avgV=0;
 			for (AvgV_Area tmp : listBean) {
 				total = total + tmp.getAverageV(); // 统计平均电压
 			}
@@ -321,21 +325,24 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 			lv_areaAvgV.setAdapter(mAdapter);
 			if (listBean.size() != 0) {
 				DecimalFormat decimalFormat = new DecimalFormat("##0.000");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
-				tv_Total.setText(decimalFormat.format(total / listBean.size()) + "");
+				tv_Total.setTextColor(Color.BLUE);
+				avgV = (float) (total / listBean.size());
+				tv_Total.setText(decimalFormat.format(avgV) + "");
 			} else {
 				tv_Total.setText("平均电压数据有误！");
 			}
+			tv_FootTitle.setTextColor(Color.BLUE);
 			tv_FootTitle.setText("总均值");
 			String chartTitle="平均电压曲线表";
-			ShowAreaAvgVChart(listBean,mChartTitle+chartTitle);  //显示平均电压曲线图
+			ShowAreaAvgVChart(listBean,mChartTitle+chartTitle,avgV);  //显示平均电压曲线图
 
 		}
 
 	}
 
-	private void ShowAreaAvgVChart(List<AvgV_Area> list,String mTitle) {
+	private void ShowAreaAvgVChart(List<AvgV_Area> list,String mTitle,float avgV) {
 		if (list!=null) {
-			LineData mLineData = getLineDatafromDayTable(list.size(),1.0, mTitle); // 从槽日报去数据
+			LineData mLineData = getLineDatafromDayTable(list.size(),1.0, mTitle,avgV); // 从槽日报去数据
 			showChart(mCharts[0], mLineData);
 		}
 		
@@ -363,15 +370,17 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		}
 	}
 
-	private LineData getLineDatafromDayTable(int count,Double range, String Area_V) {
+	private LineData getLineDatafromDayTable(int count,Double range, String Area_V,float AvgV) {
        //count 表示列表数据总数量  Area_V 图表名
 		List<String> xValues = new ArrayList<String>();
 		List<Entry> yValues = new ArrayList<Entry>(); // y轴的数据
+		List<Entry> avgValues=new ArrayList<Entry>();  //均值数据
 		for (int i =0; i<count; i++) {
 			xValues.add(listBean.get(i).getDdate().toString());// x轴显示的数据，这里默认使用数字下标显示
 			float value_AvgV = (float) (listBean.get(i).getAverageV() * range);
 			yValues.add(new Entry(value_AvgV, i)); // y轴的 平均电压
-
+			avgValues.add(new Entry(AvgV, i));   //y轴的 平均电压均值
+			
 		}
 
 		// y轴的数据集合
@@ -382,16 +391,16 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		// lineDataSet_SetV.setAxisDependency(AxisDependency.LEFT);
 		mlineDataSet.setLineWidth(1.6f); // 线宽
 		mlineDataSet.setCircleSize(1f);// 显示的圆形大小
-		mlineDataSet.setColor(Color.RED);// 显示颜色
+		mlineDataSet.setColor(Color.BLUE);// 显示颜色
 		mlineDataSet.setCircleColor(Color.GRAY);// 圆形的颜色
 		mlineDataSet.setHighLightColor(Color.GREEN); // 高亮的线的颜色
 
 		mlineDataSet.setDrawCircles(true);
 		mlineDataSet.setDrawCircleHole(true);
-		mlineDataSet.setCircleSize(3.6f); // 设置线圈的大小（半径）
+		mlineDataSet.setCircleSize(3f); // 设置线圈的大小（半径）
 		mlineDataSet.setCircleColor(Color.GREEN); // 设置线圈的颜色
 		mlineDataSet.setCircleColorHole(Color.RED);// 设置线圈的内圆（孔）的颜色
-		mlineDataSet.setValueTextSize(10f);
+		mlineDataSet.setValueTextSize(8.6f);
 		//设置平均电压显示格式
         mlineDataSet.setValueFormatter(new ValueFormatter() {
 			
@@ -403,10 +412,27 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 			}
 		});
 		
-		
+		//平均电压均值线
+        DecimalFormat decimalFormat = new DecimalFormat("##0.000");
+        LineDataSet avgLineDataSet=new LineDataSet(avgValues, "平均电压均值:"+decimalFormat.format(AvgV)+"V");
+        avgLineDataSet.setLineWidth(1.0f);
+        avgLineDataSet.setColor(Color.RED);
+        avgLineDataSet.setValueTextSize(6.5f);
+        avgLineDataSet.setDrawCircles(false);
+        avgLineDataSet.setDrawCircleHole(false);
+        avgLineDataSet.setDrawValues(false);
+        avgLineDataSet.setValueFormatter(new ValueFormatter() {			
+			@Override
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+				DecimalFormat decimalFormat = new DecimalFormat("##0.000");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+				return decimalFormat.format(value);
+			}
+		});
+        
+        
 		List<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
 		lineDataSets.add(mlineDataSet); // add
-
+        lineDataSets.add(avgLineDataSet);
 		// create a data object with the datasets
 		LineData lineData = new LineData(xValues, lineDataSets);
 
@@ -434,7 +460,9 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		
 		xAxis.setTextColor(Color.DKGRAY);
 		xAxis.setDrawAxisLine(true);
-		xAxis.setTextSize(5f);
+		xAxis.setTextSize(4.6f);
+		xAxis.setLabelRotationAngle(6f);
+		xAxis.setLabelsToSkip(1);
 
 		yAxis_left.setEnabled(true);
 		yAxis_left.setDrawAxisLine(false);
@@ -454,7 +482,7 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		mLegend.setPosition(LegendPosition.BELOW_CHART_CENTER);
 		mLegend.setForm(LegendForm.SQUARE);// 样式
 		mLegend.setFormSize(10f);// 字体
-		mLegend.setTextColor(Color.BLACK);// 颜色
+		mLegend.setTextColor(Color.BLUE);// 颜色
 		// mLegend.setTypeface(mTf);// 字体		
 
 		lineChart.setData(mLineData); // 设置数据 一定要放在CHART设定参数之后

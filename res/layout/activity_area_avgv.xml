@@ -21,53 +21,51 @@
         android:layout_margin="6dp"
         layout="@layout/include_select_all" />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/Layout_AreaAvgV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible" >
 
-        <LinearLayout
-            android:id="@+id/Layout_AreaAvgV"
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_AreaAvgV"
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp" >
+        </com.github.mikephil.charting.charts.LineChart>
+
+        <include
+            android:id="@+id/head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            layout="@layout/item_hsview_area_avgv" />
+
+        <ListView
+            android:id="@+id/lv_AreaAvgV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone" >
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@color/LV_bg"
+            android:scrollbars="horizontal" >
+        </ListView>
 
-            <include
-                android:id="@+id/head"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
-                layout="@layout/item_hsview_area_avgv" />
-
-            <ListView
-                android:id="@+id/lv_AreaAvgV"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:background="@color/LV_bg"
-                android:scrollbars="horizontal" >
-            </ListView>
-
-            <View
+        <!--
+                 <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="2dp"
                 android:background="#d2d2d2" />
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart_Area_AvgV"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp" />
-        </LinearLayout>
-    </ScrollView>
+        -->
+    </LinearLayout>
 
 </LinearLayout>

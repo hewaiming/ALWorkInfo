@@ -46,12 +46,12 @@ public class MyConst {
 			":8000/scgy/android/banner/5.jpg" };
 	
 	public static final String[] iconName = { "槽状态", "实时曲线", "效应报表", "槽龄", "槽压曲线", "故障记录", "实时记录", "操作记录", 
-			"常用参数","测量数据", "效应槽", "效应记录","槽故障最多","工艺曲线", "报警记录" ,"日报","下料异常","区平均电压"};
+			"常用参数","测量数据", "效应槽", "效应记录","槽故障最多","工艺曲线", "报警记录" ,"日报","下料异常","区平均电压","区效应系数"};
 	
 	public static final int[] drawable = { R.drawable.potstatus, R.drawable.realtime, R.drawable.aetable, R.drawable.ages,
 			R.drawable.potv, R.drawable.faultrecord, R.drawable.realrecord, R.drawable.operaterecord,
 			R.drawable.params, R.drawable.measue, R.drawable.aemost, R.drawable.aerecord,
-			R.drawable.faultmost,R.drawable.gongyi ,R.drawable.alertrecord,R.drawable.daytable,R.drawable.abnormal,R.drawable.area_avgv};
+			R.drawable.faultmost,R.drawable.gongyi ,R.drawable.alertrecord,R.drawable.daytable,R.drawable.abnormal,R.drawable.area_avgv,R.drawable.area_ae};
 	
 	public static final String ACTION_REGISTER_SUCCESS_FINISH = "register.success.finish";// 注册成功之后登陆页面退出
 

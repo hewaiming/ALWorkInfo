@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
+import com.hewaiming.ALWorkInfo.bean.Ae_Area;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.AvgV_Area;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
@@ -326,14 +327,14 @@ public class JsonToBean_Area_Date {
 		return listBean;
 	}
 
-	public static List<dayTable> JsonArrayToDayTableBean(String data) {
+	public static List<dayTable> JsonArrayToDayTableBean(String GetData) {
 
-		List<dayTable> listBean = null;
+		List<dayTable> listDayTable = null;
 		try {
-			JSONArray jsonarray = new JSONArray(data);
+			JSONArray jsonarray = new JSONArray(GetData);
 
-			listBean = new ArrayList<dayTable>();
-			listBean.clear();
+			listDayTable = new ArrayList<dayTable>();
+			listDayTable.clear();
 			// System.out.println("jsonarray. DayTable---length()---" +
 			// jsonarray.length());
 			for (int i = 0; i < jsonarray.length(); i++) {
@@ -438,13 +439,13 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setDdate(jsonobj.getString("Ddate"));
 				}
-				listBean.add(mBean);
+				listDayTable.add(mBean);
 			}
 		} catch (JSONException e) {
 
 			e.printStackTrace();
 		}
-		return listBean;
+		return listDayTable;
 	}
 
 	// 效应次数统计
@@ -1000,6 +1001,52 @@ public class JsonToBean_Area_Date {
 					mBean.setDdate("");
 				} else {
 					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				listBean.add(mBean);
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return listBean;
+	}
+	
+	// JSON解析为Bean数据 （区效应系数）
+	public static List<Ae_Area> JsonArrayToAreaAeBean(String data) {
+
+		List<Ae_Area> listBean = null;
+		try {
+			JSONArray jsonarray = new JSONArray(data);
+			listBean = new ArrayList<Ae_Area>();
+			listBean.clear();
+			DecimalFormat decimalFormat = new DecimalFormat("##0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+			for (int i = 0; i < jsonarray.length(); i++) {
+
+				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				Ae_Area mBean = new Ae_Area();
+
+				if (jsonobj.get("AeCntS").equals(null)) {
+					mBean.setAeCnt(0);
+				} else {					
+					mBean.setAeCnt(jsonobj.getInt("AeCntS"));
+				}
+				if (jsonobj.get("PotS").equals(null)) {
+					mBean.setPots(0);
+					
+				} else {					
+					mBean.setPots(jsonobj.getInt("PotS"));					
+				}
+
+				if (jsonobj.get("DDate").equals(null)) {
+					mBean.setDdate("未知");
+				} else {
+					mBean.setDdate(jsonobj.getString("DDate"));
+				}
+				if(mBean.getPots()!=0){
+					double AeXS=mBean.getAeCnt()/(double)mBean.getPots();
+					mBean.setAeXS(Double.parseDouble(decimalFormat.format(AeXS)));
+				}else{
+					
 				}
 				listBean.add(mBean);
 			}

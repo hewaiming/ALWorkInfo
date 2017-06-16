@@ -21,7 +21,7 @@ public class AvgV_Area implements Serializable {
 
 	public void setDdate(String ddate) {
 		if (ddate.length() > 10) {
-			String temp = ddate.substring(0, 10);
+			String temp = ddate.substring(5, 10);
 			Ddate = temp;
 		}
 	}

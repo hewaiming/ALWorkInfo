@@ -253,10 +253,10 @@ public class AbNormalMostActivity extends Activity implements HttpGetListener, O
 		case R.id.btn_isSHOW: // œ‘ æªÚ“˛≤ÿ
 			if (showArea.getVisibility() == View.GONE) {
 				showArea.setVisibility(View.VISIBLE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_up));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.up_red_high));
 			} else {
 				showArea.setVisibility(View.GONE);
-				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_down));
+				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.down_red_high));
 			}
 			break;
 		case R.id.btn_ok:
