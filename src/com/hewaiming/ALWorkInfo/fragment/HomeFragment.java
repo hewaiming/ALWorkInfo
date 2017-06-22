@@ -1959,7 +1959,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			tv_title.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
 			return false;
 		} else {
-			Toast.makeText(mContext, "第" + GetJXCnt + " 次尝试获取解析记录数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "第" + GetJXCnt + " 次尝试获取解析记录数据，请稍后再试！", Toast.LENGTH_SHORT).show();
 			init_GetJXRecord();
 		}
 
@@ -1968,7 +1968,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			tv_title.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
 			return false;
 		} else {
-			Toast.makeText(mContext, "第" + GetDateCnt + " 次尝试获取日期数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "第" + GetDateCnt + " 次尝试获取日期数据，请稍后再试！", Toast.LENGTH_SHORT).show();
 			init_GetDate();
 		}
 		return true;
