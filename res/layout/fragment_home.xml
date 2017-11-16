@@ -50,6 +50,7 @@
             <!-- 正常槽数量 -->
 
             <RelativeLayout
+                android:id="@+id/Normal_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="36dp" >
 

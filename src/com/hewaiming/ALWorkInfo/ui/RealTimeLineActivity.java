@@ -73,7 +73,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private TextView tv_title;
 	private Button backBtn;
 	private ImageButton isShowingBtn;
-	private LinearLayout showArea,layoutOK;
+	private LinearLayout showArea, layoutOK;
 	private String PotNo = "1101";
 	private boolean hideAction;
 	private Spinner spinner_area, spinner_begindate, spinner_enddate, spinner_potno;
@@ -88,7 +88,9 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private TimerTask timerTaskRealTime = null;
 	private Context mContext;
 
-	private Handler handler = new Handler(Looper.getMainLooper());
+	private Handler handler = new Handler(Looper.getMainLooper());	
+
+	
 	private TcpClient client = new TcpClient() {
 
 		@Override
@@ -104,7 +106,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 					tv_title.setText(PotNo + "实时曲线：连接远程服务器失败！");
 				}
 			});
-
+		
 		}
 
 		@Override
@@ -112,6 +114,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			if (realTime.getPotNo() != Integer.valueOf(PotNo)) {
 				return;
 			}
+			//handler.post(showDataRunnable);
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -131,7 +134,10 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 							setCUR = createSet_CUR();
 							data.addDataSet(setCUR);
 						}
-
+						//实时显示更新槽压、系列电流数字
+						tv_potV.setText("槽电压(V):"+(realTime.getPotv()/1000.0));
+						tv_sysA.setText("系列电流(KA):"+(realTime.getCur()/100.0));
+						
 						Calendar c = Calendar.getInstance();
 						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE)) + "."
 								+ c.get(Calendar.SECOND));
@@ -168,6 +174,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		}
 
 	};
+	private TextView tv_potV;
+	private TextView tv_sysA;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +203,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		GetDataFromJKJ_CMD();
 	}
 
+	@Override
+	protected void onDestroy() {
+		//handler.removeCallbacks(offLineRunnable);
+		//handler.removeCallbacks(showDataRunnable);
+		super.onDestroy();
+	}
 	private void GetDataFromNet() {
 		SendActionToServer();
 
@@ -287,6 +301,11 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		
 		layoutOK=(LinearLayout)findViewById(R.id.Layout_OK);
 		layoutOK.setVisibility(View.GONE);
+		
+		tv_potV=(TextView)findViewById(R.id.TxtPotV);
+		tv_potV.setTextColor(Color.BLUE);
+		tv_sysA=(TextView)findViewById(R.id.TxtSysA);
+		tv_sysA.setTextColor(Color.RED);;
 
 	}
 

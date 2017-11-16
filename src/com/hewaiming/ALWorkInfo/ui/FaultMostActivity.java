@@ -1,10 +1,23 @@
 package com.hewaiming.ALWorkInfo.ui;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.components.XAxis.XAxisPosition;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.InterFace.HttpGetListener;
 import com.hewaiming.ALWorkInfo.adapter.HScrollView.HSView_FaultMostAdapter;
@@ -65,6 +78,10 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 	private int port;
 	private Context mContext;
 	private FooterListView footView;
+	private BarChart mChart_FaultMost;
+	private BarData chartData;
+	private int[] Area_FaultCnt = { 0, 0, 0, 0, 0, 0 }; // 区故障次数总和
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +206,7 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 		isShowingBtn = (ImageButton) findViewById(R.id.btn_isSHOW);
 		showArea = (LinearLayout) findViewById(R.id.Layout_selection);
 		isShowingBtn.setOnClickListener(this);
-
+		mChart_FaultMost = (BarChart) findViewById(R.id.FaultMost_chart);
 	}
 
 	private void init_area() {
@@ -267,6 +284,12 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 						Integer.toString(areaId), BeginDate, EndDate, this, this).execute();
 
 				layout_faultmost.setVisibility(View.VISIBLE);
+				// 选择厂房显示图表
+				if (areaId == 66) {
+					mChart_FaultMost.setVisibility(View.VISIBLE);
+				} else {
+					mChart_FaultMost.setVisibility(View.GONE);
+				}
 			}
 			break;
 		}
@@ -294,10 +317,114 @@ public class FaultMostActivity extends Activity implements HttpGetListener, OnCl
 			FaultMost_Adapter = new HSView_FaultMostAdapter(this, R.layout.item_hsview_faultmost, listBean, mHead);
 			lv_FaultMost.setAdapter(FaultMost_Adapter);
 			tv_Total.setText(total + "次");
+			//各区柱形图显示
+			for (int i = 0; i < Area_FaultCnt.length; i++) {
+				 Area_FaultCnt[i] = 0;
+			}
+			//有记录
+			if (listBean != null) {
+				// 分别统计各区下料异常总次数
+				for (FaultMost tmp : listBean) {
+					if (tmp.getPotNo() >= 1101 && tmp.getPotNo() <= 1136) {
+						 Area_FaultCnt[0] =  Area_FaultCnt[0] + tmp.getFaultCnt();
+					} else if (tmp.getPotNo() >= 1201 && tmp.getPotNo() <= 1237) {
+						 Area_FaultCnt[1] =  Area_FaultCnt[1] + tmp.getFaultCnt();
+					} else if (tmp.getPotNo() >= 1301 && tmp.getPotNo() <= 1337) {
+						 Area_FaultCnt[2] =  Area_FaultCnt[2] + tmp.getFaultCnt();
+					} else if (tmp.getPotNo() >= 2101 && tmp.getPotNo() <= 2136) {
+						 Area_FaultCnt[3] =  Area_FaultCnt[3] + tmp.getFaultCnt();
+					} else if (tmp.getPotNo() >= 2201 && tmp.getPotNo() <= 2237) {
+						 Area_FaultCnt[4] =  Area_FaultCnt[4] + tmp.getFaultCnt();
+					} else if (tmp.getPotNo() >= 2301 && tmp.getPotNo() <= 2337) {
+						 Area_FaultCnt[5] =  Area_FaultCnt[5] + tmp.getFaultCnt();
+					}
+				}
+			}
+			chartData = getChartData(Area_FaultCnt);
+			showChart(mChart_FaultMost, chartData);
 		}
+	}
+	//获取图表数据
+	private BarData getChartData(int[] faultCnt) {
+		ArrayList<String> xVals = new ArrayList<String>(); // xVals用来表示区名
+		for(int i=0;i<faultCnt.length;i++){
+			if(i<3){
+				xVals.add("一厂"+(i+1)+"区");	
+			}else{
+				xVals.add("二厂"+(i-2)+"区");
+			}			
+		}		
+
+		List<BarEntry> yValues = new ArrayList<BarEntry>(); // yVals用来表示封装每个饼块的实际数据
+		/** 将一个饼形图分成四部分， 四部分的数值比例为14:14:34:38 所以 14代表的百分比就是14% */
+		for(int i=0;i<faultCnt.length;i++){
+			yValues.add(new BarEntry((float)faultCnt[i], i)); 
+		}		
+		// y轴的集合
+		BarDataSet barDataSet = new BarDataSet(yValues, "各区故障总数对比图");/* 显示在比例图上 */
+		barDataSet.setColor(Color.RED);// 设置数据露草色颜色
+		barDataSet.setDrawValues(true); // 显示数值
+		barDataSet.setValueTextSize(11f);
+		barDataSet.setBarSpacePercent(60f);
+		//barDataSet.setValueTextColor(Color.RED);
+		barDataSet.setValueFormatter(new ValueFormatter() {
+
+			@Override
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
+				DecimalFormat decimalFormat = new DecimalFormat("#");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
+
+				return decimalFormat.format(value);
+			}
+		});			
+		
+		BarData mData = new BarData(xVals, barDataSet);
+		return mData;
 
 	}
+	private void showChart(BarChart mchart, BarData mdata) {		
+		//mchart.setUsePercentValues(false);
+		mchart.setScaleEnabled(false); // 不放大
+		mchart.getLegend().setPosition(LegendPosition.ABOVE_CHART_CENTER);
+		mchart.getLegend().setForm(LegendForm.SQUARE);// 设置注解的位置和形状		
+		mchart.getLegend().setTextColor(Color.RED);
+		mchart.getLegend().setTextSize(12f);
+		mchart.getLegend().setEnabled(true);
+		mchart.getXAxis().setPosition(XAxisPosition.BOTTOM);// 设置X轴的位置
+		mchart.getXAxis().setDrawGridLines(false);// 不显示网格
+		mchart.getXAxis().setDrawAxisLine(false);
+		mchart.getXAxis().setTextSize(7f);
+		mchart.getXAxis().setTextColor(Color.DKGRAY);
+		
+		mchart.getAxisRight().setEnabled(false);// 右侧不显示Y轴
+		mchart.getAxisLeft().setEnabled(false);
+		mchart.getAxisLeft().setDrawLabels(false); // 左侧Y坐标不显示数据刻度
+		mchart.getAxisLeft().setAxisMinValue(0.0f);// 设置Y轴显示最小值，不然0下面会有空隙
+		// mBarChart.getAxisLeft().setAxisMaxValue(2.0f);// 设置Y轴显示最大值
+		mchart.getAxisLeft().setDrawGridLines(true);// 不设置Y轴网格
 
+		mchart.setNoDataTextDescription("没有获取到相关故障数据");
+		mchart.setDescription("");			
+		mchart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+			@Override
+			public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+				Toast.makeText(getApplicationContext(), "故障总数:" + new DecimalFormat("#").format(e.getVal()),
+						Toast.LENGTH_SHORT).show();// 单纯地显示一个Toast
+			}
+
+			@Override
+			public void onNothingSelected() {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		mchart.setDescriptionColor(Color.BLUE);
+		mchart.setDescriptionTextSize(10.f);// 设置描述文字的字体
+		mchart.animateXY(300, 300);
+		mchart.setData(mdata);// 给Chart填充数据
+	}
+	
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub

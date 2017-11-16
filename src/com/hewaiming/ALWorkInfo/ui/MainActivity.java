@@ -57,7 +57,7 @@ public class MainActivity extends FragmentActivity  {
 		MyApplication.getInstance().addActivity(this);
 		mContext=this;
 		FileCache mFileCache=new FileCache(mContext);
-		mFileCache.clear(); //清除本地SDCARD图片缓存
+		//mFileCache.clear(); //清除本地SDCARD图片缓存
 		ShareSDK.initSDK(this);	// 初始化ShareSDK(一键分享)		
 		initView();
 		initTab();	

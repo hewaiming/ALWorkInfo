@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">工作站</string>
+    <string name="app_name">铝电解工作站</string>
     <string name="head_name">铝电解工作站</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">欢迎使用铝电解工作站!</string>
     <string name="action_settings">Settings</string>
     <string name="area">请选择工区</string>
     <string name="date">请选择日期</string>
     <string name="potno">请选择槽号</string>
     <string name="begindate">请选择 起始日期</string>
     <string name="enddate">请选择 截止日期</string>
-    <string name="publicDate">2017-6-20</string>
+    <string name="publicDate">2017-11-18</string>
     <string name="txt_home">首页</string>
     <string name="txt_dj">电解槽</string>
 

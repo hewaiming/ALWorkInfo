@@ -21,6 +21,41 @@
         android:layout_margin="6dp"
         layout="@layout/include_select_all" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/base_bg_white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/TxtPotV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="槽压:"
+            android:textColor="@color/base_color_text_blue"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/TxtSysA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="系列电流:"
+            android:textColor="@color/base_color_text_darkred"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="6dp"
+        android:background="#d2d2d2" />
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart1"
         android:layout_width="match_parent"

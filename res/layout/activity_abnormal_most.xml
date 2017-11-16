@@ -21,6 +21,12 @@
         android:layout_margin="6dp"
         layout="@layout/include_select_all_red_abnormal" />
 
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/AbNormal_chart"
+        android:layout_width="match_parent"
+        android:layout_height="146dp"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/Layout_FaultMost"
         android:layout_width="match_parent"

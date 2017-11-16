@@ -100,7 +100,7 @@ public class AeMostActivity extends FragmentActivity
 	private int port;
 	private PieChart mPieChart_AECnt;
 	private PieData piedata;
-	private int[] Area_AeCnt={0,0,0,0,0,0}; //区效应次数总和
+	private int[] Area_AeCnt = { 0, 0, 0, 0, 0, 0 }; // 区效应次数总和
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -361,27 +361,31 @@ public class AeMostActivity extends FragmentActivity
 			msg_date2.what = 3;
 			mHandler.sendMessage(msg_date2);
 			// 显示各区效应次数饼形图
-			List<AeRecord> listAeCnt = new ArrayList<AeRecord>(); // 初始化适配器		
+			List<AeRecord> listAeCnt = new ArrayList<AeRecord>(); // 初始化适配器
 			listAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
-			for(int i=0;i<Area_AeCnt.length;i++){
-				Area_AeCnt[i]=0;
+
+			for (int i = 0; i < Area_AeCnt.length; i++) {
+				Area_AeCnt[i] = 0;
 			}
-			//分别统计各区效应次数总和
-			for (AeRecord tmp : listAeCnt) {
-				if(tmp.getPotNo()>=1101 && tmp.getPotNo()<=1136){
-					Area_AeCnt[0]=Area_AeCnt[0]+tmp.getWaitTime();
-				}else if(tmp.getPotNo()>=1201 && tmp.getPotNo()<=1237){
-					Area_AeCnt[1]=Area_AeCnt[1]+tmp.getWaitTime();
-				}else if(tmp.getPotNo()>=1301 && tmp.getPotNo()<=1337){
-					Area_AeCnt[2]=Area_AeCnt[2]+tmp.getWaitTime();
-				}else if(tmp.getPotNo()>=2101 && tmp.getPotNo()<=2136){
-					Area_AeCnt[3]=Area_AeCnt[3]+tmp.getWaitTime();
-				}else if(tmp.getPotNo()>=2201 && tmp.getPotNo()<=2237){
-					Area_AeCnt[4]=Area_AeCnt[4]+tmp.getWaitTime();
-				}else if(tmp.getPotNo()>=2301 && tmp.getPotNo()<=2337){
-					Area_AeCnt[5]=Area_AeCnt[5]+tmp.getWaitTime();
-				}				
-			}			
+			//有效应记录
+			if (listAeCnt != null) {
+				// 分别统计各区效应次数总和
+				for (AeRecord tmp : listAeCnt) {
+					if (tmp.getPotNo() >= 1101 && tmp.getPotNo() <= 1136) {
+						Area_AeCnt[0] = Area_AeCnt[0] + tmp.getWaitTime();
+					} else if (tmp.getPotNo() >= 1201 && tmp.getPotNo() <= 1237) {
+						Area_AeCnt[1] = Area_AeCnt[1] + tmp.getWaitTime();
+					} else if (tmp.getPotNo() >= 1301 && tmp.getPotNo() <= 1337) {
+						Area_AeCnt[2] = Area_AeCnt[2] + tmp.getWaitTime();
+					} else if (tmp.getPotNo() >= 2101 && tmp.getPotNo() <= 2136) {
+						Area_AeCnt[3] = Area_AeCnt[3] + tmp.getWaitTime();
+					} else if (tmp.getPotNo() >= 2201 && tmp.getPotNo() <= 2237) {
+						Area_AeCnt[4] = Area_AeCnt[4] + tmp.getWaitTime();
+					} else if (tmp.getPotNo() >= 2301 && tmp.getPotNo() <= 2337) {
+						Area_AeCnt[5] = Area_AeCnt[5] + tmp.getWaitTime();
+					}
+				}
+			}
 			piedata = getPieData(Area_AeCnt);
 			showChart(mPieChart_AECnt, piedata);
 		}
@@ -393,13 +397,13 @@ public class AeMostActivity extends FragmentActivity
 		piechart.setUsePercentValues(false);
 		piechart.getLegend().setPosition(LegendPosition.ABOVE_CHART_CENTER);
 		piechart.getLegend().setForm(LegendForm.CIRCLE);// 设置注解的位置和形状
-		piechart.getLegend().setEnabled(false);
+		piechart.getLegend().setEnabled(false);	
 		piechart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 
 			@Override
 			public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-				Toast.makeText(getApplicationContext(), "效应次数:" +new DecimalFormat("#").format(e.getVal()), Toast.LENGTH_SHORT)
-						.show();// 单纯地显示一个Toast
+				Toast.makeText(getApplicationContext(), "效应次数:" + new DecimalFormat("#").format(e.getVal()),
+						Toast.LENGTH_SHORT).show();// 单纯地显示一个Toast
 			}
 
 			@Override
@@ -425,25 +429,24 @@ public class AeMostActivity extends FragmentActivity
 		piechart.setHoleRadius(30f);
 
 		piechart.setDescription("各区效应次数总比图");// 设置描述文字
-		piechart.setDescriptionColor(Color.BLUE);	
+		piechart.setDescriptionColor(Color.BLUE);
 		piechart.setDescriptionTextSize(10.f);// 设置描述文字的字体
 		piechart.animateXY(300, 300);
 
-		
 	}
 
-	private PieData getPieData(int[]  AeCnt) {
+	private PieData getPieData(int[] AeCnt) {
 		ArrayList<String> xVals = new ArrayList<String>(); // xVals用来表示区名
-		xVals.add("一厂1区"); 
+		xVals.add("一厂1区");
 		xVals.add("一厂2区");
 		xVals.add("一厂3区");
 		xVals.add("二厂1区");
 		xVals.add("二厂2区");
-		xVals.add("二厂3区");		
+		xVals.add("二厂3区");
 
 		ArrayList<Entry> yValues = new ArrayList<Entry>(); // yVals用来表示封装每个饼块的实际数据
-	
-		/** 将一个饼形图分成四部分， 四部分的数值比例为14:14:34:38 所以 14代表的百分比就是14%		 */	
+
+		/** 将一个饼形图分成四部分， 四部分的数值比例为14:14:34:38 所以 14代表的百分比就是14% */
 
 		yValues.add(new Entry(AeCnt[0], 0));
 		yValues.add(new Entry(AeCnt[1], 1));
@@ -456,9 +459,10 @@ public class AeMostActivity extends FragmentActivity
 		pieDataSet.setSliceSpace(0f); // 设置个饼状图之间的距离
 		pieDataSet.setValueTextSize(10f);
 		pieDataSet.setValueFormatter(new ValueFormatter() {
-			
+
 			@Override
-			public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+			public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+					ViewPortHandler viewPortHandler) {
 				DecimalFormat decimalFormat = new DecimalFormat("#");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
 
 				return decimalFormat.format(value);

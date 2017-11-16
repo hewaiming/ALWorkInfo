@@ -10,7 +10,7 @@
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_gravity="center"
-        android:src="@drawable/error" />
+        android:src="@drawable/error1" />
 
     <TextView
         android:id="@+id/name"

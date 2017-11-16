@@ -122,7 +122,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -199,6 +201,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			Homedialog.dismiss();
 		};
 	};
+	private RelativeLayout layoutNormal;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -207,6 +210,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		return mView;
 	}
 
+	@Override
+	public void onDestroy() {
+	
+		
+		super.onDestroy();
+	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -1488,7 +1497,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			// Log.d("二厂房：正常槽数量", json2.toString());// 从服务器返回有数据
 			NormPotsList2 = new ArrayList<PotCtrl>();
 			NormPotsList2 = JsonToBean_GetPublicData.JsonArrayToNormPots(json2.toString());
-			return true;
+			if(NormPotsList2.size()==0){
+				return false;
+			}else{
+				return true;
+			}
+			//return true;
 		} else {
 			return false;
 		}
@@ -1502,7 +1516,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			// Log.d("一厂房：正常槽数量", json1.toString());// 从服务器返回有数据
 			NormPotsList1 = new ArrayList<PotCtrl>();
 			NormPotsList1 = JsonToBean_GetPublicData.JsonArrayToNormPots(json1.toString());
-			return true;
+			if(NormPotsList1.size()==0){
+				return false;
+			}else{
+				return true;
+			}
+			//return true;
 		} else {
 			return false;
 		}
@@ -1755,6 +1774,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		imgbtn_show_FZB.setOnClickListener(this);
 		imgbtn_show_YHLND = (ImageButton) mView.findViewById(R.id.imgbtn_show_YHLNDChart);
 		imgbtn_show_YHLND.setOnClickListener(this);
+		//获取正常槽数据
+		layoutNormal.setOnClickListener(this);
 
 	}
 
@@ -1822,7 +1843,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					@Override
 					public void run() {
 						SetNormalPot(); // 显示正常槽数量
-						iv_Fresh_Pots.setVisibility(View.GONE);
+						//iv_Fresh_Pots.setVisibility(View.GONE);
 					}
 				});
 			}
@@ -1841,6 +1862,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	private void init_normalPot() {
+		layoutNormal=(RelativeLayout)mView.findViewById(R.id.Normal_Layout);
 		tvPotTotal = (TextView) mView.findViewById(R.id.tv_potTotal);
 		tvPot1 = (TextView) mView.findViewById(R.id.tv_Room1_sum);
 		tvPot11 = (TextView) mView.findViewById(R.id.tv_Room11_sum);
@@ -2047,7 +2069,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			MyConst.showShare(mContext); // 一键分享
 			break;
 		case R.id.iv_refresh_pots:
-			Homedialog.setMessage("玩命加载...");
+			//获取各区正常槽数据,效应数据，平均电压
+			Homedialog.setMessage("玩命加载区槽数、效应系数、平均电压...");
 			if (!Homedialog.isShowing()) {
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
@@ -2056,7 +2079,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			break;
 		case R.id.iv_refresh_ae:
 			if (!Homedialog.isShowing()) {
-				Homedialog.setMessage("玩命加载...");
+				Homedialog.setMessage("玩命加载各区效应系数...");
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
@@ -2065,7 +2088,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			break;
 		case R.id.iv_refresh_avgv:
 			if (!Homedialog.isShowing()) {
-				Homedialog.setMessage("玩命加载...");
+				Homedialog.setMessage("玩命加载各区平均电压...");
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
@@ -2073,7 +2096,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			break;
 		case R.id.iv_refresh_djwd:
 			if (!Homedialog.isShowing()) {
-				Homedialog.setMessage("玩命加载...");
+				Homedialog.setMessage("玩命加载各区电解温度...");
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
@@ -2098,7 +2121,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			break;
 		case R.id.iv_refresh_fzb:
 			if (!Homedialog.isShowing()) {
-				Homedialog.setMessage("玩命加载...");
+				Homedialog.setMessage("玩命加载各区分子比...");
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
@@ -2124,7 +2147,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		case R.id.iv_refresh_yhlnd:
 			// 刷新氧化铝浓度
 			if (!Homedialog.isShowing()) {
-				Homedialog.setMessage("玩命加载...");
+				Homedialog.setMessage("玩命加载各区氧化铝浓度...");
 				Homedialog.show();
 				mHandler.sendEmptyMessageDelayed(0, 1500);
 			}
@@ -2147,6 +2170,15 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				iv_Fresh_YHLND.setVisibility(View.INVISIBLE);
 				imgbtn_show_YHLND.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
 			}
+			break;
+		case R.id.Normal_Layout:
+			//获取各区正常槽数据,效应数据，平均电压
+			Homedialog.setMessage("玩命加载区槽数、效应系数、平均电压...");
+			if (!Homedialog.isShowing()) {
+				Homedialog.show();
+				mHandler.sendEmptyMessageDelayed(0, 1500);
+			}
+			GetAllData_ShowChart(false);
 			break;
 		}
 	}
