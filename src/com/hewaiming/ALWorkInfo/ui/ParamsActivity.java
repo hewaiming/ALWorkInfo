@@ -188,7 +188,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			DoGetDataFromNet();
 			break;
 		case R.id.tv_PotNo_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[0]) {
 					SortFlag[0] = false;					
@@ -203,7 +203,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			}
 			break;
 		case R.id.tv_SetV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[1]) {
 					SortFlag[1] = false;					
@@ -218,7 +218,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			}
 			break;
 		case R.id.tv_NbTime_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[2]) {
 					SortFlag[2] = false;					
@@ -233,7 +233,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			}
 			break;
 		case R.id.tv_AeTime_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[3]) {
 					SortFlag[3] = false;					
@@ -248,7 +248,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			}
 			break;
 		case R.id.tv_ALF_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[4]) {
 					SortFlag[4] = false;					

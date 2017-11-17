@@ -148,12 +148,11 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 						tv_SysI.setText((potStatus.getSysI()) / 100.0 + "");
 						tv_RoomV.setText((potStatus.getRoomV()) / 100.0 + "");
 						listBean = new ArrayList<PotStatus>(potStatus.getPotData());
-						if (listBean != null) {
-							if (listBean.size() > 0) {
-								// listBean.clear(); // 清除LISTVIEW 以前的内容
-								PotStatus_Adapter.onDateChange(listBean);
-							}
+						if (listBean.size() > 0) {
+							// listBean.clear(); // 清除LISTVIEW 以前的内容
+							PotStatus_Adapter.onDateChange(listBean);
 						}
+
 					}
 				});
 			}
@@ -373,14 +372,11 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		if (client.isConnected()) {
 			// 断开连接
 			client.disconnect();
-		} /*else {
-			try {
-				client.connect(ip, port);
-			} catch (NumberFormatException e) {
-				Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
-				e.printStackTrace();
-			}
-		}*/
+		} /*
+			 * else { try { client.connect(ip, port); } catch
+			 * (NumberFormatException e) { Toast.makeText(this, "端口错误",
+			 * Toast.LENGTH_SHORT).show(); e.printStackTrace(); } }
+			 */
 		try {
 			client.connect(ip, port);
 		} catch (NumberFormatException e) {

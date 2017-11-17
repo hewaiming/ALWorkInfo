@@ -481,7 +481,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			layout_daytable.setVisibility(View.VISIBLE);
 			break;
 		case R.id.tv_PotNo_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[0]) {
 					SortFlag[0] = false;
@@ -496,7 +496,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_PotSt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[1]) {
 					SortFlag[1] = false;
@@ -511,7 +511,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_RunTime_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[2]) {
 					SortFlag[2] = false;
@@ -527,7 +527,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			break;
 		// 加料量排序
 		case R.id.tv_YHLCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[3]) {
 					SortFlag[3] = false;
@@ -543,7 +543,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			break;
 		// 加料次数排序
 		case R.id.tv_JLCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[4]) {
 					SortFlag[4] = false;
@@ -558,7 +558,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_SetV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[5]) {
 					SortFlag[5] = false;
@@ -573,7 +573,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_RealSetV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[6]) {
 					SortFlag[6] = false;
@@ -588,7 +588,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_WorkV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[7]) {
 					SortFlag[7] = false;
@@ -603,7 +603,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_AverageV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[8]) {
 					SortFlag[8] = false;
@@ -618,7 +618,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_AeV_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[9]) {
 					SortFlag[9] = false;
@@ -633,7 +633,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_AeTime_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[10]) {
 					SortFlag[10] = false;
@@ -648,7 +648,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_AeCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[11]) {
 					SortFlag[11] = false;
@@ -663,7 +663,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_DybTime_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[12]) {
 					SortFlag[12] = false;
@@ -678,7 +678,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_ALFCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[13]) {
 					SortFlag[13] = false;
@@ -693,7 +693,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_ALCntZSL_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[14]) {
 					SortFlag[14] = false;
@@ -708,7 +708,7 @@ public class DayTableActivity extends Activity implements HttpGetListener, OnScr
 			}
 			break;
 		case R.id.tv_Ddate_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[15]) {
 					SortFlag[15] = false;

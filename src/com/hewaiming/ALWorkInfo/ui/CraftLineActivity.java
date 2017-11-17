@@ -71,7 +71,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 	private LinearLayout showArea = null;
 	private String ip;
 	private int port;
-	private int default_PotNo = 1, default_Area = 11;	
+	private int default_PotNo = 1, default_Area = 11;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +80,12 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_craft_line);
 		MyApplication.getInstance().addActivity(this);
-		GetDataFromIntent();	
+		GetDataFromIntent();
 		init_title();
 		init_potNo();
 		init_area();
-		init_date();	
-		init_items();	
+		init_date();
+		init_items();
 	}
 
 	private void GetDataFromIntent() {
@@ -300,49 +300,49 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 	protected void PotNoChanged(int areaId2) {
 		switch (areaId2) {
 		case 11:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}			
+			}
 			for (int i = 1101; i <= 1136; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 12:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}				
+			}
 			for (int i = 1201; i <= 1237; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 13:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}				
+			}
 			for (int i = 1301; i <= 1337; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 21:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}			
+			}
 			for (int i = 2101; i <= 2136; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 22:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}				
+			}
 			for (int i = 2201; i <= 2237; i++) {
 				PotNoList.add(i + "");
 			}
 			break;
 		case 23:
-			if(PotNoList!=null || PotNoList.size()!=0){
+			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}			
+			}
 			for (int i = 2301; i <= 2337; i++) {
 				PotNoList.add(i + "");
 			}

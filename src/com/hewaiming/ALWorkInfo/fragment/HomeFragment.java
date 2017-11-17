@@ -6,25 +6,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.security.auth.PrivateCredentialPermission;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
@@ -33,9 +30,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.hewaiming.ALWorkInfo.R;
 
@@ -52,53 +46,22 @@ import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.AvgV;
 import com.hewaiming.ALWorkInfo.bean.DJWD;
 import com.hewaiming.ALWorkInfo.bean.HY_item;
-import com.hewaiming.ALWorkInfo.bean.MeasueTable;
 import com.hewaiming.ALWorkInfo.bean.PotCtrl;
-import com.hewaiming.ALWorkInfo.bean.dayTable;
-import com.hewaiming.ALWorkInfo.config.MyApplication;
 import com.hewaiming.ALWorkInfo.config.MyConst;
 import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_GetPublicData;
-import com.hewaiming.ALWorkInfo.json.JsonToMultiList;
 import com.hewaiming.ALWorkInfo.net.AsyTask_HttpGetJXRecord;
 import com.hewaiming.ALWorkInfo.net.AsyTask_HttpGetDate;
-import com.hewaiming.ALWorkInfo.net.AsyTask_HttpPost_Area;
 import com.hewaiming.ALWorkInfo.net.HttpPost_JsonArray;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
-import com.hewaiming.ALWorkInfo.ui.Ae5DayActivity;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
-import com.hewaiming.ALWorkInfo.ui.AeRecActivity;
-import com.hewaiming.ALWorkInfo.ui.AlarmRecActivity;
 import com.hewaiming.ALWorkInfo.ui.AreaAvgVActivity;
-import com.hewaiming.ALWorkInfo.ui.CraftLineActivity;
-import com.hewaiming.ALWorkInfo.ui.DayTableActivity;
-import com.hewaiming.ALWorkInfo.ui.FaultMostActivity;
-import com.hewaiming.ALWorkInfo.ui.FaultRecActivity;
-import com.hewaiming.ALWorkInfo.ui.MeasueTableActivity;
-import com.hewaiming.ALWorkInfo.ui.OperateRecActivity;
-import com.hewaiming.ALWorkInfo.ui.ParamsActivity;
-import com.hewaiming.ALWorkInfo.ui.PotAgeActivity;
-import com.hewaiming.ALWorkInfo.ui.PotStatusActivity;
-import com.hewaiming.ALWorkInfo.ui.PotVLineActivity;
-import com.hewaiming.ALWorkInfo.ui.RealRecActivity;
-import com.hewaiming.ALWorkInfo.ui.RealTimeLineActivity;
 import com.hewaiming.ALWorkInfo.ui.SettingActivity;
-import com.hewaiming.ALWorkInfo.view.HeaderListView_Params;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-
-import android.R.integer;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -106,31 +69,19 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.ShareSDK;
-import io.github.ylbfdev.slideshowview.SlideShowView;
-import io.github.ylbfdev.slideshowview.utils.FileCache;
 
 @SuppressLint("SimpleDateFormat")
 public class HomeFragment extends Fragment implements OnClickListener, HttpGetJXRecord_Listener, HttpGetDate_Listener {
@@ -141,6 +92,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			AVGV_VALUE = "≤4.02", AE_VALUE = "≤0.25";
 	private static final String YHLND_TITLE = "氧化铝浓度(%) ", DJWD_TITLE = "电解温度(°C) ", FZB_TITLE = "分子比(%) ",
 			AVGV_TITLE = "平均电压(V) ", AE_TITLE = "效应系数 ";
+	protected static final String TAG = "HomeFragment Error";
 	private SharedPreferences sp;
 	// private GridView gridView;
 	private Button btnMore;
@@ -360,9 +312,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Log.d(TAG, e.getMessage());
+					//e.printStackTrace();					
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -384,9 +338,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -408,9 +364,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -432,9 +390,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -647,9 +607,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -672,9 +634,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -697,9 +661,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -721,9 +687,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -745,9 +713,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -769,9 +739,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1061,9 +1033,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1259,9 +1233,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1471,9 +1447,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});

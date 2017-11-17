@@ -443,7 +443,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			layout_list.setVisibility(View.VISIBLE);
 			break;
 		case R.id.tv_PotNo_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[0]) {
 					SortFlag[0] = false;					
@@ -458,7 +458,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_Ddate_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[1]) {
 					SortFlag[1] = false;					
@@ -473,7 +473,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_ALCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[2]) {
 					SortFlag[2] = false;					
@@ -488,7 +488,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_LSP_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[3]) {
 					SortFlag[3] = false;					
@@ -503,7 +503,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_DJZSP_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[4]) {
 					SortFlag[4] = false;					
@@ -518,7 +518,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_DJWD_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[5]) {
 					SortFlag[5] = false;					
@@ -533,7 +533,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_FZB_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[6]) {
 					SortFlag[6] = false;					
@@ -548,7 +548,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_FeCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[7]) {
 					SortFlag[7] = false;					
@@ -563,7 +563,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_SiCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[8]) {
 					SortFlag[8] = false;					
@@ -578,7 +578,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_ALOCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[9]) {
 					SortFlag[9] = false;					
@@ -593,7 +593,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_CaFCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[10]) {
 					SortFlag[10] = false;					
@@ -608,7 +608,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_MgCnt_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[11]) {
 					SortFlag[11] = false;					
@@ -623,7 +623,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_MLSP_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[12]) {
 					SortFlag[12] = false;					
@@ -638,7 +638,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_LDYJ_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[13]) {
 					SortFlag[13] = false;					
@@ -653,7 +653,7 @@ public class MeasueTableActivity extends Activity implements HttpGetListener, On
 			}
 			break;
 		case R.id.tv_JHCL_head:
-			if ((listBean != null) || (listBean.size() != 0)) {
+			if ((listBean != null) && (!listBean.isEmpty())) {
 				Reset_SortImage();
 				if (SortFlag[14]) {
 					SortFlag[14] = false;					
