@@ -218,15 +218,15 @@
                 android:text="电解质水平" >
             </CheckBox>
 
-           <!--  <CheckBox
-                android:id="@+id/chkbox_DJWD"
+           <CheckBox
+                android:id="@+id/chkbox_ALL"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:checked="true"
-                android:text="电解温度" >
+               
+                android:text="全选" >
             </CheckBox>
-
+ <!-- 
             <CheckBox
                 android:id="@+id/chkbox_LSP"
                 android:layout_width="0dp"

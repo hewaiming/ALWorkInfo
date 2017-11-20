@@ -151,7 +151,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data.equals("") || data == null) {
+		if (data==null &&  data.isEmpty()) {
 			Toast.makeText(getApplicationContext(), "没有获取到【常用参数】数据！", Toast.LENGTH_LONG).show();
 			if (listBean != null) {
 				if (listBean.size() > 0) {

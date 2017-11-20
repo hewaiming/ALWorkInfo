@@ -63,7 +63,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 	private List<String> PotNoList = null;
 	private List<dayTable> listBean_daytable = null;
 	private List<CheckBox> list_cb = new ArrayList<CheckBox>();
-	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15;
+	private CheckBox cb0, cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15,cb_NoneAll;
 	private String selitems = "";
 	private List<MeasueTable> listBean_measuetable = null;
 	private ProgressDialog m_ProgressDialog = null;
@@ -101,8 +101,8 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 	}
 
 	private void GetPotNo_Area(String potNo) {
-		if (potNo != "" || !(potNo.equals(null))) {
-			int tmpNo = Integer.valueOf(potNo);
+		if(potNo!=null && !potNo.equals("")) {		
+			int tmpNo = Integer.parseInt(potNo);
 			default_Area = tmpNo / 100;
 			default_PotNo = tmpNo % 100;
 		}
@@ -126,6 +126,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		cb13 = (CheckBox) findViewById(R.id.chkbox_DJWD);
 		cb14 = (CheckBox) findViewById(R.id.chkbox_LSP);
 		cb15 = (CheckBox) findViewById(R.id.chkbox_DJZSP);
+		cb_NoneAll=(CheckBox) findViewById(R.id.chkbox_ALL);
 		list_cb.add(cb0);
 		list_cb.add(cb1);
 		list_cb.add(cb2);
@@ -142,6 +143,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		list_cb.add(cb13);
 		list_cb.add(cb14);
 		list_cb.add(cb15);
+		list_cb.add(cb_NoneAll);
 		for (CheckBox cb : list_cb) {
 			cb.setOnCheckedChangeListener(this);
 		}
@@ -488,9 +490,33 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		exec.shutdown();
 	}
 
+	
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if(buttonView.getId()==R.id.chkbox_ALL){
+			if(isChecked){
+			 //全选	
+				chkbox_ALL();
+			}else{
+			  //全不选
+				chkbox_None();
+			}
+		}
 		Log.i("chkbox", buttonView.getText().toString() + isChecked);
+	}
+
+	private void chkbox_None() {
+		for(int i=0;i<list_cb.size()-1;i++){
+			list_cb.get(i).setChecked(false);
+		}
+		
+	}
+
+	private void chkbox_ALL() {
+		for(int i=0;i<list_cb.size()-1;i++){
+			list_cb.get(i).setChecked(true);
+		}
+		
 	}
 
 }

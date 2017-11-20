@@ -40,11 +40,11 @@ public class HttpPost_JsonArray {
 				is = httpEntity.getContent();
 			} 
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			Log.i("HTTPRequest", e.getMessage());
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			Log.i("HTTPRequest", e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.i("HTTPRequest", e.getMessage());
 		}
 
 		try {
