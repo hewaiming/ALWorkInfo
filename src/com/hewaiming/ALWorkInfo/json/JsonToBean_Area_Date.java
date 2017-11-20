@@ -27,6 +27,7 @@ import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
 import android.R.integer;
+import android.util.Log;
 
 public class JsonToBean_Area_Date {
 
@@ -89,7 +90,6 @@ public class JsonToBean_Area_Date {
 				listBean.add(mday);
 			}
 		} catch (JSONException e) {
-
 			e.printStackTrace();
 		}
 		return listBean;
@@ -307,7 +307,7 @@ public class JsonToBean_Area_Date {
 				} else {
 					mBean.setStatus(jsonobj.getString("Status"));
 				}
-				if (jsonobj.get("MaxVoltage").equals(null)) {
+				if (jsonobj.get("MaxVoltage")==null) {
 					mBean.setMaxV(0);
 				} else {
 					mBean.setMaxV(jsonobj.getDouble("MaxVoltage"));
@@ -479,7 +479,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			Log.e("jsonToAERecord", e.getMessage());
 		}
 		return listBean;
 	}
@@ -541,8 +541,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+            Log.e("JsonTo效应时间长", e.getMessage());			
 		}
 		return listBean;
 	}
@@ -650,8 +649,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("数据转换为测量数据LIST",e.getMessage());			
 		}
 		return listBean;
 	}
@@ -664,9 +662,7 @@ public class JsonToBean_Area_Date {
 			JSONArray jsonarray = new JSONArray(data);
 
 			listBean = new ArrayList<FaultMost>();
-			listBean.clear();
-			// System.out.println("jsonarray.FaultMost---length()---" +
-			// jsonarray.length());
+			listBean.clear();		
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -686,8 +682,8 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("JSON TO故障率统计",e.getMessage());
+		
 		}
 		return listBean;
 	}
@@ -741,7 +737,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			Log.e("JSON转换成LIST数据（平均电压）", e.getMessage());
 		}
 		return listBean;
 	}
@@ -752,9 +748,7 @@ public class JsonToBean_Area_Date {
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 			listBean = new ArrayList<DJWD>();
-			listBean.clear();
-			// System.out.println("jsonarray. MeasueTable---length()---" +
-			// jsonarray.length());
+			listBean.clear();		
 			for (int i = 0; i < jsonarray.length(); i++) {
 
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
@@ -795,8 +789,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+	        Log.e("JSON转换成LIST电解温度）", e.getMessage());		
 		}
 		return listBean;
 	}
@@ -862,9 +855,8 @@ public class JsonToBean_Area_Date {
 				}
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		// System.out.println(listBean.toString());
+			Log.e("JSON转换成LIST分子比", e.getMessage());
+		}	
 		return listBean;
 	}
 
@@ -874,9 +866,7 @@ public class JsonToBean_Area_Date {
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 			listBean = new ArrayList<HY_item>();
-			listBean.clear();
-			// System.out.println("jsonarray.
-			// MeasueTable---length()---+jsonarray.length());
+			listBean.clear();		
 
 			JSONObject prior_jsonobj = jsonarray.getJSONObject(0);
 			for (int i = 0; i < jsonarray.length(); i++) {
@@ -924,9 +914,9 @@ public class JsonToBean_Area_Date {
 				}
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e("JSON转换成LIST数据 （氧化铝浓度）",e.getMessage());
 		}
-		// System.out.println(listBean.toString());
+	
 		return listBean;
 	}
 
@@ -948,7 +938,7 @@ public class JsonToBean_Area_Date {
 			}
 			return mItem;
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e("json to fzb", e.getMessage());		
 			return null;
 		}
 	}
@@ -971,7 +961,7 @@ public class JsonToBean_Area_Date {
 			}
 			return mItem;
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e("JsonArrayToYHLNDItem", e.getMessage());
 			return null;
 		}
 
@@ -1005,8 +995,8 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+            Log.e(" JSON转换成LIST 区平均电压",e.getMessage());
+		
 		}
 		return listBean;
 	}
@@ -1051,8 +1041,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+            Log.e("JSON解析为Bean数据 区效应系数",e.getMessage()); 		
 		}
 		return listBean;
 	}

@@ -20,6 +20,7 @@ import com.hewaiming.ALWorkInfo.bean.RealRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
 import android.R.integer;
+import android.util.Log;
 
 public class JsonToBean_GetPublicData {
 
@@ -38,8 +39,8 @@ public class JsonToBean_GetPublicData {
 				listBean.add(mdata.substring(0, location));
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("Json To PublicData",e.getMessage());
+			
 		}
 		return listBean;
 	}
@@ -58,13 +59,13 @@ public class JsonToBean_GetPublicData {
 				map.put("id", jsonobj.getString("RecordNo"));
 				map.put("jx_name", jsonobj.getString("Name1"));
 
-				if (jsonobj.get("Name2").equals(null)) {
+				if (jsonobj.get("Name2")==null) {
 					map.put("jx_name2", "");
 				} else {
 					map.put("jx_name2", jsonobj.getString("Name2"));
 				}
 
-				if (jsonobj.get("Name3").equals(null)) {
+				if (jsonobj.get("Name3")==null) {
 					map.put("jx_name3", "");
 				} else {
 					map.put("jx_name3", jsonobj.getString("Name3"));
@@ -73,8 +74,7 @@ public class JsonToBean_GetPublicData {
 				RXList.add(map);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("Json to JXRecord", e.getMessage());		
 		}
 
 		return RXList;
@@ -90,18 +90,17 @@ public class JsonToBean_GetPublicData {
 			for (int i = 0; i < jsonarray.length(); i++) {
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
 				PotCtrl potCtrl = new PotCtrl();
-				if (!(jsonobj.get("PotNo").equals(null))){
+				if (!(jsonobj.get("PotNo")==null)){
 					potCtrl.setPotNo(jsonobj.getInt("PotNo"));
 				}
-				if (!(jsonobj.get("p31").equals(null))){
+				if (!(jsonobj.get("p31")==null)){
 					potCtrl.setCtrls(jsonobj.getInt("p31"));
 				}
 				
 				NormPotsList.add(potCtrl);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("厂房正常槽数量 LIST", e.getMessage());			
 		}
 
 		return NormPotsList;

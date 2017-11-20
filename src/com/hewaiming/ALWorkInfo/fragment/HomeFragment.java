@@ -261,9 +261,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					Log.d(TAG, e.getMessage());					
+				} catch (BrokenBarrierException e) {				
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -287,9 +287,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					
+					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+				
+					Log.d(TAG, e.getMessage());
 				}
 			}
 		});
@@ -313,9 +315,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					Log.d(TAG, e.getMessage());
-					//e.printStackTrace();					
+								
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -338,10 +340,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -364,10 +366,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -390,10 +392,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -607,10 +609,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -634,10 +636,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -661,10 +663,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -687,10 +689,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -713,10 +715,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -739,10 +741,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -759,9 +761,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mparams.add(new BasicNameValuePair("areaID", areaID));
 		JSONArrayParser jsonParser = new JSONArrayParser();
 		JSONArray json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
-		if (json != null) {
-			// Log.d("厂房：分子比", json.toString());// 从服务器返回有数据
-			System.out.println("获取厂房分子比OK，其他数据呢");
+		if (json != null) {		
+			 Log.i("厂房：分子比" + areaID,"获取厂房分子比OK，其他数据呢");
 			return JsonToBean_Area_Date.JsonArrayToFZBItem(areaID, json.toString());
 		} else {
 			Log.i("厂房：分子比" + areaID, "从PHP服务器无数据返回！");
@@ -786,7 +787,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		JSONArray json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
 		if (json != null) {
 			// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
-			System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
+			//System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
+			Log.i("厂房：氧化铝浓度" + areaID, "获取厂房氧化铝浓度OK，其他数据呢");
 			return JsonToBean_Area_Date.JsonArrayToYHLNDItem(areaID, json.toString());
 		} else {
 			Log.i("厂房：氧化铝浓度" + areaID, "从PHP服务器无数据返回！");
@@ -1033,10 +1035,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -1233,10 +1235,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -1447,10 +1449,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					//e.printStackTrace();
+					
 					Log.d(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
-					//e.printStackTrace();
+				
 					Log.d(TAG, e.getMessage());
 				}
 			}
@@ -1834,7 +1836,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			}
 
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		
+			Log.d(TAG, e.getMessage());
 		}
 
 	}

@@ -302,49 +302,49 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		case 11:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 1101; i <= 1136; i++) {
-				PotNoList.add(i + "");
+				for (int i = 1101; i <= 1136; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		case 12:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 1201; i <= 1237; i++) {
-				PotNoList.add(i + "");
+				for (int i = 1201; i <= 1237; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		case 13:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 1301; i <= 1337; i++) {
-				PotNoList.add(i + "");
+				for (int i = 1301; i <= 1337; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		case 21:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 2101; i <= 2136; i++) {
-				PotNoList.add(i + "");
+				for (int i = 2101; i <= 2136; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		case 22:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 2201; i <= 2237; i++) {
-				PotNoList.add(i + "");
+				for (int i = 2201; i <= 2237; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		case 23:
 			if ((PotNoList != null) && (!PotNoList.isEmpty())) {
 				PotNoList.clear();
-			}
-			for (int i = 2301; i <= 2337; i++) {
-				PotNoList.add(i + "");
+				for (int i = 2301; i <= 2337; i++) {
+					PotNoList.add(i + "");
+				}
 			}
 			break;
 		}
@@ -371,8 +371,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				isShowingBtn.setImageDrawable(getResources().getDrawable(R.drawable.down_green));
 			}
 			break;
-		case R.id.btn_ok:
-			m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this, "请等待...", "正在获取工艺参数数据 ...", true);
+		case R.id.btn_ok:		
 			if (EndDate.compareTo(BeginDate) < 0) {
 				Toast.makeText(getApplicationContext(), "日期选择不对：截止日期小于开始日期", 1).show();
 			} else {
@@ -396,12 +395,13 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 							Toast.makeText(getApplicationContext(), "没有选中任何一项工艺参数，请选择工艺参数项！", 1).show();
 							break;
 						} else {
+							m_ProgressDialog = ProgressDialog.show(CraftLineActivity.this, "请等待...", "正在获取工艺参数数据 ...", true);
 							showCraft(); // 并发进程方式取数据
 							// m_ProgressDialog.dismiss();
 						}
 					}
 				} catch (ParseException e) {
-					e.printStackTrace();
+					Log.i("工艺参数：测量数据 ---", e.getMessage());					
 				}
 			}
 			break;
@@ -413,8 +413,8 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		ExecutorService exec = Executors.newCachedThreadPool();
 		final CyclicBarrier barrier = new CyclicBarrier(2, new Runnable() {
 			@Override
-			public void run() {
-				System.out.println("所有工艺参数都OK，开始happy去");
+			public void run() {				
+				Log.i("工艺参数：","所有工艺参数都OK，开始happy去");
 				Intent show_intent = new Intent(CraftLineActivity.this, ShowCraftLineActivity.class);
 				Bundle mbundle = new Bundle();
 				mbundle.putString("PotNo", PotNo);
@@ -430,9 +430,8 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 
 		exec.execute(new Runnable() {
 			@Override
-			public void run() {
-				System.out.println("测量数据OK，其他哥们呢");
-
+			public void run() {			
+				Log.i("工艺参数：","测量数据OK，其他哥们呢");
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
 				mparams.clear();
 				mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 槽号
@@ -451,16 +450,17 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Log.i("工艺参数：测量数据 ---", e.getMessage());				
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					Log.i("工艺参数：测量数据 ---", e.getMessage());					
 				}
 			}
 		});
 		exec.execute(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("日报数据OK，其他哥们呢");
+				//System.out.println("日报数据OK，其他哥们呢");
+				Log.i("工艺参数：","日报数据OK，其他哥们呢");
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
 				mparams.clear();
 				mparams.add(new BasicNameValuePair("PotNo", PotNo)); // 槽号
@@ -478,10 +478,10 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				} catch (InterruptedException e) {					
+					Log.i("工艺参数：日报数据 ---", e.getMessage());
 				} catch (BrokenBarrierException e) {
-					e.printStackTrace();
+					Log.i("工艺参数：日报数据 ---", e.getMessage());					
 				}
 			}
 		});

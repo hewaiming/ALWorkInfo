@@ -35,7 +35,6 @@ public class HttpPost_JsonArray {
 				DefaultHttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(url);
 //				httpPost.setEntity(new UrlEncodedFormEntity(params));
-
 				HttpResponse httpResponse = httpClient.execute(httpPost);
 				HttpEntity httpEntity = httpResponse.getEntity();
 				is = httpEntity.getContent();
@@ -69,12 +68,10 @@ public class HttpPost_JsonArray {
 
 			json=json.substring(0, json.length()-1);
 			json='['+json+']';
-//			System.out.println("json after---" + json);
-		
 		} catch (Exception e) {
 			Log.e("Buffer Error", "Error converting result" + e.toString());
 			return null;
-		}
+		}		
 		// try parse the string to a JSON object
 		try {
 			

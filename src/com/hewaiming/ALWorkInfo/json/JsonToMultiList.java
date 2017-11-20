@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import com.hewaiming.ALWorkInfo.bean.AeRecord;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
+import android.util.Log;
+
 public class JsonToMultiList {
 
 	public static List<dayTable> JsonArrayToDayTableBean(String data) {
@@ -95,8 +97,7 @@ public class JsonToMultiList {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+			Log.e("JsonToMultiList", e.getMessage());			
 		}
 		return listBean;
 	}
@@ -185,7 +186,7 @@ public class JsonToMultiList {
 			mapBean.put("ae5", list5);
 
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e("JsonToAE5Record", e.getMessage());			
 		}
 		return mapBean;
  }
