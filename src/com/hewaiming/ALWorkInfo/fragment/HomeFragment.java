@@ -14,9 +14,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -79,7 +76,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,8 +92,6 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private SharedPreferences sp;
 	// private GridView gridView;
 	private Button btnMore;
-	private SimpleAdapter adapter;
-	private List<Map<String, Object>> dataList;
 	private List<String> date_record = null; // 记录日期
 	private List<String> date_table = null; // 报表日期
 	private List<Map<String, Object>> JXList = null; // 记录号名
@@ -261,9 +255,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.d(TAG, e.getMessage());					
+					Log.e(TAG, e.getMessage());					
 				} catch (BrokenBarrierException e) {				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -288,10 +282,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -314,11 +308,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 								
 				} catch (BrokenBarrierException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -341,10 +335,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -367,10 +361,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -393,10 +387,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -553,7 +547,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("第 " + i + " 氧化铝浓度项 ，为空！");
+					Log.i("氧化铝浓度项:","第 " + i + " 氧化铝浓度项 ，为空！");
 				}
 			}
 		}
@@ -574,7 +568,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("获取各区分子比数据OK，开始显示柱形图表啦，happy去");
+				Log.i("获取各区分子比数据OK","获取各区分子比数据OK，开始显示柱形图表啦，happy去");
 				FZBSum_Clear();
 				ShowBar_FZB(CalcFZBSUM(listBean_FZB));// 显示各区分子比柱状图
 			}
@@ -610,10 +604,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -637,10 +631,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -664,10 +658,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -690,10 +684,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -716,10 +710,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -742,10 +736,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -950,7 +944,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("第 " + i + " 分子比平均值项 ，为空！");
+					Log.i("分子比平均值项","第 " + i + " 分子比平均值项 ，为空！");
 				}
 			}
 		}
@@ -970,7 +964,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("获取各区电解温度数据OK，开始显示柱形图表啦，happy去");
+				Log.i("各区电解温度数据OK","获取各区电解温度数据OK，开始显示柱形图表啦，happy去");
 				DJWDSum_Clear();
 				CalcDJWDSUM(listBean_DJWD);
 				ShowBar_DJWD();// 显示各区电解温度柱状图
@@ -1007,9 +1001,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(DJWD_url, "POST", mparams);
-				if (json != null) {
-					// Log.d("厂房：电解温度", json.toString());// 从服务器返回有数据
-					System.out.println("获取厂房电解温度OK，其他数据呢");
+				if (json != null) {					
+					Log.i("厂房电解温度","获取厂房电解温度OK，其他数据呢");
 					listBean_DJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
 					listBean_DJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
 
@@ -1036,10 +1029,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1159,7 +1152,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("第 " + i + " 项 电解温度，为空！");
+					Log.i("电解温度","第 " + i + " 项 电解温度，为空！");
 				}
 			}
 		}
@@ -1178,7 +1171,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("获取各区平均电压数据OK，开始显示柱形图表啦，happy去");
+				Log.i("区平均电压数据","获取各区平均电压数据OK，开始显示柱形图表啦，happy去");
 				AvgVSum_Clear();
 				CalcAvgVSUM(listBean_AvgV);
 				ShowBar_AvgV();// 显示各区平均电压柱状图
@@ -1207,9 +1200,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", yesterdayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(AvgVArea_url, "POST", mparams);
-				if (json != null) {
-					Log.d("厂房：平均电压", json.toString());// 从服务器返回有数据
-					System.out.println("获取厂房平均电压OK，其他数据呢");
+				if (json != null) {					
+					Log.i("厂房平均电压","获取厂房平均电压OK，其他数据呢");
 					listBean_AvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
 					listBean_AvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
 
@@ -1217,11 +1209,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					// 再次get平均电压数据
 					json = jsonParser.makeHttpRequest(AvgVArea_url, "POST", mparams);
 					if (json != null) {
-						Log.d("厂房：平均电压", json.toString());// 从服务器返回有数据
+						Log.i("厂房：平均电压", "ok");// 从服务器返回有数据
 						listBean_AvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
 						listBean_AvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
 					} else {
-						Log.i("厂房：平均电压 ---", "从PHP服务器无数据返回！");
+						Log.w("厂房：平均电压 ---", "从PHP服务器无数据返回！");
 						handler.post(new Runnable() {
 							@Override
 							public void run() {
@@ -1236,10 +1228,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1357,7 +1349,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("第 " + i + " 项 平均电压，为空！");
+					Log.w("平均电压为空","第 " + i + " 项 平均电压，为空！");
 				}
 			}
 		}
@@ -1390,7 +1382,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("获取各区效应系数数据OK，开始显示柱形图表啦，happy去");
+				Log.i("效应系数数据","获取各区效应系数数据OK，开始显示柱形图表啦，happy去");
 				AeCnt_Clear();
 				CalcAeCnt(listBean_AeCnt);
 				ShowBar_AE();// 显示各区效应柱状图
@@ -1419,9 +1411,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(AeCnt_url, "POST", mparams);
-				if (json != null) {
-					Log.d("厂房：效应次数", json.toString());// 从服务器返回有数据
-					System.out.println("获取厂房效应次数OK，其他数据呢");
+				if (json != null) {				
+					Log.i("效应次数","获取厂房效应次数OK，其他数据呢");
 					listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
 					listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 
@@ -1429,7 +1420,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					// 再次get效应次数数据
 					json = jsonParser.makeHttpRequest(AeCnt_url, "POST", mparams);
 					if (json != null) {
-						Log.d("厂房：效应次数", json.toString());// 从服务器返回有数据
+						Log.i("效应次数","厂房：效应次数ok");// 从服务器返回有数据
 						listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
 						listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 					} else {
@@ -1450,10 +1441,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				} catch (BrokenBarrierException e) {
 				
-					Log.d(TAG, e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 			}
 		});
@@ -1612,7 +1603,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("第 " + i + " 项 效应次数，为空！");
+					Log.w("效应次数","第 " + i + " 项 效应次数，为空！");
 				}
 			}
 		}
@@ -1645,7 +1636,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					System.out.println("槽控制字数据为NULL!");
+					Log.w("槽控制字","槽控制字数据为NULL!");
 				}
 			}
 			if (Room == 1) {
@@ -1837,7 +1828,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 		} catch (InterruptedException e) {
 		
-			Log.d(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 
 	}
