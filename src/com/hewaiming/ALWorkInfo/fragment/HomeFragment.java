@@ -224,7 +224,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
+				Log.i("氧化铝浓度数据","获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
 				YHLNDSum_Clear();
 				ShowBar_YHLND(CalcYHLNDSUM(listBean_YHLND));// 显示各区氧化铝浓度柱状图
 			}
@@ -255,9 +255,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.e(TAG, e.getMessage());					
+					Log.e(TAG, "一厂房一区氧化铝浓度数据CyclicBarrier有误");					
 				} catch (BrokenBarrierException e) {				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"一厂房一区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -282,10 +282,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"一厂房二区氧化铝浓度数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房二区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -308,11 +308,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房三区氧化铝浓度数据CyclicBarrier有误");
 								
 				} catch (BrokenBarrierException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房三区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -335,10 +335,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房一区氧化铝浓度数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,  "二厂房一区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -361,10 +361,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房二区氧化铝浓度数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"二厂房二区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -387,10 +387,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房三区氧化铝浓度数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房三区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -604,10 +604,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
-				} catch (BrokenBarrierException e) {
-				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"一厂房一区分子比数据CyclicBarrier有误");
+				} catch (BrokenBarrierException e) {				
+					Log.e(TAG, "一厂房一区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -631,10 +630,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房二区分子比数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房二区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -658,10 +657,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "一厂房三区分子比数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"一厂房三区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -684,10 +683,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房一区分子比数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"二厂房一区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -710,10 +709,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"二厂房二区分子比数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG,"二厂房二区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -736,10 +735,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房三区分子比数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "二厂房三区分子比数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -1029,10 +1028,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房电解温度数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房电解温度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -1228,10 +1227,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房平均电压数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房平均电压数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -1441,10 +1440,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房 效应次数 数据CyclicBarrier有误");
 				} catch (BrokenBarrierException e) {
 				
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "厂房 效应次数 数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -1828,7 +1827,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 		} catch (InterruptedException e) {
 		
-			Log.e(TAG, e.getMessage());
+			Log.e(TAG, "厂房正常槽数量 latch 有误");
 		}
 
 	}
