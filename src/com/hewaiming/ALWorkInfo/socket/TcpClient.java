@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import android.util.Log;
 import bean.PotStatus;
 import bean.PotStatusDATA;
 import bean.RealTime;
@@ -63,7 +64,7 @@ public abstract class TcpClient implements Runnable {
 			connect = true;
 			this.onConnect(transceiver);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e("TcpClient","连接SOCKET服务端时出错");	
 			this.onConnectFailed();
 		}
 	}

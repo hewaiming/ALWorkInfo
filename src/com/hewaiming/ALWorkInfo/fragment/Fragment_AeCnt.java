@@ -46,22 +46,22 @@ import android.widget.Toast;
 public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnClickListener, OnScrollListener {
 
 	private Context mContext;
-	private RelativeLayout mHead_AeCnt;
-	private ListView lv_AeCnt;
+	private RelativeLayout mHeadAeCnt;
+	private ListView lvAeCnt;
 	private String ip;
 	private int port;
 
 	private View mView;
-	private List<AeRecord> listBean_AeCnt = null;
+	private List<AeRecord> listBeanAeCnt = null;
 	private List<String> dateBean = new ArrayList<String>();
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
-	private HSView_AeCntAdapter AeCnt_Adapter = null;
+	private HSView_AeCntAdapter AeCntAdapter = null;
 
 	private AeMostActivity mActivity;
 	protected String PotNo, BeginDate, EndDate;
 	private FooterListView footView;
 	private ListViewAndHeadViewTouchLinstener lvAndHVTouchListener;
-	private TextView tv_Total;
+	private TextView tvTotal;
 
 	public Fragment_AeCnt(Context mContext, List<String> dateBean, List<Map<String, Object>> jXList, String mip,
 			int mport) {
@@ -91,25 +91,25 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 		super.onActivityCreated(savedInstanceState);
 		lvAndHVTouchListener = new ListViewAndHeadViewTouchLinstener();
 
-		mHead_AeCnt = (RelativeLayout) mView.findViewById(R.id.head_AeCnt); // 表头处理
-		mHead_AeCnt.setFocusable(true);
-		mHead_AeCnt.setClickable(true);
-		mHead_AeCnt.setBackgroundColor(Color.parseColor("#fffffb"));
-		mHead_AeCnt.setOnTouchListener(lvAndHVTouchListener);		
+		mHeadAeCnt = (RelativeLayout) mView.findViewById(R.id.head_AeCnt); // 表头处理
+		mHeadAeCnt.setFocusable(true);
+		mHeadAeCnt.setClickable(true);
+		mHeadAeCnt.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHeadAeCnt.setOnTouchListener(lvAndHVTouchListener);		
 
-		lv_AeCnt = (ListView) mView.findViewById(R.id.lv_AeCnt);
-		lv_AeCnt.setOnTouchListener(lvAndHVTouchListener);		
-		lv_AeCnt.setCacheColorHint(0);
-		lv_AeCnt.setOnScrollListener(this);
-		lv_AeCnt.setOnItemClickListener(new OnItemClickListener() {
+		lvAeCnt = (ListView) mView.findViewById(R.id.lv_AeCnt);
+		lvAeCnt.setOnTouchListener(lvAndHVTouchListener);		
+		lvAeCnt.setCacheColorHint(0);
+		lvAeCnt.setOnScrollListener(this);
+		lvAeCnt.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (position != listBean_AeCnt.size()) {
+				if (position != listBeanAeCnt.size()) {
 					Intent aeRec_intent = new Intent(getActivity(), AeRecActivity.class);
 					Bundle bundle_AeRec = new Bundle();
 					bundle_AeRec.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 					bundle_AeRec.putBoolean("Hide_Action", true);
-					bundle_AeRec.putString("PotNo", String.valueOf(listBean_AeCnt.get(position).getPotNo()));
+					bundle_AeRec.putString("PotNo", String.valueOf(listBeanAeCnt.get(position).getPotNo()));
 					bundle_AeRec.putString("Begin_Date", BeginDate);
 					bundle_AeRec.putString("End_Date", EndDate);
 					bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
@@ -126,8 +126,8 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 
 	private void init_footer() {
 		footView = new FooterListView(mContext);// 添加表end
-		lv_AeCnt.addFooterView(footView);
-		tv_Total = (TextView) mView.findViewById(R.id.tv_footTotal);
+		lvAeCnt.addFooterView(footView);
+		tvTotal = (TextView) mView.findViewById(R.id.tv_footTotal);
 
 	}
 
@@ -155,25 +155,25 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 	private void init_adapter(String data) {
 		if (data.equals("")) {
 			Toast.makeText(this.getActivity(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			tv_Total.setText("0次");
-			if (listBean_AeCnt != null) {
-				if (listBean_AeCnt.size() > 0) {
-					listBean_AeCnt.clear(); // 清除LISTVIEW 以前的内容
-					AeCnt_Adapter.onDateChange(listBean_AeCnt);
+			tvTotal.setText("0次");
+			if (listBeanAeCnt != null) {
+				if (listBeanAeCnt.size() > 0) {
+					listBeanAeCnt.clear(); // 清除LISTVIEW 以前的内容
+					AeCntAdapter.onDateChange(listBeanAeCnt);
 				}
 			}
 		} else {
-			listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
-			listBean_AeCnt.clear();
-			listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
+			listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
+			listBeanAeCnt.clear();
+			listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
 			int total = 0;
-			for (AeRecord tmp : listBean_AeCnt) {
+			for (AeRecord tmp : listBeanAeCnt) {
 				total = total + tmp.getWaitTime(); // 统计总数
 			}
-			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt,
-					mHead_AeCnt);
-			lv_AeCnt.setAdapter(AeCnt_Adapter);
-			tv_Total.setText(total + "次");
+			AeCntAdapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBeanAeCnt,
+					mHeadAeCnt);
+			lvAeCnt.setAdapter(AeCntAdapter);
+			tvTotal.setText(total + "次");
 		}
 
 	};
@@ -192,7 +192,7 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
-			HorizontalScrollView headSrcrollView_AeCnt = (HorizontalScrollView) mHead_AeCnt
+			HorizontalScrollView headSrcrollView_AeCnt = (HorizontalScrollView) mHeadAeCnt
 					.findViewById(R.id.horizontalScrollView_AeCnt);
 			headSrcrollView_AeCnt.onTouchEvent(arg1);
 
@@ -205,25 +205,25 @@ public class Fragment_AeCnt extends Fragment implements LoadAeCntInterface, OnCl
 
 		if (data.equals("")) {
 			Toast.makeText(this.getActivity(), "没有获取到[效应槽：次数最多]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			tv_Total.setText("0次");
-			if (listBean_AeCnt != null) {
-				if (listBean_AeCnt.size() > 0) {
-					listBean_AeCnt.clear(); // 清除LISTVIEW 以前的内容
-					AeCnt_Adapter.onDateChange(listBean_AeCnt);
+			tvTotal.setText("0次");
+			if (listBeanAeCnt != null) {
+				if (listBeanAeCnt.size() > 0) {
+					listBeanAeCnt.clear(); // 清除LISTVIEW 以前的内容
+					AeCntAdapter.onDateChange(listBeanAeCnt);
 				}
 			}
 		} else {
-			listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化适配器
-			listBean_AeCnt.clear();
-			listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
+			listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化适配器
+			listBeanAeCnt.clear();
+			listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(data);
 			int total = 0;
-			for (AeRecord tmp : listBean_AeCnt) {
+			for (AeRecord tmp : listBeanAeCnt) {
 				total = total + tmp.getWaitTime(); // 统计总数
 			}
-			AeCnt_Adapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBean_AeCnt,
-					mHead_AeCnt);
-			lv_AeCnt.setAdapter(AeCnt_Adapter);			
-			tv_Total.setText(total + "次");
+			AeCntAdapter = new HSView_AeCntAdapter(this.getActivity(), R.layout.item_hsview_aecnt, listBeanAeCnt,
+					mHeadAeCnt);
+			lvAeCnt.setAdapter(AeCntAdapter);			
+			tvTotal.setText(total + "次");
 			
 		}
 

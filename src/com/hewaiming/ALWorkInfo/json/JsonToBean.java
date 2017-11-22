@@ -12,7 +12,11 @@ import com.hewaiming.ALWorkInfo.bean.PotV;
 import com.hewaiming.ALWorkInfo.bean.SetParams;
 import com.hewaiming.ALWorkInfo.bean.dayTable;
 
+import android.util.Log;
+
 public class JsonToBean {
+
+	private static final String TAG = "JsonToBean";
 
 	public List<JSONObject> JsonArrayToList(String data) {
 
@@ -27,8 +31,8 @@ public class JsonToBean {
 				lists.add(jsonobj);
 			}
 		} catch (JSONException e) {
-
-			e.printStackTrace();
+		  Log.e(TAG, "JSONException");
+		
 		}
 		return lists;
 	}
@@ -64,7 +68,7 @@ public class JsonToBean {
 			}
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			 Log.e(TAG, "JSONException");
 		}
 		return listBean;
 	}
@@ -85,7 +89,7 @@ public class JsonToBean {
 			}
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			 Log.e(TAG, "JSONException");
 		}
 		return listBean;
 	}
@@ -107,7 +111,7 @@ public class JsonToBean {
 			}
 		} catch (JSONException e) {
 
-			e.printStackTrace();
+			 Log.e(TAG, "JSONException");
 		}
 		return listBean;
 	}
@@ -130,7 +134,7 @@ public class JsonToBean {
 				listBean.add(mSetParams);
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			 Log.e(TAG, "JSONException");
 		}
 		return listBean;
 	}
@@ -169,7 +173,7 @@ public class JsonToBean {
 				listBean.add(potAge);
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			 Log.e(TAG, "JSONException");
 		}
 		return listBean;
 	}

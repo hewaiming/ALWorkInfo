@@ -46,7 +46,7 @@ public class AboutActivity extends Activity {
 			myId = getVersionName();
 			tv_ID.setText("°æ±¾ºÅ£º"+myId);
 		} catch (Exception e) {			
-			e.printStackTrace();
+			Log.e("°æ±¾ºÅ", "°æ±¾ºÅ Exception");
 			tv_ID.setText("°æ±¾ºÅ£ºÎ´Öª");
 		}		
 		btnShare=(Button) findViewById(R.id.btn_share);

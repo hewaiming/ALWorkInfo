@@ -117,7 +117,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data==null && data.isEmpty()) {
+		if (data==null) {
 			Toast.makeText(getApplicationContext(), "没有获取到[槽龄表]数据！", Toast.LENGTH_LONG).show();
 			if (listBean != null) {
 				if (listBean.size() > 0) {
@@ -125,7 +125,7 @@ public class PotAgeActivity extends Activity implements HttpGetListener, OnClick
 					potage_Adapter.onDateChange(listBean);
 				}
 			}
-		} else {
+		} else if(!data.isEmpty()) {
 			if (lv_potage.getHeaderViewsCount() > 0) {
 				lv_potage.removeHeaderView(headerView);
 			}

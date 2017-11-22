@@ -151,7 +151,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 
 	@Override
 	public void GetDataUrl(String data) {
-		if (data==null &&  data.isEmpty()) {
+		if (data==null) {
 			Toast.makeText(getApplicationContext(), "没有获取到【常用参数】数据！", Toast.LENGTH_LONG).show();
 			if (listBean != null) {
 				if (listBean.size() > 0) {
@@ -159,7 +159,7 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 					mAdapter.onDateChange(listBean);
 				}
 			}
-		} else {
+		} else if(!data.isEmpty()){
 			/*if (lv_params.getHeaderViewsCount() > 0) {
 				lv_params.removeHeaderView(headerView);
 			}
@@ -170,7 +170,6 @@ public class ParamsActivity extends Activity implements HttpGetListener, OnClick
 			headerView.setTvAETime("AE间隔");
 			headerView.setTvALF("氟化铝下料量");
 			lv_params.addHeaderView(headerView);*/
-
 			listBean = new ArrayList<SetParams>();
 			listBean = JsonToBean.JsonArrayToSetParamsBean(data);
 			mAdapter = new Params_Adapter(this, listBean);

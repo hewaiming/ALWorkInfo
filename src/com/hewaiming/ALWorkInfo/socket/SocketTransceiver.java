@@ -9,17 +9,19 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
+import android.util.Log;
 import bean.PotStatus;
 import bean.PotStatusDATA;
 import bean.RealTime;
 import bean.RequestAction;
 
 /**
- * Socket收发�? 通过Socket发�?�数据，并使用新线程监听Socket接收到的数据
+ * Socket收发�? 通过Socket发�?�数据，并使用新线程监听Socket接收到的数据
  * 
  */
 public abstract class SocketTransceiver implements Runnable {
 
+	private static final String TAG = "SocketTransceiver";
 	protected Socket socket;
 	protected InetAddress addr;
 	protected DataInputStream in;
@@ -47,11 +49,12 @@ public abstract class SocketTransceiver implements Runnable {
 			socket.shutdownInput();
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG,"关闭SOCKET时出错");
+		
 		}
 	}
 
-	// 向服务端发�?�操作命�?
+	// 向服务端发�?�操作命�?
 	public boolean send(RequestAction action) {
 		if (out != null) {
 			try {
@@ -60,14 +63,14 @@ public abstract class SocketTransceiver implements Runnable {
 				out.flush();
 				return true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e(TAG,"SOCKET发送数据时出错");				
 			}
 		}
 		return false;
 	}
 
 	/**
-	 * 监听Socket接收的数�?(新线程中运行)
+	 * 监听Socket接收的数�?(新线程中运行)
 	 */
 	@Override
 	public void run() {
@@ -76,7 +79,7 @@ public abstract class SocketTransceiver implements Runnable {
 			out = new DataOutputStream(this.socket.getOutputStream());
 			objectInputStream = new ObjectInputStream(this.socket.getInputStream());			
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG,"SOCKET RUN时出错");
 			runFlag = false;
 		}
 		while (runFlag) {
@@ -96,10 +99,10 @@ public abstract class SocketTransceiver implements Runnable {
 					}
 				}
 			} catch (IOException e) {
-				e.printStackTrace();				
+				Log.e(TAG,"SOCKET 接收数据时出错");			
 
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				Log.e(TAG,"SOCKET 接收数据时出错");	
 			}
 
 		}
@@ -112,18 +115,18 @@ public abstract class SocketTransceiver implements Runnable {
 			out = null;
 			socket = null;
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG,"SOCKET 断开连接时出错");	
 		}
 		this.onDisconnect(addr);
 	}
 
 	/**
-	 * 接收到数�? 注意：此回调是在新线程中执行�? 连接到的Socket地址
+	 * 接收到数�? 注意：此回调是在新线程中执行�? 连接到的Socket地址
 	 */
 	// 接受服务端发送过来的实时曲线数据
 	public abstract void onReceive(InetAddress addr, RealTime rTime);
 
-	// 接受服务端发送过来的槽状态数�?
+	// 接受服务端发送过来的槽状态数�?
 	public abstract void onReceive(InetAddress addr, PotStatusDATA potStatus);
 
 	public abstract void onDisconnect(InetAddress addr);

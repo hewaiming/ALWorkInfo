@@ -92,17 +92,17 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private SharedPreferences sp;
 	// private GridView gridView;
 	private Button btnMore;
-	private List<String> date_record = null; // 记录日期
-	private List<String> date_table = null; // 报表日期
+	private List<String> dateRecord = null; // 记录日期
+	private List<String> dateTable = null; // 报表日期
 	private List<Map<String, Object>> JXList = null; // 记录号名
 
-	private String get_dateTable_url = ":8000/scgy/android/odbcPhP/getDate.php";
-	private String get_JXName_url = ":8000/scgy/android/odbcPhP/getJXRecordName.php";
+	private String getDateTableUrl = ":8000/scgy/android/odbcPhP/getDate.php";
+	private String getJXNameUrl = ":8000/scgy/android/odbcPhP/getJXRecordName.php";
 
 	private Context mContext;
 	private TitlePopup titlePopup;
-	private TextView tv_title, tv_aeTitle, tv_avgVTitle, tv_DJWDTitle, tv_FZBTitle, tv_YHLNDTitle;
-	private ImageView iv_wifi, ivShare;
+	private TextView tvTitle, tvAeTitle, tvAvgVTitle, tvDJWDTitle, tvFZBTitle, tvYHLNDTitle;
+	private ImageView ivWifi, ivShare;
 	// private SlideShowView bannerView;
 	private io.github.ylbfdev.slideshowview.SlideShowView mSlideShowView;
 	private int[] NormPotS = { 0, 0, 0, 0, 0, 0 }; // 各区正常槽数量
@@ -112,24 +112,24 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private double[] FZBAvg = { 0, 0, 0, 0, 0, 0 }; // 各区分子比平均值
 	private double[] YHLNDAvg = { 0, 0, 0, 0, 0, 0 }; // 各区氧化铝浓度平均值
 
-	private String AeCnt_url = ":8000/scgy/android/odbcPhP/AeCnt_area_date.php"; // 效应次数
-	protected String AvgVArea_url = ":8000/scgy/android/odbcPhP/GetAvgV_dayTable.php";
-	protected String DJWD_url = ":8000/scgy/android/odbcPhP/GetDJWD_MeasueTable.php";
-	protected String FZB_url = ":8000/scgy/android/odbcPhP/GetFZB_MeasueTable_plus.php"; // 获取分子比数据地址
-	protected String YHLND_url = ":8000/scgy/android/odbcPhP/GetYHLND_MeasueTable_plus.php"; // 获取氧化铝浓度数据地址
-	private List<AeRecord> listBean_AeCnt = null; // 效应次数列表
-	private List<AvgV> listBean_AvgV = null; // 日报数据列表
-	private List<DJWD> listBean_DJWD = null; // 电解温度列表
-	private List<HY_item> listBean_FZB = null; // 初始化分子比数据列表
-	private List<HY_item> listBean_YHLND = null; // 氧化铝浓度数据列表
+	private String getAeCntUrl = ":8000/scgy/android/odbcPhP/AeCnt_area_date.php"; // 效应次数
+	protected String getAvgVAreaUrl = ":8000/scgy/android/odbcPhP/GetAvgV_dayTable.php";
+	protected String getDJWDUrl = ":8000/scgy/android/odbcPhP/GetDJWD_MeasueTable.php";
+	protected String getFZBUrl = ":8000/scgy/android/odbcPhP/GetFZB_MeasueTable_plus.php"; // 获取分子比数据地址
+	protected String getYHLNDUrl = ":8000/scgy/android/odbcPhP/GetYHLND_MeasueTable_plus.php"; // 获取氧化铝浓度数据地址
+	private List<AeRecord> listBeanAeCnt = null; // 效应次数列表
+	private List<AvgV> listBeanAvgV = null; // 日报数据列表
+	private List<DJWD> listBeanDJWD = null; // 电解温度列表
+	private List<HY_item> listBeanFZB = null; // 初始化分子比数据列表
+	private List<HY_item> listBeanYHLND = null; // 氧化铝浓度数据列表
 
-	private String get_NormPots1_url = ":8000/scgy/android/odbcPhP/GetNormPots1.php";
-	private String get_NormPots2_url = ":8000/scgy/android/odbcPhP/GetNormPots2.php";
+	private String getNormPots1Url = ":8000/scgy/android/odbcPhP/GetNormPots1.php";
+	private String getNormPots2Url = ":8000/scgy/android/odbcPhP/GetNormPots2.php";
 
 	private List<PotCtrl> NormPotsList1 = null; // 一厂房槽状态 列表
 	private List<PotCtrl> NormPotsList2 = null; // 二厂房槽状态 列表
 
-	private BarChart mBarChart_AE, mBarChart_V, mBarChart_DJWD, mBarChart_FZB, mBarChart_YHLND;
+	private BarChart mBarChartAE, mBarChartV, mBarChartDJWD, mBarChartFZB, mBarChartYHLND;
 	private Handler handler = new Handler(Looper.getMainLooper());
 	private int GetDateCnt = 0, GetJXCnt = 0;
 	private View mView;
@@ -137,8 +137,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	private boolean CalcPots1 = false, CalcPots2 = false;
 	private TextView tvPotTotal, tvPot1, tvPot11, tvPot12, tvPot13, tvPot2, tvPot21, tvPot22, tvPot23;
 
-	private ImageView iv_Fresh_Pots, iv_Fresh_Ae, iv_Fresh_AvgV, iv_Fresh_DJWD, iv_Fresh_FZB, iv_Fresh_YHLND;
-	private ImageButton imgbtn_show_DJWD, imgbtn_show_FZB, imgbtn_show_YHLND;
+	private ImageView ivFreshPots, ivFreshAe, ivFreshAvgV, ivFreshDJWD, ivFreshFZB, ivFreshYHLND;
+	private ImageButton imgbtnShowDJWD, imgbtnShowFZB, imgbtnShowYHLND;
 	protected MyProgressDialog Homedialog;
 
 	private Handler mHandler = new Handler() {
@@ -169,10 +169,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		init(); // 初始化各控件
 		NetDetector netDetector = new NetDetector(mContext, false);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
-			iv_wifi.setVisibility(View.GONE);		
+			ivWifi.setVisibility(View.GONE);		
 			mSlideShowView.setVisibility(View.VISIBLE);// wifi
 		} else {
-			iv_wifi.setVisibility(View.VISIBLE);		
+			ivWifi.setVisibility(View.VISIBLE);		
 			mSlideShowView.setVisibility(View.GONE);// no wifi
 		}
 		if (NetStatus() != 0) {
@@ -182,15 +182,15 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				startActivity(intent);// 没有设置远程服务器ip和端口
 
 			} else {
-				get_dateTable_url = "http://" + ip + get_dateTable_url;
-				get_JXName_url = "http://" + ip + get_JXName_url;
-				get_NormPots1_url = "http://" + ip + get_NormPots1_url;
-				get_NormPots2_url = "http://" + ip + get_NormPots2_url;
-				AeCnt_url = "http://" + ip + AeCnt_url;
-				AvgVArea_url = "http://" + ip + AvgVArea_url;
-				DJWD_url = "http://" + ip + DJWD_url;
-				FZB_url = "http://" + ip + FZB_url;
-				YHLND_url = "http://" + ip + YHLND_url;				
+				getDateTableUrl = "http://" + ip + getDateTableUrl;
+				getJXNameUrl = "http://" + ip + getJXNameUrl;
+				getNormPots1Url = "http://" + ip + getNormPots1Url;
+				getNormPots2Url = "http://" + ip + getNormPots2Url;
+				getAeCntUrl = "http://" + ip + getAeCntUrl;
+				getAvgVAreaUrl = "http://" + ip + getAvgVAreaUrl;
+				getDJWDUrl = "http://" + ip + getDJWDUrl;
+				getFZBUrl = "http://" + ip + getFZBUrl;
+				getYHLNDUrl = "http://" + ip + getYHLNDUrl;				
 				// init_GetDate(); // 获取日期
 				// init_GetJXRecord(); // 获取解析记录			
 				List<String> imageUris = new ArrayList<>();
@@ -219,14 +219,14 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	// 获取各区氧化铝浓度数据，再显示图表
 	private void initDATA_YHLND() {
-		listBean_YHLND = new ArrayList<HY_item>(); // 初始化分子比适配器
+		listBeanYHLND = new ArrayList<HY_item>(); // 初始化分子比适配器
 		ExecutorService exec_YHLND = Executors.newCachedThreadPool();
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
 				Log.i("氧化铝浓度数据","获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
 				YHLNDSum_Clear();
-				ShowBar_YHLND(CalcYHLNDSUM(listBean_YHLND));// 显示各区氧化铝浓度柱状图
+				ShowBar_YHLND(CalcYHLNDSUM(listBeanYHLND));// 显示各区氧化铝浓度柱状图
 			}
 		});
 
@@ -244,13 +244,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_YHLNDTitle.setText(YHLND_TITLE + "  参考值:" + YHLND_VALUE);
+						tvYHLNDTitle.setText(YHLND_TITLE + "  参考值:" + YHLND_VALUE);
 					}
 				});
 
 				HY_item room11 = GetRoomAvgYHLND("11", BeginDateValue, EndDateValue);
 				if (room11 != null) {
-					listBean_YHLND.add(room11);
+					listBeanYHLND.add(room11);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -276,7 +276,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 				HY_item room12 = GetRoomAvgYHLND("12", BeginDateValue, EndDateValue);
 				if (room12 != null) {
-					listBean_YHLND.add(room12);
+					listBeanYHLND.add(room12);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -303,7 +303,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room13 = GetRoomAvgYHLND("13", BeginDateValue, EndDateValue);
 				if (room13 != null) {
-					listBean_YHLND.add(room13);
+					listBeanYHLND.add(room13);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -329,7 +329,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room21 = GetRoomAvgYHLND("21", BeginDateValue, EndDateValue);
 				if (room21 != null) {
-					listBean_YHLND.add(room21);
+					listBeanYHLND.add(room21);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -355,7 +355,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room22 = GetRoomAvgYHLND("22", BeginDateValue, EndDateValue);
 				if (room22 != null) {
-					listBean_YHLND.add(room22);
+					listBeanYHLND.add(room22);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -381,7 +381,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room23 = GetRoomAvgYHLND("23", BeginDateValue, EndDateValue);
 				if (room23 != null) {
-					listBean_YHLND.add(room23);
+					listBeanYHLND.add(room23);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -494,11 +494,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		BarData bardata = new BarData(xVals, barDataSet);
 		bardata.setHighlightEnabled(true);
 
-		mBarChart_YHLND.setData(bardata); // 设置数据
+		mBarChartYHLND.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart_YHLND.invalidate();
+				mBarChartYHLND.invalidate();
 			}
 		});
 
@@ -563,14 +563,14 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	// 获取分子比数据，再显示图表
 	private void initDATA_FZB() {
-		listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
+		listBeanFZB = new ArrayList<HY_item>(); // 初始化分子比适配器
 		ExecutorService exec_FZB = Executors.newCachedThreadPool();
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
 				Log.i("获取各区分子比数据OK","获取各区分子比数据OK，开始显示柱形图表啦，happy去");
 				FZBSum_Clear();
-				ShowBar_FZB(CalcFZBSUM(listBean_FZB));// 显示各区分子比柱状图
+				ShowBar_FZB(CalcFZBSUM(listBeanFZB));// 显示各区分子比柱状图
 			}
 		});
 
@@ -591,13 +591,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_FZBTitle.setText(FZB_TITLE + "  参考值:" + FZB_VALUE);
+						tvFZBTitle.setText(FZB_TITLE + "  参考值:" + FZB_VALUE);
 					}
 				});
 				// listBean_FZB = new ArrayList<HY_item>(); // 初始化分子比适配器
 				HY_item room11 = GetRoomAvgFzb("11", BeginDateValue, EndDateValue);
 				if (room11 != null) {
-					listBean_FZB.add(room11);
+					listBeanFZB.add(room11);
 				}
 
 				try {
@@ -624,7 +624,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 				HY_item room12 = GetRoomAvgFzb("12", BeginDateValue, EndDateValue);
 				if (room12 != null) {
-					listBean_FZB.add(room12);
+					listBeanFZB.add(room12);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -651,7 +651,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room13 = GetRoomAvgFzb("13", BeginDateValue, EndDateValue);
 				if (room13 != null) {
-					listBean_FZB.add(room13);
+					listBeanFZB.add(room13);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -677,7 +677,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room21 = GetRoomAvgFzb("21", BeginDateValue, EndDateValue);
 				if (room21 != null) {
-					listBean_FZB.add(room21);
+					listBeanFZB.add(room21);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -703,7 +703,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room22 = GetRoomAvgFzb("22", BeginDateValue, EndDateValue);
 				if (room22 != null) {
-					listBean_FZB.add(room22);
+					listBeanFZB.add(room22);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -729,7 +729,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				final String BeginDateValue = sdf.format(cal.getTime());
 				HY_item room23 = GetRoomAvgFzb("23", BeginDateValue, EndDateValue);
 				if (room23 != null) {
-					listBean_FZB.add(room23);
+					listBeanFZB.add(room23);
 				}
 				try {
 					barrier.await();// 等待其他哥们
@@ -753,7 +753,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mparams.add(new BasicNameValuePair("EndDate", endDateValue));
 		mparams.add(new BasicNameValuePair("areaID", areaID));
 		JSONArrayParser jsonParser = new JSONArrayParser();
-		JSONArray json = jsonParser.makeHttpRequest(FZB_url, "POST", mparams);
+		JSONArray json = jsonParser.makeHttpRequest(getFZBUrl, "POST", mparams);
 		if (json != null) {		
 			 Log.i("厂房：分子比" + areaID,"获取厂房分子比OK，其他数据呢");
 			return JsonToBean_Area_Date.JsonArrayToFZBItem(areaID, json.toString());
@@ -777,7 +777,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mparams.add(new BasicNameValuePair("EndDate", endDateValue));
 		mparams.add(new BasicNameValuePair("areaID", areaID));
 		JSONArrayParser jsonParser = new JSONArrayParser();
-		JSONArray json = jsonParser.makeHttpRequest(YHLND_url, "POST", mparams);
+		JSONArray json = jsonParser.makeHttpRequest(getYHLNDUrl, "POST", mparams);
 		if (json != null) {
 			// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
 			//System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
@@ -888,11 +888,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		BarData bardata = new BarData(xVals, barDataSet);
 		bardata.setHighlightEnabled(true);
 
-		mBarChart_FZB.setData(bardata); // 设置数据
+		mBarChartFZB.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart_FZB.invalidate();
+				mBarChartFZB.invalidate();
 			}
 		});
 
@@ -965,7 +965,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			public void run() {
 				Log.i("各区电解温度数据OK","获取各区电解温度数据OK，开始显示柱形图表啦，happy去");
 				DJWDSum_Clear();
-				CalcDJWDSUM(listBean_DJWD);
+				CalcDJWDSUM(listBeanDJWD);
 				ShowBar_DJWD();// 显示各区电解温度柱状图
 			}
 		});
@@ -990,7 +990,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_DJWDTitle.setText(DJWD_TITLE + todayValue + " 参考值:" + DJWD_VALUE);
+						tvDJWDTitle.setText(DJWD_TITLE + todayValue + " 参考值:" + DJWD_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -999,19 +999,19 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("BeginDate", todayValue));
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
-				JSONArray json = jsonParser.makeHttpRequest(DJWD_url, "POST", mparams);
+				JSONArray json = jsonParser.makeHttpRequest(getDJWDUrl, "POST", mparams);
 				if (json != null) {					
 					Log.i("厂房电解温度","获取厂房电解温度OK，其他数据呢");
-					listBean_DJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
-					listBean_DJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
+					listBeanDJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
+					listBeanDJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
 
 				} else {
 					// 再次get电解温度数据
-					json = jsonParser.makeHttpRequest(DJWD_url, "POST", mparams);
+					json = jsonParser.makeHttpRequest(getDJWDUrl, "POST", mparams);
 					if (json != null) {
 						// Log.d("厂房：电解温度", json.toString());// 从服务器返回有数据
-						listBean_DJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
-						listBean_DJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
+						listBeanDJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
+						listBeanDJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
 					} else {
 						Log.i("厂房：电解温度", "从PHP服务器无数据返回！");
 						handler.post(new Runnable() {
@@ -1110,11 +1110,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		BarData bardata = new BarData(xVals, barDataSet);
 		bardata.setHighlightEnabled(true);
 
-		mBarChart_DJWD.setData(bardata); // 设置数据
+		mBarChartDJWD.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart_DJWD.invalidate();
+				mBarChartDJWD.invalidate();
 			}
 		});
 
@@ -1172,7 +1172,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			public void run() {
 				Log.i("区平均电压数据","获取各区平均电压数据OK，开始显示柱形图表啦，happy去");
 				AvgVSum_Clear();
-				CalcAvgVSUM(listBean_AvgV);
+				CalcAvgVSUM(listBeanAvgV);
 				ShowBar_AvgV();// 显示各区平均电压柱状图
 			}
 		});
@@ -1189,7 +1189,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_avgVTitle.setText(AVGV_TITLE + yesterdayValue + "  参考值:" + AVGV_VALUE);
+						tvAvgVTitle.setText(AVGV_TITLE + yesterdayValue + "  参考值:" + AVGV_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -1198,19 +1198,19 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("BeginDate", yesterdayValue));
 				mparams.add(new BasicNameValuePair("EndDate", yesterdayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
-				JSONArray json = jsonParser.makeHttpRequest(AvgVArea_url, "POST", mparams);
+				JSONArray json = jsonParser.makeHttpRequest(getAvgVAreaUrl, "POST", mparams);
 				if (json != null) {					
 					Log.i("厂房平均电压","获取厂房平均电压OK，其他数据呢");
-					listBean_AvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
-					listBean_AvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
+					listBeanAvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
+					listBeanAvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
 
 				} else {
 					// 再次get平均电压数据
-					json = jsonParser.makeHttpRequest(AvgVArea_url, "POST", mparams);
+					json = jsonParser.makeHttpRequest(getAvgVAreaUrl, "POST", mparams);
 					if (json != null) {
 						Log.i("厂房：平均电压", "ok");// 从服务器返回有数据
-						listBean_AvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
-						listBean_AvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
+						listBeanAvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
+						listBeanAvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
 					} else {
 						Log.w("厂房：平均电压 ---", "从PHP服务器无数据返回！");
 						handler.post(new Runnable() {
@@ -1315,11 +1315,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		BarData bardata = new BarData(xVals, barDataSet);
 		bardata.setHighlightEnabled(true);
 
-		mBarChart_V.setData(bardata); // 设置数据
+		mBarChartV.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart_V.invalidate();
+				mBarChartV.invalidate();
 			}
 		});
 
@@ -1383,7 +1383,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			public void run() {
 				Log.i("效应系数数据","获取各区效应系数数据OK，开始显示柱形图表啦，happy去");
 				AeCnt_Clear();
-				CalcAeCnt(listBean_AeCnt);
+				CalcAeCnt(listBeanAeCnt);
 				ShowBar_AE();// 显示各区效应柱状图
 			}
 		});
@@ -1400,7 +1400,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						tv_aeTitle.setText(AE_TITLE + mToday + " 参考值：" + AE_VALUE);
+						tvAeTitle.setText(AE_TITLE + mToday + " 参考值：" + AE_VALUE);
 					}
 				});
 				List<NameValuePair> mparams = new ArrayList<NameValuePair>();
@@ -1409,19 +1409,19 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("BeginDate", todayValue));
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
-				JSONArray json = jsonParser.makeHttpRequest(AeCnt_url, "POST", mparams);
+				JSONArray json = jsonParser.makeHttpRequest(getAeCntUrl, "POST", mparams);
 				if (json != null) {				
 					Log.i("效应次数","获取厂房效应次数OK，其他数据呢");
-					listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
-					listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
+					listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
+					listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 
 				} else {
 					// 再次get效应次数数据
-					json = jsonParser.makeHttpRequest(AeCnt_url, "POST", mparams);
+					json = jsonParser.makeHttpRequest(getAeCntUrl, "POST", mparams);
 					if (json != null) {
 						Log.i("效应次数","厂房：效应次数ok");// 从服务器返回有数据
-						listBean_AeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
-						listBean_AeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
+						listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
+						listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 					} else {
 						Log.i("厂房：效应次数 ---", "从PHP服务器无数据返回！");
 						handler.post(new Runnable() {
@@ -1462,7 +1462,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	// 获取二厂房正常槽数量
 	protected Boolean GetNormalPots2() {
 		HttpPost_JsonArray jsonParser2 = new HttpPost_JsonArray();
-		JSONArray json2 = jsonParser2.makeHttpRequest(get_NormPots2_url, "POST");
+		JSONArray json2 = jsonParser2.makeHttpRequest(getNormPots2Url, "POST");
 		if (json2 != null) {
 			// Log.d("二厂房：正常槽数量", json2.toString());// 从服务器返回有数据
 			NormPotsList2 = new ArrayList<PotCtrl>();
@@ -1481,7 +1481,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	// 获取一厂房正常槽数量
 	protected Boolean GetNormalPots1() {
 		HttpPost_JsonArray jsonParser1 = new HttpPost_JsonArray();
-		JSONArray json1 = jsonParser1.makeHttpRequest(get_NormPots1_url, "POST");
+		JSONArray json1 = jsonParser1.makeHttpRequest(getNormPots1Url, "POST");
 		if (json1 != null) {
 			// Log.d("一厂房：正常槽数量", json1.toString());// 从服务器返回有数据
 			NormPotsList1 = new ArrayList<PotCtrl>();
@@ -1567,11 +1567,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		});
 
 		BarData bardata = new BarData(xVals, barDataSet);
-		mBarChart_AE.setData(bardata); // 设置数据
+		mBarChartAE.setData(bardata); // 设置数据
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mBarChart_AE.invalidate();
+				mBarChartAE.invalidate();
 			}
 		});
 
@@ -1667,9 +1667,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	private void init_GetDate() {
 		GetDateCnt++;
-		if (date_table == null) {
+		if (dateTable == null) {
 			// 执行从远程获得日期数据
-			AsyTask_HttpGetDate mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(get_dateTable_url,
+			AsyTask_HttpGetDate mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(getDateTableUrl,
 					this, mContext).execute();
 		}
 
@@ -1679,7 +1679,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		GetJXCnt++;
 		if (JXList == null) {
 			AsyTask_HttpGetJXRecord mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(
-					get_JXName_url, this, mContext).execute(); // 执行从远程获得解析记录数据
+					getJXNameUrl, this, mContext).execute(); // 执行从远程获得解析记录数据
 		}
 
 	}
@@ -1695,55 +1695,55 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		btnMore = (Button) mView.findViewById(R.id.btn_more);
 		btnMore.setVisibility(View.VISIBLE);
 		btnMore.setOnClickListener(this);
-		tv_title = (TextView) mView.findViewById(R.id.tv_title);
-		iv_wifi = (ImageView) mView.findViewById(R.id.iv_NoWiFi);
+		tvTitle = (TextView) mView.findViewById(R.id.tv_title);
+		ivWifi = (ImageView) mView.findViewById(R.id.iv_NoWiFi);
 		// bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView)
 		// mView.findViewById(R.id.bannerwView);
 		mSlideShowView = (io.github.ylbfdev.slideshowview.SlideShowView) mView.findViewById(R.id.MySlideShowView);
 		// 5个图表初始化
-		mBarChart_AE = (BarChart) mView.findViewById(R.id.Ae_chart);
-		mBarChart_V = (BarChart) mView.findViewById(R.id.AvgV_chart);
-		mBarChart_DJWD = (BarChart) mView.findViewById(R.id.DJWD_chart);
-		mBarChart_FZB = (BarChart) mView.findViewById(R.id.FZB_chart);
-		mBarChart_YHLND = (BarChart) mView.findViewById(R.id.YHLND_chart);
+		mBarChartAE = (BarChart) mView.findViewById(R.id.Ae_chart);
+		mBarChartV = (BarChart) mView.findViewById(R.id.AvgV_chart);
+		mBarChartDJWD = (BarChart) mView.findViewById(R.id.DJWD_chart);
+		mBarChartFZB = (BarChart) mView.findViewById(R.id.FZB_chart);
+		mBarChartYHLND = (BarChart) mView.findViewById(R.id.YHLND_chart);
 		// 图表标题初始化
-		tv_aeTitle = (TextView) mView.findViewById(R.id.tv_AeTitle);
-		tv_avgVTitle = (TextView) mView.findViewById(R.id.tv_AvgV);
-		tv_DJWDTitle = (TextView) mView.findViewById(R.id.tv_DJWD);
-		tv_FZBTitle = (TextView) mView.findViewById(R.id.tv_FZB);
-		tv_YHLNDTitle = (TextView) mView.findViewById(R.id.tv_YHLND);
+		tvAeTitle = (TextView) mView.findViewById(R.id.tv_AeTitle);
+		tvAvgVTitle = (TextView) mView.findViewById(R.id.tv_AvgV);
+		tvDJWDTitle = (TextView) mView.findViewById(R.id.tv_DJWD);
+		tvFZBTitle = (TextView) mView.findViewById(R.id.tv_FZB);
+		tvYHLNDTitle = (TextView) mView.findViewById(R.id.tv_YHLND);
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String todayValue = sdf.format(dt);
-		tv_aeTitle.setText(AE_TITLE + todayValue + " 参考值：" + AE_VALUE);
-		init_BarCHART(mBarChart_AE, 0);
-		init_BarCHART(mBarChart_V, 1);
-		init_BarCHART(mBarChart_DJWD, 2);
-		init_BarCHART(mBarChart_FZB, 3);
-		init_BarCHART(mBarChart_YHLND, 4);
+		tvAeTitle.setText(AE_TITLE + todayValue + " 参考值：" + AE_VALUE);
+		init_BarCHART(mBarChartAE, 0);
+		init_BarCHART(mBarChartV, 1);
+		init_BarCHART(mBarChartDJWD, 2);
+		init_BarCHART(mBarChartFZB, 3);
+		init_BarCHART(mBarChartYHLND, 4);
 	}
 
 	private void init_button() {
-		iv_Fresh_Pots = (ImageView) mView.findViewById(R.id.iv_refresh_pots);
-		iv_Fresh_Pots.setOnClickListener(this);
+		ivFreshPots = (ImageView) mView.findViewById(R.id.iv_refresh_pots);
+		ivFreshPots.setOnClickListener(this);
 		// iv_Fresh_Pots.setVisibility(View.GONE);
-		iv_Fresh_Ae = (ImageView) mView.findViewById(R.id.iv_refresh_ae);
-		iv_Fresh_Ae.setOnClickListener(this);
-		iv_Fresh_AvgV = (ImageView) mView.findViewById(R.id.iv_refresh_avgv);
-		iv_Fresh_AvgV.setOnClickListener(this);
-		iv_Fresh_DJWD = (ImageView) mView.findViewById(R.id.iv_refresh_djwd);
-		iv_Fresh_DJWD.setOnClickListener(this);
-		iv_Fresh_FZB = (ImageView) mView.findViewById(R.id.iv_refresh_fzb);
-		iv_Fresh_FZB.setOnClickListener(this);
-		iv_Fresh_YHLND = (ImageView) mView.findViewById(R.id.iv_refresh_yhlnd);
-		iv_Fresh_YHLND.setOnClickListener(this);
-		imgbtn_show_DJWD = (ImageButton) mView.findViewById(R.id.imgbtn_show_DJWDChart);
-		imgbtn_show_DJWD.setOnClickListener(this);
-		imgbtn_show_FZB = (ImageButton) mView.findViewById(R.id.imgbtn_show_FZBChart);
-		imgbtn_show_FZB.setOnClickListener(this);
-		imgbtn_show_YHLND = (ImageButton) mView.findViewById(R.id.imgbtn_show_YHLNDChart);
-		imgbtn_show_YHLND.setOnClickListener(this);
+		ivFreshAe = (ImageView) mView.findViewById(R.id.iv_refresh_ae);
+		ivFreshAe.setOnClickListener(this);
+		ivFreshAvgV = (ImageView) mView.findViewById(R.id.iv_refresh_avgv);
+		ivFreshAvgV.setOnClickListener(this);
+		ivFreshDJWD = (ImageView) mView.findViewById(R.id.iv_refresh_djwd);
+		ivFreshDJWD.setOnClickListener(this);
+		ivFreshFZB = (ImageView) mView.findViewById(R.id.iv_refresh_fzb);
+		ivFreshFZB.setOnClickListener(this);
+		ivFreshYHLND = (ImageView) mView.findViewById(R.id.iv_refresh_yhlnd);
+		ivFreshYHLND.setOnClickListener(this);
+		imgbtnShowDJWD = (ImageButton) mView.findViewById(R.id.imgbtn_show_DJWDChart);
+		imgbtnShowDJWD.setOnClickListener(this);
+		imgbtnShowFZB = (ImageButton) mView.findViewById(R.id.imgbtn_show_FZBChart);
+		imgbtnShowFZB.setOnClickListener(this);
+		imgbtnShowYHLND = (ImageButton) mView.findViewById(R.id.imgbtn_show_YHLNDChart);
+		imgbtnShowYHLND.setOnClickListener(this);
 		//获取正常槽数据
 		layoutNormal.setOnClickListener(this);
 
@@ -1889,13 +1889,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					if (checkGlobalData()) {
 						Intent aemost_intent = new Intent(getActivity(), AeMostActivity.class);
 						Bundle aemostBundle = new Bundle();
-						if (date_record != null) {
-							aemostBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+						if (dateRecord != null) {
+							aemostBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 						}
 						if (JXList != null) {
 							aemostBundle.putSerializable("JXList", (Serializable) JXList);
 						}
-						if (date_record != null && JXList != null) {
+						if (dateRecord != null && JXList != null) {
 							aemostBundle.putString("ip", ip);
 							aemostBundle.putInt("port", port);
 							aemost_intent.putExtras(aemostBundle);
@@ -1917,13 +1917,13 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					if (checkGlobalData()) {
 						Intent avgV_intent=new Intent(getActivity(),AreaAvgVActivity.class);
 						Bundle avgVBundle = new Bundle();
-						if (date_record != null) {
-							avgVBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+						if (dateRecord != null) {
+							avgVBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 						}
 						if (JXList != null) {
 							avgVBundle.putSerializable("JXList", (Serializable) JXList);
 						}
-						if (date_record != null && JXList != null) {
+						if (dateRecord != null && JXList != null) {
 							avgVBundle.putString("ip", ip);
 							avgVBundle.putInt("port", port);
 							avgV_intent.putExtras(avgVBundle);
@@ -1948,8 +1948,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 	protected Boolean checkGlobalData() {
 		if (GetJXCnt > 3) {
-			tv_title.setTextSize(14);
-			tv_title.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
+			tvTitle.setTextSize(14);
+			tvTitle.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
 			return false;
 		} else {
 			Toast.makeText(mContext, "第" + GetJXCnt + " 次尝试获取解析记录数据，请稍后再试！", Toast.LENGTH_SHORT).show();
@@ -1957,8 +1957,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		}
 
 		if (GetDateCnt > 3) {
-			tv_title.setTextSize(14);
-			tv_title.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
+			tvTitle.setTextSize(14);
+			tvTitle.setText("工作站:" + "网络太卡或请检查远程服务器IP和端口是否正确！");
 			return false;
 		} else {
 			Toast.makeText(mContext, "第" + GetDateCnt + " 次尝试获取日期数据，请稍后再试！", Toast.LENGTH_SHORT).show();
@@ -2003,14 +2003,14 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			// tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
 
 		} else {
-			date_table = new ArrayList<String>();
-			date_table = JsonToBean_GetPublicData.JsonArrayToDate(data);
+			dateTable = new ArrayList<String>();
+			dateTable = JsonToBean_GetPublicData.JsonArrayToDate(data);
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 			Date dt = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String todayValue = sdf.format(dt);
-			date_record = new ArrayList<String>(date_table); // 记录日期
-			date_record.add(0, todayValue);
+			dateRecord = new ArrayList<String>(dateTable); // 记录日期
+			dateRecord.add(0, todayValue);
 		}
 
 	}
@@ -2074,10 +2074,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			initDATA_DJWD();// 显示当前各区电解温度
 			break;
 		case R.id.imgbtn_show_DJWDChart:
-			if (mBarChart_DJWD.getVisibility() == View.GONE) {
-				mBarChart_DJWD.setVisibility(View.VISIBLE);
-				iv_Fresh_DJWD.setVisibility(View.VISIBLE);
-				imgbtn_show_DJWD.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+			if (mBarChartDJWD.getVisibility() == View.GONE) {
+				mBarChartDJWD.setVisibility(View.VISIBLE);
+				ivFreshDJWD.setVisibility(View.VISIBLE);
+				imgbtnShowDJWD.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
 				if (!Homedialog.isShowing()) {
 					Homedialog.setMessage("玩命加载...");
 					Homedialog.show();
@@ -2085,9 +2085,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				initDATA_DJWD();// 显示当前各区电解温度
 			} else {
-				mBarChart_DJWD.setVisibility(View.GONE);
-				iv_Fresh_DJWD.setVisibility(View.INVISIBLE);
-				imgbtn_show_DJWD.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+				mBarChartDJWD.setVisibility(View.GONE);
+				ivFreshDJWD.setVisibility(View.INVISIBLE);
+				imgbtnShowDJWD.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
 			}
 			break;
 		case R.id.iv_refresh_fzb:
@@ -2099,10 +2099,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			initDATA_FZB();// 显示当前各区分子比
 			break;
 		case R.id.imgbtn_show_FZBChart:
-			if (mBarChart_FZB.getVisibility() == View.GONE) {
-				mBarChart_FZB.setVisibility(View.VISIBLE);
-				iv_Fresh_FZB.setVisibility(View.VISIBLE);
-				imgbtn_show_FZB.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+			if (mBarChartFZB.getVisibility() == View.GONE) {
+				mBarChartFZB.setVisibility(View.VISIBLE);
+				ivFreshFZB.setVisibility(View.VISIBLE);
+				imgbtnShowFZB.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
 				if (!Homedialog.isShowing()) {
 					Homedialog.setMessage("玩命加载...");
 					Homedialog.show();
@@ -2110,9 +2110,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				initDATA_FZB();// 显示当前各区分子比
 			} else {
-				mBarChart_FZB.setVisibility(View.GONE);
-				iv_Fresh_FZB.setVisibility(View.INVISIBLE);
-				imgbtn_show_FZB.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+				mBarChartFZB.setVisibility(View.GONE);
+				ivFreshFZB.setVisibility(View.INVISIBLE);
+				imgbtnShowFZB.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
 			}
 			break;
 		case R.id.iv_refresh_yhlnd:
@@ -2126,10 +2126,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			break;
 		case R.id.imgbtn_show_YHLNDChart:
 			// 显示氧化铝浓度
-			if (mBarChart_YHLND.getVisibility() == View.GONE) {
-				mBarChart_YHLND.setVisibility(View.VISIBLE);
-				iv_Fresh_YHLND.setVisibility(View.VISIBLE);
-				imgbtn_show_YHLND.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
+			if (mBarChartYHLND.getVisibility() == View.GONE) {
+				mBarChartYHLND.setVisibility(View.VISIBLE);
+				ivFreshYHLND.setVisibility(View.VISIBLE);
+				imgbtnShowYHLND.setImageDrawable(getResources().getDrawable(R.drawable.up_gray));
 				if (!Homedialog.isShowing()) {
 					Homedialog.setMessage("玩命加载...");
 					Homedialog.show();
@@ -2137,9 +2137,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				initDATA_YHLND();// 显示当前各区氧化铝浓度
 			} else {
-				mBarChart_YHLND.setVisibility(View.GONE);
-				iv_Fresh_YHLND.setVisibility(View.INVISIBLE);
-				imgbtn_show_YHLND.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
+				mBarChartYHLND.setVisibility(View.GONE);
+				ivFreshYHLND.setVisibility(View.INVISIBLE);
+				imgbtnShowYHLND.setImageDrawable(getResources().getDrawable(R.drawable.down_gray));
 			}
 			break;
 		case R.id.Normal_Layout:

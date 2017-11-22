@@ -352,10 +352,11 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		}
 		if (default_PotNo == 1) {
 			spinner_potno.setSelection(0);
-			PotNo = PotNoList.get(0).toString();
-			PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+			if (!PotNoList.isEmpty()){
+				PotNo = PotNoList.get(0).toString();
+				PotNo_adapter.notifyDataSetChanged();// 通知数据改变
+			}			
 		}
-
 	}
 
 	@Override

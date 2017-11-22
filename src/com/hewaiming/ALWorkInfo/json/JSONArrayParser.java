@@ -22,7 +22,8 @@ import org.json.JSONException;
 import android.util.Log;
 
 public class JSONArrayParser {
-	 InputStream is = null;
+	 private static final String TAG = "JSONArrayParser";
+	InputStream is = null;
 	 JSONArray jObj = null;
 	 String json = "";
 
@@ -56,11 +57,11 @@ public class JSONArrayParser {
 				is = httpEntity.getContent();
 			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			Log.e(TAG, "UnsupportedEncodingException");
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			Log.e(TAG, "ClientProtocolException");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, "IOException");
 		}
 
 		try {

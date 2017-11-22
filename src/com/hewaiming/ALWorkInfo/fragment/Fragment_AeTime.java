@@ -34,10 +34,10 @@ import android.widget.Toast;
 
 public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	private View mView;
-	private RelativeLayout mHead_AeTime;
-	private ListView lv_AeTime;
-	private List<AeRecord> listBean_AeTime = null;
-	private HSView_AeTimeAdapter AeTime_Adapter = null;
+	private RelativeLayout mHeadAeTime;
+	private ListView lvAeTime;
+	private List<AeRecord> listBeanAeTime = null;
+	private HSView_AeTimeAdapter AeTimeAdapter = null;
 	private AeMostActivity mActivity;
 	private String PotNo;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
@@ -79,19 +79,19 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	private void init_adapter(String data) {
 		if (data.equals("")) {
 			Toast.makeText(this.getActivity(), "没有获取到[效应槽：持续时间最长]数据，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean_AeTime != null) {
-				if (listBean_AeTime.size() > 0) {
-					listBean_AeTime.clear(); // 清除LISTVIEW 以前的内容
-					AeTime_Adapter.onDateChange(listBean_AeTime);
+			if (listBeanAeTime != null) {
+				if (listBeanAeTime.size() > 0) {
+					listBeanAeTime.clear(); // 清除LISTVIEW 以前的内容
+					AeTimeAdapter.onDateChange(listBeanAeTime);
 				}
 			}
 		} else {
-			listBean_AeTime = new ArrayList<AeRecord>(); // 初始化效应时间长 适配器
-			listBean_AeTime.clear();
-			listBean_AeTime = JsonToBean_Area_Date.JsonArrayToAeTimeBean(data);
-			AeTime_Adapter = new HSView_AeTimeAdapter(this.getActivity(), R.layout.item_hsview_aetime, listBean_AeTime,
-					mHead_AeTime);
-			lv_AeTime.setAdapter(AeTime_Adapter);
+			listBeanAeTime = new ArrayList<AeRecord>(); // 初始化效应时间长 适配器
+			listBeanAeTime.clear();
+			listBeanAeTime = JsonToBean_Area_Date.JsonArrayToAeTimeBean(data);
+			AeTimeAdapter = new HSView_AeTimeAdapter(this.getActivity(), R.layout.item_hsview_aetime, listBeanAeTime,
+					mHeadAeTime);
+			lvAeTime.setAdapter(AeTimeAdapter);
 		}
 
 	};
@@ -100,27 +100,27 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
-		mHead_AeTime = (RelativeLayout) mView.findViewById(R.id.head_AeTime); // 表头处理
-		mHead_AeTime.setFocusable(true);
-		mHead_AeTime.setClickable(true);
-		mHead_AeTime.setBackgroundColor(Color.parseColor("#fffffb"));
-		mHead_AeTime.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		mHeadAeTime = (RelativeLayout) mView.findViewById(R.id.head_AeTime); // 表头处理
+		mHeadAeTime.setFocusable(true);
+		mHeadAeTime.setClickable(true);
+		mHeadAeTime.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHeadAeTime.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
-		lv_AeTime = (ListView) mView.findViewById(R.id.lv_AeTime);
-		lv_AeTime.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
-		lv_AeTime.setCacheColorHint(0);
-		lv_AeTime.setOnScrollListener(this);
-		lv_AeTime.setOnItemClickListener(new OnItemClickListener() {		
+		lvAeTime = (ListView) mView.findViewById(R.id.lv_AeTime);
+		lvAeTime.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lvAeTime.setCacheColorHint(0);
+		lvAeTime.setOnScrollListener(this);
+		lvAeTime.setOnItemClickListener(new OnItemClickListener() {		
 		
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PotNo = String.valueOf(listBean_AeTime.get(position).getPotNo());
+				PotNo = String.valueOf(listBeanAeTime.get(position).getPotNo());
 //				Toast.makeText(getApplicationContext(), PotNo, 1).show();
 				Intent potv_intent = new Intent( getActivity(), PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
 				potv_bundle.putString("PotNo", PotNo);
-				potv_bundle.putString("Begin_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
-				potv_bundle.putString("End_Date", listBean_AeTime.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("Begin_Date", listBeanAeTime.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("End_Date", listBeanAeTime.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 				potv_bundle.putString("ip", ip);
@@ -149,7 +149,7 @@ public class Fragment_AeTime extends Fragment implements OnScrollListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
-			HorizontalScrollView headSrcrollView_AeTime = (HorizontalScrollView) mHead_AeTime
+			HorizontalScrollView headSrcrollView_AeTime = (HorizontalScrollView) mHeadAeTime
 					.findViewById(R.id.horizontalScrollView1);
 			headSrcrollView_AeTime.onTouchEvent(arg1);
 			return false;

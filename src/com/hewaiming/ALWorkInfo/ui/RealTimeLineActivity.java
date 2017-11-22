@@ -67,6 +67,7 @@ import bean.RealTime;
 import bean.RequestAction;
 
 public class RealTimeLineActivity extends DemoBase implements OnClickListener, OnChartValueSelectedListener {
+	private static final String TAG = "RealTimeLineActivity";
 	private String ip;
 	private int port;
 	private LineChart mChart;
@@ -542,7 +543,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			action.setPotNo_Area(PotNo);
 			client.getTransceiver().send(action);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG, "Exception sendRealTimeAction");
 		}
 	}
 
@@ -558,7 +559,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 				client.connect(ip, port);
 			} catch (NumberFormatException e) {
 				Toast.makeText(this, "¶Ë¿Ú´íÎó", Toast.LENGTH_SHORT).show();
-				e.printStackTrace();
+				Log.e(TAG, "NumberFormatException connect");
 			}
 		}
 	}

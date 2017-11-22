@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class UpdateManager {
 	private static final int NO_UPDATE = 3;
 	private static final int GET_UNDATAINFO_ERROR=4;
 	private static final int CAN_UPDATE=5;
+	private static final String TAG = "UpdateManager";
 	/* 淇濆瓨瑙ｆ瀽鐨刋ML淇℃伅 */
 	HashMap<String, String> mHashMap;
 	/* 涓嬭浇淇濆瓨璺緞 */
@@ -103,7 +105,7 @@ public class UpdateManager {
 			// 鑾峰彇杞欢鐗堟湰鍙凤紝瀵瑰簲AndroidManifest.xml涓媋ndroid:versionCode
 			versionCode = context.getPackageManager().getPackageInfo("com.hewaiming.ALWorkInfo", 0).versionCode;
 		} catch (NameNotFoundException e) {
-			e.printStackTrace();
+			Log.e(TAG, "NameNotFoundException");
 		}
 		return versionCode;
 	}
@@ -115,7 +117,7 @@ public class UpdateManager {
 			// 鑾峰彇杞欢鐗堟湰鍙凤紝瀵瑰簲AndroidManifest.xml涓媋ndroid:versionCode
 			versionName = context.getPackageManager().getPackageInfo("com.hewaiming.ALWorkInfo", 0).versionName;
 		} catch (NameNotFoundException e) {
-			e.printStackTrace();
+			Log.e(TAG, "NameNotFoundException");
 		}
 		return versionName;
 	}
@@ -233,9 +235,9 @@ public class UpdateManager {
 					is.close();
 				}
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				Log.e(TAG, "MalformedURLException");
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "IOException");
 			}
 			// 鍙栨秷涓嬭浇瀵硅瘽妗嗘樉绀�
 			mDownloadDialog.dismiss();
@@ -314,7 +316,7 @@ public class UpdateManager {
 				Message msg = new Message();
 				msg.what = GET_UNDATAINFO_ERROR;
 				mHandler.sendMessage(msg);
-				e.printStackTrace();
+				Log.e(TAG, "Exception");
 			}
 		}
 	}

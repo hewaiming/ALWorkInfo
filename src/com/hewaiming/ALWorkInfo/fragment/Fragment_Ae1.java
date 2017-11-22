@@ -32,10 +32,10 @@ import android.widget.Toast;
 
 public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 	private View mView;
-	private RelativeLayout mHead_Ae;
-	private ListView lv_Ae;
-	private List<AeRecord> listBean_Ae = null;
-	private HSView_AeRecAdapter Ae_Adapter = null;
+	private RelativeLayout mHeadAe;
+	private ListView lvAe;
+	private List<AeRecord> listBeanAe = null;
+	private HSView_AeRecAdapter aeAdapter = null;
 	private Ae5DayActivity mActivity;
 	private List<Map<String, Object>> JXList = new ArrayList<Map<String, Object>>();
 	private List<String> dateBean = new ArrayList<String>();
@@ -74,19 +74,19 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 	private void init_adapter(Object data) {
 		if (data==null) {
 			Toast.makeText(this.getActivity(), "没有获取到[效应情报表]最新一次AE，可能无符合条件数据！", Toast.LENGTH_LONG).show();
-			if (listBean_Ae != null) {
-				if (listBean_Ae.size() > 0) {
-					listBean_Ae.clear(); // 清除LISTVIEW 以前的内容
-					Ae_Adapter.onDateChange(listBean_Ae);
+			if (listBeanAe != null) {
+				if (listBeanAe.size() > 0) {
+					listBeanAe.clear(); // 清除LISTVIEW 以前的内容
+					aeAdapter.onDateChange(listBeanAe);
 				}
 			}
 		} else {
-			listBean_Ae = new ArrayList<AeRecord>(); // 初始化效应记录 适配器
-			listBean_Ae.clear();
-			listBean_Ae =(List<AeRecord>) data;
-			Ae_Adapter = new HSView_AeRecAdapter(this.getActivity(), R.layout.item_hsview_ae_rec, listBean_Ae,
-					mHead_Ae);
-			lv_Ae.setAdapter(Ae_Adapter);
+			listBeanAe = new ArrayList<AeRecord>(); // 初始化效应记录 适配器
+			listBeanAe.clear();
+			listBeanAe =(List<AeRecord>) data;
+			aeAdapter = new HSView_AeRecAdapter(this.getActivity(), R.layout.item_hsview_ae_rec, listBeanAe,
+					mHeadAe);
+			lvAe.setAdapter(aeAdapter);
 		}
 
 	};
@@ -95,25 +95,25 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
-		mHead_Ae = (RelativeLayout) mView.findViewById(R.id.head_Ae1); // 表头处理
-		mHead_Ae.setFocusable(true);
-		mHead_Ae.setClickable(true);
-		mHead_Ae.setBackgroundColor(Color.parseColor("#fffffb"));
-		mHead_Ae.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		mHeadAe = (RelativeLayout) mView.findViewById(R.id.head_Ae1); // 表头处理
+		mHeadAe.setFocusable(true);
+		mHeadAe.setClickable(true);
+		mHeadAe.setBackgroundColor(Color.parseColor("#fffffb"));
+		mHeadAe.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
 
-		lv_Ae = (ListView) mView.findViewById(R.id.lv_Ae1);
-		lv_Ae.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
-		lv_Ae.setCacheColorHint(0);
-		lv_Ae.setOnScrollListener(this);
-		lv_Ae.setOnItemClickListener(new OnItemClickListener() {
+		lvAe = (ListView) mView.findViewById(R.id.lv_Ae1);
+		lvAe.setOnTouchListener(new ListViewAndHeadViewTouchLinstener());
+		lvAe.setCacheColorHint(0);
+		lvAe.setOnScrollListener(this);
+		lvAe.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent potv_intent = new Intent( getActivity(), PotVLineActivity.class);
 				Bundle potv_bundle = new Bundle();
-				potv_bundle.putString("PotNo", String.valueOf(listBean_Ae.get(position).getPotNo()));
-				potv_bundle.putString("Begin_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
-				potv_bundle.putString("End_Date", listBean_Ae.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("PotNo", String.valueOf(listBeanAe.get(position).getPotNo()));
+				potv_bundle.putString("Begin_Date", listBeanAe.get(position).getDdate().substring(0, 10));
+				potv_bundle.putString("End_Date", listBeanAe.get(position).getDdate().substring(0, 10));
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateBean);
 				potv_bundle.putString("ip", ip);
@@ -142,7 +142,7 @@ public class Fragment_Ae1 extends Fragment implements OnScrollListener {
 
 		public boolean onTouch(View arg0, MotionEvent arg1) {
 			// 当在列头 和 listView控件上touch时，将这个touch的事件分发给 ScrollView
-			HorizontalScrollView headSrcrollView_Ae = (HorizontalScrollView) mHead_Ae
+			HorizontalScrollView headSrcrollView_Ae = (HorizontalScrollView) mHeadAe
 					.findViewById(R.id.horizontalScrollView1);
 			headSrcrollView_Ae.onTouchEvent(arg1);
 			return false;

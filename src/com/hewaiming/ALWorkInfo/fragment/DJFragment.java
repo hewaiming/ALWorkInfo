@@ -68,18 +68,18 @@ public class DJFragment extends Fragment
 	private Button btnMore;
 	private SimpleAdapter adapter;
 	private List<Map<String, Object>> dataList;
-	private List<String> date_record = null; // 记录日期
-	private List<String> date_table = null; // 报表日期
+	private List<String> dateRecord = null; // 记录日期
+	private List<String> dateTable = null; // 报表日期
 	private List<Map<String, Object>> JXList = null; // 记录号名
 
-	private String get_dateTable_url = ":8000/scgy/android/odbcPhP/getDate.php";
-	private String get_JXName_url = ":8000/scgy/android/odbcPhP/getJXRecordName.php";
+	private String getDateTableUrl = ":8000/scgy/android/odbcPhP/getDate.php";
+	private String getJXNameUrl = ":8000/scgy/android/odbcPhP/getJXRecordName.php";
 	private AsyTask_HttpGetDate mhttpgetdata_date;
 	private AsyTask_HttpGetJXRecord mHttpGetData_JXRecord;
 	private Context mContext;
 	// private TitlePopup titlePopup;
-	private TextView tv_title, tv_aeTitle;
-	private ImageView iv_wifi, ivShare;	
+	private TextView tvTitle;
+	private ImageView ivShare;	
 
 	private int GetDateCnt = 0, GetJXCnt = 0;
 	private View mView;
@@ -101,8 +101,8 @@ public class DJFragment extends Fragment
 				Intent intent = new Intent(getActivity(), SettingActivity.class);			
 				startActivity(intent);// 没有设置远程服务器ip和端口
 			} else {
-				get_dateTable_url = "http://" + ip + get_dateTable_url;
-				get_JXName_url = "http://" + ip + get_JXName_url;				
+				getDateTableUrl = "http://" + ip + getDateTableUrl;
+				getJXNameUrl = "http://" + ip + getJXNameUrl;				
 				init_GetDate();
 				init_GetJXRecord();				
 			}
@@ -123,9 +123,9 @@ public class DJFragment extends Fragment
 
 	private void init_GetDate() {
 		GetDateCnt++;
-		if (date_table == null) {
+		if (dateTable == null) {
 			// 执行从远程获得日期数据
-			mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(get_dateTable_url, this, mContext)
+			mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(getDateTableUrl, this, mContext)
 					.execute();
 		}
 
@@ -134,7 +134,7 @@ public class DJFragment extends Fragment
 	private void init_GetJXRecord() {
 		GetJXCnt++;
 		if (JXList == null) {
-			mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(get_JXName_url, this,
+			mHttpGetData_JXRecord = (AsyTask_HttpGetJXRecord) new AsyTask_HttpGetJXRecord(getJXNameUrl, this,
 					mContext).execute(); // 执行从远程获得解析记录数据
 		}
 
@@ -155,8 +155,8 @@ public class DJFragment extends Fragment
 		btnMore = (Button) mView.findViewById(R.id.btn_more);
 		btnMore.setVisibility(View.GONE);
 		// btnMore.setOnClickListener(this);
-		tv_title = (TextView) mView.findViewById(R.id.tv_title);
-		tv_title.setText("电解槽信息");
+		tvTitle = (TextView) mView.findViewById(R.id.tv_title);
+		tvTitle.setText("电解槽信息");
 		// iv_wifi = (ImageView) findViewById(R.id.iv_NoWiFi);
 		// bannerView = (com.hewaiming.ALWorkInfo.banner.SlideShowView)
 		// findViewById(R.id.bannerwView);
@@ -189,7 +189,7 @@ public class DJFragment extends Fragment
 		if (position == 0 || position == 1) {
 			DoRun = true;
 		}
-		if ((JXList != null && date_record != null) || DoRun) {
+		if ((JXList != null && dateRecord != null) || DoRun) {
 			switch (position) {
 			case 8:
 				Intent Paramsintent = new Intent(getActivity(), ParamsActivity.class);
@@ -202,7 +202,7 @@ public class DJFragment extends Fragment
 			case 15:
 				Intent DayTable_intent = new Intent(getActivity(), DayTableActivity.class);
 				Bundle DayTablebundle = new Bundle();
-				DayTablebundle.putStringArrayList("date_table", (ArrayList<String>) date_table);
+				DayTablebundle.putStringArrayList("date_table", (ArrayList<String>) dateTable);
 				DayTablebundle.putSerializable("JXList", (Serializable) JXList);
 				DayTablebundle.putString("ip", ip);
 				DayTablebundle.putInt("port", port);
@@ -212,7 +212,7 @@ public class DJFragment extends Fragment
 			case 2:
 				Intent Ae5day_intent = new Intent(getActivity(), Ae5DayActivity.class);
 				Bundle bundle_Ae5 = new Bundle();
-				bundle_Ae5.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_Ae5.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_Ae5.putSerializable("JXList", (Serializable) JXList);
 				bundle_Ae5.putString("ip", ip);
 				bundle_Ae5.putInt("port", port);
@@ -233,7 +233,7 @@ public class DJFragment extends Fragment
 				potv_bundle.putString("PotNo", "");
 				potv_bundle.putString("Begin_Date", "");
 				potv_bundle.putString("End_Date", "");
-				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				potv_bundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				potv_bundle.putSerializable("JXList", (Serializable) JXList);
 				potv_bundle.putString("ip", ip);
 				potv_bundle.putInt("port", port);
@@ -243,11 +243,11 @@ public class DJFragment extends Fragment
 			case 5:
 				Intent faultRec_intent = new Intent(getActivity(), FaultRecActivity.class);
 				Bundle bundle_faultRec = new Bundle();
-				bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_faultRec.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_faultRec.putBoolean("Hide_Action", false);
 				bundle_faultRec.putString("PotNo", "1101");
-				bundle_faultRec.putString("Begin_Date", date_record.get(0));
-				bundle_faultRec.putString("End_Date", date_record.get(0));
+				bundle_faultRec.putString("Begin_Date", dateRecord.get(0));
+				bundle_faultRec.putString("End_Date", dateRecord.get(0));
 				bundle_faultRec.putSerializable("JXList", (Serializable) JXList);
 				bundle_faultRec.putString("ip", ip);
 				bundle_faultRec.putInt("port", port);
@@ -257,7 +257,7 @@ public class DJFragment extends Fragment
 			case 6:
 				Intent realRec_intent = new Intent(getActivity(), RealRecActivity.class);
 				Bundle realbundle = new Bundle();
-				realbundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				realbundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				realbundle.putSerializable("JXList", (Serializable) JXList);
 				realbundle.putString("ip", ip);
 				realbundle.putInt("port", port);
@@ -267,7 +267,7 @@ public class DJFragment extends Fragment
 			case 7:
 				Intent operate_intent = new Intent(getActivity(), OperateRecActivity.class);
 				Bundle operateBundle = new Bundle();
-				operateBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				operateBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				operateBundle.putString("ip", ip);
 				operateBundle.putInt("port", port);
 				operate_intent.putExtras(operateBundle);
@@ -276,7 +276,7 @@ public class DJFragment extends Fragment
 			case 0:
 				Intent PotStatus_intent = new Intent(getActivity(), PotStatusActivity.class);
 				Bundle PotStatusBundle = new Bundle();				
-				PotStatusBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				PotStatusBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				PotStatusBundle.putSerializable("JXList", (Serializable) JXList);
 				PotStatusBundle.putString("ip", ip);
 				PotStatusBundle.putInt("port", port);
@@ -286,7 +286,7 @@ public class DJFragment extends Fragment
 			case 9:
 				Intent measue_intent = new Intent(getActivity(), MeasueTableActivity.class);
 				Bundle measueBundle = new Bundle();
-				measueBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				measueBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				measueBundle.putString("ip", ip);
 				measueBundle.putInt("port", port);
 				measue_intent.putExtras(measueBundle);
@@ -296,7 +296,7 @@ public class DJFragment extends Fragment
 			case 10:
 				Intent aemost_intent = new Intent(getActivity(), AeMostActivity.class);
 				Bundle aemostBundle = new Bundle();
-				aemostBundle.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				aemostBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				aemostBundle.putSerializable("JXList", (Serializable) JXList);
 				aemostBundle.putString("ip", ip);
 				aemostBundle.putInt("port", port);
@@ -306,11 +306,11 @@ public class DJFragment extends Fragment
 			case 11:
 				Intent aeRec_intent = new Intent(getActivity(), AeRecActivity.class);
 				Bundle bundle_AeRec = new Bundle();
-				bundle_AeRec.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_AeRec.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_AeRec.putBoolean("Hide_Action", false);
 				bundle_AeRec.putString("PotNo", "1101");
-				bundle_AeRec.putString("Begin_Date", date_record.get(0));
-				bundle_AeRec.putString("End_Date", date_record.get(0));
+				bundle_AeRec.putString("Begin_Date", dateRecord.get(0));
+				bundle_AeRec.putString("End_Date", dateRecord.get(0));
 				bundle_AeRec.putSerializable("JXList", (Serializable) JXList);
 				bundle_AeRec.putString("ip", ip);
 				bundle_AeRec.putInt("port", port);
@@ -321,7 +321,7 @@ public class DJFragment extends Fragment
 				Intent faultmost_intent = new Intent(getActivity(), FaultMostActivity.class);
 				Bundle bundle_faultmost = new Bundle();
 				bundle_faultmost.putSerializable("JXList", (Serializable) JXList);
-				bundle_faultmost.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_faultmost.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_faultmost.putString("ip", ip);
 				bundle_faultmost.putInt("port", port);
 				faultmost_intent.putExtras(bundle_faultmost);
@@ -330,7 +330,7 @@ public class DJFragment extends Fragment
 			case 13:
 				Intent craft_intent = new Intent(getActivity(), CraftLineActivity.class);
 				Bundle craftBundle = new Bundle();
-				craftBundle.putStringArrayList("date_table", (ArrayList<String>) date_table);
+				craftBundle.putStringArrayList("date_table", (ArrayList<String>) dateTable);
 				craftBundle.putString("PotNo_Selected", "1101");
 				craftBundle.putString("ip", ip);
 				craftBundle.putInt("port", port);
@@ -340,7 +340,7 @@ public class DJFragment extends Fragment
 			case 14:
 				Intent alarmRec_intent = new Intent(getActivity(), AlarmRecActivity.class);
 				Bundle bundle_alarm = new Bundle();
-				bundle_alarm.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_alarm.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_alarm.putSerializable("JXList", (Serializable) JXList);
 				bundle_alarm.putString("ip", ip);
 				bundle_alarm.putInt("port", port);
@@ -351,7 +351,7 @@ public class DJFragment extends Fragment
 				Intent abnormalmost_intent = new Intent(getActivity(), AbNormalMostActivity.class);
 				Bundle bundle_abnormalmost = new Bundle();
 				bundle_abnormalmost.putSerializable("JXList", (Serializable) JXList);
-				bundle_abnormalmost.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_abnormalmost.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_abnormalmost.putString("ip", ip);
 				bundle_abnormalmost.putInt("port", port);
 				abnormalmost_intent.putExtras(bundle_abnormalmost);
@@ -361,7 +361,7 @@ public class DJFragment extends Fragment
 				Intent areaAvgV_intent = new Intent(getActivity(), AreaAvgVActivity.class);
 				Bundle bundle_areaAvgV = new Bundle();
 				bundle_areaAvgV.putSerializable("JXList", (Serializable) JXList);
-				bundle_areaAvgV.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_areaAvgV.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_areaAvgV.putString("ip", ip);
 				bundle_areaAvgV.putInt("port", port);
 				areaAvgV_intent.putExtras(bundle_areaAvgV);
@@ -371,7 +371,7 @@ public class DJFragment extends Fragment
 				Intent areaAe_intent = new Intent(getActivity(), AreaAeActivity.class);
 				Bundle bundle_areaAe = new Bundle();
 				bundle_areaAe.putSerializable("JXList", (Serializable) JXList);
-				bundle_areaAe.putStringArrayList("date_record", (ArrayList<String>) date_record);
+				bundle_areaAe.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
 				bundle_areaAe.putString("ip", ip);
 				bundle_areaAe.putInt("port", port);
 				areaAe_intent.putExtras(bundle_areaAe);
@@ -397,8 +397,8 @@ public class DJFragment extends Fragment
 			// 从此初始化日期和解析记录数据
 
 			if (GetJXCnt > 3) {
-				tv_title.setTextSize(12);
-				tv_title.setText("工作站:" + "网络不给力或请检查远程服务器IP和端口是否正确！");
+				tvTitle.setTextSize(12);
+				tvTitle.setText("工作站:" + "网络不给力或请检查远程服务器IP和端口是否正确！");
 				// Toast.makeText(getApplicationContext(), "第" + GetJXCnt +
 				// "次尝试获取解析记录数据失败，请检查远程服务器IP和端口是否正确！", //
 				// Toast.LENGTH_LONG).show();
@@ -410,8 +410,8 @@ public class DJFragment extends Fragment
 			if (GetDateCnt > 3) {
 				// Toast.makeText(getApplicationContext(), "第" + GetDateCnt + "
 				// 次尝试获取日期失败，请检查远程服务器IP和端口是否正确！", Toast.LENGTH_LONG).show();
-				tv_title.setTextSize(14);
-				tv_title.setText("工作站:" + "网络不给力或请检查远程服务器IP和端口是否正确！");
+				tvTitle.setTextSize(14);
+				tvTitle.setText("工作站:" + "网络不给力或请检查远程服务器IP和端口是否正确！");
 			} else {
 				Toast.makeText(mContext, "第" + GetDateCnt + " 次尝试获取日期数据", Toast.LENGTH_SHORT).show();
 				init_GetDate();
@@ -450,14 +450,14 @@ public class DJFragment extends Fragment
 			// tv_title.setText("工作站:" + "请检查远程服务器IP和端口是否正确！");
 
 		} else {
-			date_table = new ArrayList<String>();
-			date_table = JsonToBean_GetPublicData.JsonArrayToDate(data);
+			dateTable = new ArrayList<String>();
+			dateTable = JsonToBean_GetPublicData.JsonArrayToDate(data);
 			TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
 			Date dt = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String todayValue = sdf.format(dt);
-			date_record = new ArrayList<String>(date_table); // 记录日期
-			date_record.add(0, todayValue);
+			dateRecord = new ArrayList<String>(dateTable); // 记录日期
+			dateRecord.add(0, todayValue);
 		}
 
 	}
