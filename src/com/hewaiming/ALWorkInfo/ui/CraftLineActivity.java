@@ -454,7 +454,8 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.e(TAG,"工艺参数：测量数据 出错1 ---");				
+					Log.e(TAG,"工艺参数：测量数据 出错1 InterruptedException");	
+					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
 					Log.e(TAG,"工艺参数：测量数据 出错2 ---");					
 				}
@@ -484,6 +485,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {					
 					Log.e(TAG,"工艺参数：日报数据 错误1---");
+					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
 					Log.e(TAG,"工艺参数：日报数据 错误2---");					
 				}
