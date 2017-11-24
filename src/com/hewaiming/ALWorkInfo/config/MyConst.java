@@ -96,8 +96,14 @@ public class MyConst {
 			}
 		});
 		dialog.show();	
-	}
+	}	
 	
+	public static boolean isEqual(double a, double b) {
+	    if (Double.isNaN(a) || Double.isNaN(b) || Double.isInfinite(a) || Double.isInfinite(b)) {
+	       return false;
+	    }
+	    return (a - b) < 0.001d;
+	}
 	public static boolean GetDataFromSharePre(Context mContext,String showName) {		
 		SharedPreferences sp;
 		sp = mContext.getSharedPreferences("GuideDiaLogIsShow", mContext.MODE_PRIVATE);

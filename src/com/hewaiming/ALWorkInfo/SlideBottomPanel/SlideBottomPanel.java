@@ -392,7 +392,7 @@ public class SlideBottomPanel extends FrameLayout {
 					childView.setVisibility(View.VISIBLE);
 				}
 			} catch (NullPointerException e) {
-				e.printStackTrace();
+				Log.e("showPanelTitle","NullPointerException");
 			}
 		}
 	}
@@ -402,7 +402,7 @@ public class SlideBottomPanel extends FrameLayout {
 			try {
 				((ViewGroup) panel).getChildAt(1).setVisibility(View.INVISIBLE);
 			} catch (NullPointerException e) {
-				e.printStackTrace();
+				Log.e("hidePanelTitle","NullPointerException");
 			}
 		}
 	}

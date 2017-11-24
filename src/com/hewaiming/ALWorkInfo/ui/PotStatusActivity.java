@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -380,8 +381,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		try {
 			client.connect(ip, port);
 		} catch (NumberFormatException e) {
-			Toast.makeText(this, "¶Ë¿Ú´íÎó", Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
+			Toast.makeText(this, "¶Ë¿Ú´íÎó", Toast.LENGTH_SHORT).show();			
 		}
 	}
 
@@ -417,7 +417,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 			action.setPotNo_Area(String.valueOf(areaId));
 			client.getTransceiver().send(action);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e("sendPotStatusAction", "sendPotStatusAction Exception");
 		}
 	}
 

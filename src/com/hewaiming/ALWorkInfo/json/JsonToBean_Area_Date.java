@@ -90,7 +90,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mday);
 			}
 		} catch (JSONException e) {
-			Log.e("JsonTo日报", e.getMessage());
+			Log.e("JsonTo日报","JsonTo日报 JSONException" );
 		
 		}
 		return listBean;
@@ -112,7 +112,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mPotV);
 			}
 		} catch (JSONException e) {
-			Log.e("JsonTo槽电压", e.getMessage());			
+			Log.e("JsonTo槽电压","JsonTo槽电压 JSONException");			
 		}
 		return listBean;
 	}
@@ -138,7 +138,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonTo槽电压Plus", e.getMessage());
+			Log.e("JsonTo槽电压Plus","JsonTo槽电压Plus JSONException" );
 		}
 		return listBean;
 	}
@@ -169,7 +169,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonTo故障表", e.getMessage());
+			Log.e("JsonTo故障表","JsonTo故障表 JSONException");
 		}
 		return listBean;
 	}
@@ -217,7 +217,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonTo实时记录", e.getMessage());
+			Log.e("JsonTo实时记录", "JsonTo实时记录 JSONException");
 		}
 		return listBean;
 	}
@@ -254,7 +254,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonTo操作记录", e.getMessage());
+			Log.e("JsonTo操作记录","JsonTo操作记录  JSONException" );
 		}
 		return listBean;
 	}
@@ -322,7 +322,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonToAE记录", e.getMessage());
+			Log.e("JsonToAE记录","JsonToAE记录 JSONException" );
 		}
 		return listBean;
 	}
@@ -443,7 +443,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("JsonTo日报", e.getMessage());
+			Log.e("JsonTo日报", "JsonTo日报 JSONException");
 		}
 		return listDayTable;
 	}
@@ -479,7 +479,7 @@ public class JsonToBean_Area_Date {
 			}
 		} catch (JSONException e) {
 
-			Log.e("jsonToAERecord", e.getMessage());
+			Log.e("jsonToAERecord","jsonToAERecord JSONException");
 		}
 		return listBean;
 	}
@@ -541,7 +541,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-            Log.e("JsonTo效应时间长", e.getMessage());			
+            Log.e("JsonTo效应时间长","JsonTo效应时间长 JSONException" );			
 		}
 		return listBean;
 	}
@@ -649,7 +649,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-			Log.e("数据转换为测量数据LIST",e.getMessage());			
+			Log.e("数据转换为测量数据LIST","数据转换为测量数据LIST JSONException");			
 		}
 		return listBean;
 	}
@@ -682,7 +682,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-			Log.e("JSON TO故障率统计",e.getMessage());
+			Log.e("JSON TO故障率统计","JSON TO故障率统计 JSONException");
 		
 		}
 		return listBean;
@@ -736,7 +736,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-			Log.e("JSON转换成LIST数据（平均电压）", e.getMessage());
+			Log.e("JSON转换成LIST数据（平均电压）","JSON转换成LIST数据（平均电压）JSONException");
 		}
 		return listBean;
 	}
@@ -788,7 +788,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-	        Log.e("JSON转换成LIST电解温度）", e.getMessage());		
+	        Log.e("JSON转换成LIST电解温度","JSON转换成LIST电解温度 JSONException");		
 		}
 		return listBean;
 	}
@@ -854,7 +854,7 @@ public class JsonToBean_Area_Date {
 				}
 			}
 		} catch (JSONException e) {
-			Log.e("JSON转换成LIST分子比", e.getMessage());
+			Log.e("JSON转换成LIST分子比", "JSON转换成LIST分子比 JSONException");
 		}	
 		return listBean;
 	}
@@ -913,7 +913,7 @@ public class JsonToBean_Area_Date {
 				}
 			}
 		} catch (JSONException e) {
-			Log.e("JSON转换成LIST数据 （氧化铝浓度）",e.getMessage());
+			Log.e("JSON转换成LIST数据 氧化铝浓度","JSON转换成LIST数据 氧化铝浓度 JSONException");
 		}
 	
 		return listBean;
@@ -937,7 +937,7 @@ public class JsonToBean_Area_Date {
 			}
 			return mItem;
 		} catch (JSONException e) {
-			Log.e("json to fzb", e.getMessage());		
+			Log.e("json to fzb","json to fzb JSONException");		
 			return null;
 		}
 	}
@@ -960,7 +960,7 @@ public class JsonToBean_Area_Date {
 			}
 			return mItem;
 		} catch (JSONException e) {
-			Log.e("JsonArrayToYHLNDItem", e.getMessage());
+			Log.e("JsonArrayToYHLNDItem","JsonArrayToYHLNDItem JSONException");
 			return null;
 		}
 
@@ -994,7 +994,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-            Log.e(" JSON转换成LIST 区平均电压",e.getMessage());
+            Log.e("JSON转换成LIST 区平均电压","JSON转换成LIST 区平均电压 JSONException");
 		
 		}
 		return listBean;
@@ -1040,7 +1040,7 @@ public class JsonToBean_Area_Date {
 				listBean.add(mBean);
 			}
 		} catch (JSONException e) {
-            Log.e("JSON解析为Bean数据 区效应系数",e.getMessage()); 		
+            Log.e("JSON解析为Bean数据 区效应系数","JSON解析为Bean数据 区效应系数 JSONException"); 		
 		}
 		return listBean;
 	}

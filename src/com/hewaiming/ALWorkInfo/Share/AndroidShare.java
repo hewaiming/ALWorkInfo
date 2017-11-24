@@ -222,7 +222,7 @@ public class AndroidShare extends Dialog implements AdapterView.OnItemClickListe
 			intent.setType("text/plain");
 		} else {
 			File f = new File(imgPath);
-			if ((f != null) && (f.exists()) && (f.isFile())) {
+			if ( (f.exists()) && (f.isFile())) {
 				intent.setType("image/png");
 				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
 			}

@@ -157,9 +157,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	@Override
-	public void onDestroy() {
-	
-		
+	public void onDestroy() {		
 		super.onDestroy();
 	}
 	@Override
@@ -192,7 +190,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				getFZBUrl = "http://" + ip + getFZBUrl;
 				getYHLNDUrl = "http://" + ip + getYHLNDUrl;				
 				// init_GetDate(); // 获取日期
-				// init_GetJXRecord(); // 获取解析记录			
+				// init_GetJXRecord(); // 获取解析记录		
+				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
+				
 				List<String> imageUris = new ArrayList<>();
 				String IP = "http://" + ip;
 				imageUris.add(IP + MyConst.PIC_ADDRESS[0]);
@@ -204,11 +204,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				/* 为控件设置图片 */				
 				mSlideShowView.setImageUris(imageUris);				
 				/* 开始播放 默认4秒切换 */
-				mSlideShowView.startPlay();
-				
-				checkUpDate(); // 检测版本升级
-				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
-
+				mSlideShowView.startPlay();				
+				checkUpDate(); // 检测版本升级	
 			}
 
 		} else {
@@ -416,11 +413,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				Cnt2++;
 			}
 		}
-		if (YHLNDTotal1 != 0) {
+		if (!MyConst.isEqual(YHLNDTotal1, 0.0)) {
 			YHLNDTotal = YHLNDTotal + YHLNDTotal1;
 			TotalCnt = TotalCnt + Cnt1;
 		}
-		if (YHLNDTotal2 != 0) {
+		if (!MyConst.isEqual(YHLNDTotal2,0.0)) {
 			YHLNDTotal = YHLNDTotal + YHLNDTotal2;// 厂房氧化铝浓度总和
 			TotalCnt = TotalCnt + Cnt2;
 		}	
@@ -815,11 +812,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				Cnt2++;
 			}
 		}
-		if (FZBTotal1 != 0) {
+		if (!MyConst.isEqual(FZBTotal1,0.0)) {
 			FZBTotal = FZBTotal + FZBTotal1;
 			TotalCnt = TotalCnt + Cnt1;
 		}
-		if (FZBTotal2 != 0) {
+		if (!MyConst.isEqual(FZBTotal2,0.0)) {
 			FZBTotal = FZBTotal + FZBTotal2;// 厂房分子比总和
 			TotalCnt = TotalCnt + Cnt2;
 		}

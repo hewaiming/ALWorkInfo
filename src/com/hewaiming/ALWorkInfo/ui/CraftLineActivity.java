@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CraftLineActivity extends Activity implements OnClickListener, OnCheckedChangeListener {
+	protected static final String TAG = "CraftLineActivity CyclicBarrier";
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn;
 	private TextView tv_title;
@@ -352,7 +353,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 		}
 		if (default_PotNo == 1) {
 			spinner_potno.setSelection(0);
-			if (!PotNoList.isEmpty()){
+			if (PotNoList!=null && !PotNoList.isEmpty()){
 				PotNo = PotNoList.get(0).toString();
 				PotNo_adapter.notifyDataSetChanged();// 通知数据改变
 			}			
@@ -443,7 +444,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(measue_potno_url, "POST", mparams);
 				if (json != null) {
-					Log.d("工艺参数：测量数据", json.toString());// 从服务器返回有数据
+					//Log.d("工艺参数：测量数据", json.toString());// 从服务器返回有数据
 					listBean_measuetable = new ArrayList<MeasueTable>();
 					listBean_measuetable = JsonToBean_Area_Date.JsonArrayToMeasueTableBean(json.toString());
 				} else {
@@ -453,9 +454,9 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.i("工艺参数：测量数据 ---", e.getMessage());				
+					Log.e(TAG,"工艺参数：测量数据 出错1 ---");				
 				} catch (BrokenBarrierException e) {
-					Log.i("工艺参数：测量数据 ---", e.getMessage());					
+					Log.e(TAG,"工艺参数：测量数据 出错2 ---");					
 				}
 			}
 		});
@@ -472,7 +473,7 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(potno_url, "POST", mparams);
 				if (json != null) {
-					Log.d("工艺参数：日报数据", json.toString());// 从服务器返回有数据
+					//Log.d("工艺参数：日报数据", json.toString());// 从服务器返回有数据
 					listBean_daytable = new ArrayList<dayTable>();
 					listBean_daytable = JsonToMultiList.JsonArrayToDayTableBean(json.toString());
 				} else {
@@ -482,9 +483,9 @@ public class CraftLineActivity extends Activity implements OnClickListener, OnCh
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {					
-					Log.i("工艺参数：日报数据 ---", e.getMessage());
+					Log.e(TAG,"工艺参数：日报数据 错误1---");
 				} catch (BrokenBarrierException e) {
-					Log.i("工艺参数：日报数据 ---", e.getMessage());					
+					Log.e(TAG,"工艺参数：日报数据 错误2---");					
 				}
 			}
 		});

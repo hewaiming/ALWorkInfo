@@ -71,6 +71,7 @@ import android.graphics.Color;
 import android.graphics.Matrix.ScaleToFit;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1125,7 +1126,7 @@ public class PotVLineActivity extends Activity
 								BeginDate, EndDate, this, this).execute();
 					}
 				} catch (ParseException e) {
-					e.printStackTrace();
+					Log.e("PotVLineActivity", "ParseException");
 				}
 			}
 			break;
