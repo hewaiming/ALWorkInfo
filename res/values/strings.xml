@@ -10,7 +10,7 @@
     <string name="potno">请选择槽号</string>
     <string name="begindate">请选择 起始日期</string>
     <string name="enddate">请选择 截止日期</string>
-    <string name="publicDate">2017-11-18</string>
+    <string name="publicDate">2017-11-24</string>
     <string name="txt_home">首页</string>
     <string name="txt_dj">电解槽</string>
 
@@ -33,7 +33,7 @@
     <string name="hello">你好, 铝电解监控系统安卓版!</string>
     <string name="soft_update_no">已经是最新版本</string>
     <string name="soft_update_title">软件更新</string>
-    <string name="soft_update_info">全新改版，增加更多工艺指标数据等。</string>
+    <string name="soft_update_info">全新改版，增加更多工艺指标数据等(version.xml配置)。</string>
     <string name="soft_update_updatebtn">更新</string>
     <string name="soft_update_later">稍后更新</string>
     <string name="soft_updating">正在更新</string>

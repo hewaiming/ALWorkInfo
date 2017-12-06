@@ -97,9 +97,9 @@ import android.widget.Toast;
 
 public class PotVLineActivity extends Activity
 		implements HttpGetListener, HttpGetListener_other, OnClickListener, OnScrollListener {
-	private static final float BaseV = 3935;// X字段值为100
-	private static final float BaseV_LESS = 3820; // X字段值为50
-	private static final float BaseV_MORE = 4045;// X字段值为150
+	private static final float BaseV = 3635;// X字段值为100 // y轴不过欠
+	private static final float BaseV_LESS = 3520; // X字段值为50
+	private static final float BaseV_MORE = 3745;// X字段值为150
 	private Spinner spinner_area, spinner_potno, spinner_beginDate, spinner_endDate;
 	private Button findBtn, backBtn, moreBtn;
 	private TextView tv_title;
