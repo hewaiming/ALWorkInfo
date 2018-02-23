@@ -102,6 +102,7 @@ public class JsonToMultiList {
 		return listBean;
 	}
 
+	//效应情报表数据
 	public static Map<String, List<AeRecord>> JsonArrayToAeRecord_5DayBean(String data) {
 		Map<String, List<AeRecord>> mapBean = null;
 		List<AeRecord> list1 = null;
@@ -109,6 +110,9 @@ public class JsonToMultiList {
 		List<AeRecord> list3 = null;
 		List<AeRecord> list4 = null;
 		List<AeRecord> list5 = null;
+		int listNo=-1;
+		int potNo=0;
+		
 		try {
 			JSONArray jsonarray = new JSONArray(data);
 
@@ -117,16 +121,19 @@ public class JsonToMultiList {
 			list2 = new ArrayList<AeRecord>();
 			list3 = new ArrayList<AeRecord>();
 			list4 = new ArrayList<AeRecord>();
-			list5 = new ArrayList<AeRecord>();
+			list5 = new ArrayList<AeRecord>();			
 			//System.out.println("jsonarray. AE5day_Table---length()---" + jsonarray.length());
-			for (int i = 0; i < jsonarray.length(); i++) {
-
+			for (int i = 0; i < jsonarray.length(); i++) {				
 				JSONObject jsonobj = jsonarray.getJSONObject(i);
+				//第一次给POTNO变量赋值
+				if(i==0) {
+					potNo=jsonobj.getInt("POTNO");
+				}
 				AeRecord mBean = new AeRecord();
 				if (jsonobj.get("POTNO").equals(null)) {
 					mBean.setPotNo(0);
 				} else {
-					mBean.setPotNo(jsonobj.getInt("POTNO"));
+					mBean.setPotNo(jsonobj.getInt("POTNO"));					
 				}
 
 				if (jsonobj.get("DDate").equals(null)) {
@@ -161,7 +168,14 @@ public class JsonToMultiList {
 				} else {
 					mBean.setMaxV(jsonobj.getDouble("MaxVoltage"));
 				}
-				switch (i % 5) {
+				//判断后续数据与前一数据是否相等
+				if(potNo==mBean.getPotNo()){
+					listNo++;
+				}else{
+					listNo=0;
+					potNo=mBean.getPotNo();
+				}
+				switch (listNo % 5) {
 				case 0:
 					list1.add(mBean);
 					break;

@@ -166,7 +166,12 @@ public class AreaAvgVActivity extends Activity implements HttpGetListener, OnCli
 		spinner_endDate.setAdapter(Date_adapter);
 		spinner_beginDate.setVisibility(View.VISIBLE);
 		spinner_endDate.setVisibility(View.VISIBLE);
-		spinner_beginDate.setSelection(25);
+		if(dateBean.size()>25)
+		{
+			spinner_beginDate.setSelection(25);
+		}else{
+			spinner_beginDate.setSelection(dateBean.size()-1);
+		}	
 		BeginDate = spinner_beginDate.getItemAtPosition(0).toString();
 		EndDate = spinner_endDate.getItemAtPosition(0).toString();
 
