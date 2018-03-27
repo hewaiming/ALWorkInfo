@@ -45,6 +45,7 @@ import com.hewaiming.ALWorkInfo.bean.DJWD;
 import com.hewaiming.ALWorkInfo.bean.HY_item;
 import com.hewaiming.ALWorkInfo.bean.PotCtrl;
 import com.hewaiming.ALWorkInfo.config.MyConst;
+import com.hewaiming.ALWorkInfo.config.PermisionUtils;
 import com.hewaiming.ALWorkInfo.json.JSONArrayParser;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_Area_Date;
 import com.hewaiming.ALWorkInfo.json.JsonToBean_GetPublicData;
@@ -54,12 +55,14 @@ import com.hewaiming.ALWorkInfo.net.HttpPost_JsonArray;
 import com.hewaiming.ALWorkInfo.net.NetDetector;
 import com.hewaiming.ALWorkInfo.ui.AeMostActivity;
 import com.hewaiming.ALWorkInfo.ui.AreaAvgVActivity;
+import com.hewaiming.ALWorkInfo.ui.MainActivity;
 import com.hewaiming.ALWorkInfo.ui.SettingActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -157,9 +160,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	@Override
-	public void onDestroy() {		
+	public void onDestroy() {
 		super.onDestroy();
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -167,10 +171,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		init(); // 初始化各控件
 		NetDetector netDetector = new NetDetector(mContext, false);
 		if (netDetector.isConnectingToInternetNoShow() == 1) {
-			ivWifi.setVisibility(View.GONE);		
+			ivWifi.setVisibility(View.GONE);
 			mSlideShowView.setVisibility(View.VISIBLE);// wifi
 		} else {
-			ivWifi.setVisibility(View.VISIBLE);		
+			ivWifi.setVisibility(View.VISIBLE);
 			mSlideShowView.setVisibility(View.GONE);// no wifi
 		}
 		if (NetStatus() != 0) {
@@ -188,11 +192,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				getAvgVAreaUrl = "http://" + ip + getAvgVAreaUrl;
 				getDJWDUrl = "http://" + ip + getDJWDUrl;
 				getFZBUrl = "http://" + ip + getFZBUrl;
-				getYHLNDUrl = "http://" + ip + getYHLNDUrl;				
+				getYHLNDUrl = "http://" + ip + getYHLNDUrl;
 				// init_GetDate(); // 获取日期
-				// init_GetJXRecord(); // 获取解析记录		
+				// init_GetJXRecord(); // 获取解析记录
 				GetAllData_ShowChart(true); // 获取运行槽数据后，才能执行‘四低一高‘工艺数据，且显示5个图表
-				
+
 				List<String> imageUris = new ArrayList<>();
 				String IP = "http://" + ip;
 				imageUris.add(IP + MyConst.PIC_ADDRESS[0]);
@@ -201,11 +205,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				imageUris.add(IP + MyConst.PIC_ADDRESS[3]);
 				imageUris.add(IP + MyConst.PIC_ADDRESS[4]);
 				// mSlideShowView.setVisibility(View.VISIBLE);// wifi
-				/* 为控件设置图片 */				
-				mSlideShowView.setImageUris(imageUris);				
+				/* 为控件设置图片 */
+				mSlideShowView.setImageUris(imageUris);
 				/* 开始播放 默认4秒切换 */
-				mSlideShowView.startPlay();				
-				checkUpDate(); // 检测版本升级	
+				mSlideShowView.startPlay();
+				checkUpDate(); // 检测版本升级
 			}
 
 		} else {
@@ -221,7 +225,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
-				Log.i("氧化铝浓度数据","获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
+				Log.i("氧化铝浓度数据", "获取各区氧化铝浓度数据OK，开始显示柱形图表啦，happy去");
 				YHLNDSum_Clear();
 				ShowBar_YHLND(CalcYHLNDSUM(listBeanYHLND));// 显示各区氧化铝浓度柱状图
 			}
@@ -252,10 +256,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					Log.e(TAG, "一厂房一区氧化铝浓度数据CyclicBarrier有误");	
+					Log.e(TAG, "一厂房一区氧化铝浓度数据CyclicBarrier有误");
 					Thread.currentThread().interrupt();
-				} catch (BrokenBarrierException e) {				
-					Log.e(TAG,"一厂房一区氧化铝浓度数据CyclicBarrier有误");
+				} catch (BrokenBarrierException e) {
+					Log.e(TAG, "一厂房一区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
 		});
@@ -279,11 +283,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				try {
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
-					
-					Log.e(TAG,"一厂房二区氧化铝浓度数据CyclicBarrier有误");
+
+					Log.e(TAG, "一厂房二区氧化铝浓度数据CyclicBarrier有误");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
+
 					Log.e(TAG, "一厂房二区氧化铝浓度数据CyclicBarrier有误");
 				}
 			}
@@ -308,9 +312,9 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					barrier.await();// 等待其他哥们
 				} catch (InterruptedException e) {
 					Log.e(TAG, "一厂房三区氧化铝浓度数据CyclicBarrier1有误");
-					Thread.currentThread().interrupt();			
+					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-					
+
 					Log.e(TAG, "一厂房三区氧化铝浓度数据CyclicBarrier2有误");
 				}
 			}
@@ -332,12 +336,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
+				} catch (InterruptedException e) {
 					Log.e(TAG, "二厂房一区氧化铝浓度数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
-					Log.e(TAG,  "二厂房一区氧化铝浓度数据CyclicBarrier有误2");
+
+					Log.e(TAG, "二厂房一区氧化铝浓度数据CyclicBarrier有误2");
 				}
 			}
 		});
@@ -358,12 +362,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "二厂房二区氧化铝浓度数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
-					Log.e(TAG,"二厂房二区氧化铝浓度数据CyclicBarrier有误2");
+
+					Log.e(TAG, "二厂房二区氧化铝浓度数据CyclicBarrier有误2");
 				}
 			}
 		});
@@ -384,10 +388,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
+				} catch (InterruptedException e) {
 					Log.e(TAG, "二厂房三区氧化铝浓度数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
-				} catch (BrokenBarrierException e) {					
+				} catch (BrokenBarrierException e) {
 					Log.e(TAG, "二厂房三区氧化铝浓度数据CyclicBarrier有误2");
 				}
 			}
@@ -399,7 +403,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		// 图表数据设置
 		ArrayList<BarEntry> yVals = new ArrayList<>();// Y轴方向厂房氧化铝浓度数据
 		ArrayList<String> xVals = new ArrayList<>();// X轴数据
-		double YHLNDTotal1=0, YHLNDTotal2=0, YHLNDTotal=0; // 一厂房，二厂房，厂房氧化铝浓度总和
+		double YHLNDTotal1 = 0, YHLNDTotal2 = 0, YHLNDTotal = 0; // 一厂房，二厂房，厂房氧化铝浓度总和
 		int PotS1, PotS2, PotS;
 		int Cnt1 = 0, Cnt2 = 0, TotalCnt = 0;
 		for (int i = 0; i < 3; i++) {
@@ -418,10 +422,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			YHLNDTotal = YHLNDTotal + YHLNDTotal1;
 			TotalCnt = TotalCnt + Cnt1;
 		}
-		if (!MyConst.isEqual(YHLNDTotal2,0.0)) {
+		if (!MyConst.isEqual(YHLNDTotal2, 0.0)) {
 			YHLNDTotal = YHLNDTotal + YHLNDTotal2;// 厂房氧化铝浓度总和
 			TotalCnt = TotalCnt + Cnt2;
-		}	
+		}
 		PotS1 = NormPotS[0] + NormPotS[1] + NormPotS[2]; // 一厂房正常槽总数
 		PotS2 = NormPotS[3] + NormPotS[4] + NormPotS[5]; // 二厂房正常槽总数
 		PotS = PotS1 + PotS2; // 厂房正常槽总数
@@ -438,10 +442,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			xVals.add("一厂3区" + mDate[2]);
 			yVals.add(new BarEntry((float) YHLNDAvg[2], 2));
 		}
-		if (PotS1 != 0 && Cnt1!=0) {
+		if (PotS1 != 0 && Cnt1 != 0) {
 			xVals.add("一厂");
 			yVals.add(new BarEntry((float) YHLNDTotal1 / Cnt1, 3));
-		}else if(Cnt1==0){
+		} else if (Cnt1 == 0) {
 			xVals.add("一厂");
 			yVals.add(new BarEntry((float) 0, 3));
 		}
@@ -457,17 +461,17 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			xVals.add("二厂3区" + mDate[5]);
 			yVals.add(new BarEntry((float) YHLNDAvg[5], 6));
 		}
-		if (PotS2 != 0 && Cnt2!=0) {
+		if (PotS2 != 0 && Cnt2 != 0) {
 			xVals.add("二厂");
 			yVals.add(new BarEntry((float) YHLNDTotal2 / Cnt2, 7));
-		}else if(Cnt2==0){
+		} else if (Cnt2 == 0) {
 			xVals.add("二厂");
 			yVals.add(new BarEntry((float) 0, 7));
 		}
-		if (PotS != 0 && TotalCnt!=0) {
+		if (PotS != 0 && TotalCnt != 0) {
 			xVals.add("厂房");
 			yVals.add(new BarEntry((float) YHLNDTotal / TotalCnt, 8));
-		}else if(TotalCnt==0){
+		} else if (TotalCnt == 0) {
 			xVals.add("厂房");
 			yVals.add(new BarEntry((float) 0, 8));
 		}
@@ -545,7 +549,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.i("氧化铝浓度项:","第 " + i + " 氧化铝浓度项 ，为空！");
+					Log.i("氧化铝浓度项:", "第 " + i + " 氧化铝浓度项 ，为空！");
 				}
 			}
 		}
@@ -566,7 +570,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(6, new Runnable() {
 			@Override
 			public void run() {
-				Log.i("获取各区分子比数据OK","获取各区分子比数据OK，开始显示柱形图表啦，happy去");
+				Log.i("获取各区分子比数据OK", "获取各区分子比数据OK，开始显示柱形图表啦，happy去");
 				FZBSum_Clear();
 				ShowBar_FZB(CalcFZBSUM(listBeanFZB));// 显示各区分子比柱状图
 			}
@@ -600,10 +604,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
-					Log.e(TAG,"一厂房一区分子比数据CyclicBarrier有误1");
+				} catch (InterruptedException e) {
+					Log.e(TAG, "一厂房一区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
-				} catch (BrokenBarrierException e) {				
+				} catch (BrokenBarrierException e) {
 					Log.e(TAG, "一厂房一区分子比数据CyclicBarrier有误2");
 				}
 			}
@@ -626,10 +630,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "一厂房二区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
-				} catch (BrokenBarrierException e) {				
+				} catch (BrokenBarrierException e) {
 					Log.e(TAG, "一厂房二区分子比数据CyclicBarrier有误2");
 				}
 			}
@@ -652,12 +656,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
+				} catch (InterruptedException e) {
 					Log.e(TAG, "一厂房三区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
-					Log.e(TAG,"一厂房三区分子比数据CyclicBarrier有误2");
+
+					Log.e(TAG, "一厂房三区分子比数据CyclicBarrier有误2");
 				}
 			}
 		});
@@ -678,12 +682,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "二厂房一区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
-					Log.e(TAG,"二厂房一区分子比数据CyclicBarrier有误2");
+
+					Log.e(TAG, "二厂房一区分子比数据CyclicBarrier有误2");
 				}
 			}
 		});
@@ -704,12 +708,12 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
-					Log.e(TAG,"二厂房二区分子比数据CyclicBarrier有误1");
+				} catch (InterruptedException e) {
+					Log.e(TAG, "二厂房二区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-					
-					Log.e(TAG,"二厂房二区分子比数据CyclicBarrier有误2");
+
+					Log.e(TAG, "二厂房二区分子比数据CyclicBarrier有误2");
 				}
 			}
 		});
@@ -730,10 +734,10 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {				
+				} catch (InterruptedException e) {
 					Log.e(TAG, "二厂房三区分子比数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
-				} catch (BrokenBarrierException e) {				
+				} catch (BrokenBarrierException e) {
 					Log.e(TAG, "二厂房三区分子比数据CyclicBarrier有误2");
 				}
 			}
@@ -750,8 +754,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		mparams.add(new BasicNameValuePair("areaID", areaID));
 		JSONArrayParser jsonParser = new JSONArrayParser();
 		JSONArray json = jsonParser.makeHttpRequest(getFZBUrl, "POST", mparams);
-		if (json != null) {		
-			 Log.i("厂房：分子比" + areaID,"获取厂房分子比OK，其他数据呢");
+		if (json != null) {
+			Log.i("厂房：分子比" + areaID, "获取厂房分子比OK，其他数据呢");
 			return JsonToBean_Area_Date.JsonArrayToFZBItem(areaID, json.toString());
 		} else {
 			Log.i("厂房：分子比" + areaID, "从PHP服务器无数据返回！");
@@ -776,7 +780,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		JSONArray json = jsonParser.makeHttpRequest(getYHLNDUrl, "POST", mparams);
 		if (json != null) {
 			// Log.d("厂房：氧化铝浓度", json.toString());// 从服务器返回有数据
-			//System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
+			// System.out.println("获取厂房氧化铝浓度OK，其他数据呢");
 			Log.i("厂房：氧化铝浓度" + areaID, "获取厂房氧化铝浓度OK，其他数据呢");
 			return JsonToBean_Area_Date.JsonArrayToYHLNDItem(areaID, json.toString());
 		} else {
@@ -811,11 +815,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				Cnt2++;
 			}
 		}
-		if (!MyConst.isEqual(FZBTotal1,0.0)) {
+		if (!MyConst.isEqual(FZBTotal1, 0.0)) {
 			FZBTotal = FZBTotal + FZBTotal1;
 			TotalCnt = TotalCnt + Cnt1;
 		}
-		if (!MyConst.isEqual(FZBTotal2,0.0)) {
+		if (!MyConst.isEqual(FZBTotal2, 0.0)) {
 			FZBTotal = FZBTotal + FZBTotal2;// 厂房分子比总和
 			TotalCnt = TotalCnt + Cnt2;
 		}
@@ -939,7 +943,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.i("分子比平均值项","第 " + i + " 分子比平均值项 ，为空！");
+					Log.i("分子比平均值项", "第 " + i + " 分子比平均值项 ，为空！");
 				}
 			}
 		}
@@ -959,7 +963,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				Log.i("各区电解温度数据OK","获取各区电解温度数据OK，开始显示柱形图表啦，happy去");
+				Log.i("各区电解温度数据OK", "获取各区电解温度数据OK，开始显示柱形图表啦，happy去");
 				DJWDSum_Clear();
 				CalcDJWDSUM(listBeanDJWD);
 				ShowBar_DJWD();// 显示各区电解温度柱状图
@@ -996,8 +1000,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(getDJWDUrl, "POST", mparams);
-				if (json != null) {					
-					Log.i("厂房电解温度","获取厂房电解温度OK，其他数据呢");
+				if (json != null) {
+					Log.i("厂房电解温度", "获取厂房电解温度OK，其他数据呢");
 					listBeanDJWD = new ArrayList<DJWD>(); // 初始化电解温度适配器
 					listBeanDJWD = JsonToBean_Area_Date.JsonArrayToDJWDBean(json.toString());
 
@@ -1022,11 +1026,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "厂房电解温度数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
+
 					Log.e(TAG, "厂房电解温度数据CyclicBarrier有误2");
 				}
 			}
@@ -1147,7 +1151,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.i("电解温度","第 " + i + " 项 电解温度，为空！");
+					Log.i("电解温度", "第 " + i + " 项 电解温度，为空！");
 				}
 			}
 		}
@@ -1166,7 +1170,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				Log.i("区平均电压数据","获取各区平均电压数据OK，开始显示柱形图表啦，happy去");
+				Log.i("区平均电压数据", "获取各区平均电压数据OK，开始显示柱形图表啦，happy去");
 				AvgVSum_Clear();
 				CalcAvgVSUM(listBeanAvgV);
 				ShowBar_AvgV();// 显示各区平均电压柱状图
@@ -1195,8 +1199,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", yesterdayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(getAvgVAreaUrl, "POST", mparams);
-				if (json != null) {					
-					Log.i("厂房平均电压","获取厂房平均电压OK，其他数据呢");
+				if (json != null) {
+					Log.i("厂房平均电压", "获取厂房平均电压OK，其他数据呢");
 					listBeanAvgV = new ArrayList<AvgV>(); // 初始化效应次数适配器
 					listBeanAvgV = JsonToBean_Area_Date.JsonArrayToAvgVDayTableBean(json.toString());
 
@@ -1221,11 +1225,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "厂房平均电压数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
+
 					Log.e(TAG, "厂房平均电压数据CyclicBarrier有误2");
 				}
 			}
@@ -1344,7 +1348,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.w("平均电压为空","第 " + i + " 项 平均电压，为空！");
+					Log.w("平均电压为空", "第 " + i + " 项 平均电压，为空！");
 				}
 			}
 		}
@@ -1377,7 +1381,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		final CyclicBarrier barrier = new CyclicBarrier(1, new Runnable() {
 			@Override
 			public void run() {
-				Log.i("效应系数数据","获取各区效应系数数据OK，开始显示柱形图表啦，happy去");
+				Log.i("效应系数数据", "获取各区效应系数数据OK，开始显示柱形图表啦，happy去");
 				AeCnt_Clear();
 				CalcAeCnt(listBeanAeCnt);
 				ShowBar_AE();// 显示各区效应柱状图
@@ -1406,8 +1410,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				mparams.add(new BasicNameValuePair("EndDate", todayValue));
 				JSONArrayParser jsonParser = new JSONArrayParser();
 				JSONArray json = jsonParser.makeHttpRequest(getAeCntUrl, "POST", mparams);
-				if (json != null) {				
-					Log.i("效应次数","获取厂房效应次数OK，其他数据呢");
+				if (json != null) {
+					Log.i("效应次数", "获取厂房效应次数OK，其他数据呢");
 					listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
 					listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 
@@ -1415,7 +1419,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					// 再次get效应次数数据
 					json = jsonParser.makeHttpRequest(getAeCntUrl, "POST", mparams);
 					if (json != null) {
-						Log.i("效应次数","厂房：效应次数ok");// 从服务器返回有数据
+						Log.i("效应次数", "厂房：效应次数ok");// 从服务器返回有数据
 						listBeanAeCnt = new ArrayList<AeRecord>(); // 初始化效应次数适配器
 						listBeanAeCnt = JsonToBean_Area_Date.JsonArrayToAeCntBean(json.toString());
 					} else {
@@ -1434,11 +1438,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 				try {
 					barrier.await();// 等待其他哥们
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					Log.e(TAG, "厂房 效应次数 数据CyclicBarrier有误1");
 					Thread.currentThread().interrupt();
 				} catch (BrokenBarrierException e) {
-				
+
 					Log.e(TAG, "厂房 效应次数 数据CyclicBarrier有误2");
 				}
 			}
@@ -1463,11 +1467,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			// Log.d("二厂房：正常槽数量", json2.toString());// 从服务器返回有数据
 			NormPotsList2 = new ArrayList<PotCtrl>();
 			NormPotsList2 = JsonToBean_GetPublicData.JsonArrayToNormPots(json2.toString());
-			if(NormPotsList2.size()==0){
+			if (NormPotsList2.size() == 0) {
 				return false;
-			}else{
+			} else {
 				return true;
-			}			
+			}
 		} else {
 			return false;
 		}
@@ -1481,11 +1485,11 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			// Log.d("一厂房：正常槽数量", json1.toString());// 从服务器返回有数据
 			NormPotsList1 = new ArrayList<PotCtrl>();
 			NormPotsList1 = JsonToBean_GetPublicData.JsonArrayToNormPots(json1.toString());
-			if(NormPotsList1.size()==0){
+			if (NormPotsList1.size() == 0) {
 				return false;
-			}else{
+			} else {
 				return true;
-			}		
+			}
 		} else {
 			return false;
 		}
@@ -1596,7 +1600,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.w("效应次数","第 " + i + " 项 效应次数，为空！");
+					Log.w("效应次数", "第 " + i + " 项 效应次数，为空！");
 				}
 			}
 		}
@@ -1629,7 +1633,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					}
 
 				} else {
-					Log.w("槽控制字","槽控制字数据为NULL!");
+					Log.w("槽控制字", "槽控制字数据为NULL!");
 				}
 			}
 			if (Room == 1) {
@@ -1663,8 +1667,8 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		GetDateCnt++;
 		if (dateTable == null) {
 			// 执行从远程获得日期数据
-			AsyTask_HttpGetDate mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(getDateTableUrl,
-					this, mContext).execute();
+			AsyTask_HttpGetDate mhttpgetdata_date = (AsyTask_HttpGetDate) new AsyTask_HttpGetDate(getDateTableUrl, this,
+					mContext).execute();
 		}
 
 	}
@@ -1738,7 +1742,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 		imgbtnShowFZB.setOnClickListener(this);
 		imgbtnShowYHLND = (ImageButton) mView.findViewById(R.id.imgbtn_show_YHLNDChart);
 		imgbtnShowYHLND.setOnClickListener(this);
-		//获取正常槽数据
+		// 获取正常槽数据
 		layoutNormal.setOnClickListener(this);
 
 	}
@@ -1807,7 +1811,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 					@Override
 					public void run() {
 						SetNormalPot(); // 显示正常槽数量
-						//iv_Fresh_Pots.setVisibility(View.GONE);
+						// iv_Fresh_Pots.setVisibility(View.GONE);
 					}
 				});
 			}
@@ -1819,7 +1823,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				// initDATA_YHLND();// 显示当前各区氧化铝浓度
 			}
 
-		} catch (InterruptedException e) {		
+		} catch (InterruptedException e) {
 			Log.e(TAG, "厂房正常槽数量 latch 有误");
 			Thread.currentThread().interrupt();
 		}
@@ -1827,7 +1831,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 	}
 
 	private void init_normalPot() {
-		layoutNormal=(RelativeLayout)mView.findViewById(R.id.Normal_Layout);
+		layoutNormal = (RelativeLayout) mView.findViewById(R.id.Normal_Layout);
 		tvPotTotal = (TextView) mView.findViewById(R.id.tv_potTotal);
 		tvPot1 = (TextView) mView.findViewById(R.id.tv_Room1_sum);
 		tvPot11 = (TextView) mView.findViewById(R.id.tv_Room11_sum);
@@ -1901,15 +1905,15 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 				}
 			});
 		}
-		//区平均电压，长点击
+		// 区平均电压，长点击
 		if (TYPE == 1) {
 			mChart.setOnLongClickListener(new OnLongClickListener() {
-				
+
 				@Override
 				public boolean onLongClick(View arg0) {
-					
+
 					if (checkGlobalData()) {
-						Intent avgV_intent=new Intent(getActivity(),AreaAvgVActivity.class);
+						Intent avgV_intent = new Intent(getActivity(), AreaAvgVActivity.class);
 						Bundle avgVBundle = new Bundle();
 						if (dateRecord != null) {
 							avgVBundle.putStringArrayList("date_record", (ArrayList<String>) dateRecord);
@@ -1922,7 +1926,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 							avgVBundle.putInt("port", port);
 							avgV_intent.putExtras(avgVBundle);
 							startActivity(avgV_intent);
-							
+
 						}
 					}
 					return true;
@@ -2034,7 +2038,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			MyConst.showShare(mContext); // 一键分享
 			break;
 		case R.id.iv_refresh_pots:
-			//获取各区正常槽数据,效应数据，平均电压
+			// 获取各区正常槽数据,效应数据，平均电压
 			Homedialog.setMessage("玩命加载区槽数、效应系数、平均电压...");
 			if (!Homedialog.isShowing()) {
 				Homedialog.show();
@@ -2137,7 +2141,7 @@ public class HomeFragment extends Fragment implements OnClickListener, HttpGetJX
 			}
 			break;
 		case R.id.Normal_Layout:
-			//获取各区正常槽数据,效应数据，平均电压
+			// 获取各区正常槽数据,效应数据，平均电压
 			Homedialog.setMessage("玩命加载区槽数、效应系数、平均电压...");
 			if (!Homedialog.isShowing()) {
 				Homedialog.show();

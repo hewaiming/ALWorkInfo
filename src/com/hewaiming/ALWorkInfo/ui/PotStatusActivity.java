@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -168,6 +169,12 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_potstatus);
+		// 第一种，是在主线程中直接忽略，强制执行。（不推荐这种方法，但是该方法修改起来简单）
+		/*
+		 * if (android.os.Build.VERSION.SDK_INT > 9) { StrictMode.ThreadPolicy
+		 * policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		 * StrictMode.setThreadPolicy(policy); }
+		 */
 		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8:00"));
@@ -188,6 +195,16 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		SendActionToServer();
 		if (!MyConst.GetDataFromSharePre(mContext, "PotStatus_Show")) {
 			MyConst.GuideDialog_show(mContext, "PotStatus_Show"); // 第一次显示
+		}
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();		
+		if (timerPotStatus != null) {
+			timerPotStatus.cancel();
+			if (client != null && client.isConnected()) { client.disconnect(); }
 		}
 
 	}
@@ -381,7 +398,7 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 		try {
 			client.connect(ip, port);
 		} catch (NumberFormatException e) {
-			Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();			
+			Toast.makeText(this, "端口错误", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -411,14 +428,26 @@ public class PotStatusActivity extends DemoBase implements OnScrollListener, OnC
 	}
 
 	private void sendPotStatusAction() {
-		try {
-			RequestAction action = new RequestAction();
-			action.setActionId(2);
-			action.setPotNo_Area(String.valueOf(areaId));
-			client.getTransceiver().send(action);
-		} catch (Exception e) {
-			Log.e("sendPotStatusAction", "sendPotStatusAction Exception");
-		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					RequestAction action = new RequestAction();
+					action.setActionId(2);
+					action.setPotNo_Area(String.valueOf(areaId));
+					if (action != null && client.isConnected())
+						client.getTransceiver().send(action);
+				} catch (Exception e) {
+					Log.e("sendPotStatusAction", "sendPotStatusAction Exception");
+				}
+
+			}
+		}).start();
+		/*
+		 * RequestAction action = new RequestAction(); action.setActionId(2);
+		 * action.setPotNo_Area(String.valueOf(areaId));
+		 * client.getTransceiver().send(action);
+		 */
 	}
 
 }

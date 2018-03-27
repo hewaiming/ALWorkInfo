@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 
 import com.hewaiming.ALWorkInfo.R;
 import com.hewaiming.ALWorkInfo.config.MyApplication;
+import com.hewaiming.ALWorkInfo.config.PermisionUtils;
 import com.hewaiming.ALWorkInfo.fragment.DJFragment;
 import com.hewaiming.ALWorkInfo.fragment.HomeFragment;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -25,6 +26,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -36,57 +38,61 @@ import android.widget.ImageView;
 import cn.sharesdk.framework.ShareSDK;
 import io.github.ylbfdev.slideshowview.utils.FileCache;
 
-
-public class MainActivity extends FragmentActivity  {
+public class MainActivity extends FragmentActivity {
 
 	private HomeFragment mHomeFragment;
-	private DJFragment mDJFragment;	
+	private DJFragment mDJFragment;
 	private Button[] mTabs;
 	private Fragment[] fragments;
 	private ImageView iv_home_tips;
 	private ImageView iv_dj_tips;
 	private int index;
 	private int currentTabIndex;
-	private Context mContext;	
+	private Context mContext;
+	private boolean verifyPass=false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		super.onCreate(savedInstanceState);	
-		setContentView(R.layout.activity_main);		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 		MyApplication.getInstance().addActivity(this);
-		mContext=this;
-		FileCache mFileCache=new FileCache(mContext);
-		//mFileCache.clear(); //清除本地SDCARD图片缓存
-		ShareSDK.initSDK(this);	// 初始化ShareSDK(一键分享)		
+		// 检测读写权限
+		if (Build.VERSION.SDK_INT >= 23 && !verifyPass) {
+			PermisionUtils.verifyStoragePermissions(MainActivity.this);
+			verifyPass=true;
+		}
+		mContext = this;
+		FileCache mFileCache = new FileCache(mContext);
+		// mFileCache.clear(); //清除本地SDCARD图片缓存
+		ShareSDK.initSDK(this); // 初始化ShareSDK(一键分享)
 		initView();
-		initTab();	
-	} 
+		initTab();
+	}
 
-	
-	private void initView(){
+	private void initView() {
 		mTabs = new Button[2];
 		mTabs[0] = (Button) findViewById(R.id.btn_home);
 		mTabs[1] = (Button) findViewById(R.id.btn_dj);
-		
-		iv_home_tips = (ImageView)findViewById(R.id.iv_home_tips);
+
+		iv_home_tips = (ImageView) findViewById(R.id.iv_home_tips);
 		iv_home_tips.setVisibility(View.GONE);
-		iv_dj_tips = (ImageView)findViewById(R.id.iv_dj_tips);
+		iv_dj_tips = (ImageView) findViewById(R.id.iv_dj_tips);
 		iv_dj_tips.setVisibility(View.GONE);
-		//把第一个tab设为选中状态
+		// 把第一个tab设为选中状态
 		mTabs[0].setSelected(true);
 	}
-	
-	private void initTab(){
+
+	private void initTab() {
 		mHomeFragment = new HomeFragment();
 		mDJFragment = new DJFragment();
-		
-		fragments = new Fragment[] {mHomeFragment, mDJFragment};
+
+		fragments = new Fragment[] { mHomeFragment, mDJFragment };
 		// 添加显示第一个fragment
 		getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, mDJFragment)
-			.add(R.id.fragmentContainer, mHomeFragment).hide(mDJFragment).show(mHomeFragment).commit();
+				.add(R.id.fragmentContainer, mHomeFragment).hide(mDJFragment).show(mHomeFragment).commit();
 	}
-	
+
 	public void onTabSelect(View view) {
 		switch (view.getId()) {
 		case R.id.btn_home:
@@ -94,7 +100,7 @@ public class MainActivity extends FragmentActivity  {
 			break;
 		case R.id.btn_dj:
 			index = 1;
-			break;	
+			break;
 		}
 		if (currentTabIndex != index) {
 			FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
@@ -105,11 +111,11 @@ public class MainActivity extends FragmentActivity  {
 			trx.show(fragments[index]).commit();
 		}
 		mTabs[currentTabIndex].setSelected(false);
-		//把当前tab设为选中状态
+		// 把当前tab设为选中状态
 		mTabs[index].setSelected(true);
 		currentTabIndex = index;
-	}	
-	
+	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
@@ -118,6 +124,7 @@ public class MainActivity extends FragmentActivity  {
 		}
 		return true;
 	}
+
 	protected void dialog_exit() {
 		AlertDialog.Builder builder = new Builder(mContext);
 		builder.setMessage("确定要退出吗?");
@@ -125,7 +132,8 @@ public class MainActivity extends FragmentActivity  {
 		builder.setPositiveButton("确认", new android.content.DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				ShareSDK.stopSDK();	                //关闭一键分享
+				verifyPass=false;
+				ShareSDK.stopSDK(); // 关闭一键分享
 				dialog.dismiss();
 				MyApplication.getInstance().exit();
 
@@ -139,11 +147,11 @@ public class MainActivity extends FragmentActivity  {
 		});
 		builder.create().show();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	
+
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 }

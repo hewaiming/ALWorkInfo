@@ -43,6 +43,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
@@ -89,9 +90,8 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	private TimerTask timerTaskRealTime = null;
 	private Context mContext;
 
-	private Handler handler = new Handler(Looper.getMainLooper());	
+	private Handler handler = new Handler(Looper.getMainLooper());
 
-	
 	private TcpClient client = new TcpClient() {
 
 		@Override
@@ -107,7 +107,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 					tv_title.setText(PotNo + "实时曲线：连接远程服务器失败！");
 				}
 			});
-		
+
 		}
 
 		@Override
@@ -115,7 +115,7 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 			if (realTime.getPotNo() != Integer.valueOf(PotNo)) {
 				return;
 			}
-			//handler.post(showDataRunnable);
+			// handler.post(showDataRunnable);
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -135,10 +135,10 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 							setCUR = createSet_CUR();
 							data.addDataSet(setCUR);
 						}
-						//实时显示更新槽压、系列电流数字
-						tv_potV.setText("槽电压(V):"+(realTime.getPotv()/1000.0));
-						tv_sysA.setText("系列电流(KA):"+(realTime.getCur()/100.0));
-						
+						// 实时显示更新槽压、系列电流数字
+						tv_potV.setText("槽电压(V):" + (realTime.getPotv() / 1000.0));
+						tv_sysA.setText("系列电流(KA):" + (realTime.getCur() / 100.0));
+
 						Calendar c = Calendar.getInstance();
 						data.addXValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE)) + "."
 								+ c.get(Calendar.SECOND));
@@ -184,6 +184,12 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_realtime_linechart);
+		// 第一种，是在主线程中直接忽略，强制执行。（不推荐这种方法，但是该方法修改起来简单）
+		/*
+		 * if (android.os.Build.VERSION.SDK_INT > 9) { StrictMode.ThreadPolicy
+		 * policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		 * StrictMode.setThreadPolicy(policy); }
+		 */
 		MyApplication.getInstance().addActivity(this);
 		GetDataFromIntent();
 		init_title();
@@ -206,10 +212,18 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 
 	@Override
 	protected void onDestroy() {
-		//handler.removeCallbacks(offLineRunnable);
-		//handler.removeCallbacks(showDataRunnable);
 		super.onDestroy();
+		/*
+		 * if (client != null && client.isConnected()) { client.disconnect(); }
+		 */
+		if (timerRealTime != null) {
+			timerRealTime.cancel();
+			if (client != null && client.isConnected()) {
+				client.disconnect();
+			}
+		}
 	}
+
 	private void GetDataFromNet() {
 		SendActionToServer();
 
@@ -299,14 +313,15 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 		spinner_begindate.setVisibility(View.GONE);
 		spinner_enddate = (Spinner) findViewById(R.id.spinner_Enddate);
 		spinner_enddate.setVisibility(View.GONE);
-		
-		layoutOK=(LinearLayout)findViewById(R.id.Layout_OK);
+
+		layoutOK = (LinearLayout) findViewById(R.id.Layout_OK);
 		layoutOK.setVisibility(View.GONE);
-		
-		tv_potV=(TextView)findViewById(R.id.TxtPotV);
+
+		tv_potV = (TextView) findViewById(R.id.TxtPotV);
 		tv_potV.setTextColor(Color.BLUE);
-		tv_sysA=(TextView)findViewById(R.id.TxtSysA);
-		tv_sysA.setTextColor(Color.RED);;
+		tv_sysA = (TextView) findViewById(R.id.TxtSysA);
+		tv_sysA.setTextColor(Color.RED);
+		;
 
 	}
 
@@ -537,14 +552,25 @@ public class RealTimeLineActivity extends DemoBase implements OnClickListener, O
 	}
 
 	private void sendRealTimeAction() {
-		try {
-			RequestAction action = new RequestAction();
-			action.setActionId(1);
-			action.setPotNo_Area(PotNo);
-			client.getTransceiver().send(action);
-		} catch (Exception e) {
-			Log.e(TAG, "Exception sendRealTimeAction");
-		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					RequestAction action = new RequestAction();
+					action.setActionId(1);
+					action.setPotNo_Area(PotNo);
+					if (action != null && client.isConnected())
+						client.getTransceiver().send(action);
+				} catch (Exception e) {
+					e.printStackTrace();
+					Log.e(TAG, "Exception sendRealTimeAction"); 
+				}
+			}
+		}).start();
+		/*
+		 * RequestAction action = new RequestAction(); action.setActionId(1);
+		 * action.setPotNo_Area(PotNo); client.getTransceiver().send(action);
+		 */
 	}
 
 	/**

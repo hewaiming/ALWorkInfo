@@ -49,8 +49,7 @@ public abstract class SocketTransceiver implements Runnable {
 			socket.shutdownInput();
 			in.close();
 		} catch (Exception e) {
-			Log.e(TAG,"关闭SOCKET时出错");
-		
+			Log.e(TAG,"关闭SOCKET时出错");		
 		}
 	}
 
@@ -58,12 +57,13 @@ public abstract class SocketTransceiver implements Runnable {
 	public boolean send(RequestAction action) {
 		if (out != null) {
 			try {
-				out.writeInt(action.getActionId());
+				out.writeInt(action.getActionId());					
 				out.writeUTF(action.getPotNo_Area());
 				out.flush();
 				return true;
 			} catch (Exception e) {
-				Log.e(TAG,"SOCKET发送数据时出错");				
+				e.printStackTrace();
+				Log.e(TAG,"SOCKET发送数据时出错:"+e.getMessage());							
 			}
 		}
 		return false;
