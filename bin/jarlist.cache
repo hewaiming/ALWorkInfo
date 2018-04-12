@@ -1,23 +1,23 @@
 # cache for current jar dependency. DO NOT EDIT.
 # format is <lastModified> <length> <SHA-1> <path>
 # Encoding is UTF-8
-1494385793138 162087 442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375 D:\workspace\slideshowview\libs\universal-image-loader-1.9.5.jar
-1521426823061 162087 442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375 D:\workspace\ALWorkInfo\libs\universal-image-loader-1.9.5.jar
-1490146276000 71686 d49d36ec407502d69c217d81a87283eba9c746b2 D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\MobCommons-2017.0322.0931.jar
-1521426823156 71686 d49d36ec407502d69c217d81a87283eba9c746b2 D:\workspace\ALWorkInfo\libs\MobCommons-2017.0322.0931.jar
-1521426822353 6496 1b40dd5cc7381571d1cc57e03fcf328598d559c4 D:\workspace\ALWorkInfo\libs\ShareSDK-Wechat-Moments-2.8.2.jar
-1490146276000 6496 1b40dd5cc7381571d1cc57e03fcf328598d559c4 D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-Wechat-Moments-2.8.2.jar
-1490146276000 32941 fbb64a7456b98849ee2868a55aa0b3bb3f6e6a29 D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-QQ-2.8.2.jar
-1521426822927 32941 fbb64a7456b98849ee2868a55aa0b3bb3f6e6a29 D:\workspace\ALWorkInfo\libs\ShareSDK-QQ-2.8.2.jar
-1521426822574 6291 1af0c437d793e4f8689be564e02b8c2dec50488a D:\workspace\ALWorkInfo\libs\ShareSDK-Wechat-Favorite-2.8.2.jar
-1490146276000 6291 1af0c437d793e4f8689be564e02b8c2dec50488a D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-Wechat-Favorite-2.8.2.jar
-1490146276000 43061 002b4be4096d7ce75e969449fc81b62e312748a6 D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-Wechat-Core-2.8.2.jar
-1521426822763 43061 002b4be4096d7ce75e969449fc81b62e312748a6 D:\workspace\ALWorkInfo\libs\ShareSDK-Wechat-Core-2.8.2.jar
-1490146276000 6277 f3f9d8cdaf36e449309698b6d3ec46fd47e4e14c D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-Wechat-2.8.2.jar
-1521426822453 6277 f3f9d8cdaf36e449309698b6d3ec46fd47e4e14c D:\workspace\ALWorkInfo\libs\ShareSDK-Wechat-2.8.2.jar
-1490146276000 30188 dc2c7e7eaa2bad4c5333b6471d388a64df781d1b D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-QZone-2.8.2.jar
-1521426822758 30188 dc2c7e7eaa2bad4c5333b6471d388a64df781d1b D:\workspace\ALWorkInfo\libs\ShareSDK-QZone-2.8.2.jar
-1490146276000 119035 521f72e4ce63c721c5d3006bfa4fa712dd51bea9 D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\ShareSDK-Core-2.8.2.jar
-1521426822712 119035 521f72e4ce63c721c5d3006bfa4fa712dd51bea9 D:\workspace\ALWorkInfo\libs\ShareSDK-Core-2.8.2.jar
-1521426822950 200024 242b3a8f9b6b47d2ea8cf932cd978a5b6651d22a D:\workspace\ALWorkInfo\libs\MobTools-2017.0322.0931.jar
-1490146276000 200024 242b3a8f9b6b47d2ea8cf932cd978a5b6651d22a D:\ShareSDK-Android-2.8.2\v2.8.2\ShareSDK for Android\Libs\MainLibs\libs\MobTools-2017.0322.0931.jar
+1522723350450 162087 442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\universal-image-loader-1.9.5.jar
+1523501244194 162087 442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375 E:\Eclipse_WorkSpace_ALInfo\SlideShowView\libs\universal-image-loader-1.9.5.jar
+1522723350470 71686 d49d36ec407502d69c217d81a87283eba9c746b2 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\MobCommons-2017.0322.0931.jar
+1523507525000 71686 d49d36ec407502d69c217d81a87283eba9c746b2 E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\MobCommons-2017.0322.0931.jar
+1522723350202 6496 1b40dd5cc7381571d1cc57e03fcf328598d559c4 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-Wechat-Moments-2.8.2.jar
+1523507525000 6496 1b40dd5cc7381571d1cc57e03fcf328598d559c4 E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-Wechat-Moments-2.8.2.jar
+1523507525000 32941 fbb64a7456b98849ee2868a55aa0b3bb3f6e6a29 E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-QQ-2.8.2.jar
+1522723349937 32941 fbb64a7456b98849ee2868a55aa0b3bb3f6e6a29 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-QQ-2.8.2.jar
+1522723350258 6291 1af0c437d793e4f8689be564e02b8c2dec50488a E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-Wechat-Favorite-2.8.2.jar
+1523507525000 6291 1af0c437d793e4f8689be564e02b8c2dec50488a E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-Wechat-Favorite-2.8.2.jar
+1522723349869 43061 002b4be4096d7ce75e969449fc81b62e312748a6 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-Wechat-Core-2.8.2.jar
+1523507525000 43061 002b4be4096d7ce75e969449fc81b62e312748a6 E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-Wechat-Core-2.8.2.jar
+1522723349792 6277 f3f9d8cdaf36e449309698b6d3ec46fd47e4e14c E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-Wechat-2.8.2.jar
+1523507525000 6277 f3f9d8cdaf36e449309698b6d3ec46fd47e4e14c E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-Wechat-2.8.2.jar
+1523507525000 30188 dc2c7e7eaa2bad4c5333b6471d388a64df781d1b E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-QZone-2.8.2.jar
+1522723350322 30188 dc2c7e7eaa2bad4c5333b6471d388a64df781d1b E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-QZone-2.8.2.jar
+1522723349854 119035 521f72e4ce63c721c5d3006bfa4fa712dd51bea9 E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\ShareSDK-Core-2.8.2.jar
+1523507525000 119035 521f72e4ce63c721c5d3006bfa4fa712dd51bea9 E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\ShareSDK-Core-2.8.2.jar
+1522723349949 200024 242b3a8f9b6b47d2ea8cf932cd978a5b6651d22a E:\Eclipse_WorkSpace_ALInfo\ALWorkInfo\libs\MobTools-2017.0322.0931.jar
+1523507525000 200024 242b3a8f9b6b47d2ea8cf932cd978a5b6651d22a E:\Eclipse_WorkSpace_ALInfo\OneKeyShare-master\OneKeyShare-master\libs\MobTools-2017.0322.0931.jar
